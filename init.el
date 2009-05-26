@@ -2,10 +2,10 @@
 ;; .emacs
 ;; Nurullah Akkaya
 ;; nurullah@nakkaya.com
-(setq load-path (cons "~/.myEmacs/" load-path))
-(setq load-path (cons "~/.myEmacs/ext/" load-path))
-(setq load-path (cons "~/.myEmacs/ext/muse/lisp/" load-path))
-(setq load-path (cons "~/.myEmacs/int/" load-path))
+(setq load-path (cons "~/Projects/emacs/" load-path))
+(setq load-path (cons "~/Projects/emacs/ext/" load-path))
+(setq load-path (cons "~/Projects/emacs/ext/muse/lisp/" load-path))
+(setq load-path (cons "~/Projects/emacs/int/" load-path))
 
 
 (cond
