@@ -358,6 +358,13 @@ completion buffers."
 ;;outline mode
 (add-hook 'java-mode-hook 'outline-minor-mode)
 
+;;
+;;git.el
+;;
+(require 'git)
+(setq git-committer-name "Nurullah Akkaya")
+(setq git-committer-email "nurullah@nakkaya.com")
+(setq exec-path (append exec-path '("/opt/local/bin")) )
 
 ;;Flyspell
 (setq ispell-program-name "/opt/local/bin/ispell")
@@ -526,6 +533,9 @@ completion buffers."
 ;;outline bindings
 (global-set-key [M-up] 'hide-subtree)
 (global-set-key [M-down] 'show-subtree)
+
+;keybindindings for git
+(global-set-key "\C-xgs" 'git-status)
 
 
 (cond 
