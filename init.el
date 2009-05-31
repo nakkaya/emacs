@@ -364,6 +364,11 @@ completion buffers."
 (require 'git)
 (setq git-committer-name "Nurullah Akkaya")
 (setq git-committer-email "nurullah@nakkaya.com")
+
+(when (equal system-type 'darwin)
+  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+  (push "/opt/local/bin" exec-path))
+
 (setq exec-path (append exec-path '("/opt/local/bin")) )
 
 ;;Flyspell
