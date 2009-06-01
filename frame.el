@@ -59,6 +59,18 @@
 (set-face-foreground 'modeline-inactive "dark green")
 (set-face-background 'modeline-inactive "black")
 
+(set-face-foreground 'diff-added "blue")
+(set-face-background 'diff-added "black")
+
+(set-face-foreground 'diff-removed "firebrick")
+(set-face-background 'diff-removed "black")
+
+(set-face-foreground 'diff-file-header "blue")
+(set-face-background 'diff-file-header "black")
+
+(set-face-foreground 'diff-header "forest-green")
+(set-face-background 'diff-header "black")
+
 ;;gnus theme
 ;;;; Faces ;;;;
 ;;;
