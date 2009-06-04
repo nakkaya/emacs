@@ -582,4 +582,10 @@ completion buffers."
 ((string= "windows" my-opsys)
   (na-frame-windows)))
 
+;;setup server calls
+(add-hook 'server-visit-hook 'call-raise-frame)
+(add-hook 'find-file-hook 'call-raise-frame)
+(defun call-raise-frame ()
+  (raise-frame))
+
 (server-start)
