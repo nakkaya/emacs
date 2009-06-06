@@ -1,6 +1,6 @@
 ;;
 ;;run term with /bin/bash
-(setq term-term-name "vt100")
+(setq term-term-name "screen")
 (setq-default term-buffer-maximum-size 5000)
 
 (defun na-linux-run-term ()
