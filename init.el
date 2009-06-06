@@ -511,10 +511,9 @@ completion buffers."
 (global-set-key [S-f5] 'na-proxy-stop)
 (global-set-key [f6] 'nmap)
 (global-set-key [S-f6] 'dsniff)
-(global-set-key [f7] 'outline-minor-mode)
+(global-set-key [f7] 'compile)
 (global-set-key [f8] 'toggle-truncate-lines)
 (global-set-key [M-f12] 'na-switch-project)
-(global-set-key [f12] 'compile)
 
 (define-key global-map [(control meta .)] 'find-tag-other-window)
 (global-set-key [(meta g)] 'goto-line)
