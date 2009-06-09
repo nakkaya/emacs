@@ -1,6 +1,6 @@
 ;;
 ;;run term with /bin/bash
-(setq term-term-name "screen")
+(setq term-term-name "xterm-color")
 (setq-default term-buffer-maximum-size 5000)
 
 (defun na-linux-run-term ()
