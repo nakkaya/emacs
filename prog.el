@@ -49,6 +49,34 @@
   (comment-region beg end (- arg)))
 
 ;;
+;;lisp customization
+;;
+(defun lispy-parens ()
+  "Setup parens display for lisp modes"
+  (setq show-paren-delay 0)
+  (setq show-paren-style 'parenthesis)
+  (make-variable-buffer-local 'show-paren-mode)
+  (show-paren-mode 1)
+  (set-face-background 'show-paren-match-face (face-background 'default))
+  (if (boundp 'font-lock-comment-face)
+      (set-face-foreground 'show-paren-match-face 
+			   (face-foreground 'font-lock-comment-face))
+    (set-face-foreground 'show-paren-match-face 
+			 (face-foreground 'default)))
+  (set-face-foreground 'show-paren-match-face "red")
+  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+(add-hook 'lisp-mode-hook 'lispy-parens)
+(add-hook 'emacs-lisp-mode-hook 'lispy-parens)
+(add-hook 'lisp-mode-hook 'abbrev-mode)
+(add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+
+;;
+;; Clojure
+;;
+(setq inferior-lisp-program "java -server -cp /java/clojure/clojure.jar clojure.lang.Repl")
+(add-hook 'clojure-mode-hook 'lispy-parens)
+
+;;
 ;;c++ custom
 ;;
 ;;compile command
@@ -74,32 +102,6 @@
   (make-local-variable 'compile-command)
   (setq compile-command (concat "ant run -find")))
 (add-hook 'java-mode-hook 'na-setup-java)
-
-;;
-;;lisp customization
-;;
-(defun lispy-parens ()
-  "Setup parens display for lisp modes"
-  (setq show-paren-delay 0)
-  (setq show-paren-style 'parenthesis)
-  (make-variable-buffer-local 'show-paren-mode)
-  (show-paren-mode 1)
-  (set-face-background 'show-paren-match-face (face-background 'default))
-  (if (boundp 'font-lock-comment-face)
-      (set-face-foreground 'show-paren-match-face 
-			   (face-foreground 'font-lock-comment-face))
-    (set-face-foreground 'show-paren-match-face 
-			 (face-foreground 'default)))
-  (set-face-foreground 'show-paren-match-face "red")
-  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
-(add-hook 'lisp-mode-hook 'lispy-parens)
-(add-hook 'emacs-lisp-mode-hook 'lispy-parens)
-(add-hook 'lisp-mode-hook 'abbrev-mode)
-(add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-
-
-
-
 
 ;;
 ;;git.el

@@ -4,6 +4,7 @@
 ;; nurullah@nakkaya.com
 (setq load-path (cons "~/Projects/emacs/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/" load-path))
+(setq load-path (cons "~/Projects/emacs/ext/clojure-mode/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/muse/lisp/" load-path))
 (setq load-path (cons "~/Projects/emacs/int/" load-path))
 
@@ -31,6 +32,7 @@
 (load "frame.el")
 (load "jump.el")
 (load "php-mode.el")
+(load "clojure-mode.el")
 (load "javadoc-help.el")
 (load "prog.el")
 
