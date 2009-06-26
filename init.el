@@ -32,6 +32,7 @@
 (load "jump.el")
 (load "php-mode.el")
 (load "javadoc-help.el")
+(load "prog.el")
 
 ;; ********************************************************
 ;; General customization
@@ -212,180 +213,14 @@ completion buffers."
 				   (dolist (i del-buf-list)
 				     (kill-buffer i)))))
 
-;; ********************************************************
-;; Programming Customization
-;; ********************************************************
-(setq auto-mode-alist
-      (append '(("\\.C$"       . c++-mode)
-		("\\.cc$"      . c++-mode)
-		("\\.c$"       . c-mode)
-		("\\.h$"       . c++-mode)
-		("\\.i$"       . c++-mode)
-		("\\.ii$"      . c++-mode)
-		("\\.m$"       . objc-mode)
-		("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
-		("\\.java$"    . java-mode)
-		("\\.outline$" . outline-mode)
-		("\\.sql$"     . c-mode)
-		("\\.sh$"      . shell-script-mode)
-		("\\.command$"      . shell-script-mode)
-		("\\.mak$"     . makefile-mode)
-		("\\.rb$"     . ruby-mode)
-		("\\.php$"     . php-mode)
-		("\\.GNU$"     . makefile-mode)
-		("makefile$"   . makefile-mode)
-		("Imakefile$"  . makefile-mode)
-		("\\.Xdefaults$"    . xrdb-mode)
-		("\\.Xenvironment$" . xrdb-mode)
-		("\\.Xresources$"   . xrdb-mode)
-		("*.\\.ad$"         . xrdb-mode)
-		("\\.[eE]?[pP][sS]$" . ps-mode)
-		("\\.zip$"     . archive-mode)
-		("\\.tar$"     . tar-mode)
-		("\\.tar.gz$"     . tar-mode)
-		) auto-mode-alist))
+;;
+;; Mode Specific Code
+;;
 
-(setq compilation-window-height 10)
-(defun na-bounce-sexp ()
-  "Will bounce between matching parens just like % in vi"
-  (interactive)
-  (let ((prev-char (char-to-string (preceding-char)))
-        (next-char (char-to-string (following-char))))
-    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-	  ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-	  (t (error "%s" "Not on a paren, brace, or bracket")))))
-
-
-(defun na-uncomment-region (beg end &optional arg)
-  (interactive "*r\np")
-  (comment-region beg end (- arg)))
-;;
-;;c++ custom
-;;
-;;compile command
-(require 'compile)
-(add-hook 'c++-mode-hook
-	  (lambda ()
-	    (unless (file-exists-p "Makefile")
-	      (set (make-local-variable 'compile-command)
-		   (let ((file (file-name-nondirectory buffer-file-name)))
-		     (concat "g++ -g -O2 -Wall -o " 
-			     (file-name-sans-extension file)
-			     " " file))))))
-
-;;
-;;java custom
-;;
-;; (defun kgold-setup-java ()
-;;   (make-local-variable 'compile-command)
-;;   (setq compile-command (concat "javac " (file-name-nondirectory 
-;; 					  buffer-file-name))))
-(defun kgold-setup-java ()
-  (make-local-variable 'compile-command)
-  (setq compile-command (concat "ant run -find")))
-(add-hook 'java-mode-hook 'kgold-setup-java)
-
-(defun na-java-lookup( query )
-(interactive "sClass:")
-(setq qList (split-string query ))
-(setq url "http://www.google.com/search?q=")
-(dolist (term qList )
-  (setq url (concat url term "+")))
-(setq url (substring url 0 (- (string-width url) 1 ) ))
-(setq url (concat url "&sitesearch=java.sun.com/j2se/1.5.0/docs/api/"))
-(browse-url url))
-
-;;
-;;Perl custom
-;;
-(add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
-;;
-;;Ruby Custom
-;;
-;;
-(autoload 'ruby-mode "ruby-mode"
-  "Mode for editing ruby source files")
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-(require 'inf-ruby)
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-	  '(lambda ()
-	     (inf-ruby-keys)))
-
-;;
-;;lisp customization
-;;
-(defun lispy-parens ()
-  "Setup parens display for lisp modes"
-  (setq show-paren-delay 0)
-  (setq show-paren-style 'parenthesis)
-  (make-variable-buffer-local 'show-paren-mode)
-  (show-paren-mode 1)
-  (set-face-background 'show-paren-match-face (face-background 'default))
-  (if (boundp 'font-lock-comment-face)
-      (set-face-foreground 'show-paren-match-face 
-			   (face-foreground 'font-lock-comment-face))
-    (set-face-foreground 'show-paren-match-face 
-			 (face-foreground 'default)))
-  (set-face-foreground 'show-paren-match-face "red")
-  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
-(add-hook 'lisp-mode-hook 'lispy-parens)
-(add-hook 'emacs-lisp-mode-hook 'lispy-parens)
-(add-hook 'lisp-mode-hook 'abbrev-mode)
-(add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-
-;;
-;;Php
-;;
-;disable warnings
-(add-hook 'php-mode-hook (lambda () (setq php-warned-bad-indent t)))
-
-;;
 ;; Text
-;;
 (delete-selection-mode)
 (setq fill-column 80) ;;; Text lines limit to 80 chars
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-;;
-;;Mode Customization
-;;
-
-;;outline mode
-(add-hook 'java-mode-hook 'outline-minor-mode)
-
-;;
-;;git.el
-;;
-(require 'git)
-(setq git-committer-name "Nurullah Akkaya")
-(setq git-committer-email "nurullah@nakkaya.com")
-
-(when (equal system-type 'darwin)
-  (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
-  (push "/opt/local/bin" exec-path))
-
-(setq exec-path (append exec-path '("/opt/local/bin")) )
-
-;;Flyspell
-(setq ispell-program-name "/opt/local/bin/ispell")
-(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
-(add-hook 'message-mode-hook 'turn-on-flyspell)
-(add-hook 'text-mode-hook 'turn-on-flyspell)
-(add-hook 'c-mode-common-hook 'flyspell-prog-mode)
-(add-hook 'java-mode-hook 'flyspell-prog-mode)
-(add-hook 'ruby-mode-hook 'flyspell-prog-mode)
-(add-hook 'lisp-mode-hook 'flyspell-mode)
-(add-hook 'emacs-lisp-mode-hook 'flyspell-mode)
-(defun turn-on-flyspell ()
-  "Force flyspell-mode on using a positive arg.  For use in hooks."
-  (interactive)
-  (flyspell-mode 1))
 
 ;;EasyPG
 (cond 
@@ -398,7 +233,6 @@ completion buffers."
   (setq epg-gpg-program "/opt/local/bin/gpg")))
 
 ;;doc-view
-
 (cond 
  ((not(string= "windows" my-opsys))
   (require 'doc-view)))
@@ -482,20 +316,6 @@ completion buffers."
 	  (lambda ()
 	    (ibuffer-switch-to-saved-filter-groups "default")))
 (setq ibuffer-expert t)
-;
-;speedbar
-;
-(require 'speedbar)
-(setq speedbar-frame-parameters '((minibuffer)
- (width . 40)
- (height . 20)
- (border-width . 0)
- (menu-bar-lines . 0)
- (tool-bar-lines . 0)
- (unsplittable . t)
- (left-fringe . 0)
- (top . 0)
- (left . 0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;bindings of  keys
