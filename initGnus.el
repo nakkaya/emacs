@@ -118,15 +118,15 @@
 ;;
 ;;Exit gnus on emacs exit
 ;;
-(require 'advice)
-; define a wrapper around the save-buffers-kill-emacs
-; to run the new hook before:
-(defadvice save-buffers-kill-emacs
-  (before my-save-buffers-kill-emacs activate)
-  "Run before-kill-emacs-hook before asking to save this and that."
-  (run-hooks 'before-kill-emacs-hook))
-; use that hook for its purpose
-(add-hook 'before-kill-emacs-hook 'gnus-group-exit) 
+;; (require 'advice)
+;; ; define a wrapper around the save-buffers-kill-emacs
+;; ; to run the new hook before:
+;; (defadvice save-buffers-kill-emacs
+;;   (before my-save-buffers-kill-emacs activate)
+;;   "Run before-kill-emacs-hook before asking to save this and that."
+;;   (run-hooks 'before-kill-emacs-hook))
+;; ; use that hook for its purpose
+;; (add-hook 'before-kill-emacs-hook 'gnus-group-exit)
 
 ;; Remove HTML tags from a buffer
 (defun na-wash-ugly-html ()
