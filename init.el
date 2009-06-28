@@ -272,6 +272,7 @@ completion buffers."
 	       ("Muse" (mode . muse-mode))
 	       ("Source" (or
 			  (mode . java-mode)
+			  (mode . clojure-mode)
 			  (mode . php-mode)
 			  (mode . ruby-mode)
 			  (mode . shell-script-mode)

@@ -5,11 +5,51 @@
 (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
 (setq abbrev-mode t)
+
+(add-hook 'clojure-mode-hook (lambda ()
+			       (setq local-abbrev-table clojure-mode-abbrev-table)))
+
 (define-abbrev-table 'java-mode-abbrev-table '() )
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '() )
+(define-abbrev-table 'clojure-mode-abbrev-table '() )
 (define-abbrev-table 'php-mode-abbrev-table '())
 (define-abbrev-table 'c++-mode-abbrev-table '())
 (define-abbrev-table 'muse-mode-abbrev-table '())
+
+
+
+;;clojure
+(define-skeleton skel-clojure-println
+  ""
+  nil
+  "(println \""_"\" )")
+
+(define-abbrev clojure-mode-abbrev-table "prt"
+  "" 'skel-clojure-println )
+
+(define-skeleton skel-clojure-defn
+  ""
+  nil
+  "(defn "_" [ ] )")
+
+(define-abbrev clojure-mode-abbrev-table "defn"
+  "" 'skel-clojure-defn )
+
+(define-skeleton skel-clojure-if
+  ""
+  nil
+  "(if  ( "_" ) )")
+
+(define-abbrev clojure-mode-abbrev-table "if"
+  "" 'skel-clojure-if )
+
+(define-skeleton skel-clojure-let
+  ""
+  nil
+  "(let  [ "_" ] )")
+
+(define-abbrev clojure-mode-abbrev-table "let"
+  "" 'skel-clojure-let )
 
 (define-skeleton skel-cpp-prt
   ""
