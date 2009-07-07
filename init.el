@@ -269,7 +269,8 @@ completion buffers."
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
       (quote (("default"
-	       ("Muse" (mode . muse-mode))
+	       ("Muse" (or (mode . muse-mode)
+			   (mode . org-mode)) )
 	       ("Source" (or
 			  (mode . java-mode)
 			  (mode . clojure-mode)
@@ -305,6 +306,9 @@ completion buffers."
 			(mode . gnus-summary-mode)
 			(mode . gnus-article-mode)
 			(name . "^\\.newsrc-dribble")))
+	       ("IRC" (or
+			(mode . erc-mode)
+			))
 	       ("emacs" (or
 			 (name . "^\\*info\\*$")
 			 (name . "^\\*mpg123\\*$")
@@ -319,6 +323,23 @@ completion buffers."
 	  (lambda ()
 	    (ibuffer-switch-to-saved-filter-groups "default")))
 (setq ibuffer-expert t)
+
+;;
+;; ERC
+;;
+(require 'erc-join)
+(erc-autojoin-mode 1)
+(setq erc-autojoin-channels-alist
+          '(("freenode.net" "#clojure") ))
+
+;;; Finally, connect to the networks.
+(defun na-connect-irc ()
+  "Connect to IRC."
+  (interactive)
+  (erc :server "irc.freenode.net" :port 6667
+                :nick "newbie" :full-name "newbie"))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;bindings of  keys
