@@ -29,47 +29,40 @@
 ;		user-login-name "@" ;;  you@
 		"%f"		    ;; print file with full path
 		" %-"))
-;; Here are some color preferences.  I've spent a good deal of time
-;; adjusting color settings, trying to get it to look good and also be
-;; fairly easy to read.
+
+;;
+;; Theme
+;;
+
 (setq default-frame-alist
       (append default-frame-alist
-	      ;;'((foreground-color . "yellow")
-              '((foreground-color . "forest green")
-		;; '((foreground-color . "wheat")
-                (background-color . "black")
-		;; (cursor-color . "green3"))))
-                (cursor-color . "blue"))))
+              '((foreground-color . "#EEEEEC")
+                (background-color . "#2A2A38")
+                (cursor-color . "#FCE94F"))))
 
-(set-face-foreground 'bold "forest green")
-(set-face-background 'bold "black")
+(set-face-foreground 'bold "#EEEEEC")
+(set-face-background 'bold "#2A2A38")
+(set-face-background 'default "#2A2A38")
 
-;(set-face-foreground 'default "forest green")
-(set-face-background 'default "black")
+(set-face-foreground 'font-lock-string-face "#854BBE")
+(set-face-foreground 'font-lock-keyword-face "#A02350")
+(set-face-foreground 'font-lock-function-name-face "#C3A878")
+(set-face-foreground 'font-lock-builtin-face "#729FCF")
+(set-face-foreground 'font-lock-comment-face "#888A85")
 
-(set-face-foreground 'bold-italic "yellow green")
-(set-face-foreground 'italic "yellow3")
-
-(set-face-foreground 'region "white")
-(set-face-background 'region "blue")
-
-(set-face-foreground 'modeline "black")
-(set-face-background 'modeline "forest green")
-
-(set-face-foreground 'modeline-inactive "dark green")
+(set-face-foreground 'modeline "#A5A5A0")
+(set-face-background 'modeline "#555753")
+(set-face-foreground 'modeline-inactive "#64645F")
 (set-face-background 'modeline-inactive "black")
 
-(set-face-foreground 'diff-added "blue")
-(set-face-background 'diff-added "black")
 
+(set-face-foreground 'diff-added "#EEEEEC")
 (set-face-foreground 'diff-removed "firebrick")
-(set-face-background 'diff-removed "black")
+(set-face-foreground 'diff-file-header "#EEEEEC")
+(set-face-foreground 'diff-header "#EEEEEC")
 
-(set-face-foreground 'diff-file-header "blue")
-(set-face-background 'diff-file-header "black")
-
-(set-face-foreground 'diff-header "forest-green")
-(set-face-background 'diff-header "black")
+(set-face-background 'diff-header "#2A2A38")
+(set-face-background 'diff-file-header "#2A2A38")
 
 ;;gnus theme
 ;;;; Faces ;;;;
