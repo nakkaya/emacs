@@ -55,6 +55,8 @@
 (set-face-foreground 'modeline-inactive "#64645F")
 (set-face-background 'modeline-inactive "black")
 
+(set-face-background 'fringe "#2A2A38")
+(set-face-foreground 'vertical-border "#888A85")
 
 (set-face-foreground 'diff-added "#EEEEEC")
 (set-face-foreground 'diff-removed "firebrick")
