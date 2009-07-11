@@ -95,7 +95,7 @@
 (defun na-proxy-start ()
   (interactive)
   (start-process "ssh socks" "ssh socks" 
-		 "ssh" "-ND" "9999" "-p" "2200" "-v" "nakkaya@nakkaya.com")
+		 "ssh" "-ND" "9999" "-p" "5432" "-v" "nakkaya@nakkaya.com")
 )
 
 (defun na-proxy-stop ()

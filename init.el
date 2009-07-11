@@ -286,7 +286,8 @@ completion buffers."
 			  (mode . muse-mode)
 			  (mode . c++-mode)))
 
-	       ("Terminal" (mode . term-mode))
+	       ("Terminal" (or (mode . term-mode)
+			       (mode . inferior-lisp-mode)))
 	       ("Network" (or 
 			   (name . "^ssh.*$")
 			   (name . "^\\*nmap\\*$")

@@ -74,8 +74,8 @@
 ;;
 ;; Clojure
 ;;
-;(setq inferior-lisp-program "java -server -cp /java/clojure/clojure.jar clojure.lang.Repl")
-(setq inferior-lisp-program "~/Projects/scripts/clojure")
+(setq inferior-lisp-program "java -server -cp /java/clojure/clojure.jar:/java/clojure/clojure-contrib.jar clojure.lang.Repl")
+;(setq inferior-lisp-program "~/Projects/scripts/clojure")
 (add-hook 'clojure-mode-hook 'lispy-parens)
 
 ;;
