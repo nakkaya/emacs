@@ -24,14 +24,16 @@
 (defun na-switch-between-terminals () 
 "cycle multiple terminals"
 (interactive)
-(if (not (eq (get-buffer "*terminal*")  nil ) )
+(if (not (eq (or (get-buffer "*terminal*") 
+		 (get-buffer "*inferior-lisp*"))  nil ) )
     (progn     
       (setq found nil)
       (bury-buffer)
       (setq head (car (buffer-list)))      
       (while  (eq found nil)	
 	(set-buffer head)	
-	(if (eq major-mode 'term-mode )
+	(if (or (eq major-mode 'term-mode ) 
+		(eq major-mode 'inferior-lisp-mode ))
 	    (setq found t )
 	  (progn
 	   (bury-buffer)
