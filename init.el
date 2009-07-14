@@ -334,11 +334,11 @@ completion buffers."
           '(("freenode.net" "#clojure") ))
 
 ;;; Finally, connect to the networks.
-(defun na-connect-irc ()
+(defun na-erc ()
   "Connect to IRC."
   (interactive)
   (erc :server "irc.freenode.net" :port 6667
-                :nick "newbie" :full-name "newbie"))
+                :nick "hamza" :full-name "rgb"))
 
 
 
