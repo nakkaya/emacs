@@ -346,6 +346,7 @@ completion buffers."
 ;;bindings of  keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key [S-f1] 'na-run-term-or-rename)
+(global-set-key [M-f1] 'inferior-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
 (global-set-key [S-f2] 'gnus)
 (global-set-key [f2] 'switch-to-gnus)
