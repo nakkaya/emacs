@@ -376,6 +376,7 @@ completion buffers."
 (define-key global-map [(meta control  p)] 'na-cm-save-point)
 (global-set-key [(control =)] 'na-bounce-sexp)
 (global-set-key [M-right] 'other-window)
+(define-key global-map [(meta \[)] 'other-frame)
 ;;works for pc keyboard
 (define-key global-map [C-M-kp-subtract] 'erase-buffer)
 ;;works for ibook keyboard
