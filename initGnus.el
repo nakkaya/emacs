@@ -204,3 +204,7 @@
 	   (gnus))
 	  (t
 	   (error "No candidate found")))))
+
+(gnus-demon-add-handler 'gnus-group-get-new-news 2 t)
+(gnus-demon-add-handler 'gnus-group-save-newsrc 10 t)
+(gnus-demon-init)  ; this is redundant in No Gnus
