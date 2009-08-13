@@ -74,10 +74,11 @@
 ;;
 ;; Clojure
 ;;
-(setq class-path (concat "-cp " 
+(setq class-path (concat "-Djava.awt.headless=true " "-cp " 
 			 "/java/clojure/clojure.jar:"
 			 "/java/clojure/clojure-contrib.jar:"
 			 "/java/compojure/compojure.jar:"
+			 "/java/form/miglayout-3.7-swing.jar:"
 			 "/java/form/jfd-loader.jar:"
 			 "/java/form/swing-layout.jar:"
 			 "/java/flickrapi/flickrapi-1.2.jar"))
