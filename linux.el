@@ -65,17 +65,6 @@
       (mpg123-add-new file ))
 (define-key dired-mode-map "\M-m"  'dired-mpg123-add)
 
-(defun na-scan-wireless ()
-  (interactive)
-  (switch-to-buffer "*scratch*")
-  (erase-buffer)
-
-  (cond 
-   ((string= "linux" my-opsys)
-    (shell-command "/sbin/iwlist ath0 scan" 1 ))
-   ((string= "osx" my-opsys)
-    (shell-command "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s" 1 ))))
-
 ;;nmap mode configuration
 (cond
  ((string= "linux" my-opsys)
@@ -97,10 +86,8 @@
 (defun na-proxy-start ()
   (interactive)
   (start-process "ssh socks" "ssh socks" 
-		 "ssh" "-ND" "9999" "-p" "5432" "-v" "nakkaya@nakkaya.com")
-)
+		 "ssh" "-ND" "9999" "-p" "5432" "-v" "nakkaya@nakkaya.com"))
 
 (defun na-proxy-stop ()
   (interactive)
-  (quit-process "ssh socks")
-)
+  (quit-process "ssh socks"))

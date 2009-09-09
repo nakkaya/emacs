@@ -153,11 +153,9 @@
    '(article
      (horizontal 1.0
 		 (vertical 0.50
-			   (summary 1.0 point)
-			   )
+			   (summary 1.0 point))
 		 (vertical 1.0
-			   (article 1.0)
-			   ))))
+			   (article 1.0)))))
   (gnus-add-configuration
    '(summary
      (horizontal 1.0
@@ -170,15 +168,13 @@
      (horizontal 1.0
 		 (vertical 0.50
 			   ( article 1.0 ) )
-		 (vertical 1.0
-			   ))))
+		 (vertical 1.0 ))))
   (gnus-add-configuration
    '(forward
      (horizontal 1.0
 		 (vertical 0.50
 			   ( article 1.0 ) )
-		 (vertical 1.0
-			   ))))
+		 (vertical 1.0 ))))
   (gnus-add-configuration
    '(group
      (horizontal 1.0
@@ -194,51 +190,30 @@
 		 (vertical 1.0
 			   (group 1.0) ))))))
 
+(defun na-set-frame-size(width height font-size)
+  (set-face-attribute 
+   'default (selected-frame) :height font-size :width 'normal)
+  (set-frame-width (selected-frame) width)
+  (set-frame-height (selected-frame) height)
+  (set-frame-position (selected-frame) 0 1))
 
 (defun na-resize-frame-big ()
-  "Set size"
-  (interactive)
-  (set-face-attribute 'default (selected-frame) :height 130 :width 'normal)
-  (set-frame-width (selected-frame) 178)
-  (set-frame-height (selected-frame) 55 )
-  (set-frame-position (selected-frame) 0 1)) 
+  (interactive)  
+  (na-set-frame-size 178 55 130))
 
 (defun na-resize-frame-big-bf ()
-  "Set size"
   (interactive)
-  (set-face-attribute 'default (selected-frame) :height 150 :width 'normal)  
-  (set-frame-width (selected-frame) 158 )
-  (set-frame-height (selected-frame) 43 )
-  (set-frame-position (selected-frame) 0 1))
-
-(defun na-resize-frame-small ()
-  "Set size"
-  (interactive)
-  (set-frame-width (selected-frame) 77)
-  (set-frame-height (selected-frame) 40))
+  (na-set-frame-size 158 43 150))
 
 (defun na-resize-frame-bizdik ()
-  "Set size"
   (interactive)
-;  (set-default-font "monaco")
-  (set-face-attribute 'default (selected-frame) :height 110 :width 'normal)
-  (set-frame-width (selected-frame) 110)
-  (set-frame-height (selected-frame) 33)
-  (set-frame-position (selected-frame) 0 1))
+  (na-set-frame-size 110 33 110))
 
 (defun na-resize-frame-bizdik-bf ()
-  "Set size"
   (interactive)
-  (set-face-attribute 'default (selected-frame) :height 130 :width 'normal)
-  (set-frame-width (selected-frame) 70 )
-  (set-frame-height (selected-frame) 22 )
-  (set-frame-position (selected-frame) 0 1))
+  (na-set-frame-size 77 22 130))
 
 (defun na-frame-windows ()
-  "Set size"
   (interactive)
   (set-default-font "monaco")
-  (set-face-attribute 'default (selected-frame) :height 100 :width 'normal)
-   (set-frame-width (selected-frame) 130)
-   (set-frame-height (selected-frame) 50)
-   (set-frame-position (selected-frame) 0 1))
+  (na-set-frame-size 130 50 110))

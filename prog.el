@@ -14,6 +14,7 @@
 		("\\.m$"       . objc-mode)
 		("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
 		("\\.java$"    . java-mode)
+		("\\.xml$"     . xml-mode)
 		("\\.outline$" . outline-mode)
 		("\\.sql$"     . c-mode)
 		("\\.sh$"      . shell-script-mode)
