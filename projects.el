@@ -3,92 +3,50 @@
 (setq na-project-alist '())
 
 (defun na-project-load-list ()
-   ""
-   (interactive)
-   (setq file (expand-file-name "~/.my-project" ) )
-   (when (file-readable-p file)
-     (with-temp-buffer
-       (insert-file-contents file)
-       (goto-char (point-min))
-       (while (not (eobp))
-	 (setq line (buffer-substring-no-properties 
-		     (progn (beginning-of-line) (point))
-		     (progn (end-of-line) (point))))
-	 (setq na-list-of-projects (cons (car(split-string line)) na-list-of-projects))
-	 (setq na-project-alist (cons (split-string line ) na-project-alist ) )
-         (forward-line)))))
+  ""
+  (interactive)
+  (setq file (expand-file-name "~/.my-project" ) )
+  (when (file-readable-p file)
+    (with-temp-buffer
+      (insert-file-contents file)
+      (goto-char (point-min))
+      (while (not (eobp))
+	(setq line (buffer-substring-no-properties 
+		    (progn (beginning-of-line) (point))
+		    (progn (end-of-line) (point))))
+	(setq na-list-of-projects
+	      (cons (car(split-string line)) na-list-of-projects))
+	(setq na-project-alist
+	      (cons (split-string line ) na-project-alist ) )
+	(forward-line)))))
 (na-project-load-list)
 
 (defun na-project-save-list()
-(interactive)
-(with-temp-buffer
-(dolist (project na-project-alist)
-  (dolist (item project )
-    (insert (concat item " "))
-      )
-  (insert "\n"))
-(write-region (point-min) (point-max) "~/.my-project")))
+  (interactive)
+  (with-temp-buffer
+    (dolist (project na-project-alist)
+      (dolist (item project )
+	(insert (concat item " ")))
+      (insert "\n"))
+    (write-region (point-min) (point-max) "~/.my-project")))
 
 (defun na-find-project(proName)
-(setq returnProject nil )
-;;tmp project list
-(setq pList na-project-alist)
-;;iterate through the project list
-(while pList
-  (setq project (car pList))
-  ;;get project name
-  (setq pName (car project) )    
-  ;;when found launch shell set tags 
-  (if (string-equal pName  proName )
-      (setq returnProject project))
-(setq pList (cdr pList)))
-returnProject)
-
-(defun na-visit-javadoc()
-(interactive)
-(beginning-of-buffer)
-;; locate package
-(setq packageName "" )
-(if (re-search-forward 
-		   "package \\(.*?\\);" nil t)
-		  (setq packageName 
-			(buffer-substring-no-properties 
-			 (match-beginning 1) (- (point) 1) ) ) )
-;; locate class name
-(setq className "" )
-(if (re-search-forward 
-		   "class .*?\\(.*?\\){" nil t)
-		  (setq className 
-			(buffer-substring-no-properties 
-			 (match-beginning 1) (- (point) 1) ) ) )
-
-(setq classPath (concat  packageName "/"  className ".html" ) )
-
-(with-temp-buffer
-(insert classPath)
-;;replace . with /
-(while (search-forward "." nil t)
-  (replace-match "/" nil t))
-;;replace space with nothing
-(beginning-of-buffer)
-(while (search-forward " " nil t)
-  (replace-match "" nil t))
-(setq classPath (buffer-string) ))
-
-(setq project (na-find-project currentProject ))
-(if (not (eq project nil))
-    (progn 
-      (setq name (car project) )
-      (setq path (car(cdr project)) )
-      ))    
-
-(setq classPath (concat  path "doc/" classPath ) )
-(browse-url (expand-file-name classPath) ))
-
-(define-key java-mode-map (kbd "C-c C-v") 'na-visit-javadoc)
+  (setq returnProject nil )
+  ;;tmp project list
+  (setq pList na-project-alist)
+  ;;iterate through the project list
+  (while pList
+    (setq project (car pList))
+    ;;get project name
+    (setq pName (car project) )    
+    ;;when found launch shell set tags 
+    (if (string-equal pName  proName )
+	(setq returnProject project))
+    (setq pList (cdr pList)))
+  returnProject)
 
 (defun na-create-tags()
-(interactive)
+  (interactive)
   (setq project (na-find-project currentProject ))
   (if (not (eq project nil))
       (progn 
@@ -105,8 +63,7 @@ returnProject)
 	    (term-send-string "*terminal*" "find . -type f -name \"*.cpp\" -o -name \"*.h\" | etags - " ))
 	(term-send-input)
 
-	(switch-to-buffer currentBuffer)
-	)))
+	(switch-to-buffer currentBuffer))))
 
 
 (defun na-project-kill-terms()
@@ -115,6 +72,10 @@ returnProject)
       (kill-buffer "build"))
   (if (not (eq (get-buffer "*terminal*")  nil ) )
       (kill-buffer "*terminal*")))
+
+(defun na-send-term (term command)
+  (term-send-string term command )
+  (term-send-input))
 
 (defun na-switch-project ( projectName )
   "Switch to a given project."
@@ -141,93 +102,76 @@ returnProject)
 	;;setup shells one for build one for running
 	;;build
 	(term "/bin/bash")
-	(term-send-string "*terminal*" (concat "cd " pPath "build/") )
-	(term-send-input)
+	(na-send-term "*terminal*" (concat "cd " pPath "build/") )
 	(rename-buffer "build" )
 	;;main dir
 	(term "/bin/bash")
-	(term-send-string "*terminal*" (concat "cd " pPath) )
-	(term-send-input)
+	(na-send-term "*terminal*" (concat "cd " pPath) )
 	
 	;;visit project name
 	(find-tag pName))))
 
 (defun na-create-compiled-project-directory()
   (term "/bin/bash")
-  (term-send-string "*terminal*" (concat "cd") )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectPath) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "mkdir " newProjectName) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectName) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "mkdir " "build") )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " "build") )
-  (term-send-input)
+  (na-send-term "*terminal*" (concat "cd"))
+  (na-send-term "*terminal*" (concat "cd " newProjectPath))
+  (na-send-term "*terminal*" (concat "mkdir " newProjectName))
+  (na-send-term "*terminal*" (concat "cd " newProjectName))
+  (na-send-term "*terminal*" (concat "mkdir " "build"))
+  (na-send-term "*terminal*" (concat "cd " "build"))
+  
   (rename-buffer "build" )
   (term "/bin/bash")
-  (term-send-string "*terminal*" (concat "cd") )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectPath) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectName) )
-  (term-send-input)
+  (na-send-term "*terminal*" (concat "cd"))
+  (na-send-term "*terminal*" (concat "cd " newProjectPath))
+  (na-send-term "*terminal*" (concat "cd " newProjectName))
   
   (if (string= progLanguage "Java" )
       (na-create-poject-skeleton-java newProjectName newProjectPath))
   (if (string= progLanguage "Cpp" )
       (na-create-poject-skeleton-cpp newProjectName newProjectPath)))
 
-(defun na-create-dynamic-project-directory()
-  (term "/bin/bash")
-  (term-send-string "*terminal*" (concat "cd") )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectPath) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "mkdir " newProjectName) )
-  (term-send-input)
-  (term-send-string "*terminal*" (concat "cd " newProjectName) )
-  (term-send-input))
-
 (defun na-create-project(newProjectPath)
   (interactive "FProject Path: ")
-(setq newProjectName (read-string "Project Name: ") )
-(setq progLanguage (completing-read "Language: " '("Java" "Cpp" "Clojure") ) )
+  (setq newProjectName (read-string "Project Name: ") )
+  (setq progLanguage 
+	(completing-read "Language: " '("Java" "Cpp" "Clojure") ) )
 
-(if (eq (y-or-n-p "Temporary Project? ") nil )
-    (progn 
-      (setq projObject (list newProjectName newProjectPath progLanguage))
-      (setq na-list-of-projects (cons (car projObject) na-list-of-projects))
-      (setq na-project-alist (cons projObject na-project-alist ) )
-      (na-project-save-list)))
+  (if (eq (y-or-n-p "Temporary Project? ") nil )
+      (progn 
+	(setq projObject (list newProjectName newProjectPath progLanguage))
+	(setq na-list-of-projects 
+	      (cons (car projObject) na-list-of-projects))
+	(setq na-project-alist (cons projObject na-project-alist ) )
+	(na-project-save-list)))
+  
+  (na-project-kill-terms)
 
-(na-project-kill-terms)
-
-;;create project directories
-(if (or (string-equal progLanguage "Java") (string-equal progLanguage "Cpp"))
-    (na-create-compiled-project-directory)
-  (na-create-dynamic-project-directory) ))
+  ;;create project directories
+  (if (or 
+       (string-equal progLanguage "Java") (string-equal progLanguage "Cpp"))
+      (na-create-compiled-project-directory) ))
 
 (defun na-create-poject-skeleton-java( newProjectName  newProjectPath )
-;;create ant file
-(find-file (concat newProjectPath "/" newProjectName "/build.xml" ))
-(skel-java-ant)
-(indent-region (point-min) (point-max))
-(save-buffer)
-;;create main
-(find-file (concat newProjectPath "/" newProjectName "/" newProjectName ".java" ))
-(skel-java-main)
-(indent-region (point-min) (point-max))
-(save-buffer))
+  ;;create ant file
+  (find-file (concat newProjectPath "/" newProjectName "/build.xml" ))
+  (skel-java-ant)
+  (indent-region (point-min) (point-max))
+  (save-buffer)
+  ;;create main
+  (find-file 
+   (concat newProjectPath "/" newProjectName "/" newProjectName ".java" ))
+  (skel-java-main)
+  (indent-region (point-min) (point-max))
+  (save-buffer))
 
 (defun na-create-poject-skeleton-cpp( newProjectName  newProjectPath )
-;;create main
-(find-file (concat newProjectPath "/" newProjectName "/" newProjectName ".cpp" ))
-(skel-cpp-main)
-(indent-region (point-min) (point-max))
-(save-buffer))
+  ;;create main
+  (find-file 
+   (concat newProjectPath "/" newProjectName "/" newProjectName ".cpp" ))
+  (skel-cpp-main)
+  (indent-region (point-min) (point-max))
+  (save-buffer))
 
 ;;
 ;;Skeletons for building stubs
@@ -311,7 +255,7 @@ returnProject)
   \n >
   "</project>"
   \n >
-)
+  )
 
 (define-skeleton skel-cpp-main
   ""
