@@ -96,13 +96,15 @@
 			 "./extLibs/pop3.jar:"
 			 "./extLibs/smtp.jar:"		
 					; layout
-			 "/java/form/miglayout-3.7-swing.jar:"
 			 "/java/form/jfd-loader.jar:"
 			 "/java/form/swing-layout.jar:"
+			 "../extLibs/miglayout-3.7-swing.jar:"
 			 "./extLibs/miglayout-3.7-swing.jar:"
 			 "./extLibs/bcprov-jdk15-143.jar:"
+			 "../extLibs/mac-widgets.jar:"
 			 "./extLibs/mac-widgets.jar:"
 			 "./extLibs/forms.jar:"
+			 "../extLibs/forms.jar:"
 			 "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server " class-path " clojure.lang.Repl" ))
 (setq inferior-lisp-program   clojure-command)
