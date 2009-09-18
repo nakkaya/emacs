@@ -35,6 +35,7 @@
 (load "clojure-mode.el")
 (load "javadoc-help.el")
 (load "prog.el")
+(load "muse.el")
 
 ;; ********************************************************
 ;; General customization
@@ -250,21 +251,6 @@ completion buffers."
 (cond 
  ((not(string= "windows" my-opsys))
   (setq doc-view-ghostscript-options '("-dSAFER" "-dNOPAUSE" "-sDEVICE=png16m" "-dTextAlphaBits=4" "-dBATCH" "-dGraphicsAlphaBits=4" "-dQUIET" ) )))
-
-;;muse mode
-(require 'muse-mode)
-(require 'muse-publish)
-(require 'muse-html)  ;; and so on
-(add-hook 'muse-mode-hook 'abbrev-mode)
-
-(setq muse-project-alist
-      '(("nakkaya.com" ("~/Projects/nakkaya.com/muse/" :default "index")
-         (:base "my-page-html" :path "~/Projects/nakkaya.com/html/"))
-	("wiki" ("~/Projects/wiki/" :default "index"))))
-
-(muse-derive-style "my-page-html" "html"
-                   :header "~/Projects/nakkaya.com/muse/header.tmpl"
-                   :footer "~/Projects/nakkaya.com/muse/footer.tmpl")
 
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
