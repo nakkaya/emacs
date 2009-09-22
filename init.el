@@ -35,7 +35,6 @@
 (load "clojure-mode.el")
 (load "javadoc-help.el")
 (load "prog.el")
-(load "muse.el")
 
 ;; ********************************************************
 ;; General customization
@@ -220,6 +219,12 @@ completion buffers."
 ;; Mode Specific Code
 ;;
 
+;;muse mode
+(load-library "muse-mode")
+(load-library "muse-wiki")
+(setq muse-project-alist
+      '(("wiki" ("~/Projects/wiki/" :default "index"))))
+
 ;; Text
 (delete-selection-mode)
 (setq fill-column 80) ;;; Text lines limit to 80 chars
@@ -255,8 +260,10 @@ completion buffers."
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
       (quote (("default"
-	       ("Muse" (or (mode . muse-mode)
-			   (mode . org-mode)) )
+	       ("Markup" (or (mode . muse-mode)
+			     (mode . org-mode)
+			     (mode . html-mode)
+			     (mode . text-mode)))
 	       ("Source" (or
 			  (mode . java-mode)
 			  (mode . clojure-mode)
@@ -270,6 +277,7 @@ completion buffers."
 			  (mode . asm-mode)
 			  (mode . emacs-lisp-mode)
 			  (mode . muse-mode)
+			  (mode . xml-mode)
 			  (mode . c++-mode)))
 
 	       ("Terminal" (or (mode . term-mode)
