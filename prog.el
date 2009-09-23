@@ -8,7 +8,7 @@
       (append '(("\\.C$"       . c++-mode)
 		("\\.cc$"      . c++-mode)
 		("\\.c$"       . c-mode)
-		("\\.markdown$"  . text-mode)
+		("\\.markdown$"  . markdown-mode)
 		("\\.h$"       . c++-mode)
 		("\\.i$"       . c++-mode)
 		("\\.ii$"      . c++-mode)
