@@ -41,7 +41,7 @@
 (define-skeleton skel-clojure-let
   ""
   nil
-  "(let  [ "_" ] )")
+  "(let ["_"] )")
 (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let )
 
 (define-skeleton skel-clojure-ref-set
@@ -56,6 +56,13 @@
   "(proxy ["_"] [] "
     \n > ")")
 (define-abbrev clojure-mode-abbrev-table "proxy" "" 'skel-clojure-proxy)
+
+(define-skeleton skel-clojure-doseq
+  ""
+  nil
+  "(doseq ["_"] "
+    \n > ")")
+(define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
 
 (define-skeleton skel-cpp-prt
   ""

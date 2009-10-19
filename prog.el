@@ -107,6 +107,8 @@
 			 "./extLibs/mac-widgets.jar:"
 			 "./extLibs/forms.jar:"
 			 "../extLibs/forms.jar:"
+			 "./extLibs/velocity.jar:"
+			 "./extLibs/velocity-dep.jar:"
 			 "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server " class-path " clojure.lang.Repl" ))
 (setq inferior-lisp-program   clojure-command)
