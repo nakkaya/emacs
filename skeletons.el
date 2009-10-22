@@ -32,6 +32,12 @@
   "(defn "_" [])")
 (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn )
 
+(define-skeleton skel-clojure-defn-
+  ""
+  nil
+  "(defn- "_" [])")
+(define-abbrev clojure-mode-abbrev-table "dfn-" "" 'skel-clojure-defn- )
+
 (define-skeleton skel-clojure-if
   ""
   nil
