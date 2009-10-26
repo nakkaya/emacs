@@ -267,6 +267,9 @@ completion buffers."
 	       ("Markup" (or (mode . muse-mode)
 			     (mode . org-mode)
 			     (mode . html-mode)
+			     (mode . markdown-mode)
+			     (mode . xml-mode)
+			     (name . "\\.xml$")
 			     (mode . text-mode)))
 	       ("Source" (or
 			  (mode . java-mode)
@@ -280,8 +283,6 @@ completion buffers."
 			  (mode . cperl-mode)
 			  (mode . asm-mode)
 			  (mode . emacs-lisp-mode)
-			  (mode . muse-mode)
-			  (mode . xml-mode)
 			  (mode . c++-mode)))
 
 	       ("Terminal" (or (mode . term-mode)
@@ -306,8 +307,7 @@ completion buffers."
 			(mode . gnus-article-mode)
 			(name . "^\\.newsrc-dribble")))
 	       ("IRC" (or
-			(mode . erc-mode)
-			))
+			(mode . erc-mode)))
 	       ("emacs" (or
 			 (name . "^\\*info\\*$")
 			 (name . "^\\*mpg123\\*$")
@@ -316,6 +316,7 @@ completion buffers."
 			 (name . "^\\*Messages\\*$")
 			 (name . "^\\*Completions\\*$") 
 			 (name . "^\\*Backtrace\\*$")
+			 (name . "^TAGS$")
 			 (name . "^\\*Help\\*$")
 			 (name . "^\\*Shell Command Output\\*$")))))))
 (add-hook 'ibuffer-mode-hook
