@@ -18,6 +18,7 @@
 		("\\.xml$"     . xml-mode)
 		("\\.outline$" . outline-mode)
 		("\\.sql$"     . c-mode)
+		("\\.pde$"     . c-mode)
 		("\\.sh$"      . shell-script-mode)
 		("\\.command$"      . shell-script-mode)
 		("\\.mak$"     . makefile-mode)
