@@ -91,13 +91,22 @@
 			 "./extLibs/jetty-util.jar:"
 			 "./extLibs/servlet-api.jar:"
 			 "./extLibs/markdownj.jar:"
+					;Java Mail API
+			 			 "./extLibs/dsn.jar:"
+			 "/java/mail/activation.jar:"
+			 "/java/mail/imap.jar:"
+			 "/java/mail/mail.jar:"
+			 "/java/mail/mailapi.jar:"
+			 "/java/mail/pop3.jar:"
+			 "/java/mail/smtp.jar:"
+
 			 "./extLibs/dsn.jar:"
 			 "./extLibs/activation.jar:"
 			 "./extLibs/imap.jar:"
 			 "./extLibs/mail.jar:"
 			 "./extLibs/mailapi.jar:"
 			 "./extLibs/pop3.jar:"
-			 "./extLibs/smtp.jar:"		
+			 "./extLibs/smtp.jar:"
 					; layout
 			 "/java/form/jfd-loader.jar:"
 			 "/java/form/swing-layout.jar:"
@@ -110,6 +119,7 @@
 			 "../extLibs/forms.jar:"
 			 "./extLibs/velocity.jar:"
 			 "./extLibs/velocity-dep.jar:"
+			 "./classes/:"
 			 "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server " class-path " clojure.lang.Repl" ))
 (setq inferior-lisp-program   clojure-command)
