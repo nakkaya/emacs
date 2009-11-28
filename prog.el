@@ -73,18 +73,24 @@
 (add-hook 'lisp-mode-hook 'abbrev-mode)
 (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
 (add-hook 'clojure-mode-hook 'abbrev-mode)
+(add-hook 'clojure-mode-hook 'lispy-parens)
 
 ;;
 ;; Clojure
-;;"-Djava.awt.headless=true "
-(setq class-path (concat "-cp " 
-			 "./extLibs/*:"
-			 "../extLibs/*:"
-			 "./classes/:"
-			 "."))
-(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server " class-path " clojure.lang.Repl" ))
-(setq inferior-lisp-program   clojure-command)
-(add-hook 'clojure-mode-hook 'lispy-parens)
+(setq swank-clojure-jar-path "./extLibs"
+      swank-clojure-extra-classpaths  (list
+				       "../extLibs/"
+				       "./classes"
+				       "./"))
+
+(require 'swank-clojure-autoload)
+
+;; slime
+(eval-after-load "slime"
+  '(progn (slime-setup '(slime-repl))))
+
+(require 'slime)
+(slime-setup)
 
 ;;
 ;;c++ custom
