@@ -25,7 +25,6 @@
 (load "searchDown.el")
 
 (load "skeletons.el")
-(load "linux.el")
 (load "frame.el")
 (load "jump.el")
 (load "php-mode.el")
@@ -215,6 +214,23 @@ completion buffers."
 ;;
 ;; Mode Specific Code
 ;;
+;;nmap mode configuration
+(cond
+ ((string= "linux" my-opsys)
+  (setq nmap-nmap-program "/usr/bin/nmap")
+  (setq nmap-ifconfig-program "/sbin/ifconfig")
+  (setq nmap-network-interface "ath0")))
+
+(cond
+ ((string= "osx" my-opsys)
+  (setq dsniff-os "osx")
+  (setq dsniff-network-interface "en1")
+  (setq dsniff-arpspoof-program "/opt/local/sbin/arpspoof")
+  (setq dsniff-urlsnarf-program "/opt/local/sbin/urlsnarf")
+  (setq dsniff-dsniff-program "/opt/local/sbin/dsniff")
+  (setq dsniff-msgsnarf-program "/opt/local/sbin/msgsnarf")
+  (setq dsniff-mailsnarf-program "/opt/local/sbin/mailsnarf")
+  (setq dsniff-tcpdump-program "/opt/local/sbin/tcpdump")))
 
 ;;markdown mode
 (autoload 'markdown-mode "markdown-mode.el"

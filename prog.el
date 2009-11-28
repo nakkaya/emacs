@@ -171,3 +171,44 @@
                         (setq i (+ 32 i)) i (single-key-description i)
                         (setq i (+ 32 i)) i (single-key-description i)))
         (setq i (- i 96))))))
+
+;;
+;;run term with /bin/bash
+(setq term-term-name "xterm-color")
+(setq-default term-buffer-maximum-size 5000)
+
+(defun na-linux-run-term ()
+      "run bash"
+      (interactive)
+      (term "/bin/bash"))
+
+(defun na-run-term-or-rename ()
+  "create new shell or rename old"
+  (interactive)  
+  (if (not (eq (get-buffer "*terminal*")  nil ) )
+      (progn
+	( setq new-buffer-name (read-from-minibuffer "Name shell to: " ) )
+	(set-buffer "*terminal*")
+	( rename-buffer new-buffer-name )))
+  
+  (if (eq (get-buffer "*terminal*")  nil) 
+      (progn
+	(na-linux-run-term ))))
+
+(defun na-switch-between-terminals () 
+"cycle multiple terminals"
+(interactive)
+(if (not (eq (or (get-buffer "*terminal*") 
+		 (get-buffer "*inferior-lisp*"))  nil ) )
+    (progn     
+      (setq found nil)
+      (bury-buffer)
+      (setq head (car (buffer-list)))      
+      (while  (eq found nil)	
+	(set-buffer head)	
+	(if (or (eq major-mode 'term-mode ) 
+		(eq major-mode 'inferior-lisp-mode ))
+	    (setq found t )
+	  (progn
+	   (bury-buffer)
+	   (setq head (car (buffer-list)))))))))
