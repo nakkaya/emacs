@@ -24,8 +24,6 @@
 (load "dsniff.el")
 (load "searchDown.el")
 
-(load "initGnus.el")
-
 (load "skeletons.el")
 (load "linux.el")
 (load "frame.el")
@@ -298,13 +296,6 @@ completion buffers."
 			   (mode . dsniff-mode)
 			   (mode . nmap-mode)))
 	       ("dired" (mode . dired-mode))
-	       ("gnus" (or
-			(mode . message-mode)
-			(mode . mail-mode)
-			(mode . gnus-group-mode)
-			(mode . gnus-summary-mode)
-			(mode . gnus-article-mode)
-			(name . "^\\.newsrc-dribble")))
 	       ("IRC" (or
 			(mode . erc-mode)))
 	       ("emacs" (or
@@ -347,8 +338,6 @@ completion buffers."
 (global-set-key [M-f1] 'run-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
 (global-set-key [M-f2] 'todo-show)
-(global-set-key [S-f2] 'gnus)
-(global-set-key [f2] 'switch-to-gnus)
 (global-set-key [f3] 'javadoc-lookup)
 (global-set-key [f4] 'na-mpg123-run)
 (global-set-key [f5] 'na-proxy-start)
