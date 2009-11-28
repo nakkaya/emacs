@@ -26,7 +26,6 @@
 (load "skeletons.el")
 (load "frame.el")
 (load "jump.el")
-(load "php-mode.el")
 (load "clojure-mode.el")
 (load "javadoc-help.el")
 (load "prog.el")
@@ -279,7 +278,6 @@ completion buffers."
 	       ("Source" (or
 			  (mode . java-mode)
 			  (mode . clojure-mode)
-			  (mode . php-mode)
 			  (mode . ruby-mode)
 			  (mode . shell-script-mode)
 			  (mode . sh-mode)
