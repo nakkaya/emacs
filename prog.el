@@ -83,8 +83,6 @@
 				       "./classes"
 				       "./"))
 
-(require 'swank-clojure-autoload)
-
 ;; slime
 (eval-after-load "slime"
   '(progn (slime-setup '(slime-repl))))
