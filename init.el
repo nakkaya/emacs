@@ -5,9 +5,6 @@
 (setq load-path (cons "~/Projects/emacs/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/clojure-mode/" load-path))
-(setq load-path (cons "~/Projects/emacs/ext/swank-clojure/" load-path))
-(add-to-list 'load-path "~/Projects/emacs/ext/swank-clojure/src/emacs/")
-(setq load-path (cons "~/Projects/emacs/ext/slime/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/muse/lisp/" load-path))
 (setq load-path (cons "~/Projects/emacs/int/" load-path))
 
@@ -347,7 +344,7 @@ completion buffers."
 ;;bindings of  keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key [S-f1] 'na-run-term-or-rename)
-(global-set-key [M-f1] 'slime)
+(global-set-key [M-f1] 'run-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
 (global-set-key [M-f2] 'todo-show)
 (global-set-key [S-f2] 'gnus)

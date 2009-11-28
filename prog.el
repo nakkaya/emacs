@@ -75,21 +75,28 @@
 (add-hook 'clojure-mode-hook 'abbrev-mode)
 (add-hook 'clojure-mode-hook 'lispy-parens)
 
-;;
-;; Clojure
-(setq swank-clojure-jar-path "./extLibs"
-      swank-clojure-extra-classpaths  (list
-				       "../extLibs/"
-				       "./classes"
-				       "./"))
+(setq class-path (concat "-cp " 
+             "./extLibs/*:"
+             "../extLibs/*:"
+             "./classes/:"
+             "."))
+(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server " class-path " clojure.lang.Repl" ))
+(setq inferior-lisp-program   clojure-command)
+(add-hook 'clojure-mode-hook 'lispy-parens)
 
-;; slime
-(eval-after-load "slime"
-  '(progn (slime-setup '(slime-repl))))
-
-(require 'slime)
-(slime-setup)
-
+;;sub process support for clojure
+(add-hook 'clojure-mode-hook
+	  '(lambda ()
+	     (define-key clojure-mode-map 
+	       (kbd "\e\C-x") 'lisp-eval-defun)
+	     (define-key clojure-mode-map 
+	       (kbd "\C-x\C-e") 'lisp-eval-last-sexp)
+	     (define-key clojure-mode-map 
+	       (kbd "\C-c\C-e") 'lisp-eval-last-sexp)
+	     (define-key clojure-mode-map 
+	       (kbd "\C-c\C-r") 'lisp-eval-region)
+	     (define-key clojure-mode-map 
+	       (kbd "\C-c\C-z") 'run-lisp)))
 ;;
 ;;c++ custom
 ;;
