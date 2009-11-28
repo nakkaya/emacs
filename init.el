@@ -5,7 +5,6 @@
 (setq load-path (cons "~/Projects/emacs/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/clojure-mode/" load-path))
-(setq load-path (cons "~/Projects/emacs/ext/muse/lisp/" load-path))
 (setq load-path (cons "~/Projects/emacs/int/" load-path))
 
 (cond
@@ -236,12 +235,6 @@ completion buffers."
 (autoload 'markdown-mode "markdown-mode.el"
    "Major mode for editing Markdown files" t)
 
-;;muse mode
-(load-library "muse-mode")
-(load-library "muse-wiki")
-(setq muse-project-alist
-      '(("wiki" ("~/Projects/wiki/" :default "index"))))
-
 ;; Text
 (delete-selection-mode)
 (setq fill-column 80) ;;; Text lines limit to 80 chars
@@ -277,8 +270,7 @@ completion buffers."
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
       (quote (("default"
-	       ("Markup" (or (mode . muse-mode)
-			     (mode . org-mode)
+	       ("Markup" (or (mode . org-mode)
 			     (mode . html-mode)
 			     (mode . markdown-mode)
 			     (mode . xml-mode)
