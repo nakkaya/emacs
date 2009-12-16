@@ -73,6 +73,13 @@
     \n > ")")
 (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
 
+(define-skeleton skel-clojure-reduce
+  ""
+  nil
+  "(reduce (fn[h v] ) "_" ) ")
+
+(define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
+
 (define-skeleton skel-cpp-prt
   ""
   nil
