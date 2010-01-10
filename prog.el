@@ -79,6 +79,7 @@
              "./extLibs/*:"
              "../extLibs/*:"
              "./classes/:"
+	     "/Users/nakkaya/Projects/clodiuno/src/:"
              "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server -Dfile.encoding=UTF-8 "  class-path " clojure.lang.Repl" ))
 (setq inferior-lisp-program   clojure-command)
