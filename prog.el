@@ -222,3 +222,10 @@
 	  (progn
 	   (bury-buffer)
 	   (setq head (car (buffer-list)))))))))
+
+(defun na-run-git-switch ()
+  "Switch to git buffer or run git-status"
+  (interactive)  
+  (if (not (eq (get-buffer "*git-status*") nil))
+      (switch-to-buffer "*git-status*")
+    (git-status (read-directory-name "Select Directory: "))))

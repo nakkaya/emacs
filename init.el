@@ -343,7 +343,7 @@ completion buffers."
 (global-set-key [S-f1] 'na-run-term-or-rename)
 (global-set-key [M-f1] 'run-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
-(global-set-key [M-f2] 'todo-show)
+(global-set-key [f2] 'na-run-git-switch)
 (global-set-key [f3] 'javadoc-lookup)
 (global-set-key [f4] 'na-mpg123-run)
 (global-set-key [f5] 'na-proxy-start)
