@@ -76,11 +76,11 @@
 (add-hook 'clojure-mode-hook 'lispy-parens)
 
 (setq class-path (concat "-cp " 
-             "./extLibs/*:"
-             "../extLibs/*:"
-             "./classes/:"
-	     "/Users/nakkaya/Projects/clodiuno/src/:"
-             "."))
+			 "./extLibs/*:"
+			 "../extLibs/*:"
+			 "./classes/:"
+			 "/Users/nakkaya/Projects/clodiuno/src/:"
+			 "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server -Dfile.encoding=UTF-8 "  class-path " clojure.lang.Repl" ))
 (setq inferior-lisp-program   clojure-command)
 
@@ -108,31 +108,9 @@
 	       "\C-c\C-z" 'run-lisp)))
 
 ;;
-;;c++ custom
-;;
-;;compile command
-(require 'compile)
-(add-hook 'c++-mode-hook
-	  (lambda ()
-	    (unless (file-exists-p "Makefile")
-	      (set (make-local-variable 'compile-command)
-		   (let ((file (file-name-nondirectory buffer-file-name)))
-		     (concat "g++ -g -O2 -Wall -o " 
-			     (file-name-sans-extension file)
-			     " " file))))))
-
-;;
 ;;java custom
 ;;
 (add-hook 'java-mode-hook 'outline-minor-mode)
-;; (defun na-setup-java ()
-;;   (make-local-variable 'compile-command)
-;;   (setq compile-command (concat "javac " (file-name-nondirectory 
-;; 					  buffer-file-name))))
-(defun na-setup-java ()
-  (make-local-variable 'compile-command)
-  (setq compile-command (concat "ant run -find")))
-(add-hook 'java-mode-hook 'na-setup-java)
 
 ;;
 ;;git.el
@@ -144,8 +122,7 @@
 (when (equal system-type 'darwin)
   (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
   (push "/opt/local/bin" exec-path))
-
-(setq exec-path (append exec-path '("/opt/local/bin")) )
+(setq exec-path (append exec-path '("/opt/local/bin")))
 
 
 ;;Flyspell
@@ -167,20 +144,20 @@
 ;;print ascii table
 ;;
 (defun ascii-table ()
-    "Display basic ASCII table (0 thru 128)."
-    (interactive)
-    (switch-to-buffer "*ASCII*")
-    (erase-buffer)
-    (save-excursion (let ((i -1))
-      (insert "ASCII characters 0 thru 127.\n\n")
-      (insert " Hex  Dec  Char|  Hex  Dec  Char|  Hex  Dec  Char|  Hex  Dec  Char\n")
-      (while (< i 31)
-        (insert (format "%4x %4d %4s | %4x %4d %4s | %4x %4d %4s | %4x %4d %4s\n"
-                        (setq i (+ 1  i)) i (single-key-description i)
-                        (setq i (+ 32 i)) i (single-key-description i)
-                        (setq i (+ 32 i)) i (single-key-description i)
-                        (setq i (+ 32 i)) i (single-key-description i)))
-        (setq i (- i 96))))))
+  "Display basic ASCII table (0 thru 128)."
+  (interactive)
+  (switch-to-buffer "*ASCII*")
+  (erase-buffer)
+  (save-excursion (let ((i -1))
+		    (insert "ASCII characters 0 thru 127.\n\n")
+		    (insert " Hex  Dec  Char|  Hex  Dec  Char|  Hex  Dec  Char|  Hex  Dec  Char\n")
+		    (while (< i 31)
+		      (insert (format "%4x %4d %4s | %4x %4d %4s | %4x %4d %4s | %4x %4d %4s\n"
+				      (setq i (+ 1  i)) i (single-key-description i)
+				      (setq i (+ 32 i)) i (single-key-description i)
+				      (setq i (+ 32 i)) i (single-key-description i)
+				      (setq i (+ 32 i)) i (single-key-description i)))
+		      (setq i (- i 96))))))
 
 ;;
 ;;run term with /bin/bash
@@ -188,9 +165,9 @@
 (setq-default term-buffer-maximum-size 5000)
 
 (defun na-linux-run-term ()
-      "run bash"
-      (interactive)
-      (term "/bin/bash"))
+  "run bash"
+  (interactive)
+  (term "/bin/bash"))
 
 (defun na-run-term-or-rename ()
   "create new shell or rename old"
@@ -209,16 +186,16 @@
   "cycle multiple terminals"
   (interactive)
   (if (not (eq (or (get-buffer "*terminal*") 
-		   (get-buffer "*inferior-lisp*"))  nil ) )
+		   (get-buffer "*inferior-lisp*")) nil))
       (progn     
 	(setq found nil)
 	(bury-buffer)
 	(setq head (car (buffer-list)))      
 	(while  (eq found nil)	
 	  (set-buffer head)	
-	  (if (or (eq major-mode 'term-mode ) 
-		  (eq major-mode 'inferior-lisp-mode ))
-	      (setq found t )
+	  (if (or (eq major-mode 'term-mode)
+		  (eq major-mode 'inferior-lisp-mode))
+	      (setq found t)
 	    (progn
 	      (bury-buffer)
 	      (setq head (car (buffer-list)))))))))
