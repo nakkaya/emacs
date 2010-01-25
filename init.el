@@ -341,7 +341,7 @@ completion buffers."
 ;;bindings of  keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key [S-f1] 'na-run-term-or-rename)
-(global-set-key [M-f1] 'run-lisp)
+(global-set-key [M-f1] 'na-run-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
 (global-set-key [f2] 'na-run-git-switch)
 (global-set-key [f3] 'javadoc-lookup)

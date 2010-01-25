@@ -81,8 +81,24 @@
 			 "./classes/:"
 			 "/Users/nakkaya/Projects/clodiuno/src/:"
 			 "."))
-(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server -Dfile.encoding=UTF-8 "  class-path " clojure.lang.Repl" ))
-(setq inferior-lisp-program   clojure-command)
+(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -server -Dfile.encoding=UTF-8 "  class-path " clojure.lang.Repl"))
+
+(setq lisp-programs 
+      (list (list '"clojure" clojure-command)
+	    (list '"sbcl" "/opt/local/bin/sbcl")))
+
+(defun na-run-lisp (arg)
+  (interactive "P")
+  (if (null arg)
+      (setq inferior-lisp-program (second (first lisp-programs)))
+    (let (choice) 
+      (setq choice (completing-read 
+		    "Lisp: " 
+		    (mapcar 'first lisp-programs)))
+      (dolist (l lisp-programs)
+	(if (string= (first l) choice)
+	    (setq inferior-lisp-program (second l))))))
+  (run-lisp inferior-lisp-program))
 
 (defun na-load-buffer ()
   (interactive)
