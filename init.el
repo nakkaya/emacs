@@ -249,23 +249,6 @@ completion buffers."
  ((string= "osx" my-opsys)
   (setq epg-gpg-program "/opt/local/bin/gpg")))
 
-;;doc-view
-(cond 
- ((not(string= "windows" my-opsys))
-  (require 'doc-view)))
-
-(cond
- ((string= "osx" my-opsys)
-  (setq doc-view-ghostscript-program "/opt/local/bin/gs")
-  (setq doc-view-cache-directory "~/.doc-view/" ))
- ((string= "linux" my-opsys)
-  (setq doc-view-ghostscript-program "/usr/bin/gs")
-  (setq doc-view-cache-directory "~/.doc-view/" )))
-
-(cond 
- ((not(string= "windows" my-opsys))
-  (setq doc-view-ghostscript-options '("-dSAFER" "-dNOPAUSE" "-sDEVICE=png16m" "-dTextAlphaBits=4" "-dBATCH" "-dGraphicsAlphaBits=4" "-dQUIET" ) )))
-
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
       (quote (("default"
@@ -429,8 +412,6 @@ point."
 ;(require 'recentf)
 ;(recentf-mode 1)
 (setq bookmark-save-flag 1 )
-
-(load "projects.el")
 
 (cond
  ((string= "osx" my-opsys)
