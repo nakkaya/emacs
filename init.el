@@ -316,8 +316,11 @@ completion buffers."
   "Connect to IRC."
   (interactive)
   (erc :server "irc.freenode.net" :port 6667
-                :nick "hamza" :full-name "rgb"))
+                :nick "hamza" :password "1qaz2wsx" :full-name "rgb"))
 
+(setq erc-fill-column 75)
+(setq erc-track-remove-disconnected-buffers t)
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -356,7 +359,7 @@ completion buffers."
 ;;works for pc keyboard
 (define-key global-map [C-M-kp-subtract] 'erase-buffer)
 ;;works for ibook keyboard
-(define-key global-map [C-M-backspace] 'erase-buffer)
+(define-key global-map [C-M-delete] 'erase-buffer)
 
 ;;outline bindings
 (global-set-key [M-up] 'hide-subtree)

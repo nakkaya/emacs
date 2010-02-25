@@ -78,6 +78,7 @@
 (setq class-path (concat "-cp " 
 			 "./extLibs/*:"
 			 "../extLibs/*:"
+			 "./lib/*:"
 			 "./classes/:"
 			 "/Users/nakkaya/Projects/clodiuno/src/:"
 			 "/Users/nakkaya/Projects/net-eval/src/:"
