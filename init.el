@@ -254,6 +254,8 @@ completion buffers."
 (setq org-mobile-inbox-for-pull "~/Documents/org/from-mobile.org")
 (setq org-mobile-directory "/Volumes/nakkaya.com/org/")
 (setq org-mobile-files (quote ("personal.org")))
+(setq org-agenda-files (list "~/Documents/org/personal.org"))
+
 (setq org-return-follows-link t)
 (setq org-hide-leading-stars t)
 (setq org-tag-alist '(("buy" . ?b) ("write" . ?w)))
