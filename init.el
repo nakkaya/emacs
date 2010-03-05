@@ -256,6 +256,11 @@ completion buffers."
 (setq org-mobile-files (quote ("personal.org")))
 (setq org-agenda-files (list "~/Documents/org/personal.org"))
 
+(setq org-agenda-custom-commands
+      '(("w" todo "TODO")
+	("h" agenda "SCHEDULED")
+        ))
+
 (setq org-return-follows-link t)
 (setq org-hide-leading-stars t)
 (setq org-tag-alist '(("buy" . ?b) ("write" . ?w)))
