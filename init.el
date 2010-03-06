@@ -253,13 +253,13 @@ completion buffers."
 (setq org-directory "~/Documents/org/")
 (setq org-mobile-inbox-for-pull "~/Documents/org/from-mobile.org")
 (setq org-mobile-directory "/Volumes/nakkaya.com/org/")
-(setq org-mobile-files (quote ("personal.org")))
-(setq org-agenda-files (list "~/Documents/org/personal.org"))
+(setq org-mobile-files (quote ("gtd.org")))
+(setq org-agenda-files (list "~/Documents/org/gtd.org"))
 
+(setq org-mobile-force-id-on-agenda-items nil)
 (setq org-agenda-custom-commands
       '(("w" todo "TODO")
-	("h" agenda "SCHEDULED")
-        ))
+	("h" agenda "SCHEDULED")))
 
 (setq org-return-follows-link t)
 (setq org-hide-leading-stars t)
@@ -346,8 +346,8 @@ completion buffers."
 (global-set-key [M-f1] 'na-run-lisp)
 (global-set-key [f1] 'na-switch-between-terminals)
 (global-set-key [f2] 'na-run-git-switch)
-(global-set-key [f3] 'javadoc-lookup)
-(global-set-key [f4] 'na-mpg123-run)
+(global-set-key [f3] 'org-show-todo-tree)
+(global-set-key [f4] 'javadoc-lookup)
 (global-set-key [f5] 'na-proxy-start)
 (global-set-key [S-f5] 'na-proxy-stop)
 (global-set-key [f6] 'nmap)
