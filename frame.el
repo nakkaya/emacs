@@ -65,6 +65,9 @@
 (set-face-background 'diff-header "#2A2A38")
 (set-face-background 'diff-file-header "#2A2A38")
 
+(set-face-background 'org-hide "#2A2A38")
+(set-face-foreground 'org-hide "#2A2A38")
+
 (defun na-set-frame-size(width height font-size)
   (set-face-attribute 
    'default (selected-frame) :height font-size :width 'normal)
