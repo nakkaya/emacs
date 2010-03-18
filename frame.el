@@ -95,3 +95,45 @@
   (interactive)
   (set-default-font "monaco")
   (na-set-frame-size 130 50 110))
+
+;;gnus layout
+(gnus-add-configuration
+ '(article
+   (horizontal 1.0
+	       (vertical 0.50
+			 (summary 1.0 point))
+	       (vertical 1.0
+			 (article 1.0)))))
+(gnus-add-configuration
+ '(summary
+   (horizontal 1.0
+	       (vertical 0.50
+			 (group 1.0))
+	       (vertical 1.0
+			 (summary 1.0 point)))))
+(gnus-add-configuration
+ '(reply
+   (horizontal 1.0
+	       (vertical 0.50
+			 ( article 1.0 ) )
+	       (vertical 1.0 ))))
+(gnus-add-configuration
+ '(forward
+   (horizontal 1.0
+	       (vertical 0.50
+			 ( article 1.0 ) )
+	       (vertical 1.0 ))))
+(gnus-add-configuration
+ '(group
+   (horizontal 1.0
+	       (vertical 0.50
+			 (group 1.0 point) )
+	       (vertical 1.0
+			 (group 1.0) ))))
+(gnus-add-configuration
+ '(message
+   (horizontal 1.0
+	       (vertical 0.50
+			 (message 1.0 point) )
+	       (vertical 1.0
+			 (group 1.0) ))))

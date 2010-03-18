@@ -29,6 +29,7 @@
 (load "clojure-mode.el")
 (load "javadoc-help.el")
 (load "prog.el")
+(load "gnus-init.el")
 
 ;; ********************************************************
 ;; General customization
@@ -294,7 +295,13 @@ completion buffers."
 			  (mode . asm-mode)
 			  (mode . emacs-lisp-mode)
 			  (mode . c++-mode)))
-
+	       ("gnus" (or
+			(mode . message-mode)
+			(mode . mail-mode)
+			(mode . gnus-group-mode)
+			(mode . gnus-summary-mode)
+			(mode . gnus-article-mode)
+			(name . "^\\.newsrc-dribble")))
 	       ("Terminal" (or (mode . term-mode)
 			       (mode . inferior-lisp-mode)))
 	       ("Network" (or 
@@ -356,7 +363,8 @@ completion buffers."
 (global-set-key [f2] 'na-run-git-switch)
 (global-set-key [f3] 'org-agenda)
 (global-set-key [S-f3] 'org-show-todo-tree)
-(global-set-key [f4] 'javadoc-lookup)
+(global-set-key [S-f4] 'gnus)
+(global-set-key [f4] 'switch-to-gnus)
 (global-set-key [f5] 'na-proxy-start)
 (global-set-key [S-f5] 'na-proxy-stop)
 (global-set-key [f6] 'nmap)
