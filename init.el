@@ -17,6 +17,7 @@
    ((string-match "apple" system-configuration)
     (setq my-opsys "osx" )))))
 
+(require 'org)
 (require 'dired)
 (require 'diff-mode)
 (load "nmap.el")
