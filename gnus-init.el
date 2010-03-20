@@ -33,6 +33,19 @@
 ;; No HTML mail
 (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 
+;;threading
+(setq gnus-show-threads t
+      gnus-thread-hide-subtree t	;all threads will be hidden
+      gnus-thread-hide-killed t
+      ;; if t, the changed subject in the  middle of a thread is ignored.
+      ;; default nil and the change accepted.
+      gnus-thread-ignore-subject t
+      ;;default 4
+      gnus-thread-indent-level 2)
+
+(define-key gnus-summary-mode-map [(right)] 'gnus-summary-show-thread)
+(define-key gnus-summary-mode-map [(left)]  'gnus-summary-hide-thread)
+
 ;; Never show vcard stuff, I never need it anyway
 (setq gnus-ignored-mime-types
       '("text/x-vcard"))
