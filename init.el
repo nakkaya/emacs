@@ -5,6 +5,7 @@
 (setq load-path (cons "~/Projects/emacs/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/" load-path))
 (setq load-path (cons "~/Projects/emacs/ext/clojure-mode/" load-path))
+(setq load-path (cons "~/Projects/emacs/ext/org-mode/lisp/" load-path))
 (setq load-path (cons "~/Projects/emacs/int/" load-path))
 
 (cond
