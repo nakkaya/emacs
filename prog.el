@@ -82,6 +82,7 @@
 			 "./classes/:"
 			 "/Users/nakkaya/Projects/clodiuno/src/:"
 			 "/Users/nakkaya/Projects/net-eval/src/:"
+			 "./test/:"
 			 "./src/:"
 			 "."))
 (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -d32 -server -Dfile.encoding=UTF-8 "  class-path " clojure.lang.Repl"))
