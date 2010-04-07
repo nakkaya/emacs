@@ -7,23 +7,17 @@
 (setq user-full-name "Nurullah Akkaya")
 (setq user-mail-address "nurullah@nakkaya.com")
 (setq mail-user-agent 'gnus-user-agent)
-
 ;;storage
-(setq gnus-directory "~/Documents/Gnus")
-(setq message-directory "~/Documents/Gnus/mail")
-;; (setq nnml-directory "~/Documents/Gnus/nnml-mail")
-(setq gnus-article-save-directory "~/Documents/Gnus/saved")
-(setq gnus-kill-files-directory "~/Documents/Gnus/scores")
-(setq gnus-cache-directory "~/Documents/Gnus/cache")
-(setq message-auto-save-directory "~/Documents/Gnus")
+(setq gnus-directory "~/Documents/gnus")
+(setq message-directory "~/Documents/gnus/mail")
+(setq gnus-article-save-directory "~/Documents/gnus/saved")
+(setq gnus-kill-files-directory "~/Documents/gnus/scores")
+(setq gnus-cache-directory "~/Documents/gnus/cache")
+(setq message-auto-save-directory "~/Documents/gnus")
 
 ;; General speedups.
-(setq gnus-check-new-newsgroups nil) 
-(setq gnus-nov-is-evil nil) 
 (setq gnus-save-newsrc-file t)
 (setq gnus-interactive-exit nil)
-(setq gnus-activate-level 1)
-(setq gnus-use-cache t)
 (setq message-from-style 'angles) 
 (setq gnus-summary-line-format "%U%R%z%d %I%(%[%3L: %-10,10n%]%) %s\n")
 (setq gnus-agent nil)
@@ -47,22 +41,14 @@
 (define-key gnus-summary-mode-map [(left)]  'gnus-summary-hide-thread)
 
 ;; Never show vcard stuff, I never need it anyway
-(setq gnus-ignored-mime-types
-      '("text/x-vcard"))
+(setq gnus-ignored-mime-types '("text/x-vcard"))
 
 (setq gnus-posting-styles
-      '((".*"
-	 (signature "Nurullah Akkaya\nhttp://nakkaya.com"))))
+      '((".*" (signature "Nurullah Akkaya\nhttp://nakkaya.com"))))
 
 (defun add-mail-headers ()
-  "Add Reply-To, X-OS, and X-Uptime mail headers."
   (message-add-header
-   (concat "X-Homepage: http://nakkaya.com")
-   ;;    (concat "X-OS: "
-   ;;            (substring (shell-command-to-string "uname -a") 0 -1))
-   ;;    (concat "X-Uptime: "
-   ;;            (substring (shell-command-to-string "uptime") 0 -1))
-   ))
+   (concat "X-Homepage: http://nakkaya.com")))
 (add-hook 'message-send-hook 'add-mail-headers)
 
 (setq gnus-visible-headers 
@@ -79,17 +65,14 @@
 ;;*================================
 (add-hook 'message-sent-hook 'gnus-score-followup-article)
 (add-hook 'message-sent-hook 'gnus-score-followup-thread)
-;; Use a second connection to grab the next article when I read one, so
-;; I don't have to wait for it be downloaded.  
-					;(setq gnus-asynchronous t)
-;; Configure incoming mail (IMAP)
-(load "tls")
-(setq gnus-select-method '(nnimap "gmail"
-				  (nnimap-address "imap.gmail.com")
-				  (nnimap-server-port 993)
-				  (nnimap-authinfo-file "~/.authinfo")
-				  (nnimap-stream ssl)))
 
+(setq gnus-select-method 
+      '(nnmaildir "GMail" 
+		  (directory "~/Documents/mail/")
+		  (directory-files nnheader-directory-files-safe) 
+		  (get-new-mail nil)))
+
+(load "tls")
 (setq send-mail-function 'smtpmail-send-it
       message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
@@ -107,6 +90,11 @@
       smtpmail-debug-info t
       smtpmail-local-domain "nakkaya.com")
 
+(define-key gnus-group-mode-map (kbd "vo")
+  '(lambda ()
+     (interactive)
+     (shell-command "offlineimap&" "*offlineimap*" nil)))
+
 (require 'smtpmail)
 (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
 (setq message-kill-buffer-on-exit t)
@@ -114,12 +102,6 @@
 (remove-hook 'gnus-mark-article-hook
              'gnus-summary-mark-read-and-unread-as-read)
 (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
-
-(defun na-gmail-move-trash ()
-  (interactive)
-  (gnus-summary-move-article nil "[Gmail]/Trash"))
-
-(define-key gnus-summary-mode-map [(v)] 'na-gmail-move-trash)
 
 (defun switch-to-gnus (&optional arg)
   "Switch to a Gnus related buffer.
@@ -134,8 +116,8 @@
 	(alist '(("^\\*\\(mail\\|\\(wide \\)?reply\\)" t)
 		 ("^\\*Group")
 		 ("^\\*Summary")
-		 ("^\\*Article" nil 
-		  (lambda ()				      
+		 ("^\\*Article" nil
+		  (lambda ()
 		    (buffer-live-p 
 		     gnus-article-current-summary))))))
     (catch 'none-found
@@ -160,3 +142,21 @@
 	   (gnus))
 	  (t
 	   (error "No candidate found")))))
+
+(defun mail-notify ()
+  (let ((buffer (get-buffer "*Group*"))
+        (count 0))
+    (when buffer
+      (with-current-buffer buffer
+        (goto-char (point-min))
+        (while (re-search-forward "\\([[:digit:]]+\\): INBOX" nil t)
+          (setq count (+ count (string-to-number (match-string 1)))))))
+    (if (> count 0)
+	(shell-command 
+	 "/usr/bin/afplay ~/Downloads/Mail_Mother_Fucker.mp3"))))
+
+(add-hook 'gnus-after-getting-new-news-hook 'mail-notify)
+
+(gnus-demon-add-handler 'gnus-group-get-new-news 1 t)
+(gnus-demon-add-handler 'gnus-group-save-newsrc 1 t)
+(gnus-demon-init)
