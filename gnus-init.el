@@ -137,11 +137,19 @@
 		(t
 		 (throw 'none-found t))))))
     (cond (candidate
-	   (switch-to-buffer candidate))
+	   (progn 
+	     (make-frame '((name . "Gnus") (width . 150)))
+	     (set-frame-position (selected-frame) 100 1)
+	     (switch-to-buffer candidate)))
 	  (arg
 	   (gnus))
 	  (t
 	   (error "No candidate found")))))
+
+(define-key gnus-group-mode-map (kbd "Q")
+  '(lambda ()
+     (interactive)
+     (delete-frame)))
 
 (defun mail-notify ()
   (let ((buffer (get-buffer "*Group*"))
