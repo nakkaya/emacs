@@ -138,8 +138,10 @@
 		 (throw 'none-found t))))))
     (cond (candidate
 	   (progn 
-	     (make-frame '((name . "Gnus") (width . 150)))
-	     (set-frame-position (selected-frame) 100 1)
+	     (make-frame '((name . "Gnus") (width . 130)))
+	     (set-frame-position (selected-frame) 0 1)
+	     (set-face-attribute 
+	      'default (selected-frame) :height 160 :width 'normal)
 	     (switch-to-buffer candidate)))
 	  (arg
 	   (gnus))
