@@ -223,5 +223,15 @@
   "Switch to git buffer or run git-status"
   (interactive)  
   (if (not (eq (get-buffer "*git-status*") nil))
-      (switch-to-buffer "*git-status*")
+      (progn 
+	(make-frame '((name . "Git") (width . 130)))
+	(set-frame-position (selected-frame) 0 1)
+	(set-face-attribute 
+	 'default (selected-frame) :height 160 :width 'normal)
+	(switch-to-buffer "*git-status*"))
     (git-status (read-directory-name "Select Directory: "))))
+
+(define-key git-status-mode-map (kbd "Q")
+  '(lambda ()
+     (interactive)
+     (delete-frame)))
