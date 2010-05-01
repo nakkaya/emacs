@@ -329,6 +329,7 @@ completion buffers."
 			 (name . "^\\*git-status\\*$")
 			 (name . "^\\*git-diff\\*$")
 			 (name . "^\\*git-commit\\*$")
+			 (name . "^\\*Git Command Output\\*$")
 			 (name . "^\\*Messages\\*$")
 			 (name . "^\\*Completions\\*$") 
 			 (name . "^\\*Backtrace\\*$")
