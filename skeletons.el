@@ -80,6 +80,20 @@
 
 (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
 
+(define-skeleton skel-clojure-try
+  ""
+  nil
+  "(try "_" (catch Exception e (println e)))")
+
+(define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
+
+(define-skeleton skel-clojure-map
+  ""
+  nil
+  "(map #() "_")")
+
+(define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
+
 (define-skeleton skel-cpp-prt
   ""
   nil
