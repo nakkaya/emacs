@@ -87,7 +87,7 @@
 
 (setq library-path "-Djava.library.path=./native/macosx/x86/")
 
-(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))
+(setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))
 
 (setq lisp-programs 
       (list (list "clojure" clojure-command)
