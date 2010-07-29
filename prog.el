@@ -126,6 +126,8 @@
 	     (define-key clojure-mode-map 
 	       "\C-c\C-z" 'run-lisp)))
 
+(define-clojure-indent (from-blackboard 'defun))
+
 ;;
 ;;java custom
 ;;
