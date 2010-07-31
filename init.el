@@ -360,6 +360,23 @@ completion buffers."
 (setq erc-track-remove-disconnected-buffers t)
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
+(defun na-run-erc-switch ()
+  "Switch to clojure buffer or run erc."
+  (interactive)  
+  (if (not (eq (get-buffer "irc.freenode.net:6667") nil))
+      (progn 
+	(make-frame '((name . "ERC") (width . 80)))
+	(set-frame-position (selected-frame) 0 1)
+	(set-face-attribute 
+	 'default (selected-frame) :height 160 :width 'normal)
+	(switch-to-buffer "#clojure"))
+    (na-erc)))
+
+(define-key erc-mode-map (kbd "Q")
+  '(lambda ()
+     (interactive)
+     (delete-frame)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;bindings of  keys
@@ -370,10 +387,8 @@ completion buffers."
 (global-set-key [f2] 'na-run-git-switch)
 (global-set-key [f3] 'org-agenda)
 (global-set-key [S-f3] 'org-show-todo-tree)
-(global-set-key [S-f4] 'gnus)
-(global-set-key [f4] 'switch-to-gnus)
-(global-set-key [f5] 'na-proxy-start)
-(global-set-key [S-f5] 'na-proxy-stop)
+;;(global-set-key [S-f4] 'na-run-erc-switch)
+(global-set-key [f4] 'na-run-erc-switch)
 (global-set-key [f6] 'nmap)
 (global-set-key [S-f6] 'dsniff)
 (global-set-key [f7] 'compile)
