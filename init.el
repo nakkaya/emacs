@@ -391,7 +391,7 @@ completion buffers."
 (global-set-key [f4] 'na-run-erc-switch)
 (global-set-key [f6] 'nmap)
 (global-set-key [S-f6] 'dsniff)
-(global-set-key [f7] 'compile)
+(global-set-key [f7] 'na-clojure-project)
 (global-set-key [f8] 'toggle-truncate-lines)
 (global-set-key [M-f12] 'na-switch-project)
 

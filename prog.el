@@ -80,7 +80,6 @@
 			 "../extLibs/*:"
 			 "./lib/*:"
 			 "./classes/:"
-			 "/Users/nakkaya/Projects/net-eval/src/:"
 			 "./test/:"
 			 "./src/:"
 			 "."))
@@ -127,6 +126,16 @@
 	       "\C-c\C-z" 'run-lisp)))
 
 (define-clojure-indent (from-blackboard 'defun))
+
+(defun na-clojure-project (path)
+  (interactive (list (read-directory-name "Project root: " )))
+  (when (get-buffer "*inferior-lisp*") 
+    (kill-buffer "*inferior-lisp*"))
+  (let ((path-lst (split-string path "/")))
+    (let ((proj-name (nth (- (length path-lst) 2) path-lst)))
+      (dired path)
+      (run-lisp (second (first lisp-programs)))
+      (find-file (concat path "src/" proj-name "/core.clj")))))
 
 ;;
 ;;java custom
