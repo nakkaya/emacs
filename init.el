@@ -21,8 +21,6 @@
 (require 'org)
 (require 'dired)
 (require 'diff-mode)
-(load "nmap.el")
-(load "dsniff.el")
 (load "searchDown.el")
 
 (load "skeletons.el")
