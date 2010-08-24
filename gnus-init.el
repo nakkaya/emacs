@@ -16,8 +16,13 @@
 (setq message-auto-save-directory "~/Documents/gnus")
 
 ;; General speedups.
-(setq gnus-save-newsrc-file t)
+
+(setq gnus-check-new-newsgroups nil) 
+(setq gnus-nov-is-evil nil) 
 (setq gnus-interactive-exit nil)
+(setq gnus-activate-level 1)
+(setq gnus-use-cache t)
+(setq gnus-save-newsrc-file t)
 (setq message-from-style 'angles) 
 (setq gnus-summary-line-format "%U%R%z%d %I%(%[%3L: %-10,10n%]%) %s\n")
 (setq gnus-agent nil)
@@ -66,11 +71,13 @@
 (add-hook 'message-sent-hook 'gnus-score-followup-article)
 (add-hook 'message-sent-hook 'gnus-score-followup-thread)
 
-(setq gnus-select-method 
-      '(nnmaildir "GMail" 
-		  (directory "~/Documents/mail/")
-		  (directory-files nnheader-directory-files-safe) 
-		  (get-new-mail nil)))
+;; Configure incoming mail (IMAP)
+(load "tls")
+(setq gnus-select-method '(nnimap "gmail"
+				  (nnimap-address "imap.gmail.com")
+				  (nnimap-server-port 993)
+				  (nnimap-authinfo-file "~/.authinfo")
+				  (nnimap-stream ssl)))
 
 (load "tls")
 (setq send-mail-function 'smtpmail-send-it
@@ -90,11 +97,6 @@
       smtpmail-debug-info t
       smtpmail-local-domain "nakkaya.com")
 
-(define-key gnus-group-mode-map (kbd "vo")
-  '(lambda ()
-     (interactive)
-     (shell-command "offlineimap&" "*offlineimap*" nil)))
-
 (require 'smtpmail)
 (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
 (setq message-kill-buffer-on-exit t)
@@ -102,6 +104,12 @@
 (remove-hook 'gnus-mark-article-hook
              'gnus-summary-mark-read-and-unread-as-read)
 (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
+
+(defun na-gmail-move-trash ()
+  (interactive)
+  (gnus-summary-move-article nil "[Gmail]/Trash"))
+
+(define-key gnus-summary-mode-map [(v)] 'na-gmail-move-trash)
 
 (defun switch-to-gnus (&optional arg)
   "Switch to a Gnus related buffer.

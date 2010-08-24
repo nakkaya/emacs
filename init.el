@@ -387,6 +387,7 @@ completion buffers."
 (global-set-key [S-f3] 'org-show-todo-tree)
 ;;(global-set-key [S-f4] 'na-run-erc-switch)
 (global-set-key [f4] 'na-run-erc-switch)
+(global-set-key [f5] 'switch-to-gnus)
 (global-set-key [f6] 'nmap)
 (global-set-key [S-f6] 'dsniff)
 (global-set-key [f7] 'na-clojure-project)
