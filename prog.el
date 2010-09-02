@@ -131,11 +131,15 @@
   (interactive (list (read-directory-name "Project root: " )))
   (when (get-buffer "*inferior-lisp*") 
     (kill-buffer "*inferior-lisp*"))
+  (when (get-buffer "*terminal*") 
+    (kill-buffer "*terminal*"))
   (let ((path-lst (split-string path "/")))
     (let ((proj-name (nth (- (length path-lst) 2) path-lst)))
       (dired path)
       (run-lisp (second (first lisp-programs)))
-      (find-file (concat path "src/" proj-name "/core.clj")))))
+      (dired path)
+      (term "/bin/bash")
+      (dired path))))
 
 ;;
 ;;java custom
