@@ -274,6 +274,11 @@ completion buffers."
 (setq org-agenda-window-setup 'other-frame)
 (setq org-agenda-show-all-dates t)
 
+(require 'org-latex)
+(setq org-export-latex-listings t)
+(add-to-list 'org-export-latex-packages-alist '("" "listings"))
+(add-to-list 'org-export-latex-packages-alist '("" "color"))
+
 ;; ibuffer
 (setq ibuffer-saved-filter-groups
       (quote (("default"
