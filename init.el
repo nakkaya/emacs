@@ -251,12 +251,12 @@ completion buffers."
   (setq epg-gpg-program "/opt/local/bin/gpg")))
 
 ;;org-mode
-(setq org-directory "~/Documents/org/")
-(setq org-mobile-inbox-for-pull "~/Documents/org/from-mobile.org")
+(setq org-directory "~/Dropbox/org/")
+(setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 (setq org-mobile-files (quote ("gtd.org" "curriculum.org")))
-(setq org-agenda-files (list "~/Documents/org/gtd.org"
-			     "~/Documents/org/birthday.org"))
+(setq org-agenda-files (list "~/Dropbox/org/gtd.org"
+			     "~/Dropbox/org/birthday.org"))
 
 (setq org-mobile-force-id-on-agenda-items nil)
 (setq org-agenda-custom-commands
