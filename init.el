@@ -35,10 +35,10 @@
 ;; General customization
 ;; ********************************************************
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(bookmark-default-file "~/.emacs.d/emacs.bmk")
  '(c++-default-style "stroustrup")
  '(column-number-mode t)
@@ -233,7 +233,7 @@ completion buffers."
 
 ;;markdown mode
 (autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 
 ;; Text
 (delete-selection-mode)
@@ -323,7 +323,7 @@ completion buffers."
 			   (mode . nmap-mode)))
 	       ("dired" (mode . dired-mode))
 	       ("IRC" (or
-			(mode . erc-mode)))
+		       (mode . erc-mode)))
 	       ("emacs" (or
 			 (name . "^\\*info\\*$")
 			 (name . "^\\*mpg123\\*$")
@@ -350,14 +350,14 @@ completion buffers."
 (require 'erc-join)
 (erc-autojoin-mode 1)
 (setq erc-autojoin-channels-alist
-          '(("freenode.net" "#clojure") ))
+      '(("freenode.net" "#clojure") ))
 
 ;;; Finally, connect to the networks.
 (defun na-erc ()
   "Connect to IRC."
   (interactive)
   (erc :server "irc.freenode.net" :port 6667
-                :nick "hamza" :password "1qaz2wsx" :full-name "rgb"))
+       :nick "xxx" :password "xxx" :full-name "xxx"))
 
 (setq erc-fill-column 75)
 (setq erc-track-remove-disconnected-buffers t)
@@ -424,7 +424,7 @@ completion buffers."
 (global-set-key [M-up] 'hide-subtree)
 (global-set-key [M-down] 'show-subtree)
 
-;keybindindings for git
+					;keybindindings for git
 (global-set-key "\C-xgs" 'git-status)
 
 
@@ -448,7 +448,7 @@ point."
        (or (eobp) (not (= ?w (char-syntax (char-after))))))
       (dabbrev-expand arg)
     (indent-according-to-mode)))
- 
+
 (defun my-tab-fix ()
   (local-set-key [tab] 'indent-or-expand))
 
@@ -471,17 +471,17 @@ point."
 (require 'saveplace)
 (setq-default save-place t)
 ;;save recent opened files
-;(require 'recentf)
-;(recentf-mode 1)
+					;(require 'recentf)
+					;(recentf-mode 1)
 (setq bookmark-save-flag 1 )
 
 (cond
  ((string= "osx" my-opsys)
   (na-resize-frame-big)
   (split-window-horizontally))
-((string= "linux" my-opsys)
+ ((string= "linux" my-opsys)
   (na-resize-frame-bizdik))
-((string= "windows" my-opsys)
+ ((string= "windows" my-opsys)
   (na-frame-windows)))
 
 ;;setup server calls
