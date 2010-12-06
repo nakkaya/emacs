@@ -15,7 +15,7 @@
   (load "jump.el")
   (load "clojure-mode.el")
   (require 'diff-mode)  
-  
+  (require 'org)
 #+end_src
 
 * Options
