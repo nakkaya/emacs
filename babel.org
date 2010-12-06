@@ -1,0 +1,988 @@
+* Load Path
+#+begin_src emacs-lisp 
+  (setq dotfiles-dir (file-name-directory
+                      (or load-file-name (buffer-file-name))))
+  
+  (add-to-list 'load-path dotfiles-dir)
+  (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
+  (add-to-list 'load-path (concat dotfiles-dir "/int/"))
+  (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
+  (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
+#+end_src
+
+#+begin_src emacs-lisp 
+  (load "searchDown.el")
+  (load "jump.el")
+  (load "clojure-mode.el")
+  (require 'diff-mode)  
+  
+#+end_src
+
+* Options
+** Misc
+#+begin_src emacs-lisp 
+  (setq large-file-warning-threshold 256000000 )
+  ;;debug
+  (setq debug-on-error t) 
+  ;;enable blinking cursor
+  (blink-cursor-mode 1)
+  (put 'erase-buffer 'disabled nil)
+  ;;disable scroll bar
+  (toggle-scroll-bar nil)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  ;;do not continue line when split frame
+  (setq truncate-partial-width-windows nil)
+  ;; turn on font-lock mode
+  (global-font-lock-mode t)
+  (when window-system
+    ;; use extended compound-text coding for X clipboard
+    (set-selection-coding-system 'compound-text-with-extensions))
+  
+  (setq bookmark-default-file "~/.emacs.d/emacs.bmk")
+  (setq c++-default-style "stroustrup")
+  (setq column-number-mode t)
+  (setq compilation-scroll-output t)
+  (setq dired-dwim-target t)
+  (setq fill-column 72)
+  (setq inhibit-startup-screen t)
+  (setq next-line-add-newlines nil)
+  (setq query-replace-highlight t)
+  (setq require-final-newline t)
+  (setq scroll-step 1)
+  (setq search-highlight t)
+  (setq transient-mark-mode t)
+#+end_src
+
+#+begin_src emacs-lisp 
+  (cond
+   ((string-match "GNU" (emacs-version))
+    (cond 
+     ((string-match "linux" system-configuration)
+      (setq cur-op-sys "linux" ))
+     ((string-match "nt" system-configuration)
+      (setq cur-op-sys "windows"))
+     ((string-match "apple" system-configuration)
+      (setq cur-op-sys "apple" )))))
+#+end_src
+
+Do not open a new frame for each file on OSX,
+
+#+begin_src emacs-lisp 
+  (cond 
+   ((string= "osx" cur-op-sys)
+    (setq ns-pop-up-frames nil)))
+#+end_src
+
+Replace yes or no with y or n,
+
+#+begin_src emacs-lisp 
+  (defun yes-or-no-p (arg)
+    "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
+    (y-or-n-p arg))
+#+end_src
+
+Color on selection,
+
+#+begin_src emacs-lisp 
+  (defface completion-setup-directory-face  '((t (:foreground "Blue")))
+    "Face to use for directories."
+    :group 'color-file-completion)
+  
+  (defcustom color-file-completion-always t "If true, always turn on regexps in
+  completion buffers."
+    :group 'color-file-completion
+    :type 'boolean)
+  
+  (defun completion-setup-directory-face()
+    "When we are completing a filename, highlight directories."
+    (interactive)
+    ;;if this is completing a filename... highlight faces...
+    (when (or color-file-completion-always
+              (eq minibuffer-completion-table 'read-file-name-internal))
+      (let((font-lock-verbose nil))
+        (font-lock-mode 1)
+        (font-lock-add-keywords nil '(("[^ \n]+/" 0 'completion-setup-directory-face keep)))
+        (font-lock-fontify-buffer))))
+  
+  (add-hook 'completion-list-mode-hook 'completion-setup-directory-face)
+#+end_src
+
+** Encoding
+
+#+begin_src emacs-lisp 
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+end_src
+
+** Keyboard and Mouse
+
+#+begin_src emacs-lisp 
+  (defun scroll-window-forward-line ()
+    "Move window forward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-up 1))
+  
+  (defun scroll-window-backward-line ()
+    "Move window backward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-down 1)) 
+  
+  (define-key global-map [wheel-up] 'scroll-window-backward-line)
+  (define-key global-map [wheel-down] 'scroll-window-forward-line)
+#+end_src
+
+Set up the keyboard so the delete key on both the regular keyboard
+and the keypad delete the character under the cursor and to the right
+under X, instead of the default, backspace behavior.
+
+#+begin_src emacs-lisp 
+  (global-set-key [delete] 'delete-char)
+  (global-set-key [kp-delete] 'delete-char)
+#+end_src
+
+#+begin_src emacs-lisp 
+  (global-set-key [S-f1] 'na-run-term-or-rename)
+  (global-set-key [M-f1] 'na-run-lisp)
+  (global-set-key [f1] 'na-switch-between-terminals)
+  (global-set-key [f2] 'na-run-git-switch)
+  (global-set-key [f3] 'org-agenda)
+  (global-set-key [S-f3] 'org-show-todo-tree)
+  ;;(global-set-key [S-f4] 'na-run-erc-switch)
+  (global-set-key [f4] 'na-run-erc-switch)
+  (global-set-key [f5] 'switch-to-gnus)
+  (global-set-key [f6] 'nmap)
+  (global-set-key [S-f6] 'dsniff)
+  (global-set-key [f7] 'na-clojure-project)
+  (global-set-key [f8] 'toggle-truncate-lines)
+  (global-set-key [M-f12] 'na-switch-project)
+  
+  (define-key global-map [(control meta .)] 'find-tag-other-window)
+  (global-set-key [(meta g)] 'goto-line)
+  (define-key global-map [(meta \])] 'ibuffer)
+  (add-hook 'term-mode-hook
+         '(lambda ()
+            (define-key term-raw-map [(meta \])] 'ibuffer)))
+  
+  (add-hook 'term-mode-hook
+         '(lambda ()
+            (define-key term-raw-map [(meta .)] 'find-tag)))
+  
+  (define-key global-map [(meta p)] 'na-cm-rotate)
+  (define-key global-map [(meta control  p)] 'na-cm-save-point)
+  (global-set-key [(control =)] 'na-bounce-sexp)
+  
+  (global-set-key [M-right] 'other-window)
+  (define-key org-mode-map (kbd "M-<right>") 'other-window)
+  
+  (define-key global-map [(meta \[)] 'other-frame)
+  ;;works for pc keyboard
+  (define-key global-map [C-M-kp-subtract] 'erase-buffer)
+  ;;works for ibook keyboard
+  (define-key global-map [C-M-delete] 'erase-buffer)
+  
+  ;;outline bindings
+  (global-set-key [M-up] 'hide-subtree)
+  (global-set-key [M-down] 'show-subtree)
+  
+                                       ;keybindindings for git
+  (global-set-key "\C-xgs" 'git-status)
+  
+  (setq mac-option-modifier 'super )
+  (setq mac-command-modifier 'meta )
+  (define-key global-map [home] 'beginning-of-line)
+  (define-key global-map [end] 'end-of-line)
+  
+#+end_src
+
+* Modes
+** Markdown
+#+begin_src emacs-lisp 
+  (autoload 'markdown-mode "markdown-mode.el"
+    "Major mode for editing Markdown files" t)
+#+end_src
+
+** Dired
+#+begin_src emacs-lisp 
+  (require 'dired)
+  (require 'dired-details)
+  (dired-details-install)
+  
+  (defun na-dired-up-directory-after-kill ()
+    "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
+    (interactive)
+    (let ((buf (current-buffer)))
+      (dired-up-directory)
+      (kill-buffer buf)))
+  (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
+#+end_src
+
+** org-mode
+
+#+begin_src emacs-lisp 
+  (setq org-directory "~/Dropbox/Org/")
+  (setq org-mobile-inbox-for-pull "~/Dropbox/Org/from-mobile.org")
+  (setq org-mobile-directory "~/Dropbox/MobileOrg")
+  (setq org-mobile-files (quote ("gtd.org" "curriculum.org")))
+  (setq org-agenda-files (list "~/Dropbox/Org/gtd.org"
+                            "~/Dropbox/Org/birthday.org"))
+  
+  (setq org-mobile-force-id-on-agenda-items nil)
+  (setq org-agenda-custom-commands
+        '(("w" todo "TODO")
+       ("h" agenda "" ((org-agenda-show-all-dates nil)))
+       ("W" agenda "" ((org-agenda-ndays 21)
+                       (org-agenda-show-all-dates nil)))
+       ("A" agenda ""
+        ((org-agenda-ndays 1)
+         (org-agenda-overriding-header "Today")))))
+  
+  (setq org-return-follows-link t)
+  (setq org-hide-leading-stars t)
+  (setq org-tag-alist '(("buy" . ?b) ("write" . ?w)))
+  (setq org-agenda-window-setup 'other-frame)
+  (setq org-agenda-show-all-dates t)
+  
+  (require 'org-latex)
+  (setq org-export-latex-listings t)
+  (add-to-list 'org-export-latex-packages-alist '("" "listings"))
+  (add-to-list 'org-export-latex-packages-alist '("" "color"))
+  
+  (setq org-src-fontify-natively t)
+  (setq org-confirm-babel-evaluate nil)
+  
+#+end_src
+
+** IBuffer
+
+#+begin_src emacs-lisp 
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+              ("Markup" (or (mode . org-mode)
+                            (mode . html-mode)
+                            (mode . markdown-mode)
+                            (mode . xml-mode)
+                            (name . "\\.xml$")
+                            (mode . text-mode)))
+              ("Source" (or
+                         (mode . java-mode)
+                         (mode . clojure-mode)
+                         (mode . ruby-mode)
+                         (mode . shell-script-mode)
+                         (mode . sh-mode)
+                         (mode . c-mode)
+                         (mode . lisp-mode)
+                         (mode . cperl-mode)
+                         (mode . asm-mode)
+                         (mode . emacs-lisp-mode)
+                         (mode . c++-mode)))
+              ("gnus" (or
+                       (mode . message-mode)
+                       (mode . mail-mode)
+                       (mode . gnus-group-mode)
+                       (mode . gnus-summary-mode)
+                       (mode . gnus-article-mode)
+                       (name . "^\\*offlineimap\\*$")
+                       (name . "^\\.newsrc-dribble")))
+              ("Terminal" (or (mode . term-mode)
+                              (mode . inferior-lisp-mode)))
+              ("Network" (or 
+                          (name . "^ssh.*$")
+                          (name . "^\\*nmap\\*$")
+                          (name . "^\\*dsniff\\*$")
+                          (name . "^\\*ftp.+\\*$")
+                          (name . "^\\*nmap.+\\*$")
+                          (name . "^\\*arpspoof.+\\*$")
+                          (name . "^\\*tramp.+\\*$")
+                          (name . "^\\*trace.+SMTP.+\\*$")
+                          (mode . dsniff-mode)
+                          (mode . nmap-mode)))
+              ("dired" (mode . dired-mode))
+              ("IRC" (or
+                      (mode . erc-mode)))
+              ("emacs" (or
+                        (name . "^\\*info\\*$")
+                        (name . "^\\*mpg123\\*$")
+                        (name . "^\\.todo-do")
+                        (name . "^\\*scratch\\*$")
+                        (name . "^\\*git-status\\*$")
+                        (name . "^\\*git-diff\\*$")
+                        (name . "^\\*git-commit\\*$")
+                        (name . "^\\*Git Command Output\\*$")
+                        (name . "^\\*Messages\\*$")
+                        (name . "^\\*Completions\\*$") 
+                        (name . "^\\*Backtrace\\*$")
+                        (name . "^TAGS$")
+                        (name . "^\\*Help\\*$")
+                        (name . "^\\*Shell Command Output\\*$")))))))
+  (add-hook 'ibuffer-mode-hook
+         (lambda ()
+           (ibuffer-switch-to-saved-filter-groups "default")))
+  (setq ibuffer-expert t)
+#+end_src
+
+** EasyPG
+#+begin_src emacs-lisp 
+  (if (string= "apple" cur-op-sys)
+      (progn   
+        (require 'epa)
+        (epa-file-enable)
+        (setq epg-gpg-program "/opt/local/bin/gpg")))
+#+end_src
+
+** Text Mode
+#+begin_src emacs-lisp 
+  (delete-selection-mode)
+  (setq fill-column 80)
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+end_src
+
+** Flyspell
+#+begin_src emacs-lisp 
+  (setq ispell-program-name "/opt/local/bin/ispell")
+  (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+  (add-hook 'message-mode-hook 'turn-on-flyspell)
+  (add-hook 'text-mode-hook 'turn-on-flyspell)
+  (add-hook 'c-mode-common-hook 'flyspell-prog-mode)
+  (add-hook 'java-mode-hook 'flyspell-prog-mode)
+  (add-hook 'ruby-mode-hook 'flyspell-prog-mode)
+  (add-hook 'lisp-mode-hook 'flyspell-mode)
+  (add-hook 'emacs-lisp-mode-hook 'flyspell-mode)
+  (defun turn-on-flyspell ()
+    "Force flyspell-mode on using a positive arg.  For use in hooks."
+    (interactive)
+    (flyspell-mode 1))
+#+end_src
+
+* Programming
+** Misc
+#+begin_src emacs-lisp 
+  (setq compilation-window-height 10)
+  
+  (setq auto-mode-alist
+        (append '(("\\.C$"       . c++-mode)
+                  ("\\.cc$"      . c++-mode)
+                  ("\\.c$"       . c-mode)
+                  ("\\.markdown$"  . markdown-mode)
+                  ("\\.h$"       . c++-mode)
+                  ("\\.i$"       . c++-mode)
+                  ("\\.ii$"      . c++-mode)
+                  ("\\.m$"       . objc-mode)
+                  ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
+                  ("\\.java$"    . java-mode)
+                  ("\\.xml$"     . xml-mode)
+                  ("\\.outline$" . outline-mode)
+                  ("\\.sql$"     . c-mode)
+                  ("\\.pde$"     . c++-mode)
+                  ("\\.sh$"      . shell-script-mode)
+                  ("\\.command$"      . shell-script-mode)
+                  ("\\.mak$"     . makefile-mode)
+                  ("\\.rb$"     . ruby-mode)
+                  ("\\.php$"     . php-mode)
+                  ("\\.GNU$"     . makefile-mode)
+                  ("makefile$"   . makefile-mode)
+                  ("Imakefile$"  . makefile-mode)
+                  ("\\.Xdefaults$"    . xrdb-mode)
+                  ("\\.Xenvironment$" . xrdb-mode)
+                  ("\\.Xresources$"   . xrdb-mode)
+                  ("*.\\.ad$"         . xrdb-mode)
+                  ("\\.[eE]?[pP][sS]$" . ps-mode)
+                  ("\\.zip$"     . archive-mode)
+                  ("\\.tar$"     . tar-mode)
+                  ("\\.tar.gz$"     . tar-mode)
+                  ) auto-mode-alist))
+  
+  (defun indent-or-expand (arg)
+    "Either indent according to mode, or expand the word preceding
+    point."
+    (interactive "*P")
+    (if (and
+         (or (bobp) (= ?w (char-syntax (char-before))))
+         (or (eobp) (not (= ?w (char-syntax (char-after))))))
+        (dabbrev-expand arg)
+      (indent-according-to-mode)))
+  
+  (defun my-tab-fix ()
+    (local-set-key [tab] 'indent-or-expand))
+  
+  (add-hook 'clojure-mode-hook 'my-tab-fix)
+  
+  (defun na-bounce-sexp ()
+    "Will bounce between matching parens just like % in vi"
+    (interactive)
+    (let ((prev-char (char-to-string (preceding-char)))
+          (next-char (char-to-string (following-char))))
+      (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+            ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+            (t (error "%s" "Not on a paren, brace, or bracket")))))
+  
+  (defun lispy-parens ()
+    "Setup parens display for lisp modes"
+    (setq show-paren-delay 0)
+    (setq show-paren-style 'parenthesis)
+    (make-variable-buffer-local 'show-paren-mode)
+    (show-paren-mode 1)
+    (set-face-background 'show-paren-match-face (face-background 'default))
+    (if (boundp 'font-lock-comment-face)
+        (set-face-foreground 'show-paren-match-face 
+                             (face-foreground 'font-lock-comment-face))
+      (set-face-foreground 'show-paren-match-face 
+                           (face-foreground 'default)))
+    (set-face-foreground 'show-paren-match-face "red")
+    (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+  (add-hook 'lisp-mode-hook 'lispy-parens)
+  (add-hook 'emacs-lisp-mode-hook 'lispy-parens)
+  (add-hook 'lisp-mode-hook 'abbrev-mode)
+  (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+  (add-hook 'clojure-mode-hook 'abbrev-mode)
+  (add-hook 'clojure-mode-hook 'lispy-parens)
+  
+#+end_src
+** Clojure
+#+begin_src emacs-lisp 
+  
+  (setq class-path (concat "-cp " 
+                           "./extLibs/*:"
+                           "../extLibs/*:"
+                           "./lib/*:"
+                           "./classes/:"
+                           "./test/:"
+                           "./src/:"
+                           "."))
+  
+  (setq library-path "-Djava.library.path=./native/macosx/x86/")
+  
+  (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))
+  
+  (setq lisp-programs 
+        (list (list "clojure" clojure-command)
+              (list "sbcl" "/opt/local/bin/sbcl")))
+  
+  (defun na-run-lisp (arg)
+    (interactive "P")
+    (if (null arg)
+        (run-lisp (second (first lisp-programs)))
+      (let (choice) 
+        (setq choice (completing-read "Lisp: " (mapcar 'first lisp-programs)))
+        (dolist (l lisp-programs)
+          (if (string= (first l) choice)
+              (run-lisp (second l)))))))
+  
+  (defun na-load-buffer ()
+    (interactive)
+    (point-to-register 5)
+    (mark-whole-buffer)
+    (lisp-eval-region (point) (mark) nil)
+    (jump-to-register 5))
+  
+  ;;sub process support for clojure
+  (add-hook 'clojure-mode-hook
+            '(lambda ()
+               (define-key clojure-mode-map 
+                 "\e\C-x" 'lisp-eval-defun)
+               (define-key clojure-mode-map 
+                 "\C-x\C-e" 'lisp-eval-last-sexp)
+               (define-key clojure-mode-map 
+                 "\C-c\C-e" 'lisp-eval-last-sexp)
+               (define-key clojure-mode-map 
+                 "\C-c\C-r" 'lisp-eval-region)
+               (define-key clojure-mode-map 
+                 "\C-c\C-l" 'na-load-buffer)
+               (define-key clojure-mode-map 
+                 "\C-c\C-z" 'run-lisp)))
+  
+  (define-clojure-indent (from-blackboard 'defun))
+  
+  (defun na-clojure-project (path)
+    (interactive (list (read-directory-name "Project root: " )))
+    (when (get-buffer "*inferior-lisp*") 
+      (kill-buffer "*inferior-lisp*"))
+    (when (get-buffer "*terminal*") 
+      (kill-buffer "*terminal*"))
+    (let ((path-lst (split-string path "/")))
+      (let ((proj-name (nth (- (length path-lst) 2) path-lst)))
+        (dired path)
+        (run-lisp (second (first lisp-programs)))
+        (dired path)
+        (term "/bin/bash")
+        (dired path))))
+  
+#+end_src
+
+** git
+#+begin_src emacs-lisp 
+  (require 'git)
+  (setq git-committer-name "Nurullah Akkaya")
+  (setq git-committer-email "nurullah@nakkaya.com")
+  
+  (when (equal system-type 'darwin)
+    (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+    (push "/opt/local/bin" exec-path))
+  (setq exec-path (append exec-path '("/opt/local/bin")))
+  
+  (defun na-run-git-switch ()
+    "Switch to git buffer or run git-status"
+    (interactive)  
+    (if (not (eq (get-buffer "*git-status*") nil))
+        (progn 
+          (make-frame '((name . "Git") (width . 130)))
+          (set-frame-position (selected-frame) 0 1)
+          (set-face-attribute 
+           'default (selected-frame) :height 160 :width 'normal)
+          (switch-to-buffer "*git-status*"))
+      (git-status (read-directory-name "Select Directory: "))))
+  
+  (define-key git-status-mode-map (kbd "Q")
+    '(lambda ()
+       (interactive)
+       (delete-frame)))
+  
+#+end_src
+
+** term
+#+begin_src emacs-lisp 
+  (setq term-term-name "xterm-color")
+  (setq-default term-buffer-maximum-size 5000)
+  
+  (defun na-linux-run-term ()
+    "run bash"
+    (interactive)
+    (term "/bin/bash"))
+  
+  (defun na-run-term-or-rename ()
+    "create new shell or rename old"
+    (interactive)  
+    (if (not (eq (get-buffer "*terminal*")  nil ) )
+        (progn
+          ( setq new-buffer-name (read-from-minibuffer "Name shell to: " ) )
+          (set-buffer "*terminal*")
+          ( rename-buffer new-buffer-name )))
+    
+    (if (eq (get-buffer "*terminal*")  nil) 
+        (progn
+          (na-linux-run-term ))))
+  
+  (defun na-switch-between-terminals () 
+    "cycle multiple terminals"
+    (interactive)
+    (if (not (eq (or (get-buffer "*terminal*") 
+                     (get-buffer "*inferior-lisp*")) nil))
+        (progn     
+          (setq found nil)
+          (bury-buffer)
+          (setq head (car (buffer-list)))      
+          (while  (eq found nil)  
+            (set-buffer head)     
+            (if (or (eq major-mode 'term-mode)
+                    (eq major-mode 'inferior-lisp-mode))
+                (setq found t)
+              (progn
+                (bury-buffer)
+                (setq head (car (buffer-list)))))))))
+  
+#+end_src
+
+* Theme
+#+begin_src emacs-lisp 
+(setq frame-title-format (list "GNU Emacs " emacs-version))
+(setq display-time-day-and-date nil )
+(setq display-time-format "") 
+(setq display-time-load-average-threshold 0 )
+(setq display-time-string-forms '( load "," (if mail "" "")) )
+(setq display-time-interval 5)
+(display-time-mode 1)
+(setq battery-mode-line-format "%b%p%" )
+(display-battery-mode t)
+
+(setq-default mode-line-format
+	      '(""
+		mode-line-modified
+		(-3 . "%p") ;; position
+		"[%b]"
+		"%[("
+		mode-name
+		mode-line-process
+		minor-mode-alist
+		"%n" ")%]-"
+		(line-number-mode "L%l-")
+		(column-number-mode "C%c [")
+		global-mode-string
+		"] "
+		"%f"		    ;; print file with full path
+		" %-"))
+#+end_src
+
+#+begin_src emacs-lisp 
+(setq default-frame-alist
+      (append default-frame-alist
+              '((foreground-color . "#EEEEEC")
+                (background-color . "#2A2A38")
+                (cursor-color . "#FCE94F"))))
+
+(set-face-foreground 'bold "#EEEEEC")
+(set-face-background 'bold "#2A2A38")
+(set-face-background 'default "#2A2A38")
+
+(set-face-foreground 'font-lock-string-face "#854BBE")
+(set-face-foreground 'font-lock-keyword-face "#A02350")
+(set-face-foreground 'font-lock-function-name-face "#C3A878")
+(set-face-foreground 'font-lock-builtin-face "#729FCF")
+(set-face-foreground 'font-lock-comment-face "#888A85")
+
+(set-face-foreground 'modeline "#A5A5A0")
+(set-face-background 'modeline "#555753")
+(set-face-foreground 'modeline-inactive "#64645F")
+(set-face-background 'modeline-inactive "black")
+
+(set-face-background 'fringe "#2A2A38")
+(set-face-foreground 'vertical-border "#888A85")
+
+(set-face-foreground 'diff-added "#EEEEEC")
+(set-face-foreground 'diff-removed "firebrick")
+(set-face-foreground 'diff-file-header "#EEEEEC")
+(set-face-foreground 'diff-header "#EEEEEC")
+
+(set-face-background 'diff-header "#2A2A38")
+(set-face-background 'diff-file-header "#2A2A38")
+
+(set-face-background 'org-hide "#2A2A38")
+(set-face-foreground 'org-hide "#2A2A38")
+#+end_src
+
+#+begin_src emacs-lisp 
+(defun na-set-frame-size(width height font-size)
+  (set-face-attribute 
+   'default (selected-frame) :height font-size :width 'normal)
+  (set-frame-width (selected-frame) width)
+  (set-frame-height (selected-frame) height)
+  (set-frame-position (selected-frame) 0 1))
+
+(defun na-resize-frame-big ()
+  (interactive)  
+  (na-set-frame-size 178 55 130))
+
+(defun na-frame-windows ()
+  (interactive)
+  (set-default-font "monaco")
+  (na-set-frame-size 130 50 110))
+#+end_src
+
+* Misc
+
+#+begin_src emacs-lisp 
+  (defun na-reopen-file ()
+    "Reopen file in buffer."
+    (interactive)
+    (let ((p (point)))
+      (progn
+        (find-alternate-file buffer-file-name)
+        (goto-char p))))
+#+end_src
+
+* Session
+
+#+begin_src emacs-lisp 
+  (load "desktop")
+  (desktop-load-default)
+  (setq desktop-enable t)
+  (require 'saveplace)
+  (setq-default save-place t)
+  (setq bookmark-save-flag 1 )
+#+end_src
+
+#+begin_src emacs-lisp 
+  (add-hook 'server-visit-hook 'call-raise-frame)
+  (add-hook 'find-file-hook 'call-raise-frame)
+  (defun call-raise-frame ()
+    (raise-frame))
+  
+  (server-start)
+#+end_src
+
+#+begin_src emacs-lisp 
+  (setq auto-save-list-file-prefix "~/.saves/auto-save-list/" )
+  (setq
+   backup-by-copying t                 ; don't clobber symlinks
+   backup-directory-alist
+   '(("." . "~/.saves"))                       ; don't litter my fs tree
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t)                  ; use versioned backups
+  (setq tramp-auto-save-directory "~/.saves/tramp-autosave")
+  
+  ;;do not save tramp files
+  (defun tv-list-tramp-buffer-file-name ()
+    (let* ((desktop-info-list (mapcar #'desktop-buffer-info (buffer-list)))
+        (tramp-buf-list (loop for i in desktop-info-list
+                              if (and (listp i)
+                                      (stringp (car (nth 8 i)))
+                                      (string-match "^/su:.*\\|^/sudo:.*\\|^/scp:.*" (car (nth 8 i))))
+                              collect (nth 2 i))))
+      tramp-buf-list))
+  
+  (add-hook 'desktop-save-hook #'(lambda ()
+                                (let ((del-buf-list
+                                       (tv-list-tramp-buffer-file-name)))
+                                  (dolist (i del-buf-list)
+                                    (kill-buffer i)))))
+#+end_src
+
+** Autorun
+
+#+begin_src emacs-lisp 
+  (na-resize-frame-big)
+#+end_src
+
+* Skeletons
+** Setup
+#+begin_src emacs-lisp 
+  (setq skeleton-pair t)
+  (global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+  (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+  (setq abbrev-mode t)
+  
+  (add-hook 'clojure-mode-hook 
+            (lambda ()
+              (setq local-abbrev-table clojure-mode-abbrev-table)))
+  
+  (define-abbrev-table 'java-mode-abbrev-table '())
+  (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
+  (define-abbrev-table 'clojure-mode-abbrev-table '())
+  (define-abbrev-table 'c++-mode-abbrev-table '())
+  
+#+end_src
+** Clojure
+#+begin_src emacs-lisp 
+  (define-skeleton skel-clojure-println
+    ""
+    nil
+    "(println "_")")
+  (define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
+  
+  (define-skeleton skel-clojure-defn
+    ""
+    nil
+    "(defn "_" [])")
+  (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
+  
+  (define-skeleton skel-clojure-defn-
+    ""
+    nil
+    "(defn- "_" [])")
+  (define-abbrev clojure-mode-abbrev-table "def-" "" 'skel-clojure-defn- )
+  
+  (define-skeleton skel-clojure-if
+    ""
+    nil
+    "(if ("_"))")
+  (define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
+  
+  (define-skeleton skel-clojure-let
+    ""
+    nil
+    "(let ["_"] )")
+  (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
+  
+  (define-skeleton skel-clojure-ref-set
+    ""
+    nil
+    "(dosync (ref-set "_" ))")
+  (define-abbrev clojure-mode-abbrev-table "refs" "" 'skel-clojure-ref-set)
+  
+  (define-skeleton skel-clojure-proxy
+    ""
+    nil
+    "(proxy ["_"] [] "
+    \n > ")")
+  (define-abbrev clojure-mode-abbrev-table "proxy" "" 'skel-clojure-proxy)
+  
+  (define-skeleton skel-clojure-doseq
+    ""
+    nil
+    "(doseq ["_"] "
+    \n > ")")
+  (define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
+  
+  (define-skeleton skel-clojure-do
+    ""
+    nil
+    "(do "_" "
+    \n > ")")
+  (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
+  
+  (define-skeleton skel-clojure-reduce
+    ""
+    nil
+    "(reduce (fn[h v] ) "_" ) ")
+  
+  (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
+  
+  (define-skeleton skel-clojure-try
+    ""
+    nil
+    "(try "_" (catch Exception e (println e)))")
+  
+  (define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
+  
+  (define-skeleton skel-clojure-map
+    ""
+    nil
+    "(map #() "_")")
+  
+  (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
+  
+#+end_src
+
+** Cpp
+#+begin_src emacs-lisp 
+  (define-skeleton skel-cpp-prt
+    ""
+    nil
+    \n >
+    "cout<< " _ " <<endl;"
+    \n >)
+  (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt )
+  
+#+end_src
+** ELisp
+#+begin_src emacs-lisp 
+  (define-skeleton skel-list-insert
+    ""
+    nil
+    "(insert "_" )")
+  (define-abbrev lisp-mode-abbrev-table "ins" "" 'skel-list-insert )
+  
+  (define-skeleton skel-list-setq
+    ""
+    nil
+    "(setq "_" )")
+  (define-abbrev lisp-mode-abbrev-table "set" "" 'skel-list-setq )
+  
+  (define-skeleton skel-list-deffun
+    ""
+    nil
+    "(defun "_" () "
+    \n >
+    ")")
+  (define-abbrev lisp-mode-abbrev-table "deff" "" 'skel-list-deffun )
+  
+  (define-skeleton skel-list-defvar
+    ""
+    nil
+    "(defvar "_" )")
+  (define-abbrev lisp-mode-abbrev-table "defv" "" 'skel-list-defvar )
+  
+  (define-skeleton skel-list-if
+    ""
+    nil
+    "(if "
+    _
+    \n >
+    " )")
+  (define-abbrev lisp-mode-abbrev-table "if" "" 'skel-list-if )
+  
+  (define-skeleton skel-list-progn
+    ""
+    nil
+    "(progn "
+    _
+    \n >
+    " )")
+  (define-abbrev lisp-mode-abbrev-table "progn" "" 'skel-list-progn )
+  
+#+end_src
+
+** Java
+#+begin_src emacs-lisp 
+  (define-skeleton skel-java-println
+    "Insert a Java println Statement"
+    nil
+    "System.out.println(" _ " );")
+  (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
+  
+  (define-skeleton skel-java-ife
+    "Insert a Common If else Statement"
+    nil
+    \n >
+    "if (" _ " ){"
+    \n >
+    "} else {"
+    \n >
+    "}")
+  (define-abbrev java-mode-abbrev-table "ife" "" 'skel-java-ife )
+  
+  (define-skeleton skel-java-try
+    "Insert a try catch block"
+    nil
+    \n >
+    "try{"
+    \n >
+    _ \n
+    "}catch( Exception e ) {" >
+    " "
+    \n > \n
+    "}" >)
+  (define-abbrev java-mode-abbrev-table "try" "" 'skel-java-try )
+  
+  (define-skeleton skel-java-if
+    "Insert a Common If Statement"
+    nil
+    \n >
+    "if (" _ " ){"
+    \n >
+    "}")
+  
+  (define-abbrev java-mode-abbrev-table "if" "" 'skel-java-if )
+  (define-abbrev c++-mode-abbrev-table "if"  "" 'skel-java-if )
+  
+  (define-skeleton skel-java-for1
+    "Insert a Common If Statement"
+    nil
+    \n >
+    "for( int i=0 ; i<" _ " ;i++){"
+    \n >
+    "}")
+  (define-abbrev java-mode-abbrev-table "for1" "" 'skel-java-for1 )
+  
+  
+  (define-skeleton skel-java-timer
+    "creates timing statements"
+    nil
+    \n >
+    "final long start = System.currentTimeMillis();"
+    \n >
+    "System.out.println( Long.toString( System.currentTimeMillis() - start ) ) ;")
+  (define-abbrev java-mode-abbrev-table "jtimer" "" 'skel-java-timer )
+  
+  (define-skeleton skel-java-comment
+    "creates javadoc comment"
+    nil
+    \n >
+    "/*"
+    \n >
+    "*"
+    \n >
+    "*"
+    \n >
+    "*"
+    \n >
+    "* @param"
+    \n >
+    "* @return"
+    \n >
+    "* @exception"
+    \n >
+    "*"
+    \n >
+    "*/"
+    \n >)
+  (define-abbrev java-mode-abbrev-table "jdcomment" "" 'skel-java-comment )
+  
+#+end_src
+
