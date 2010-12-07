@@ -52,7 +52,13 @@
   (setq scroll-step 1)
   (setq search-highlight t)
   (setq transient-mark-mode t)
+  ;; I hate tabs!
+  (setq-default indent-tabs-mode nil)
+  
 #+end_src
+
+#+results:
+: t
 
 #+begin_src emacs-lisp 
   (cond
