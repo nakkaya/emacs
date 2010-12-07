@@ -622,40 +622,42 @@ under X, instead of the default, backspace behavior.
 #+end_src
 
 #+begin_src emacs-lisp 
-(setq default-frame-alist
-      (append default-frame-alist
-              '((foreground-color . "#EEEEEC")
-                (background-color . "#2A2A38")
-                (cursor-color . "#FCE94F"))))
-
-(set-face-foreground 'bold "#EEEEEC")
-(set-face-background 'bold "#2A2A38")
-(set-face-background 'default "#2A2A38")
-
-(set-face-foreground 'font-lock-string-face "#854BBE")
-(set-face-foreground 'font-lock-keyword-face "#A02350")
-(set-face-foreground 'font-lock-function-name-face "#C3A878")
-(set-face-foreground 'font-lock-builtin-face "#729FCF")
-(set-face-foreground 'font-lock-comment-face "#888A85")
-
-(set-face-foreground 'modeline "#A5A5A0")
-(set-face-background 'modeline "#555753")
-(set-face-foreground 'modeline-inactive "#64645F")
-(set-face-background 'modeline-inactive "black")
-
-(set-face-background 'fringe "#2A2A38")
-(set-face-foreground 'vertical-border "#888A85")
-
-(set-face-foreground 'diff-added "#EEEEEC")
-(set-face-foreground 'diff-removed "firebrick")
-(set-face-foreground 'diff-file-header "#EEEEEC")
-(set-face-foreground 'diff-header "#EEEEEC")
-
-(set-face-background 'diff-header "#2A2A38")
-(set-face-background 'diff-file-header "#2A2A38")
-
-(set-face-background 'org-hide "#2A2A38")
-(set-face-foreground 'org-hide "#2A2A38")
+  (setq default-frame-alist
+        (append default-frame-alist
+                '((foreground-color . "#EEEEEC")
+                  (background-color . "#2A2A38")
+                  (cursor-color . "#FCE94F"))))
+  
+  (set-face-foreground 'bold "#EEEEEC")
+  (set-face-background 'bold "#2A2A38")
+  (set-face-background 'default "#2A2A38")
+  
+  (set-face-foreground 'font-lock-string-face "#854BBE")
+  (set-face-foreground 'font-lock-keyword-face "#A02350")
+  (set-face-foreground 'font-lock-function-name-face "#C3A878")
+  (set-face-foreground 'font-lock-builtin-face "#729FCF")
+  (set-face-foreground 'font-lock-comment-face "#888A85")
+  
+  (set-face-foreground 'modeline "#A5A5A0")
+  (set-face-background 'modeline "#555753")
+  (set-face-foreground 'modeline-inactive "#64645F")
+  (set-face-background 'modeline-inactive "black")
+  
+  (set-face-background 'fringe "#2A2A38")
+  (set-face-foreground 'vertical-border "#888A85")
+  
+  (set-face-foreground 'diff-added "#EEEEEC")
+  (set-face-foreground 'diff-removed "firebrick")
+  (set-face-foreground 'diff-file-header "#EEEEEC")
+  (set-face-foreground 'diff-header "#EEEEEC")
+  
+  (set-face-background 'diff-header "#2A2A38")
+  (set-face-background 'diff-file-header "#2A2A38")
+  
+  (set-face-background 'org-hide "#2A2A38")
+  (set-face-foreground 'org-hide "#2A2A38")
+  (set-face-foreground 'org-meta-line "#2A3730")
+  
 #+end_src
 
 #+begin_src emacs-lisp 
