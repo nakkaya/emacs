@@ -259,7 +259,27 @@ under X, instead of the default, backspace behavior.
   
   (setq org-src-fontify-natively t)
   (setq org-confirm-babel-evaluate nil)
-  
+#+end_src
+
+ if idle for 5 minutes, display the current agenda.
+
+#+begin_src emacs-lisp
+  (defun jump-to-org-agenda ()
+    (interactive)
+    (let ((buf (get-buffer "*Org Agenda*"))
+          wind)
+      (if buf
+          (if (setq wind (get-buffer-window buf))
+              (select-window wind)
+            (if (called-interactively-p)
+                (progn
+                  (select-window (display-buffer buf t t))
+                  (org-fit-window-to-buffer))
+              (with-selected-window (display-buffer buf)
+                (org-fit-window-to-buffer))))
+        (funcall (lambda () (org-agenda-list t))))))
+
+  (run-with-idle-timer 300 t 'jump-to-org-agenda)
 #+end_src
 
 ** IBuffer
