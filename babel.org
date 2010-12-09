@@ -481,7 +481,13 @@ under X, instead of the default, backspace behavior.
   
   (setq library-path "-Djava.library.path=./native/macosx/x86/")
   
-  (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))
+  (cond 
+   ((string= "osx" cur-op-sys)
+    (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main")))
+  ((string= "linux" cur-op-sys)
+    (setq clojure-command (concat "/usr/bin/java -Xmx512M -XX:MaxPermSize=512M -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))))
+  
+  
   
   (setq lisp-programs 
         (list (list "clojure" clojure-command)
@@ -710,6 +716,10 @@ under X, instead of the default, backspace behavior.
   (interactive)
   (set-default-font "monaco")
   (na-set-frame-size 130 50 110))
+
+(defun na-frame-linux ()
+  (interactive)
+  (na-set-frame-size 100 40 100))
 #+end_src
 
 * Misc
@@ -776,7 +786,12 @@ under X, instead of the default, backspace behavior.
 ** Autorun
 
 #+begin_src emacs-lisp 
-  (na-resize-frame-big)
+  (cond 
+   ((string= "osx" cur-op-sys)
+      (na-resize-frame-big))
+  ((string= "linux" cur-op-sys)
+      (na-frame-linux)))
+
 #+end_src
 
 * Skeletons
