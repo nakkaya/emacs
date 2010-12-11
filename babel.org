@@ -482,7 +482,7 @@ under X, instead of the default, backspace behavior.
   (setq library-path "-Djava.library.path=./native/macosx/x86/")
   
   (cond 
-   ((string= "osx" cur-op-sys)
+   ((string= "apple" cur-op-sys)
     (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main")))
   ((string= "linux" cur-op-sys)
     (setq clojure-command (concat "/usr/bin/java -Xmx512M -XX:MaxPermSize=512M -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main"))))
