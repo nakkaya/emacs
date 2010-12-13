@@ -696,7 +696,7 @@ under X, instead of the default, backspace behavior.
   
   (set-face-background 'org-hide "#2A2A38")
   (set-face-foreground 'org-hide "#2A2A38")
-  (set-face-foreground 'org-meta-line "#2A3730")
+  (set-face-foreground 'org-meta-line "#7D7D5E")
   
 #+end_src
 
