@@ -164,7 +164,7 @@ under X, instead of the default, backspace behavior.
   (global-set-key [S-f6] 'dsniff)
   (global-set-key [f7] 'na-clojure-project)
   (global-set-key [f8] 'toggle-truncate-lines)
-  (global-set-key [M-f12] 'na-switch-project)
+  (global-set-key [f12] 'org-babel-tangle)
   
   (define-key global-map [(control meta .)] 'find-tag-other-window)
   (global-set-key [(meta g)] 'goto-line)
@@ -719,7 +719,8 @@ under X, instead of the default, backspace behavior.
 
 (defun na-frame-linux ()
   (interactive)
-  (na-set-frame-size 100 40 100))
+  (set-default-font "monaco")
+  (na-set-frame-size 100 40 80))
 #+end_src
 
 * Misc
