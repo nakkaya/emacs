@@ -282,6 +282,15 @@ under X, instead of the default, backspace behavior.
   (run-with-idle-timer 300 t 'jump-to-org-agenda)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun na-org-export ()
+    (interactive)
+    (org-exp-res/src-name-cleanup)
+    (call-interactively 'org-export-as-pdf-and-open)
+    (undo))
+  
+#+end_src
+
 ** IBuffer
 
 #+begin_src emacs-lisp 
