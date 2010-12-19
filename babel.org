@@ -234,17 +234,17 @@ under X, instead of the default, backspace behavior.
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
   (setq org-mobile-files (quote ("gtd.org" "curriculum.org")))
   (setq org-agenda-files (list "~/Dropbox/Org/gtd.org"
-                            "~/Dropbox/Org/birthday.org"))
+                               "~/Dropbox/Org/birthday.org"))
   
   (setq org-mobile-force-id-on-agenda-items nil)
   (setq org-agenda-custom-commands
         '(("w" todo "TODO")
-       ("h" agenda "" ((org-agenda-show-all-dates nil)))
-       ("W" agenda "" ((org-agenda-ndays 21)
-                       (org-agenda-show-all-dates nil)))
-       ("A" agenda ""
-        ((org-agenda-ndays 1)
-         (org-agenda-overriding-header "Today")))))
+          ("h" agenda "" ((org-agenda-show-all-dates nil)))
+          ("W" agenda "" ((org-agenda-ndays 21)
+                          (org-agenda-show-all-dates nil)))
+          ("A" agenda ""
+           ((org-agenda-ndays 1)
+            (org-agenda-overriding-header "Today")))))
   
   (setq org-return-follows-link t)
   (setq org-hide-leading-stars t)
@@ -259,6 +259,30 @@ under X, instead of the default, backspace behavior.
   
   (setq org-src-fontify-natively t)
   (setq org-confirm-babel-evaluate nil)
+  
+  (add-to-list 'org-export-latex-classes
+               '("literate-code"
+                 "\\documentclass{article}\n
+                 \\renewcommand{\\rmdefault}{phv} % Arial \n
+                 \\usepackage{color} \n
+                 \\usepackage{listings} \n
+                 \\definecolor{lbcolor}{rgb}{0.9,0.9,0.9} \n
+                 \\lstset{backgroundcolor=\\color{lbcolor},rulecolor=,frame=tb,basicstyle=\\footnotesize} \n
+                 \\usepackage[hmargin=3cm,vmargin=3.5cm]{geometry} \n
+                 \\usepackage{hyperref}
+                 \\hypersetup{
+                     colorlinks,%
+                     citecolor=black,%
+                     filecolor=black,%
+                     linkcolor=blue,%
+                     urlcolor=black
+                 }"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  
 #+end_src
 
  if idle for 5 minutes, display the current agenda.
