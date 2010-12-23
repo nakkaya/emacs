@@ -229,6 +229,7 @@ under X, instead of the default, backspace behavior.
 ** org-mode
 
 #+begin_src emacs-lisp 
+  (add-hook 'org-mode-hook 'abbrev-mode)
   (setq org-directory "~/Dropbox/Org/")
   (setq org-mobile-inbox-for-pull "~/Dropbox/Org/from-mobile.org")
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
@@ -303,7 +304,7 @@ under X, instead of the default, backspace behavior.
                 (org-fit-window-to-buffer))))
         (funcall (lambda () (org-agenda-list t))))))
 
-  (run-with-idle-timer 300 t 'jump-to-org-agenda)
+;;  (run-with-idle-timer 300 t 'jump-to-org-agenda)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1260,3 +1261,15 @@ under X, instead of the default, backspace behavior.
   
 #+end_src
 
+** org-mode
+#+begin_src emacs-lisp
+  (define-skeleton skel-org-src
+    "Insert org src block."
+    nil
+    "#+begin_src"
+    \n > 
+     _ 
+    \n > 
+     "#+end_src")
+  (define-abbrev text-mode-abbrev-table "osrc" "" 'skel-org-src)
+#+end_src
