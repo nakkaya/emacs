@@ -1267,7 +1267,6 @@ under X, instead of the default, backspace behavior.
     "Insert org src block."
     nil
     "#+begin_src"
-    \n > 
      _ 
     \n > 
      "#+end_src")
