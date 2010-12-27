@@ -188,7 +188,7 @@ under X, instead of the default, backspace behavior.
   ;;works for pc keyboard
   (define-key global-map [C-M-kp-subtract] 'erase-buffer)
   ;;works for ibook keyboard
-  (define-key global-map [C-M-delete] 'erase-buffer)
+  (define-key global-map [C-M-backspace] 'erase-buffer)
   
   ;;outline bindings
   (global-set-key [M-up] 'hide-subtree)
