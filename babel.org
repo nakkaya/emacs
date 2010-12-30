@@ -54,6 +54,7 @@
   (setq transient-mark-mode t)
   ;; I hate tabs!
   (setq-default indent-tabs-mode nil)
+  (setq delete-by-moving-to-trash t)
   
 #+end_src
 
