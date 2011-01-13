@@ -504,23 +504,11 @@ under X, instead of the default, backspace behavior.
 #+end_src
 ** Clojure
 #+begin_src emacs-lisp 
-  
-  (setq class-path (concat "-cp " 
-                           "./lib/*:"
-                           "./classes/:"
-                           "./test/:"
-                           "./src/:"
-                           "."))
-  
-  (setq library-path "-Djava.library.path=./native/macosx/x86/")
-  
   (cond 
    ((string= "apple" cur-op-sys)
-    (setq clojure-command (concat "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/bin/java -Xmx512M -XX:MaxPermSize=512M -d32 -server -Dfile.encoding=UTF-8 " library-path " "  class-path " clojure.main")))
+    (setq clojure-command (concat "/Users/nakkaya/Dropbox/Scripts/lein repl")))
   ((string= "linux" cur-op-sys)
-    (setq clojure-command (concat "/usr/bin/java -Xmx512M -XX:MaxPermSize=512M -server -Dfile.encoding=UTF-8 " class-path " clojure.main"))))
-  
-  
+   (setq clojure-command (concat "/home/nakkaya/Dropbox/Scripts/lein repl"))))
   
   (setq lisp-programs 
         (list (list "clojure" clojure-command)
