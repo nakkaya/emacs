@@ -197,7 +197,8 @@ under X, instead of the default, backspace behavior.
   
                                        ;keybindindings for git
   (global-set-key "\C-xgs" 'git-status)
-  
+
+  (global-set-key [(meta h)] 'ns-do-hide-emacs)
   (setq mac-option-modifier 'super )
   (setq mac-command-modifier 'meta )
   (define-key global-map [home] 'beginning-of-line)
