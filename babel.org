@@ -69,8 +69,11 @@
       (setq cur-op-sys "linux" ))
      ((string-match "nt" system-configuration)
       (setq cur-op-sys "windows"))
+     ((string-match "cygwin" system-configuration)
+      (setq cur-op-sys "windows"))
      ((string-match "apple" system-configuration)
       (setq cur-op-sys "apple" )))))
+  
 #+end_src
 
 Do not open a new frame for each file on OSX,
@@ -509,7 +512,9 @@ under X, instead of the default, backspace behavior.
    ((string= "apple" cur-op-sys)
     (setq clojure-command (concat "/Users/nakkaya/Dropbox/Scripts/lein repl")))
   ((string= "linux" cur-op-sys)
-   (setq clojure-command (concat "/home/nakkaya/Dropbox/Scripts/lein repl"))))
+   (setq clojure-command (concat "/home/nakkaya/Dropbox/Scripts/lein repl")))
+  ((string= "windows" cur-op-sys)
+   (setq clojure-command (concat "/cygdrive/c/Dropbox/Scripts/lein repl"))))
   
   (setq lisp-programs 
         (list (list "clojure" clojure-command)
@@ -874,42 +879,52 @@ under X, instead of the default, backspace behavior.
 #+end_src
 
 #+begin_src emacs-lisp 
-  (setq default-frame-alist
-        (append default-frame-alist
-                '((foreground-color . "#EEEEEC")
-                  (background-color . "#2A2A38")
-                  (cursor-color . "#FCE94F"))))
+  (if window-system
+      (progn 
+        (setq default-frame-alist
+              (append default-frame-alist
+                      '((foreground-color . "#EEEEEC")
+                        (background-color . "#2A2A38")
+                        (cursor-color . "#FCE94F"))))
+        
+        (set-face-foreground 'bold "#EEEEEC")
+        (set-face-background 'bold "#2A2A38")
+        (set-face-background 'default "#2A2A38")
   
-  (set-face-foreground 'bold "#EEEEEC")
-  (set-face-background 'bold "#2A2A38")
-  (set-face-background 'default "#2A2A38")
+        (set-face-foreground 'font-lock-string-face "#854BBE")
+        (set-face-foreground 'font-lock-keyword-face "#A02350")
+        (set-face-foreground 'font-lock-function-name-face "#C3A878")
+        (set-face-foreground 'font-lock-builtin-face "#729FCF")
+        (set-face-foreground 'font-lock-comment-face "#888A85")
   
-  (set-face-foreground 'font-lock-string-face "#854BBE")
-  (set-face-foreground 'font-lock-keyword-face "#A02350")
-  (set-face-foreground 'font-lock-function-name-face "#C3A878")
-  (set-face-foreground 'font-lock-builtin-face "#729FCF")
-  (set-face-foreground 'font-lock-comment-face "#888A85")
+        (set-face-foreground 'modeline "#A5A5A0")
+        (set-face-background 'modeline "#555753")
+        (set-face-foreground 'modeline-inactive "#64645F")
+        (set-face-background 'modeline-inactive "black")
   
-  (set-face-foreground 'modeline "#A5A5A0")
-  (set-face-background 'modeline "#555753")
-  (set-face-foreground 'modeline-inactive "#64645F")
-  (set-face-background 'modeline-inactive "black")
+        (set-face-background 'fringe "#2A2A38")
+        (set-face-foreground 'vertical-border "#888A85")
   
-  (set-face-background 'fringe "#2A2A38")
-  (set-face-foreground 'vertical-border "#888A85")
+        (set-face-foreground 'diff-added "#EEEEEC")
+        (set-face-foreground 'diff-removed "firebrick")
+        (set-face-foreground 'diff-file-header "#EEEEEC")
+        (set-face-foreground 'diff-header "#EEEEEC")
   
-  (set-face-foreground 'diff-added "#EEEEEC")
-  (set-face-foreground 'diff-removed "firebrick")
-  (set-face-foreground 'diff-file-header "#EEEEEC")
-  (set-face-foreground 'diff-header "#EEEEEC")
+        (set-face-background 'diff-header "#2A2A38")
+        (set-face-background 'diff-file-header "#2A2A38")
   
-  (set-face-background 'diff-header "#2A2A38")
-  (set-face-background 'diff-file-header "#2A2A38")
+        (set-face-background 'org-hide "#2A2A38")
+        (set-face-foreground 'org-hide "#2A2A38")
+        (set-face-foreground 'org-meta-line "#7D7D5E"))
+    (progn 
+      (set-face-foreground 'default "color-250")
+      (set-face-background 'default "color-23")
   
-  (set-face-background 'org-hide "#2A2A38")
-  (set-face-foreground 'org-hide "#2A2A38")
-  (set-face-foreground 'org-meta-line "#7D7D5E")
-  
+      (set-face-foreground 'font-lock-string-face "color-175")
+      (set-face-foreground 'font-lock-keyword-face "color-202")
+      (set-face-foreground 'font-lock-function-name-face "color-184")
+      (set-face-foreground 'font-lock-builtin-face "color-155")
+      (set-face-foreground 'font-lock-comment-face "brightblack")))
 #+end_src
 
 #+begin_src emacs-lisp 
