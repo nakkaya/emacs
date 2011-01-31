@@ -27,9 +27,12 @@
   ;;enable blinking cursor
   (blink-cursor-mode 1)
   (put 'erase-buffer 'disabled nil)
-  ;;disable scroll bar
-  (toggle-scroll-bar nil)
-  (tool-bar-mode -1)
+  
+  (when window-system
+    ;;disable scroll bar
+    (toggle-scroll-bar nil)
+    (tool-bar-mode -1))
+  
   (menu-bar-mode -1)
   ;;do not continue line when split frame
   (setq truncate-partial-width-windows nil)
@@ -155,58 +158,51 @@ under X, instead of the default, backspace behavior.
 #+end_src
 
 #+begin_src emacs-lisp 
-  (global-set-key [S-f1] 'na-run-term-or-rename)
-  (global-set-key [M-f1] 'na-run-lisp)
-  (global-set-key [f1] 'na-switch-between-terminals)
-  (global-set-key [f2] 'na-run-git-switch)
   (global-set-key [f3] 'org-agenda)
   (global-set-key [S-f3] 'org-show-todo-tree)
-  ;;(global-set-key [S-f4] 'na-run-erc-switch)
-  (global-set-key [f4] 'na-run-erc-switch)
-  (global-set-key [f5] 'switch-to-gnus)
-  (global-set-key [f6] 'nmap)
-  (global-set-key [S-f6] 'dsniff)
   (global-set-key [f7] 'na-clojure-project)
   (global-set-key [f8] 'toggle-truncate-lines)
   (global-set-key [f12] 'org-babel-tangle)
   
-  (define-key global-map [(control meta .)] 'find-tag-other-window)
   (global-set-key [(meta g)] 'goto-line)
+  (global-set-key [(meta =)] 'na-bounce-sexp)
+
   (define-key global-map [(meta \])] 'ibuffer)
   (add-hook 'term-mode-hook
-         '(lambda ()
-            (define-key term-raw-map [(meta \])] 'ibuffer)))
+            '(lambda ()
+               (define-key term-raw-map [(meta \])] 'ibuffer)))
   
   (add-hook 'term-mode-hook
-         '(lambda ()
-            (define-key term-raw-map [(meta .)] 'find-tag)))
+            '(lambda ()
+               (define-key term-raw-map [(meta .)] 'find-tag)))
   
   (define-key global-map [(meta p)] 'na-cm-rotate)
   (define-key global-map [(meta control  p)] 'na-cm-save-point)
-  (global-set-key [(control =)] 'na-bounce-sexp)
   
-  (global-set-key [M-right] 'other-window)
-  (define-key org-mode-map (kbd "M-<right>") 'other-window)
-  
-  (define-key global-map [(meta \[)] 'other-frame)
+  (add-hook 'term-mode-hook
+            '(lambda ()
+               (define-key term-raw-map [(meta a)] 'other-window)))
+  (global-set-key [(meta a)] 'other-window)
+  (define-key org-mode-map (kbd "M-a") 'other-window)
+
   ;;works for pc keyboard
   (define-key global-map [C-M-kp-subtract] 'erase-buffer)
   ;;works for ibook keyboard
   (define-key global-map [C-M-backspace] 'erase-buffer)
   
-  ;;outline bindings
-  (global-set-key [M-up] 'hide-subtree)
-  (global-set-key [M-down] 'show-subtree)
+  (global-set-key "\C-xgs" 'na-run-git-switch)
+  (global-set-key "\C-xrl" 'na-run-lisp)
+  (global-set-key "\C-xtr" 'na-run-term-or-rename)
+  (global-set-key [(meta \[)] 'na-switch-between-terminals)
+  (add-hook 'term-mode-hook
+            '(lambda ()
+               (define-key term-raw-map [(meta \[)] 'na-switch-between-terminals)))
   
-                                       ;keybindindings for git
-  (global-set-key "\C-xgs" 'git-status)
-
   (global-set-key [(meta h)] 'ns-do-hide-emacs)
   (setq mac-option-modifier 'super )
   (setq mac-command-modifier 'meta )
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
-  
 #+end_src
 
 * Modes
