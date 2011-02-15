@@ -506,11 +506,11 @@ under X, instead of the default, backspace behavior.
 #+begin_src emacs-lisp 
   (cond 
    ((string= "apple" cur-op-sys)
-    (setq clojure-command (concat "/Users/nakkaya/Dropbox/Scripts/lein repl")))
+    (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
   ((string= "linux" cur-op-sys)
-   (setq clojure-command (concat "/home/nakkaya/Dropbox/Scripts/lein repl")))
+   (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
   ((string= "windows" cur-op-sys)
-   (setq clojure-command (concat "/cygdrive/c/Dropbox/Scripts/lein repl"))))
+   (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
   
   (setq lisp-programs 
         (list (list "clojure" clojure-command)
@@ -910,13 +910,13 @@ under X, instead of the default, backspace behavior.
         (set-face-foreground 'org-meta-line "#7D7D5E"))
     (progn 
       (set-face-foreground 'default "color-250")
-      (set-face-background 'default "color-23")
+      (set-face-background 'default "color-233")
   
       (set-face-foreground 'font-lock-string-face "color-175")
       (set-face-foreground 'font-lock-keyword-face "color-202")
       (set-face-foreground 'font-lock-function-name-face "color-184")
       (set-face-foreground 'font-lock-builtin-face "color-155")
-      (set-face-foreground 'font-lock-comment-face "brightblack")))
+      (set-face-foreground 'font-lock-comment-face "color-30")))
 #+end_src
 
 #+begin_src emacs-lisp 
