@@ -938,8 +938,7 @@ under X, instead of the default, backspace behavior.
 
 (defun na-frame-linux ()
   (interactive)
-  (set-default-font "monaco")
-  (na-set-frame-size 100 40 80))
+  (na-set-frame-size 100 40 90))
 #+end_src
 
 * Misc
