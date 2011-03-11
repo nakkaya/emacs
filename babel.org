@@ -525,6 +525,10 @@ under X, instead of the default, backspace behavior.
         (dolist (l lisp-programs)
           (if (string= (first l) choice)
               (run-lisp (second l)))))))
+
+  (defun remote-repl (arg)
+    (interactive "P")
+    (run-lisp (concat "nc " (read-string "IP: ") " " (read-string "Port: "))))
   
   (defun na-load-buffer ()
     (interactive)
