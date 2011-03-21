@@ -570,6 +570,7 @@ under X, instead of the default, backspace behavior.
         (dired path))))
   
   (require 'ob)
+  (require 'ob-sh)
   
   (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
   
