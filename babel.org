@@ -331,6 +331,7 @@ under X, instead of the default, backspace behavior.
               ("Source" (or
                          (mode . java-mode)
                          (mode . clojure-mode)
+                         (mode . scheme-mode)
                          (mode . ruby-mode)
                          (mode . shell-script-mode)
                          (mode . sh-mode)
