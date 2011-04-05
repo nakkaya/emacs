@@ -902,41 +902,34 @@ under X, instead of the default, backspace behavior.
 #+begin_src emacs-lisp 
   (if window-system
       (progn 
-        (setq default-frame-alist
-              (append default-frame-alist
-                      '((foreground-color . "#EEEEEC")
-                        (background-color . "#2A2A38")
-                        (cursor-color . "#FCE94F"))))
-        
-        (set-face-foreground 'bold "#EEEEEC")
-        (set-face-background 'bold "#2A2A38")
-        (set-face-background 'default "#2A2A38")
+        (deftheme solarized "")
   
-        (set-face-foreground 'font-lock-string-face "#854BBE")
-        (set-face-foreground 'font-lock-keyword-face "#A02350")
-        (set-face-foreground 'font-lock-function-name-face "#C3A878")
-        (set-face-foreground 'font-lock-builtin-face "#729FCF")
-        (set-face-foreground 'font-lock-comment-face "#888A85")
+        (custom-theme-set-faces
+         'solarized
+         '(default ((t (:background "#002b36" :foreground "#dcdcdc"))))
+         '(cursor ((t (:background "#586e75" :foreground "#93a1a1"))))
+         '(region ((t (:background "#586e75"))))
+         '(mode-line ((t (:background "#586e75" :foreground "#073642"))))
+         '(mode-line-inactive ((t (:background "#839496" :foreground "#839496"))))
+         '(fringe ((t (:foreground "#586e75" :background "#073642"))))
+         '(minibuffer-prompt ((t (:foreground "#268bd2"))))
+         '(font-lock-builtin-face ((t (:foreground "#859900"))))
+         '(font-lock-comment-face ((t (:foreground "#586e75" :italic t)))) ; italic ja!
+         '(font-lock-constant-face ((t (:foreground "#2aa198"))))
+         '(font-lock-function-name-face ((t (:foreground "#268bd2"))))
+         '(font-lock-keyword-face ((t (:foreground "#859900"))))
+         '(font-lock-string-face ((t (:foreground "#2aa198"))))
+         '(font-lock-type-face ((t (:foreground "#b58900"))))
+         '(font-lock-variable-name-face ((t (:foreground "#268bd2"))))
+         '(font-lock-warning-face ((t (:foreground "#d30102" :weight bold))))
+         '(isearch ((t (:foreground "#b58900" :inverse-video t))))
+         '(lazy-highlight ((t (:background "#073642")))) ; second highlight, typ?
+         '(link ((t (:foreground "#6c71c4" :underline t))))
+         '(link-visited ((t (:foreground "#8b008b" :underline t)))) ;; eh?
+         '(button ((t (:underline t :background "#073642"))))
+         '(header-line ((t (:background "#eee8d5" :foreground "#839496")))))
   
-        (set-face-foreground 'modeline "#A5A5A0")
-        (set-face-background 'modeline "#555753")
-        (set-face-foreground 'modeline-inactive "#64645F")
-        (set-face-background 'modeline-inactive "black")
-  
-        (set-face-background 'fringe "#2A2A38")
-        (set-face-foreground 'vertical-border "#888A85")
-  
-        (set-face-foreground 'diff-added "#EEEEEC")
-        (set-face-foreground 'diff-removed "firebrick")
-        (set-face-foreground 'diff-file-header "#EEEEEC")
-        (set-face-foreground 'diff-header "#EEEEEC")
-  
-        (set-face-background 'diff-header "#2A2A38")
-        (set-face-background 'diff-file-header "#2A2A38")
-  
-        (set-face-background 'org-hide "#2A2A38")
-        (set-face-foreground 'org-hide "#2A2A38")
-        (set-face-foreground 'org-meta-line "#7D7D5E"))
+        (provide-theme 'solarized))
     (progn 
       (set-face-foreground 'default "color-250")
       (set-face-background 'default "color-233")
@@ -946,6 +939,7 @@ under X, instead of the default, backspace behavior.
       (set-face-foreground 'font-lock-function-name-face "color-184")
       (set-face-foreground 'font-lock-builtin-face "color-155")
       (set-face-foreground 'font-lock-comment-face "color-30")))
+  
 #+end_src
 
 #+begin_src emacs-lisp 
