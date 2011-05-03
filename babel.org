@@ -910,7 +910,7 @@ under X, instead of the default, backspace behavior.
          '(cursor ((t (:background "#586e75" :foreground "#93a1a1"))))
          '(region ((t (:background "#586e75"))))
          '(mode-line ((t (:background "#586e75" :foreground "#073642"))))
-         '(mode-line-inactive ((t (:background "#839496" :foreground "#839496"))))
+         '(mode-line-inactive ((t (:background "#073642" :foreground "#586e75"))))
          '(fringe ((t (:foreground "#586e75" :background "#073642"))))
          '(minibuffer-prompt ((t (:foreground "#268bd2"))))
          '(font-lock-builtin-face ((t (:foreground "#859900"))))
