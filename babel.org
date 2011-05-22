@@ -438,6 +438,8 @@ under X, instead of the default, backspace behavior.
       (toggle-selective-display column)))
   
   (global-set-key (kbd "C-+") 'toggle-hiding)
+  (global-set-key [S-f2] 'hs-hide-level)
+  (global-set-key [f2] 'hs-hide-all)
   
   (add-hook 'c-mode-common-hook   'hs-minor-mode)
   (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
@@ -446,7 +448,7 @@ under X, instead of the default, backspace behavior.
   (add-hook 'perl-mode-hook       'hs-minor-mode)
   (add-hook 'sh-mode-hook         'hs-minor-mode)
   (add-hook 'clojure-mode-hook    'hs-minor-mode)
-
+  
   (setq hs-hide-comments-when-hiding-all nil)
   
 #+end_src
