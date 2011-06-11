@@ -968,10 +968,10 @@ under X, instead of the default, backspace behavior.
       (set-face-foreground 'default "color-250")
       (set-face-background 'default "color-233")
   
-      (set-face-foreground 'font-lock-string-face "color-175")
+      (set-face-foreground 'font-lock-string-face "color-147")
       (set-face-foreground 'font-lock-keyword-face "color-202")
-      (set-face-foreground 'font-lock-function-name-face "color-184")
-      (set-face-foreground 'font-lock-builtin-face "color-155")
+      (set-face-foreground 'font-lock-function-name-face "color-178")
+      (set-face-foreground 'font-lock-builtin-face "color-148")
       (set-face-foreground 'font-lock-comment-face "color-30")))
   
 #+end_src
