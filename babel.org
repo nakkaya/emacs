@@ -160,47 +160,35 @@ under X, instead of the default, backspace behavior.
 #+begin_src emacs-lisp 
   (global-set-key [f3] 'org-agenda)
   (global-set-key [S-f3] 'org-show-todo-tree)
-  (global-set-key [f7] 'na-clojure-project)
   (global-set-key [f8] 'toggle-truncate-lines)
   (global-set-key [f12] 'org-babel-tangle)
   
-  (global-set-key [(meta g)] 'goto-line)
-  (global-set-key [(meta =)] 'na-bounce-sexp)
+  (global-set-key [(control d)] 'na-bounce-sexp)
 
-  (define-key global-map [(meta \])] 'ibuffer)
+  (define-key global-map [(control \])] 'ibuffer)
   (add-hook 'term-mode-hook
             '(lambda ()
-               (define-key term-raw-map [(meta \])] 'ibuffer)))
-  
-  (add-hook 'term-mode-hook
-            '(lambda ()
-               (define-key term-raw-map [(meta .)] 'find-tag)))
+               (define-key term-raw-map [(control \])] 'ibuffer)))
   
   (define-key global-map [(meta p)] 'na-cm-rotate)
   (define-key global-map [(meta control  p)] 'na-cm-save-point)
   
   (add-hook 'term-mode-hook
             '(lambda ()
-               (define-key term-raw-map [(meta a)] 'other-window)))
-  (global-set-key [(meta a)] 'other-window)
-  (define-key org-mode-map (kbd "M-a") 'other-window)
-
-  ;;works for pc keyboard
-  (define-key global-map [C-M-kp-subtract] 'erase-buffer)
-  ;;works for ibook keyboard
-  (define-key global-map [C-M-backspace] 'erase-buffer)
+               (define-key term-raw-map [(control o)] 'other-window)))
+  (global-set-key [(control o)] 'other-window)
   
   (global-set-key "\C-xgs" 'na-run-git-switch)
   (global-set-key "\C-xrl" 'na-run-lisp)
   (global-set-key "\C-xtr" 'na-run-term-or-rename)
-  (global-set-key [(meta \[)] 'na-switch-between-terminals)
+  (global-set-key [(control p)] 'na-switch-between-terminals)
   (add-hook 'term-mode-hook
             '(lambda ()
-               (define-key term-raw-map [(meta \[)] 'na-switch-between-terminals)))
+               (define-key term-raw-map [(control p)] 'na-switch-between-terminals)))
   
   (global-set-key [(meta h)] 'ns-do-hide-emacs)
-  (setq mac-option-modifier 'super )
-  (setq mac-command-modifier 'meta )
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta)
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
 #+end_src
@@ -593,21 +581,7 @@ under X, instead of the default, backspace behavior.
                  "\C-c\C-z" 'run-lisp)))
   
   (define-clojure-indent (from-blackboard 'defun))
-  
-  (defun na-clojure-project (path)
-    (interactive (list (read-directory-name "Project root: " )))
-    (when (get-buffer "*inferior-lisp*") 
-      (kill-buffer "*inferior-lisp*"))
-    (when (get-buffer "*terminal*") 
-      (kill-buffer "*terminal*"))
-    (let ((path-lst (split-string path "/")))
-      (let ((proj-name (nth (- (length path-lst) 2) path-lst)))
-        (dired path)
-        (run-lisp (second (first lisp-programs)))
-        (dired path)
-        (term "/bin/bash")
-        (dired path))))
-  
+
   (require 'ob)
   (require 'ob-sh)
   
