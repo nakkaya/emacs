@@ -490,10 +490,13 @@ under X, instead of the default, backspace behavior.
       (indent-according-to-mode)))
   
   (defun my-tab-fix ()
-    (local-set-key [tab] 'indent-or-expand))
+    (local-set-key (read-kbd-macro "TAB") 'indent-or-expand))
   
   (add-hook 'clojure-mode-hook 'my-tab-fix)
   (add-hook 'scheme-mode-hook 'my-tab-fix)
+  (add-hook 'c-mode-hook 'my-tab-fix)
+  (add-hook 'c++-mode-hook 'my-tab-fix)
+  (add-hook 'java-mode-hook 'my-tab-fix)
   
   (defun na-bounce-sexp ()
     "Will bounce between matching parens just like % in vi"
