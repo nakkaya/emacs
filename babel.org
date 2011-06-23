@@ -1004,7 +1004,7 @@ under X, instead of the default, backspace behavior.
   (defun call-raise-frame ()
     (raise-frame))
   
-  (server-start)
+  ;;(server-start)
 #+end_src
 
 #+begin_src emacs-lisp 
