@@ -953,28 +953,6 @@ under X, instead of the default, backspace behavior.
   
 #+end_src
 
-#+begin_src emacs-lisp 
-(defun na-set-frame-size(width height font-size)
-  (set-face-attribute 
-   'default (selected-frame) :height font-size :width 'normal)
-  (set-frame-width (selected-frame) width)
-  (set-frame-height (selected-frame) height)
-  (set-frame-position (selected-frame) 0 1))
-
-(defun na-resize-frame-big ()
-  (interactive)  
-  (na-set-frame-size 178 55 130))
-
-(defun na-frame-windows ()
-  (interactive)
-  (set-default-font "monaco")
-  (na-set-frame-size 130 50 110))
-
-(defun na-frame-linux ()
-  (interactive)
-  (na-set-frame-size 100 40 90))
-#+end_src
-
 * Misc
 
 #+begin_src emacs-lisp 
@@ -1035,18 +1013,6 @@ under X, instead of the default, backspace behavior.
                                   (dolist (i del-buf-list)
                                     (kill-buffer i)))))
 #+end_src
-
-** Autorun
-
-#+begin_src emacs-lisp 
-  (cond 
-   ((string= "apple" cur-op-sys)
-      (na-resize-frame-big))
-  ((string= "linux" cur-op-sys)
-      (na-frame-linux)))
-
-#+end_src
-
 * Skeletons
 ** Setup
 #+begin_src emacs-lisp 
