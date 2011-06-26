@@ -376,11 +376,15 @@ under X, instead of the default, backspace behavior.
 
 ** EasyPG
 #+begin_src emacs-lisp 
-  (if (string= "apple" cur-op-sys)
-      (progn   
-        (require 'epa)
-        (epa-file-enable)
-        (setq epg-gpg-program "/opt/local/bin/gpg")))
+  (require 'epa)
+  (epa-file-enable)
+  
+  (cond 
+   ((string= "apple" cur-op-sys)
+    (setq epg-gpg-program "/opt/local/bin/gpg"))
+   ((string= "windows" cur-op-sys)
+    (setq epg-gpg-program (concat "/bin/gpg"))))
+  
 #+end_src
 
 ** Text Mode
