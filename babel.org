@@ -164,7 +164,7 @@ under X, instead of the default, backspace behavior.
   (global-set-key [f12] 'org-babel-tangle)
   
   (global-set-key [(control d)] 'na-bounce-sexp)
-
+  
   (define-key global-map [(control \])] 'ibuffer)
   (add-hook 'term-mode-hook
             '(lambda ()
@@ -175,22 +175,23 @@ under X, instead of the default, backspace behavior.
   
   (add-hook 'term-mode-hook
             '(lambda ()
-               (define-key term-raw-map [(control o)] 'other-window)))
-  (global-set-key [(control o)] 'other-window)
+               (define-key term-raw-map [(control \\)] 'other-window)))
+  (global-set-key [(control \\)] 'other-window)
   
   (global-set-key "\C-xgs" 'na-run-git-switch)
   (global-set-key "\C-xrl" 'na-run-lisp)
   (global-set-key "\C-xtr" 'na-run-term-or-rename)
-  (global-set-key [(control p)] 'na-switch-between-terminals)
+  (global-set-key [(control q)] 'na-switch-between-terminals)
   (add-hook 'term-mode-hook
             '(lambda ()
-               (define-key term-raw-map [(control p)] 'na-switch-between-terminals)))
+               (define-key term-raw-map [(control q)] 'na-switch-between-terminals)))
   
   (global-set-key [(meta h)] 'ns-do-hide-emacs)
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta)
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
+  
 #+end_src
 
 * Modes
