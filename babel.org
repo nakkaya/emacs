@@ -541,10 +541,10 @@ under X, instead of the default, backspace behavior.
   (cond 
    ((string= "apple" cur-op-sys)
     (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
-  ((string= "linux" cur-op-sys)
-   (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
-  ((string= "windows" cur-op-sys)
-   (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
+   ((string= "linux" cur-op-sys)
+    (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
+   ((string= "windows" cur-op-sys)
+    (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
   
   (setq lisp-programs 
         (list (list "clojure" clojure-command)
@@ -560,7 +560,7 @@ under X, instead of the default, backspace behavior.
         (dolist (l lisp-programs)
           (if (string= (first l) choice)
               (run-lisp (second l)))))))
-    
+  
   (defun remote-repl (arg)
     (interactive "P")
     (run-lisp (concat "nc " (read-string "IP: ") " " (read-string "Port: "))))
@@ -589,7 +589,7 @@ under X, instead of the default, backspace behavior.
                  "\C-c\C-z" 'run-lisp)))
   
   (define-clojure-indent (from-blackboard 'defun))
-
+  
   (require 'ob)
   (require 'ob-sh)
   
@@ -605,7 +605,8 @@ under X, instead of the default, backspace behavior.
   
   (provide 'ob-clojure)
   
-    
+  (setq org-src-window-setup 'current-window)
+  
 #+end_src
 
 ** Scheme
