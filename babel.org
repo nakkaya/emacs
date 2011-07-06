@@ -1245,15 +1245,11 @@ under X, instead of the default, backspace behavior.
 #+begin_src emacs-lisp 
   (setq ibuffer-saved-filter-groups
         (quote (("default"
-              ("Markup" (or (mode . org-mode)
-                            (mode . html-mode)
-                            (mode . markdown-mode)
-                            (mode . xml-mode)
-                            (name . "\\.xml$")
-                            (mode . text-mode)))
               ("Source" (or
                          (mode . java-mode)
                          (mode . clojure-mode)
+                         (mode . org-mode)
+                         (mode . xml-mode)
                          (mode . scheme-mode)
                          (mode . ruby-mode)
                          (mode . shell-script-mode)
@@ -1264,7 +1260,10 @@ under X, instead of the default, backspace behavior.
                          (mode . asm-mode)
                          (mode . emacs-lisp-mode)
                          (mode . c++-mode)))
-              ("gnus" (or
+              ("Terminal" (or (mode . term-mode)
+                              (mode . inferior-lisp-mode)))
+              ("Dired" (mode . dired-mode))
+              ("Gnus" (or
                        (mode . message-mode)
                        (mode . mail-mode)
                        (mode . gnus-group-mode)
@@ -1272,24 +1271,10 @@ under X, instead of the default, backspace behavior.
                        (mode . gnus-article-mode)
                        (name . "^\\*offlineimap\\*$")
                        (name . "^\\.newsrc-dribble")))
-              ("Terminal" (or (mode . term-mode)
-                              (mode . inferior-lisp-mode)))
-              ("Network" (or 
-                          (name . "^ssh.*$")
-                          (name . "^\\*nmap\\*$")
-                          (name . "^\\*dsniff\\*$")
-                          (name . "^\\*ftp.+\\*$")
-                          (name . "^\\*nmap.+\\*$")
-                          (name . "^\\*arpspoof.+\\*$")
-                          (name . "^\\*tramp.+\\*$")
-                          (name . "^\\*trace.+SMTP.+\\*$")
-                          (mode . dsniff-mode)
-                          (mode . nmap-mode)))
-              ("dired" (mode . dired-mode))
-              ("IRC" (or
-                      (mode . erc-mode)))
-              ("emacs" (or
+              ("Emacs" (or
                         (name . "^\\*info\\*$")
+                        (name . "^\\*tramp.+\\*$")
+                        (name . "^\\*trace.+SMTP.+\\*$")
                         (name . "^\\*mpg123\\*$")
                         (name . "^\\.todo-do")
                         (name . "^\\*scratch\\*$")
@@ -1297,16 +1282,28 @@ under X, instead of the default, backspace behavior.
                         (name . "^\\*git-diff\\*$")
                         (name . "^\\*git-commit\\*$")
                         (name . "^\\*Git Command Output\\*$")
+                        (name . "^\\*Org Export/Publishing Help\\*$")
                         (name . "^\\*Messages\\*$")
                         (name . "^\\*Completions\\*$") 
                         (name . "^\\*Backtrace\\*$")
                         (name . "^TAGS$")
                         (name . "^\\*Help\\*$")
                         (name . "^\\*Shell Command Output\\*$")))))))
+  
   (add-hook 'ibuffer-mode-hook
          (lambda ()
            (ibuffer-switch-to-saved-filter-groups "default")))
   (setq ibuffer-expert t)
+  
+  (setq ibuffer-formats '((mark modified read-only " "
+                                (name 18 18 :left :elide)
+                                " "
+                                (mode 16 16 :left :elide)
+                                " " filename-and-process)
+                          (mark " "
+                                (name 16 -1)
+                                " " filename)))
+  
 #+end_src
 
 ** EasyPG
