@@ -459,8 +459,8 @@ under X, instead of the default, backspace behavior.
   
     pre {
       font-family: Monaco, Consolas, \"Lucida Console\", monospace;
-      color: black;
-      background-color: #efefef;
+      color: gainsboro;
+      background-color: #373737;
       padding: 1.2em;
       border: 1px solid #dddddd;
       overflow: auto;
