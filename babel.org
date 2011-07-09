@@ -59,6 +59,8 @@
   (setq-default indent-tabs-mode nil)
   (setq delete-by-moving-to-trash t)
   
+  ;disable backup
+  (setq backup-inhibited t)
 #+end_src
 
 #+results:
@@ -1920,35 +1922,6 @@ under X, instead of the default, backspace behavior.
     (raise-frame))
   
   ;;(server-start)
-#+end_src
-
-#+begin_src emacs-lisp 
-  (setq auto-save-list-file-prefix "~/.saves/auto-save-list/" )
-  (setq
-   backup-by-copying t                 ; don't clobber symlinks
-   backup-directory-alist
-   '(("." . "~/.saves"))                       ; don't litter my fs tree
-   delete-old-versions t
-   kept-new-versions 6
-   kept-old-versions 2
-   version-control t)                  ; use versioned backups
-  (setq tramp-auto-save-directory "~/.saves/tramp-autosave")
-  
-  ;;do not save tramp files
-  (defun tv-list-tramp-buffer-file-name ()
-    (let* ((desktop-info-list (mapcar #'desktop-buffer-info (buffer-list)))
-        (tramp-buf-list (loop for i in desktop-info-list
-                              if (and (listp i)
-                                      (stringp (car (nth 8 i)))
-                                      (string-match "^/su:.*\\|^/sudo:.*\\|^/scp:.*" (car (nth 8 i))))
-                              collect (nth 2 i))))
-      tramp-buf-list))
-  
-  (add-hook 'desktop-save-hook #'(lambda ()
-                                (let ((del-buf-list
-                                       (tv-list-tramp-buffer-file-name)))
-                                  (dolist (i del-buf-list)
-                                    (kill-buffer i)))))
 #+end_src
 * Skeletons
 ** Setup
