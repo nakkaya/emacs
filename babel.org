@@ -51,7 +51,6 @@
   (setq inhibit-startup-screen t)
   (setq next-line-add-newlines nil)
   (setq query-replace-highlight t)
-  (setq require-final-newline t)
   (setq scroll-step 1)
   (setq search-highlight t)
   (setq transient-mark-mode t)
