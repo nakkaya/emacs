@@ -278,6 +278,9 @@ under X, instead of the default, backspace behavior.
                  {\\color{seccol}\\Huge\\thesection}{0pt}{\\linebreak\\huge\\raggedleft}[{\\titlerule[0.5pt]}]
   
                  \\titleformat{\\subsection}[hang]{\\sffamily\\bfseries\\underline}
+                 {}{0pt}{\\linebreak\\Large}[]
+  
+                 \\titleformat{\\subsubsection}[hang]{\\sffamily\\bfseries\\underline}
                  {}{0pt}{\\linebreak\\large}[]"
   
                  ("\\section{%s}" . "\\section*{%s}")
