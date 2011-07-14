@@ -243,7 +243,11 @@ under X, instead of the default, backspace behavior.
   (setq org-tag-alist '(("buy" . ?b) ("write" . ?w)))
   (setq org-agenda-window-setup 'other-frame)
   (setq org-agenda-show-all-dates t)
-  
+
+  (require 'ob)
+  (require 'ob-sh)
+  (setq org-src-window-setup 'current-window)
+
   (require 'org-latex)
   (setq org-export-latex-listings t)
   (add-to-list 'org-export-latex-packages-alist '("" "listings"))
@@ -548,6 +552,7 @@ under X, instead of the default, backspace behavior.
   
 #+end_src
 ** Clojure
+
 #+begin_src emacs-lisp 
   (cond 
    ((string= "apple" cur-op-sys)
@@ -600,10 +605,9 @@ under X, instead of the default, backspace behavior.
                  "\C-c\C-z" 'run-lisp)))
   
   (define-clojure-indent (from-blackboard 'defun))
-  
-  (require 'ob)
-  (require 'ob-sh)
-  
+#+end_src
+
+#+begin_src emacs-lisp
   (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
   
   (defvar org-babel-default-header-args:clojure 
@@ -615,10 +619,25 @@ under X, instead of the default, backspace behavior.
     "Done!")
   
   (provide 'ob-clojure)
-  
-  (setq org-src-window-setup 'current-window)
-  
 #+end_src
+
+#+begin_src emacs-lisp
+  (let ((fn `(("(\\(fn\\)[\[[:space:]]"
+               (0 (progn (compose-region (match-beginning 1)
+                                         (match-end 1) "λ")
+                         nil)))))
+        (inline-fn `(("\\(#\\)("
+                      (0 (progn (compose-region (match-beginning 1)
+                                                (match-end 1) "ƒ")
+                                nil))))))
+        
+        (font-lock-add-keywords 'clojure-mode fn)
+        (font-lock-add-keywords 'clojure-mode inline-fn)
+        (font-lock-add-keywords 'org-mode fn)
+        (font-lock-add-keywords 'org-mode inline-fn))
+#+end_src
+
+#+results:
 
 ** Scheme
 #+begin_src emacs-lisp
