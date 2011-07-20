@@ -1050,8 +1050,8 @@ under X, instead of the default, backspace behavior.
         (set-face-foreground 'font-lock-function-name-face "#d7af00")
         (set-face-foreground 'font-lock-builtin-face "#afd700")
         (set-face-foreground 'font-lock-comment-face "#008787")
-        (set-face-foreground 'org-block-begin-line "#000000")
-        (set-face-foreground 'org-block-end-line "#000000"))
+        (set-face-foreground 'org-block-begin-line "#303030")
+        (set-face-foreground 'org-block-end-line "#303030"))
     (progn 
       (set-face-foreground 'default "color-250")
       (set-face-background 'default "color-233")
@@ -1060,9 +1060,11 @@ under X, instead of the default, backspace behavior.
       (set-face-foreground 'font-lock-function-name-face "color-178")
       (set-face-foreground 'font-lock-builtin-face "color-148")
       (set-face-foreground 'font-lock-comment-face "color-30")
-      (set-face-foreground 'org-block-begin-line "black")
-      (set-face-foreground 'org-block-end-line "black")))
+      (set-face-foreground 'org-block-begin-line "color-236")
+      (set-face-foreground 'org-block-end-line "color-236")))
 #+end_src
+
+#+results:
 
 * Misc
 
