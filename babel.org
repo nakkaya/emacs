@@ -258,7 +258,9 @@ under X, instead of the default, backspace behavior.
                  "\\documentclass{article}\n
                  \\usepackage[x11names]{xcolor} % for a (setq of predefined color names, like LemonChiffon1
                  \\renewcommand{\\rmdefault}{phv} % Arial \n
-  \\renewcommand{\\sfdefault}{phv} % Arial
+                 \\renewcommand{\\sfdefault}{phv} % Arial
+                 \\setlength{\\parindent}{0pt}
+                 \\setlength{\\parskip}{1ex plus 0.5ex minus 0.2ex}
   
                  \\usepackage[hmargin=3cm,vmargin=3.5cm]{geometry} \n
                  \\usepackage{hyperref}
