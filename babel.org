@@ -1,3 +1,5 @@
+#+property: results silent
+
 * Load Path
 #+begin_src emacs-lisp 
   (setq dotfiles-dir (file-name-directory
@@ -61,9 +63,6 @@
   ;disable backup
   (setq backup-inhibited t)
 #+end_src
-
-#+results:
-: t
 
 #+begin_src emacs-lisp 
   (cond
@@ -731,8 +730,6 @@ under X, instead of the default, backspace behavior.
         (font-lock-add-keywords 'org-mode inline-fn))
 #+end_src
 
-#+results:
-
 ** Scheme
 #+begin_src emacs-lisp
   ;;sub process support for clojure
@@ -1063,8 +1060,6 @@ under X, instead of the default, backspace behavior.
       (set-face-foreground 'org-block-begin-line "color-236")
       (set-face-foreground 'org-block-end-line "color-236")))
 #+end_src
-
-#+results:
 
 * Misc
 
@@ -1402,12 +1397,26 @@ under X, instead of the default, backspace behavior.
 
 ** org-mode
 #+begin_src emacs-lisp
-  ;; (define-skeleton skel-org-src
-  ;;   "Insert org src block."
-  ;;   nil
-  ;;   "#+begin_src"
-  ;;    _ 
-  ;;   \n > 
-  ;;    "\#+end_src")
-  ;; (define-abbrev text-mode-abbrev-table "osrc" "" 'skel-org-src)
+  (define-skeleton skel-org-src
+    "Insert org src block."
+    nil
+    >
+    "#+begin_src "
+     _ 
+    \n > 
+     "#""+end_src"
+     >)
+  (define-abbrev text-mode-abbrev-table "osrc" "" 'skel-org-src)
+  
+  (define-skeleton skel-org-src
+    "Insert org src block clojure."
+    nil
+    >
+    "#+begin_src clojure"
+    \n >
+     _ 
+    \n > 
+     "#""+end_src"
+     >)
+  (define-abbrev text-mode-abbrev-table "ocsrc" "" 'skel-org-src)
 #+end_src
