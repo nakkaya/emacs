@@ -454,6 +454,8 @@ under X, instead of the default, backspace behavior.
                         (name . "^\\*git-commit\\*$")
                         (name . "^\\*Git Command Output\\*$")
                         (name . "^\\*Org Export/Publishing Help\\*$")
+                        (name . "^\\*Org Agenda\\*$")
+                        (name . "^\\*Calendar\\*$")
                         (name . "^\\*Messages\\*$")
                         (name . "^\\*Completions\\*$") 
                         (name . "^\\*Backtrace\\*$")
