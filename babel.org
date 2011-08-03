@@ -751,44 +751,11 @@ under X, instead of the default, backspace behavior.
   (setq term-term-name "xterm-color")
   (setq-default term-buffer-maximum-size 5000)
   
-  (defun na-linux-run-term ()
+  (defun na-run-term ()
     "run bash"
     (interactive)
-    (term "/bin/bash"))
-  
-  (defun na-run-term-or-rename ()
-    "create new shell or rename old"
-    (interactive)  
-    (if (not (eq (get-buffer "*terminal*")  nil ) )
-        (progn
-          ( setq new-buffer-name (read-from-minibuffer "Name shell to: " ) )
-          (set-buffer "*terminal*")
-          ( rename-buffer new-buffer-name )))
-    
-    (if (eq (get-buffer "*terminal*")  nil) 
-        (progn
-          (na-linux-run-term ))))
-  
-  (defun na-switch-between-terminals () 
-    "cycle multiple terminals"
-    (interactive)
-    (if (not (eq (or (get-buffer "*terminal*") 
-                     (get-buffer "*inferior-lisp*")) nil))
-        (progn     
-          (setq found nil)
-          (bury-buffer)
-          (setq head (car (buffer-list)))      
-          (while  (eq found nil)  
-            (set-buffer head)     
-            (if (or (eq major-mode 'term-mode)
-                    (eq major-mode 'inferior-lisp-mode))
-                (setq found t)
-              (progn
-                (bury-buffer)
-                (setq head (car (buffer-list)))))))))
-  
+    (term "/bin/bash"))  
 #+end_src
-
 * Theme
 #+begin_src emacs-lisp 
 (setq frame-title-format (list "GNU Emacs " emacs-version))
