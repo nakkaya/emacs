@@ -224,13 +224,14 @@ under X, instead of the default, backspace behavior.
   (setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
   (setq org-mobile-directory "~/Dropbox/mobile-org")
   (setq org-mobile-files (quote ("gtd.org" "curriculum.org")))
-  (setq org-agenda-files (list "~/Dropbox/org/gtd.org"
-                               "~/Dropbox/org/birthday.org"))
+  (setq org-agenda-files (list "~/Dropbox/org/gtd.org"))
   
   (setq org-mobile-force-id-on-agenda-items nil)
   (setq org-agenda-custom-commands
         '(("w" todo "TODO")
-          ("h" agenda "" ((org-agenda-show-all-dates nil)))
+          ("h" "Agenda and Todo"
+                ((agenda "")
+                 (todo)))
           ("W" agenda "" ((org-agenda-ndays 21)
                           (org-agenda-show-all-dates nil)))
           ("A" agenda ""
@@ -239,8 +240,8 @@ under X, instead of the default, backspace behavior.
   
   (setq org-return-follows-link t)
   (setq org-hide-leading-stars t)
-  (setq org-tag-alist '(("buy" . ?b) ("write" . ?w)))
-  (setq org-agenda-window-setup 'other-frame)
+  (setq org-agenda-window-setup 'other-window)
+  (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-show-all-dates t)
   
   (require 'ob)
@@ -392,20 +393,13 @@ under X, instead of the default, backspace behavior.
 #+begin_src emacs-lisp
   (defun jump-to-org-agenda ()
     (interactive)
-    (let ((buf (get-buffer "*Org Agenda*"))
-          wind)
-      (if buf
-          (if (setq wind (get-buffer-window buf))
-              (select-window wind)
-            (if (called-interactively-p)
-                (progn
-                  (select-window (display-buffer buf t t))
-                  (org-fit-window-to-buffer))
-              (with-selected-window (display-buffer buf)
-                (org-fit-window-to-buffer))))
-        (funcall (lambda () (org-agenda-list t))))))
-
-;;  (run-with-idle-timer 300 t 'jump-to-org-agenda)
+    (let ((agenda-window (get-buffer-window org-agenda-buffer-name t)))
+      (if agenda-window
+        (with-selected-window agenda-window (org-agenda-redo))
+        (funcall (lambda () (org-agenda nil "h"))))))
+  
+  (run-with-idle-timer 300 t 'jump-to-org-agenda)
+  
 #+end_src
 
 #+begin_src emacs-lisp
