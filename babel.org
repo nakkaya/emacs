@@ -157,9 +157,16 @@ under X, instead of the default, backspace behavior.
   (global-set-key [kp-delete] 'delete-char)
 #+end_src
 
+Mac specific,
+
+#+begin_src emacs-lisp 
+  (global-set-key [(meta h)] 'ns-do-hide-emacs)
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta)
+#+end_src
+
 #+begin_src emacs-lisp 
   (global-set-key [f3] 'org-agenda)
-  (global-set-key [S-f3] 'org-show-todo-tree)
   (global-set-key [f8] 'toggle-truncate-lines)
   (global-set-key [f12] 'org-babel-tangle)
   
@@ -180,18 +187,15 @@ under X, instead of the default, backspace behavior.
   
   (global-set-key "\C-xgs" 'na-run-git-switch)
   (global-set-key "\C-xrl" 'na-run-lisp)
-  (global-set-key "\C-xtr" 'na-run-term-or-rename)
+  (global-set-key "\C-xtr" 'na-run-term)
   (global-set-key [(control q)] 'na-switch-between-terminals)
   (add-hook 'term-mode-hook
             '(lambda ()
                (define-key term-raw-map [(control q)] 'na-switch-between-terminals)))
   
-  (global-set-key [(meta h)] 'ns-do-hide-emacs)
-  (setq mac-option-modifier 'super)
-  (setq mac-command-modifier 'meta)
+
   (define-key global-map [home] 'beginning-of-line)
   (define-key global-map [end] 'end-of-line)
-  
 #+end_src
 
 * Modes
