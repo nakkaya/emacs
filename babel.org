@@ -610,6 +610,13 @@ under X, instead of the default, backspace behavior.
   (add-hook 'clojure-mode-hook 'lispy-parens)
   (add-hook 'scheme-mode-hook 'lispy-parens)
   
+  (defun na-reopen-file ()
+    "Reopen file in buffer."
+    (interactive)
+    (let ((p (point)))
+      (progn
+        (find-alternate-file buffer-file-name)
+        (goto-char p))))
 #+end_src
 ** Clojure
 
@@ -808,18 +815,6 @@ under X, instead of the default, backspace behavior.
       (set-face-foreground 'font-lock-comment-face "color-30")
       (set-face-foreground 'org-block-begin-line "color-236")
       (set-face-foreground 'org-block-end-line "color-236")))
-#+end_src
-
-* Misc
-
-#+begin_src emacs-lisp 
-  (defun na-reopen-file ()
-    "Reopen file in buffer."
-    (interactive)
-    (let ((p (point)))
-      (progn
-        (find-alternate-file buffer-file-name)
-        (goto-char p))))
 #+end_src
 
 * Session
