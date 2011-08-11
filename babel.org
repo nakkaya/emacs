@@ -239,15 +239,12 @@ Mac specific,
       
       (setq org-mobile-force-id-on-agenda-items nil)
       (setq org-agenda-custom-commands
-            '(("w" todo "TODO")
-              ("h" "Agenda and Todo"
-                    ((agenda "")
-                     (todo)))
+            '(("h" "Agenda and Todo"
+                    ((agenda "" ((org-agenda-ndays 3)))
+                     (todo "TODO")
+                     (todo "WAITING")))
               ("W" agenda "" ((org-agenda-ndays 21)
-                              (org-agenda-show-all-dates nil)))
-              ("A" agenda ""
-               ((org-agenda-ndays 1)
-                (org-agenda-overriding-header "Today")))))
+                              (org-agenda-show-all-dates nil)))))
       
       (setq org-agenda-window-setup 'other-window)
       (setq org-agenda-restore-windows-after-quit t)
