@@ -242,7 +242,8 @@ Mac specific,
             '(("h" "Agenda and Todo"
                     ((agenda "" ((org-agenda-ndays 3)))
                      (todo "TODO")
-                     (todo "WAITING")))
+                     (todo "WAITING")
+                     (todo "RESEARCH")))
               ("W" agenda "" ((org-agenda-ndays 21)
                               (org-agenda-show-all-dates nil)))))
       
