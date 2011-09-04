@@ -9,6 +9,7 @@
   (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
   (add-to-list 'load-path (concat dotfiles-dir "/int/"))
   (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
+  (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
   (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
 #+end_src
 
@@ -902,6 +903,7 @@ Mac specific,
 ** git
 #+begin_src emacs-lisp 
   (require 'git)
+  (require 'gitsum)
   (setq git-committer-name "Nurullah Akkaya")
   (setq git-committer-email "nurullah@nakkaya.com")
   
