@@ -21,8 +21,8 @@
     (require 'org)
   #+end_src
 
-* Options
-** Misc
+* General
+** Options
    #+begin_src emacs-lisp 
      (setq large-file-warning-threshold 256000000 )
      ;;debug
@@ -46,17 +46,15 @@
        (set-selection-coding-system 'compound-text-with-extensions))
      
      (setq bookmark-default-file "~/.emacs.d/emacs.bmk")
-     (setq c++-default-style "stroustrup")
      (setq column-number-mode t)
-     (setq compilation-scroll-output t)
      (setq dired-dwim-target t)
      (setq fill-column 72)
      (setq inhibit-startup-screen t)
      (setq next-line-add-newlines nil)
      (setq query-replace-highlight t)
-     (setq scroll-step 1)
      (setq search-highlight t)
      (setq transient-mark-mode t)
+
      ;; I hate tabs!
      (setq-default indent-tabs-mode nil)
      (setq delete-by-moving-to-trash t)
@@ -122,7 +120,7 @@
      (add-hook 'completion-list-mode-hook 'completion-setup-directory-face)
    #+end_src
 
-** Encoding
+   Support Turkish alphabet,
 
    #+begin_src emacs-lisp 
      (setq locale-coding-system 'utf-8)
@@ -132,7 +130,7 @@
      (prefer-coding-system 'utf-8)
    #+end_src
 
-** Keyboard and Mouse
+** Input
 
    #+begin_src emacs-lisp 
      (defun scroll-window-forward-line ()
@@ -212,6 +210,90 @@
      (define-key global-map [end] 'end-of-line)
    #+end_src
 
+** Session
+
+   #+begin_src emacs-lisp 
+     (load "desktop")
+     (desktop-load-default)
+     (setq desktop-enable t)
+     (require 'saveplace)
+     (setq-default save-place t)
+     (setq bookmark-save-flag 1)
+   #+end_src
+
+   #+begin_src emacs-lisp 
+     (add-hook 'server-visit-hook 'call-raise-frame)
+     (add-hook 'find-file-hook 'call-raise-frame)
+     
+     (defun call-raise-frame ()
+       (raise-frame))
+   #+end_src
+
+** Theme
+
+  #+begin_src emacs-lisp 
+    (setq frame-title-format (list "GNU Emacs " emacs-version))
+    (setq display-time-day-and-date nil )
+    (setq display-time-format "") 
+    (setq display-time-load-average-threshold 0 )
+    (setq display-time-string-forms '( load "," (if mail "" "")) )
+    (setq display-time-interval 5)
+    (display-time-mode 1)
+    (setq battery-mode-line-format "%b%p%" )
+    (display-battery-mode t)
+    
+    (setq-default mode-line-format
+                  '(""
+                    mode-line-modified
+                    (-3 . "%p") ;; position
+                    "[%b]"
+                    "%[("
+                    mode-name
+                    mode-line-process
+                    minor-mode-alist
+                    "%n" ")%]-"
+                    (line-number-mode "L%l-")
+                    (column-number-mode "C%c [")
+                    global-mode-string
+                    "] "
+                    "%f"                ;; print file with full path
+                    " %-"))
+  #+end_src
+
+  #+begin_src emacs-lisp 
+    (if window-system
+        (progn 
+          (set-face-foreground 'default "#bcbcbc")
+          (set-face-background 'default "#121212")
+          (set-face-foreground 'font-lock-string-face "#afafff")
+          (set-face-foreground 'font-lock-keyword-face "#ff5f00")
+          (set-face-foreground 'font-lock-function-name-face "#d7af00")
+          (set-face-foreground 'font-lock-builtin-face "#afd700")
+          (set-face-foreground 'font-lock-comment-face "#008787")
+          (set-face-foreground 'org-block-begin-line "#303030")
+          (set-face-foreground 'org-block-end-line "#303030")
+          (set-face-foreground 'diff-added "#00ff00")
+          (set-face-foreground 'diff-removed "#ff0000")
+          (set-face-foreground 'diff-header "#005fff")
+          (set-face-background 'diff-header "#121212")
+          (set-face-background 'diff-file-header "#121212"))
+      (progn 
+        (set-face-foreground 'default "color-250")
+        (set-face-background 'default "color-233")
+        (set-face-foreground 'font-lock-string-face "color-147")
+        (set-face-foreground 'font-lock-keyword-face "color-202")
+        (set-face-foreground 'font-lock-function-name-face "color-178")
+        (set-face-foreground 'font-lock-builtin-face "color-148")
+        (set-face-foreground 'font-lock-comment-face "color-30")
+        (set-face-foreground 'org-block-begin-line "color-236")
+        (set-face-foreground 'org-block-end-line "color-236")
+        (set-face-foreground 'diff-added "brightgreen")
+        (set-face-foreground 'diff-removed "brightred")
+        (set-face-foreground 'diff-header "color-27")
+        (set-face-background 'diff-header "color-233")
+        (set-face-background 'diff-file-header "color-233")))
+  #+end_src
+
 * Modes
 ** Markdown
    #+begin_src emacs-lisp 
@@ -234,7 +316,7 @@
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
    #+end_src
 
-** org-mode
+** Org
 
    #+begin_src emacs-lisp
      (add-hook 'org-mode-hook 'abbrev-mode)
@@ -718,190 +800,150 @@
      (global-smart-tab-mode 1)
    #+end_src
 
-* Programming
-** Misc
-   #+begin_src emacs-lisp 
-     (setq compilation-window-height 10)
-     
-     (setq auto-mode-alist
-           (append '(("\\.C$"       . c++-mode)
-                     ("\\.cc$"      . c++-mode)
-                     ("\\.c$"       . c-mode)
-                     ("\\.markdown$"  . markdown-mode)
-                     ("\\.h$"       . c++-mode)
-                     ("\\.i$"       . c++-mode)
-                     ("\\.ii$"      . c++-mode)
-                     ("\\.m$"       . objc-mode)
-                     ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
-                     ("\\.java$"    . java-mode)
-                     ("\\.xml$"     . xml-mode)
-                     ("\\.outline$" . outline-mode)
-                     ("\\.sql$"     . c-mode)
-                     ("\\.pde$"     . c++-mode)
-                     ("\\.sh$"      . shell-script-mode)
-                     ("\\.command$"      . shell-script-mode)
-                     ("\\.mak$"     . makefile-mode)
-                     ("\\.rb$"     . ruby-mode)
-                     ("\\.php$"     . php-mode)
-                     ("\\.GNU$"     . makefile-mode)
-                     ("makefile$"   . makefile-mode)
-                     ("Imakefile$"  . makefile-mode)
-                     ("\\.Xdefaults$"    . xrdb-mode)
-                     ("\\.Xenvironment$" . xrdb-mode)
-                     ("\\.Xresources$"   . xrdb-mode)
-                     ("*.\\.ad$"         . xrdb-mode)
-                     ("\\.[eE]?[pP][sS]$" . ps-mode)
-                     ("\\.zip$"     . archive-mode)
-                     ("\\.tar$"     . tar-mode)
-                     ("\\.tar.gz$"     . tar-mode)
-                     ) auto-mode-alist))
-     
-     (defun na-bounce-sexp ()
-       "Will bounce between matching parens just like % in vi"
-       (interactive)
-       (let ((prev-char (char-to-string (preceding-char)))
-             (next-char (char-to-string (following-char))))
-         (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-               ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-               (t (error "%s" "Not on a paren, brace, or bracket")))))
-     
-     (defun lispy-parens ()
-       "Setup parens display for lisp modes"
-       (setq show-paren-delay 0)
-       (setq show-paren-style 'parenthesis)
-       (make-variable-buffer-local 'show-paren-mode)
-       (show-paren-mode 1)
-       (set-face-background 'show-paren-match-face (face-background 'default))
-       (if (boundp 'font-lock-comment-face)
-           (set-face-foreground 'show-paren-match-face 
-                                (face-foreground 'font-lock-comment-face))
-         (set-face-foreground 'show-paren-match-face 
-                              (face-foreground 'default)))
-       (set-face-foreground 'show-paren-match-face "red")
-       (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
-     (add-hook 'lisp-mode-hook 'lispy-parens)
-     (add-hook 'emacs-lisp-mode-hook 'lispy-parens)
-     (add-hook 'lisp-mode-hook 'abbrev-mode)
-     (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-     (add-hook 'clojure-mode-hook 'abbrev-mode)
-     (add-hook 'scheme-mode-hook 'abbrev-mode)
-     (add-hook 'clojure-mode-hook 'lispy-parens)
-     (add-hook 'scheme-mode-hook 'lispy-parens)
-     
-     (defun na-reopen-file ()
-       "Reopen file in buffer."
-       (interactive)
-       (let ((p (point)))
-         (progn
-           (find-alternate-file buffer-file-name)
-           (goto-char p))))
-   #+end_src
-** Clojure
+** Lisp
+*** Common
 
-   #+begin_src emacs-lisp 
-     (cond 
-      ((string= "apple" cur-op-sys)
-       (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
-      ((string= "linux" cur-op-sys)
-       (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
-      ((string= "windows" cur-op-sys)
-       (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
-     
-     (setq lisp-programs 
-           (list (list "clojure" clojure-command)
-                 (list "sbcl" "/opt/local/bin/sbcl")
-                 (list "gambit" "/opt/local/bin/gambit-gsc")))
-     
-     (defun na-run-lisp (arg)
-       (interactive "P")
-       (if (null arg)
-           (run-lisp (second (first lisp-programs)))
-         (let (choice) 
-           (setq choice (completing-read "Lisp: " (mapcar 'first lisp-programs)))
-           (dolist (l lisp-programs)
-             (if (string= (first l) choice)
-                 (run-lisp (second l)))))))
-     
-     (defun remote-repl (arg)
-       (interactive "P")
-       (run-lisp (concat "nc " (read-string "IP: ") " " (read-string "Port: "))))
-     
-     (defun na-load-buffer ()
-       (interactive)
-       (point-to-register 5)
-       (mark-whole-buffer)
-       (lisp-eval-region (point) (mark) nil)
-       (jump-to-register 5))
-     
-     ;;sub process support for clojure
-     (add-hook 'clojure-mode-hook
-               '(lambda ()
-                  (define-key clojure-mode-map 
-                    "\e\C-x" 'lisp-eval-defun)
-                  (define-key clojure-mode-map 
-                    "\C-x\C-e" 'lisp-eval-last-sexp)
-                  (define-key clojure-mode-map 
-                    "\C-c\C-e" 'lisp-eval-last-sexp)
-                  (define-key clojure-mode-map 
-                    "\C-c\C-r" 'lisp-eval-region)
-                  (define-key clojure-mode-map 
-                    "\C-c\C-l" 'na-load-buffer)
-                  (define-key clojure-mode-map 
-                    "\C-c\C-z" 'run-lisp)))
-     
-     (define-clojure-indent (from-blackboard 'defun))
-   #+end_src
+    #+begin_src emacs-lisp
+      (defun na-bounce-sexp ()
+        "Will bounce between matching parens just like % in vi"
+        (interactive)
+        (let ((prev-char (char-to-string (preceding-char)))
+              (next-char (char-to-string (following-char))))
+          (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+                ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+                (t (error "%s" "Not on a paren, brace, or bracket")))))
+      
+      (defun lispy-parens ()
+        "Setup parens display for lisp modes"
+        (setq show-paren-delay 0)
+        (setq show-paren-style 'parenthesis)
+        (make-variable-buffer-local 'show-paren-mode)
+        (show-paren-mode 1)
+        (set-face-background 'show-paren-match-face (face-background 'default))
+        (if (boundp 'font-lock-comment-face)
+            (set-face-foreground 'show-paren-match-face 
+                                 (face-foreground 'font-lock-comment-face))
+          (set-face-foreground 'show-paren-match-face 
+                               (face-foreground 'default)))
+        (set-face-foreground 'show-paren-match-face "red")
+        (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+      
+      (add-hook 'lisp-mode-hook 'lispy-parens)
+      (add-hook 'emacs-lisp-mode-hook 'lispy-parens)
+      (add-hook 'lisp-mode-hook 'abbrev-mode)
+      (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+      (add-hook 'clojure-mode-hook 'abbrev-mode)
+      (add-hook 'scheme-mode-hook 'abbrev-mode)
+      (add-hook 'clojure-mode-hook 'lispy-parens)
+      (add-hook 'scheme-mode-hook 'lispy-parens)
+    #+end_src
 
-   #+begin_src emacs-lisp
-     (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
-     
-     (defvar org-babel-default-header-args:clojure 
-       '((:results . "silent")))
-     
-     (defun org-babel-execute:clojure (body params)
-       "Execute a block of Clojure code with Babel."
-       (lisp-eval-string body)
-       "Done!")
-     
-     (provide 'ob-clojure)
-   #+end_src
+*** Clojure
 
-   #+begin_src emacs-lisp
-     (let ((fn `(("(\\(fn\\)[\[[:space:]]"
-                  (0 (progn (compose-region (match-beginning 1)
-                                            (match-end 1) "λ")
-                            nil)))))
-           (inline-fn `(("\\(#\\)("
-                         (0 (progn (compose-region (match-beginning 1)
-                                                   (match-end 1) "ƒ")
-                                   nil))))))
-           
-           (font-lock-add-keywords 'clojure-mode fn)
-           (font-lock-add-keywords 'clojure-mode inline-fn)
-           (font-lock-add-keywords 'org-mode fn)
-           (font-lock-add-keywords 'org-mode inline-fn))
-   #+end_src
+    #+begin_src emacs-lisp 
+      (cond 
+       ((string= "apple" cur-op-sys)
+        (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
+       ((string= "linux" cur-op-sys)
+        (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
+       ((string= "windows" cur-op-sys)
+        (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
+      
+      (setq lisp-programs 
+            (list (list "clojure" clojure-command)
+                  (list "sbcl" "/opt/local/bin/sbcl")
+                  (list "gambit" "/opt/local/bin/gambit-gsc")))
+      
+      (defun na-run-lisp (arg)
+        (interactive "P")
+        (if (null arg)
+            (run-lisp (second (first lisp-programs)))
+          (let (choice) 
+            (setq choice (completing-read "Lisp: " (mapcar 'first lisp-programs)))
+            (dolist (l lisp-programs)
+              (if (string= (first l) choice)
+                  (run-lisp (second l)))))))
+      
+      (defun remote-repl (arg)
+        (interactive "P")
+        (run-lisp (concat "nc " (read-string "IP: ") " " (read-string "Port: "))))
+      
+      (defun na-load-buffer ()
+        (interactive)
+        (point-to-register 5)
+        (mark-whole-buffer)
+        (lisp-eval-region (point) (mark) nil)
+        (jump-to-register 5))
+      
+      ;;sub process support for clojure
+      (add-hook 'clojure-mode-hook
+                '(lambda ()
+                   (define-key clojure-mode-map 
+                     "\e\C-x" 'lisp-eval-defun)
+                   (define-key clojure-mode-map 
+                     "\C-x\C-e" 'lisp-eval-last-sexp)
+                   (define-key clojure-mode-map 
+                     "\C-c\C-e" 'lisp-eval-last-sexp)
+                   (define-key clojure-mode-map 
+                     "\C-c\C-r" 'lisp-eval-region)
+                   (define-key clojure-mode-map 
+                     "\C-c\C-l" 'na-load-buffer)
+                   (define-key clojure-mode-map 
+                     "\C-c\C-z" 'run-lisp)))
+      
+      (define-clojure-indent (from-blackboard 'defun))
+    #+end_src
 
-** Scheme
+    #+begin_src emacs-lisp
+      (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
+      
+      (defvar org-babel-default-header-args:clojure 
+        '((:results . "silent")))
+      
+      (defun org-babel-execute:clojure (body params)
+        "Execute a block of Clojure code with Babel."
+        (lisp-eval-string body)
+        "Done!")
+      
+      (provide 'ob-clojure)
+    #+end_src
 
-   #+begin_src emacs-lisp
-     (add-hook 'scheme-mode-hook
-               '(lambda ()
-                  (define-key scheme-mode-map 
-                    "\e\C-x" 'lisp-eval-defun)
-                  (define-key scheme-mode-map 
-                    "\C-x\C-e" 'lisp-eval-last-sexp)
-                  (define-key scheme-mode-map 
-                    "\C-c\C-e" 'lisp-eval-last-sexp)
-                  (define-key scheme-mode-map 
-                    "\C-c\C-r" 'lisp-eval-region)
-                  (define-key scheme-mode-map 
-                    "\C-c\C-l" 'na-load-buffer)
-                  (define-key scheme-mode-map 
-                    "\C-c\C-z" 'run-lisp)))
-   #+end_src
+    #+begin_src emacs-lisp
+      (let ((fn `(("(\\(fn\\)[\[[:space:]]"
+                   (0 (progn (compose-region (match-beginning 1)
+                                             (match-end 1) "λ")
+                             nil)))))
+            (inline-fn `(("\\(#\\)("
+                          (0 (progn (compose-region (match-beginning 1)
+                                                    (match-end 1) "ƒ")
+                                    nil))))))
+            
+            (font-lock-add-keywords 'clojure-mode fn)
+            (font-lock-add-keywords 'clojure-mode inline-fn)
+            (font-lock-add-keywords 'org-mode fn)
+            (font-lock-add-keywords 'org-mode inline-fn))
+    #+end_src
 
-** git
+*** Scheme
+
+    #+begin_src emacs-lisp
+      (add-hook 'scheme-mode-hook
+                '(lambda ()
+                   (define-key scheme-mode-map 
+                     "\e\C-x" 'lisp-eval-defun)
+                   (define-key scheme-mode-map 
+                     "\C-x\C-e" 'lisp-eval-last-sexp)
+                   (define-key scheme-mode-map 
+                     "\C-c\C-e" 'lisp-eval-last-sexp)
+                   (define-key scheme-mode-map 
+                     "\C-c\C-r" 'lisp-eval-region)
+                   (define-key scheme-mode-map 
+                     "\C-c\C-l" 'na-load-buffer)
+                   (define-key scheme-mode-map 
+                     "\C-c\C-z" 'run-lisp)))
+    #+end_src
+
+** Git
 
    #+begin_src emacs-lisp 
      (require 'git)
@@ -934,7 +976,7 @@
           (jump-to-register 'z)))
    #+end_src
 
-** term
+** Term
 
    #+begin_src emacs-lisp 
      (setq term-term-name "xterm-color")
@@ -945,91 +987,6 @@
        (interactive)
        (term "/bin/bash"))  
    #+end_src
-
-* Theme
-
-  #+begin_src emacs-lisp 
-    (setq frame-title-format (list "GNU Emacs " emacs-version))
-    (setq display-time-day-and-date nil )
-    (setq display-time-format "") 
-    (setq display-time-load-average-threshold 0 )
-    (setq display-time-string-forms '( load "," (if mail "" "")) )
-    (setq display-time-interval 5)
-    (display-time-mode 1)
-    (setq battery-mode-line-format "%b%p%" )
-    (display-battery-mode t)
-    
-    (setq-default mode-line-format
-                  '(""
-                    mode-line-modified
-                    (-3 . "%p") ;; position
-                    "[%b]"
-                    "%[("
-                    mode-name
-                    mode-line-process
-                    minor-mode-alist
-                    "%n" ")%]-"
-                    (line-number-mode "L%l-")
-                    (column-number-mode "C%c [")
-                    global-mode-string
-                    "] "
-                    "%f"                ;; print file with full path
-                    " %-"))
-  #+end_src
-
-  #+begin_src emacs-lisp 
-    (if window-system
-        (progn 
-          (set-face-foreground 'default "#bcbcbc")
-          (set-face-background 'default "#121212")
-          (set-face-foreground 'font-lock-string-face "#afafff")
-          (set-face-foreground 'font-lock-keyword-face "#ff5f00")
-          (set-face-foreground 'font-lock-function-name-face "#d7af00")
-          (set-face-foreground 'font-lock-builtin-face "#afd700")
-          (set-face-foreground 'font-lock-comment-face "#008787")
-          (set-face-foreground 'org-block-begin-line "#303030")
-          (set-face-foreground 'org-block-end-line "#303030")
-          (set-face-foreground 'diff-added "#00ff00")
-          (set-face-foreground 'diff-removed "#ff0000")
-          (set-face-foreground 'diff-header "#005fff")
-          (set-face-background 'diff-header "#121212")
-          (set-face-background 'diff-file-header "#121212"))
-      (progn 
-        (set-face-foreground 'default "color-250")
-        (set-face-background 'default "color-233")
-        (set-face-foreground 'font-lock-string-face "color-147")
-        (set-face-foreground 'font-lock-keyword-face "color-202")
-        (set-face-foreground 'font-lock-function-name-face "color-178")
-        (set-face-foreground 'font-lock-builtin-face "color-148")
-        (set-face-foreground 'font-lock-comment-face "color-30")
-        (set-face-foreground 'org-block-begin-line "color-236")
-        (set-face-foreground 'org-block-end-line "color-236")
-        (set-face-foreground 'diff-added "brightgreen")
-        (set-face-foreground 'diff-removed "brightred")
-        (set-face-foreground 'diff-header "color-27")
-        (set-face-background 'diff-header "color-233")
-        (set-face-background 'diff-file-header "color-233")))
-  #+end_src
-
-* Session
-
-  #+begin_src emacs-lisp 
-    (load "desktop")
-    (desktop-load-default)
-    (setq desktop-enable t)
-    (require 'saveplace)
-    (setq-default save-place t)
-    (setq bookmark-save-flag 1 )
-  #+end_src
-
-  #+begin_src emacs-lisp 
-    (add-hook 'server-visit-hook 'call-raise-frame)
-    (add-hook 'find-file-hook 'call-raise-frame)
-    (defun call-raise-frame ()
-      (raise-frame))
-    
-    ;;(server-start)
-  #+end_src
 
 * Skeletons
 ** Setup
@@ -1342,7 +1299,7 @@
      
    #+end_src
 
-** org-mode
+** Org
 
    #+begin_src emacs-lisp
      (define-skeleton skel-org-src
