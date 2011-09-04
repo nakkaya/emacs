@@ -63,27 +63,27 @@
      (setq backup-inhibited t)
    #+end_src
 
+   Detect OS,
+
    #+begin_src emacs-lisp 
+     (defvar na-os-is-darwin nil)
+     (defvar na-os-is-windows nil)
+     (defvar na-os-is-linux nil)
+     
      (cond
       ((string-match "GNU" (emacs-version))
        (cond 
-        ((string-match "linux" system-configuration)
-         (setq cur-op-sys "linux" ))
-        ((string-match "nt" system-configuration)
-         (setq cur-op-sys "windows"))
-        ((string-match "cygwin" system-configuration)
-         (setq cur-op-sys "windows"))
-        ((string-match "apple" system-configuration)
-         (setq cur-op-sys "apple" )))))
-     
+        ((string-match "linux" system-configuration)  (setq na-os-is-linux t))
+        ((string-match "nt" system-configuration)     (setq na-os-is-windows t))
+        ((string-match "cygwin" system-configuration) (setq na-os-is-windows t))
+        ((string-match "apple" system-configuration)  (setq na-os-is-darwin t)))))
    #+end_src
 
    Do not open a new frame for each file on OSX,
 
    #+begin_src emacs-lisp 
-     (cond 
-      ((string= "osx" cur-op-sys)
-       (setq ns-pop-up-frames nil)))
+     (when na-os-is-darwin
+       (setq ns-pop-up-frames nil))
    #+end_src
 
    Replace yes or no with y or n,
@@ -583,16 +583,14 @@
    #+end_src
 
 ** EasyPG
+
    #+begin_src emacs-lisp 
      (require 'epa)
      (epa-file-enable)
      
      (cond 
-      ((string= "apple" cur-op-sys)
-       (setq epg-gpg-program "/opt/local/bin/gpg"))
-      ((string= "windows" cur-op-sys)
-       (setq epg-gpg-program (concat "/bin/gpg"))))
-     
+      (na-os-is-darwin  (setq epg-gpg-program "/opt/local/bin/gpg"))
+      (na-os-is-windows (setq epg-gpg-program (concat "/bin/gpg"))))
    #+end_src
 
 ** Text Mode
@@ -842,11 +840,11 @@
 
     #+begin_src emacs-lisp 
       (cond 
-       ((string= "apple" cur-op-sys)
+       (na-os-is-darwin
         (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
-       ((string= "linux" cur-op-sys)
+       (na-os-is-linux
         (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
-       ((string= "windows" cur-op-sys)
+       (na-os-is-windows
         (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
       
       (setq lisp-programs 
