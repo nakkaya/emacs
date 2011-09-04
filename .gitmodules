@@ -4,3 +4,6 @@
 [submodule "ext/org-mode"]
 	path = ext/org-mode
 	url = git://repo.or.cz/org-mode.git
+[submodule "ext/gitsum"]
+	path = ext/gitsum
+	url = https://github.com/chneukirchen/gitsum.git

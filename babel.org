@@ -968,7 +968,12 @@ Mac specific,
         (set-face-foreground 'font-lock-builtin-face "#afd700")
         (set-face-foreground 'font-lock-comment-face "#008787")
         (set-face-foreground 'org-block-begin-line "#303030")
-        (set-face-foreground 'org-block-end-line "#303030"))
+        (set-face-foreground 'org-block-end-line "#303030")
+        (set-face-foreground 'diff-added "#00ff00")
+        (set-face-foreground 'diff-removed "#ff0000")
+        (set-face-foreground 'diff-header "#005fff")
+        (set-face-background 'diff-header "#121212")
+        (set-face-background 'diff-file-header "#121212"))
     (progn 
       (set-face-foreground 'default "color-250")
       (set-face-background 'default "color-233")
@@ -978,7 +983,12 @@ Mac specific,
       (set-face-foreground 'font-lock-builtin-face "color-148")
       (set-face-foreground 'font-lock-comment-face "color-30")
       (set-face-foreground 'org-block-begin-line "color-236")
-      (set-face-foreground 'org-block-end-line "color-236")))
+      (set-face-foreground 'org-block-end-line "color-236")
+      (set-face-foreground 'diff-added "brightgreen")
+      (set-face-foreground 'diff-removed "brightred")
+      (set-face-foreground 'diff-header "color-27")
+      (set-face-background 'diff-header "color-233")
+      (set-face-background 'diff-file-header "color-233")))
 #+end_src
 
 * Session
