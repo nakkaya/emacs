@@ -148,6 +148,19 @@ Color on selection,
   (define-key global-map [wheel-down] 'scroll-window-forward-line)
 #+end_src
 
+Mouse setup when running in a terminal,
+
+#+begin_src emacs-lisp
+  (unless window-system
+    (xterm-mouse-mode t)
+    (require 'mouse)
+    (defun track-mouse (e)) 
+    (setq mouse-sel-mode t)
+
+    (define-key global-map [mouse-4] 'scroll-window-backward-line)
+    (define-key global-map [mouse-5] 'scroll-window-forward-line))
+#+end_src
+
 Set up the keyboard so the delete key on both the regular keyboard
 and the keypad delete the character under the cursor and to the right
 under X, instead of the default, backspace behavior.
