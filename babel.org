@@ -377,7 +377,12 @@
                        \\renewcommand{\\sfdefault}{phv} % Arial
                        \\setlength{\\parindent}{0pt}
                        \\setlength{\\parskip}{1ex plus 0.5ex minus 0.2ex}
-        
+      
+                       \\usepackage{tikz}
+                       \\usetikzlibrary{backgrounds,shapes,arrows,positioning,calc,snakes,fit}
+                       \\usepgflibrary{decorations.markings}
+                       \\usepackage{mathtools}
+      
                        \\usepackage[hmargin=3cm,vmargin=3.5cm]{geometry} \n
                        \\usepackage{hyperref}
                        \\hypersetup{
