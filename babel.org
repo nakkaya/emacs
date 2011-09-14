@@ -7,14 +7,12 @@
     
     (add-to-list 'load-path dotfiles-dir)
     (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/int/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
   #+end_src
 
   #+begin_src emacs-lisp 
-    (load "searchDown.el")
     (load "jump.el")
     (load "clojure-mode.el")
     (require 'diff-mode)  
@@ -322,12 +320,6 @@
   #+end_src
 
 * Modes
-** Markdown
-   #+begin_src emacs-lisp 
-     (autoload 'markdown-mode "markdown-mode.el"
-       "Major mode for editing Markdown files" t)
-   #+end_src
-
 ** Dired
    #+begin_src emacs-lisp 
      (require 'dired)
@@ -581,7 +573,6 @@
                            (name . "^\\*info\\*$")
                            (name . "^\\*tramp.+\\*$")
                            (name . "^\\*trace.+SMTP.+\\*$")
-                           (name . "^\\*mpg123\\*$")
                            (name . "^\\.todo-do")
                            (name . "^\\*scratch\\*$")
                            (name . "^\\*git-status\\*$")
