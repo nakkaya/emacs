@@ -314,6 +314,13 @@
         (set-face-background 'diff-file-header "color-233")))
   #+end_src
 
+  #+begin_src emacs-lisp
+    (when window-system
+      (set-face-attribute 'default nil :font "DejaVu Sans Mono-11:style=book")
+      ;;for some reason uses variable width font
+      (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch))
+  #+end_src
+
 * Modes
 ** Markdown
    #+begin_src emacs-lisp 
