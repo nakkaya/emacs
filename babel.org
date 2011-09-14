@@ -130,6 +130,13 @@
      (prefer-coding-system 'utf-8)
    #+end_src
 
+   Copy/Paste under Linux
+
+   #+begin_src emacs-lisp 
+     (when na-os-is-linux
+       (setq x-select-enable-clipboard t))
+   #+end_src
+
    #+begin_src emacs-lisp
      (defun na-fullscreen (&optional f)
        (interactive) 
