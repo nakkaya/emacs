@@ -313,10 +313,15 @@
 
   #+begin_src emacs-lisp
     (when window-system
-      (set-face-attribute 'default nil :font "DejaVu Sans Mono-11:style=book")
-      ;;for some reason uses variable width font
-      (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
-      (set-face-attribute 'org-table nil :inherit 'fixed-pitch))
+    
+      (variable-pitch-mode -1)
+    
+      (when na-os-is-linux
+        (set-face-attribute 'default nil 
+                            :font "DejaVu Sans Mono-11:style=book"))
+      (when na-os-is-darwin
+        (set-face-attribute 'default nil 
+                            :font "DejaVu Sans Mono-14:style=book")))
   #+end_src
 
 * Modes
