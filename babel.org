@@ -548,6 +548,7 @@
         
             max-width: 95%;
             margin: auto;
+            background: #f6f6f6;
             /* background-image: url(http://orgmode.org/worg-unicorn.png); */
             background-position: 25px 5px;
             background-repeat: no-repeat;
