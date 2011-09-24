@@ -1481,6 +1481,16 @@
       (setq org-confirm-babel-evaluate nil)
     #+end_src
 
+    #+begin_src emacs-lisp
+      (defun na-export-html ()
+        (interactive)
+        (org-export-as-html nil)
+        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
+               (out-file (concat "~/Dropbox/public/" file)))
+          (rename-file file out-file)
+          (org-open-file out-file)))
+    #+end_src
+
 ** IBuffer
 
    #+begin_src emacs-lisp 
