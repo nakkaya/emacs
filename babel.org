@@ -1487,7 +1487,7 @@
         (org-export-as-html nil)
         (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
                (out-file (concat "~/Dropbox/public/" file)))
-          (rename-file file out-file)
+          (rename-file file out-file t)
           (org-open-file out-file)))
     #+end_src
 
