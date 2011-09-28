@@ -195,9 +195,11 @@
    #+end_src
 
    #+begin_src emacs-lisp 
+     (global-set-key [f1] 'na-fullscreen)
+     (global-set-key [f2] 'org-babel-tangle)
+     (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'org-agenda)
      (global-set-key [f8] 'toggle-truncate-lines)
-     (global-set-key [f12] 'org-babel-tangle)
      
      (global-set-key [(control d)] 'na-bounce-sexp)
      
