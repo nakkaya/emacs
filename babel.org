@@ -189,7 +189,7 @@
    Mac specific,
 
    #+begin_src emacs-lisp 
-     (global-set-key [(meta h)] 'ns-do-hide-emacs)
+     (global-set-key [S-f1] 'ns-do-hide-emacs)
      (setq mac-option-modifier 'super)
      (setq mac-command-modifier 'meta)
    #+end_src
