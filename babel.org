@@ -295,7 +295,8 @@
           (set-face-foreground 'diff-removed "#ff0000")
           (set-face-foreground 'diff-header "#005fff")
           (set-face-background 'diff-header "#121212")
-          (set-face-background 'diff-file-header "#121212"))
+          (set-face-background 'diff-file-header "#121212")
+          (set-face-background 'diff-refine-change "#121212"))
       (progn 
         (set-face-foreground 'default "color-250")
         (set-face-background 'default "color-233")
@@ -310,7 +311,8 @@
         (set-face-foreground 'diff-removed "brightred")
         (set-face-foreground 'diff-header "color-27")
         (set-face-background 'diff-header "color-233")
-        (set-face-background 'diff-file-header "color-233")))
+        (set-face-background 'diff-file-header "color-233")
+        (set-face-background 'diff-refine-change "color-233")))
   #+end_src
 
   #+begin_src emacs-lisp
