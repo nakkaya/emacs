@@ -322,7 +322,7 @@
     
       (when na-os-is-linux
         (set-face-attribute 'default nil 
-                            :font "DejaVu Sans Mono-11:style=book"))
+                            :font "DejaVu Sans Mono-10:style=book"))
       (when na-os-is-darwin
         (set-face-attribute 'default nil 
                             :font "DejaVu Sans Mono-14:style=book")))
