@@ -1537,6 +1537,8 @@
                               (name . "^\\*git-status\\*$")
                               (name . "^\\*git-diff\\*$")
                               (name . "^\\*git-commit\\*$")
+                              (name . "^\\*gitsum\\*$")
+                              (name . "^\\*gitsum-commit\\*$")
                               (name . "^\\*Git Command Output\\*$")
                               (name . "^\\*Org Export/Publishing Help\\*$")
                               (name . "^\\*Org Agenda\\*$")
