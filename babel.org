@@ -752,6 +752,9 @@
             border: 1px solid #dddddd;
             overflow: auto;
         
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+      
             -webkit-box-shadow: 0px 0px 4px rgba(0,0,0,0.23);
             -moz-box-shadow: 0px 0px 4px rgba(0,0,0,0.23);
             box-shadow: 0px 0px 4px rgba(0,0,0,0.23);
@@ -1469,7 +1472,7 @@
             overflow: auto;
           }
         } /* END OF @media screen */
-      </style>")
+      </style>")      
     #+end_src
 
 *** babel
