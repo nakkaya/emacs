@@ -1504,7 +1504,8 @@
                     ("Notes"
                      (or (name . "^gtd.org$")
                          (name . "^pass.gpg$")
-                         (name . "^gtd.org_archive$")))
+                         (name . "^gtd.org_archive$")
+                         (name . "^from-mobile.org$")))
                     ("Source" (or
                                (mode . java-mode)
                                (mode . clojure-mode)
