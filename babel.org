@@ -1590,15 +1590,15 @@
 
 ** Flyspell
    #+begin_src emacs-lisp 
-     (setq ispell-program-name "/opt/local/bin/ispell")
+     (when na-os-is-darwin
+       (setq ispell-program-name "/opt/local/bin/ispell"))
+     
      (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+     
      (add-hook 'message-mode-hook 'turn-on-flyspell)
      (add-hook 'text-mode-hook 'turn-on-flyspell)
-     (add-hook 'c-mode-common-hook 'flyspell-prog-mode)
-     (add-hook 'java-mode-hook 'flyspell-prog-mode)
-     (add-hook 'ruby-mode-hook 'flyspell-prog-mode)
-     (add-hook 'lisp-mode-hook 'flyspell-mode)
-     (add-hook 'emacs-lisp-mode-hook 'flyspell-mode)
+     (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
+     
      (defun turn-on-flyspell ()
        "Force flyspell-mode on using a positive arg.  For use in hooks."
        (interactive)
