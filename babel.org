@@ -21,7 +21,7 @@
 * General
 ** Options
    #+begin_src emacs-lisp 
-     (setq large-file-warning-threshold 256000000 )
+     (setq large-file-warning-threshold 256000000)
      ;;debug
      (setq debug-on-error t) 
      ;;enable blinking cursor
@@ -202,6 +202,12 @@
      (global-set-key [f8] 'toggle-truncate-lines)
      
      (global-set-key [(control d)] 'na-bounce-sexp)
+     (add-hook 'c++-mode-hook
+         '(lambda ()
+            (local-set-key [(control d)] 'na-bounce-sexp)))
+     (add-hook 'c-mode-hook
+         '(lambda ()
+            (local-set-key [(control d)] 'na-bounce-sexp)))
      
      (define-key global-map [(control \])] 'ibuffer)
      (add-hook 'term-mode-hook
@@ -345,7 +351,6 @@
 ** Org
 
    #+begin_src emacs-lisp
-     (add-hook 'org-mode-hook 'abbrev-mode)
      (setq org-directory "~/Dropbox/org/")
      (setq org-return-follows-link t)
      (setq org-hide-leading-stars t)
@@ -1635,12 +1640,10 @@
       
       (add-hook 'lisp-mode-hook 'lispy-parens)
       (add-hook 'emacs-lisp-mode-hook 'lispy-parens)
-      (add-hook 'lisp-mode-hook 'abbrev-mode)
-      (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-      (add-hook 'clojure-mode-hook 'abbrev-mode)
-      (add-hook 'scheme-mode-hook 'abbrev-mode)
       (add-hook 'clojure-mode-hook 'lispy-parens)
       (add-hook 'scheme-mode-hook 'lispy-parens)
+      (add-hook 'c++-mode-hook 'lispy-parens)
+      (add-hook 'c-mode-hook 'lispy-parens)
     #+end_src
 
 *** Clojure
@@ -6547,7 +6550,15 @@
      (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
      (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
      (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+     
      (setq abbrev-mode t)
+     (add-hook 'lisp-mode-hook 'abbrev-mode)
+     (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+     (add-hook 'clojure-mode-hook 'abbrev-mode)
+     (add-hook 'scheme-mode-hook 'abbrev-mode)
+     (add-hook 'c++-mode-hook 'abbrev-mode)
+     (add-hook 'c-mode-hook 'abbrev-mode)
+     (add-hook 'org-mode-hook 'abbrev-mode)
      
      (add-hook 'clojure-mode-hook 
                (lambda ()
@@ -6558,7 +6569,6 @@
      (define-abbrev-table 'clojure-mode-abbrev-table '())
      (define-abbrev-table 'scheme-mode-abbrev-table '())
      (define-abbrev-table 'c++-mode-abbrev-table '())
-     
    #+end_src
 
 ** Clojure
@@ -6852,17 +6862,6 @@
 ** Org
 
    #+begin_src emacs-lisp
-     (define-skeleton skel-org-src
-       "Insert org src block."
-       nil
-       >
-       "#+begin_src "
-        _ 
-       \n > 
-        "#""+end_src"
-        >)
-     (define-abbrev text-mode-abbrev-table "osrc" "" 'skel-org-src)
-     
      (define-skeleton skel-org-src
        "Insert org src block clojure."
        nil
