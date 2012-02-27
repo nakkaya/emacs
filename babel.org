@@ -10,12 +10,14 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
   #+end_src
 
   #+begin_src emacs-lisp 
     (load "clojure-mode.el")
     (require 'diff-mode)  
     (require 'org)
+    (require 'htmlize)
     (require 'dired)
     (require 'git)
     (require 'gitsum)
@@ -406,6 +408,22 @@
     #+end_src
 
 *** latex
+
+    #+begin_src emacs-lisp
+      (setq-default TeX-master t)
+      (setq reftex-default-bibliography
+            (quote
+             ("~/Dropbox/org/default.bib")))
+      
+      (defun na-org-mode-reftex-setup ()
+        (interactive)
+        (load-library "reftex")
+        (and (buffer-file-name)
+             (file-exists-p (buffer-file-name))
+             (reftex-parse-all)))
+      
+      (add-hook 'org-mode-hook 'na-org-mode-reftex-setup)
+    #+end_src
 
     #+begin_src emacs-lisp
       (require 'org-latex)
@@ -1788,6 +1806,7 @@
 ** multi-term
 
    #+begin_src emacs-lisp
+     (require 'multi-term)
      (setq multi-term-program "/bin/bash")
      
      (global-set-key (kbd "C-c t") 'multi-term-next)
