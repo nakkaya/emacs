@@ -8,6 +8,7 @@
     (add-to-list 'load-path dotfiles-dir)
     (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/haskell-mode/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
@@ -1801,6 +1802,15 @@
        (if (not (eq (get-buffer "*git-status*") nil))
            (switch-to-buffer "*git-status*")
          (git-status (read-directory-name "Select Directory: "))))
+   #+end_src
+
+** Haskell
+
+   #+begin_src emacs-lisp
+     (load "haskell-site-file")
+     (require 'inf-haskell)
+     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
    #+end_src
 
 ** multi-term
