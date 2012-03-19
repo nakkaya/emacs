@@ -451,7 +451,7 @@
                            colorlinks,%
                            citecolor=black,%
                            filecolor=black,%
-                           linkcolor=blue,%
+                           linkcolor=[rgb]{0.1,0.5,1.0},%
                            urlcolor=black
                        }
                        \\RequirePackage[calcwidth]{titlesec}
@@ -462,10 +462,10 @@
                        \\titleformat{\\section}[hang]{\\sffamily\\bfseries}
                        {\\color{seccol}\\Huge\\thesection}{0pt}{\\linebreak\\huge\\raggedleft}[{\\titlerule[0.5pt]}]
         
-                       \\titleformat{\\subsection}[hang]{\\sffamily\\bfseries\\underline}
+                       \\titleformat{\\subsection}[hang]{\\color{seccol}\\sffamily\\bfseries}
                        {}{0pt}{\\linebreak\\Large}[]
         
-                       \\titleformat{\\subsubsection}[hang]{\\sffamily\\bfseries\\underline}
+                       \\titleformat{\\subsubsection}[hang]{\\color{seccol}\\sffamily\\bfseries}
                        {}{0pt}{\\linebreak\\large}[]
         
         
