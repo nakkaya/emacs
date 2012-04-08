@@ -205,6 +205,7 @@
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
+     (global-set-key [f5] 'revert-buffer-no-confirm)
      (global-set-key [f8] 'toggle-truncate-lines)
      
      (global-set-key [(control d)] 'na-bounce-sexp)
@@ -353,6 +354,29 @@
         (set-face-attribute 'default nil 
                             :font "DejaVu Sans Mono-14:style=book")))
   #+end_src
+
+** Misc
+
+   This is a little function that is useful when editing several files
+   that might for any reason change on disk (update from
+   VersionControl). It reverts all buffers that are visiting a file. 
+
+   #+begin_src emacs-lisp
+     (defun revert-all-buffers ()
+       "Refreshes all open buffers from their respective files."
+       (interactive)
+       (dolist (buf (buffer-list))
+         (with-current-buffer buf
+           (when (and (buffer-file-name) (not (buffer-modified-p)))
+             (revert-buffer t t t) )))
+       (message "Refreshed open files.") )
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (defun revert-buffer-no-confirm ()
+       "Revert buffer without confirmation."
+       (interactive) (revert-buffer t t))
+   #+end_src
 
 * Modes
 ** Dired
