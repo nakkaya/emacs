@@ -1609,6 +1609,8 @@
                               (name . "^\\*gitsum-commit\\*$")
                               (name . "^\\*Git Command Output\\*$")
                               (name . "^\\*Org Export/Publishing Help\\*$")
+                              (name . "^\\*Org-Babel Error Output\\*$")
+                              (name . "^\\*Org PDF LaTeX Output\\*$")
                               (name . "^\\*Org Agenda\\*$")
                               (name . "^\\*Calendar\\*$")
                               (name . "^\\*Messages\\*$")
