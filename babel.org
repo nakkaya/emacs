@@ -397,6 +397,14 @@
      (setq org-hide-leading-stars t)
    #+end_src
 
+   Use chrome for links when on Linux,
+
+   #+begin_src emacs-lisp
+     (when na-os-is-linux
+       (setq browse-url-browser-function 'browse-url-generic
+             browse-url-generic-program "google-chrome"))
+   #+end_src
+
 *** agenda
 
     #+begin_src emacs-lisp
