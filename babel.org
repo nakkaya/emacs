@@ -230,18 +230,19 @@
      (global-set-key [(control \\)] 'other-window)
      
      (global-set-key "\C-xgs" 'na-run-git-switch)
+     (global-set-key "\C-xgg" 'na-gnus-switch)
      (global-set-key "\C-xrl" 'na-run-lisp)
      (global-set-key "\C-xtr" 'na-run-term)
-     (global-set-key [(control q)] 'na-switch-between-terminals)
-     (add-hook 'term-mode-hook
-               '(lambda ()
-                  (define-key term-raw-map [(control q)] 'na-switch-between-terminals)))
-     
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
      
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
+     
+     (define-key gnus-group-mode-map (kbd "Q")
+       '(lambda ()
+          (interactive)
+          (jump-to-register 'z)))
      
      (define-key git-status-mode-map (kbd "Q")
        '(lambda ()
@@ -340,6 +341,7 @@
         (set-face-background 'diff-header "color-233")
         (set-face-background 'diff-file-header "color-233")
         (set-face-background 'diff-refine-change "color-233")))
+    
   #+end_src
 
   #+begin_src emacs-lisp
@@ -1927,6 +1929,136 @@
    #+begin_src emacs-lisp
      (require 'dired-details)
      (dired-details-install)
+   #+end_src
+
+** Gnus
+
+   #+begin_src emacs-lisp
+     (require 'gnus)
+     (require 'browse-url)
+     ;;
+     ;;Gnus
+     ;;
+     (setq gnus-novice-user nil)
+     (setq user-full-name "Nurullah Akkaya")
+     (setq user-mail-address "nurullah@nakkaya.com")
+     (setq mail-user-agent 'gnus-user-agent)
+     
+     ;;storage
+     (setq gnus-directory "~/.gnus")
+     (setq message-directory "~/.gnus/mail")
+     (setq gnus-article-save-directory "~/.gnus/saved")
+     (setq gnus-kill-files-directory "~/.gnus/scores")
+     (setq gnus-cache-directory "~/.gnus/cache")
+     (setq message-auto-save-directory "~/.gnus")
+     
+     ;; General speedups.
+     (setq gnus-check-new-newsgroups nil) 
+     (setq gnus-nov-is-evil nil) 
+     (setq gnus-interactive-exit nil)
+     (setq gnus-activate-level 1)
+     (setq gnus-use-cache t)
+     (setq gnus-save-newsrc-file t)
+     (setq message-from-style 'angles) 
+     (setq gnus-summary-line-format "%U%R%z%d %I%(%[%3L: %-10,10n%]%) %s\n")
+     (setq gnus-agent nil)
+     
+     (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+     
+     ;; Inline images?
+     (setq mm-attachment-override-types '("image/.*"))
+     
+     ;; No HTML mail
+     (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+     
+     ;;threading
+     (setq gnus-show-threads t
+           gnus-thread-hide-subtree t        ;all threads will be hidden
+           gnus-thread-hide-killed t
+           ;; if t, the changed subject in the  middle of a thread is ignored.
+           ;; default nil and the change accepted.
+           gnus-thread-ignore-subject t
+           ;;default 4
+           gnus-thread-indent-level 2)
+     
+     (define-key gnus-summary-mode-map [(right)] 'gnus-summary-show-thread)
+     (define-key gnus-summary-mode-map [(left)]  'gnus-summary-hide-thread)
+     
+     ;; Never show vcard stuff, I never need it anyway
+     (setq gnus-ignored-mime-types '("text/x-vcard"))
+     
+     (setq gnus-posting-styles
+           '((".*" (signature "Nurullah Akkaya\nhttp://nakkaya.com"))))
+     
+     (defun add-mail-headers ()
+       (message-add-header
+        (concat "X-Homepage: http://nakkaya.com")))
+     (add-hook 'message-send-hook 'add-mail-headers)
+     
+     (setq gnus-visible-headers 
+           (mapconcat 'regexp-quote
+                      '("From:" "Newsgroups:" "Subject:" "Date:" 
+                        "Organization:" "To:" "Cc:" "Followup-To" 
+                        "Gnus-Warnings:"
+                        "X-Sent:" "X-URL:" "User-Agent:" "X-Newsreader:"
+                        "X-Mailer:" "Reply-To:"
+                        "X-Attachments" "X-Diagnostic")
+                      "\\|"))
+     
+     ;;* Higher Scoring of followups to myself
+     ;;*================================
+     (add-hook 'message-sent-hook 'gnus-score-followup-article)
+     (add-hook 'message-sent-hook 'gnus-score-followup-thread)
+     
+     ;; Configure incoming mail (IMAP)
+     (load "tls")
+     (setq gnus-select-method '(nnimap "gmail"
+                                       (nnimap-address "imap.gmail.com")
+                                       (nnimap-server-port 993)
+                                       (nnimap-authinfo-file "~/.authinfo")
+                                       (nnimap-stream ssl)))
+     
+     (cond 
+      (na-os-is-darwin  (setq na-gnutls-program "/opt/local/bin/gnutls-cli"))
+      (na-os-is-linux   (setq na-gnutls-program "/usr/bin/gnutls-cli")))
+     
+     (setq send-mail-function 'smtpmail-send-it
+           message-send-mail-function 'smtpmail-send-it
+           starttls-use-gnutls t
+           starttls-gnutls-program "/usr/bin/gnutls-cli"
+           starttls-extra-arguments nil      
+           smtpmail-gnutls-credentials '(("smtp.gmail.com" 587 nil nil))
+           smtpmail-starttls-credentials  '(("smtp.gmail.com" 587 "nurullah@nakkaya.com" nil))
+           smtpmail-default-smtp-server "smtp.gmail.com"
+           smtpmail-smtp-server "smtp.gmail.com"
+           smtpmail-smtp-service 587
+           smtpmail-debug-info t
+           smtpmail-local-domain "nakkaya.com")
+     
+     (require 'smtpmail)
+     (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
+     (setq message-kill-buffer-on-exit t)
+     
+     (remove-hook 'gnus-mark-article-hook 'gnus-summary-mark-read-and-unread-as-read)
+     (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
+     
+     (defun na-gmail-move-trash ()
+       (interactive)
+       (gnus-summary-move-article nil "[Gmail]/Trash"))
+     
+     (define-key gnus-summary-mode-map [(v)] 'na-gmail-move-trash)
+     
+     (gnus-demon-add-handler 'gnus-group-get-new-news 1 t)
+     (gnus-demon-add-handler 'gnus-group-save-newsrc 1 t)
+     (gnus-demon-init)
+     
+     (defun na-gnus-switch ()
+       "Switch to git buffer or run git-status"
+       (interactive)  
+       (window-configuration-to-register 'z)
+       (if (not (eq (get-buffer "*Group*") nil))
+           (switch-to-buffer "*Group*")
+         (gnus)))
    #+end_src
 
 * Skeletons
