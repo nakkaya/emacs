@@ -286,8 +286,8 @@
     (setq display-time-string-forms '( load "," (if mail "" "")) )
     (setq display-time-interval 5)
     (display-time-mode 1)
-    (setq battery-mode-line-format "%b%p%" )
-    (display-battery-mode t)
+    ;;(setq battery-mode-line-format "%b%p%" )
+    ;;(display-battery-mode t)
     
     (setq-default mode-line-format
                   '(""
