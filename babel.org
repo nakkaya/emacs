@@ -1572,6 +1572,18 @@
           (org-open-file out-file)))
     #+end_src
 
+    #+begin_src emacs-lisp
+      (defun na-export-pdf ()
+        (interactive)
+        (org-export-as-pdf-and-open nil)
+        (delete-file (concat (car (split-string (buffer-name) "\\.")) ".tex"))
+        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".pdf"))
+               (out-file (concat "~/Dropbox/public/" file)))
+          (rename-file file out-file t)
+          (org-open-file out-file)))
+      
+    #+end_src
+
 ** IBuffer
 
    #+begin_src emacs-lisp 
