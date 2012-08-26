@@ -8,7 +8,6 @@
     (add-to-list 'load-path dotfiles-dir)
     (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/haskell-mode/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
@@ -26,6 +25,7 @@
 
 * General
 ** Options
+
    #+begin_src emacs-lisp 
      (setq large-file-warning-threshold 256000000)
      ;;debug
@@ -140,20 +140,9 @@
        (setq x-select-enable-clipboard t))
    #+end_src
 
-   #+begin_src emacs-lisp
-     (defun na-fullscreen (&optional f)
-       (interactive) 
-       (if na-os-is-darwin
-           ;; included in emacs 23.2 
-           ;; FIXME: the ns version doesn't take the frame option 
-           (ns-toggle-fullscreen) 
-         (set-frame-parameter 
-          f 'fullscreen 
-          (if (frame-parameter f 'fullscreen) 
-              nil 'fullboth))))
-   #+end_src
-
 ** Input
+
+   Single line scroll.
 
    #+begin_src emacs-lisp 
      (defun scroll-window-forward-line ()
@@ -254,10 +243,11 @@
           (interactive)
           (kill-buffer)
           (jump-to-register 'z)))
-     
    #+end_src
 
 ** Session
+
+   Save buffer state on exit and reload on startup.
 
    #+begin_src emacs-lisp 
      (load "desktop")
@@ -267,6 +257,8 @@
      (setq-default save-place t)
      (setq bookmark-save-flag 1)
    #+end_src
+
+   Bring frame to front when opening files.
 
    #+begin_src emacs-lisp 
      (add-hook 'server-visit-hook 'call-raise-frame)
@@ -376,14 +368,57 @@
        (message "Refreshed open files.") )
    #+end_src
 
+   Revert buffer no questions asked.
+
    #+begin_src emacs-lisp
      (defun revert-buffer-no-confirm ()
        "Revert buffer without confirmation."
        (interactive) (revert-buffer t t))
    #+end_src
 
+   Will bounce between matching parens just like % in vi
+
+   #+begin_src emacs-lisp
+     (defun na-bounce-sexp ()
+       (interactive)
+       (let ((prev-char (char-to-string (preceding-char)))
+             (next-char (char-to-string (following-char))))
+         (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+               ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+               (t (error "%s" "Not on a paren, brace, or bracket")))))
+   #+end_src
+
+   Highlight matching parens.
+
+   #+begin_src emacs-lisp
+     (defun na-highlight-mathing-paren ()
+       (setq show-paren-delay 0)
+       (setq show-paren-style 'parenthesis)
+       (make-variable-buffer-local 'show-paren-mode)
+       (show-paren-mode 1)
+       (set-face-background 'show-paren-match-face (face-background 'default))
+       (if (boundp 'font-lock-comment-face)
+         (set-face-foreground 'show-paren-match-face 
+                              (face-foreground 'font-lock-comment-face))
+         (set-face-foreground 'show-paren-match-face 
+                              (face-foreground 'default)))
+       (set-face-foreground 'show-paren-match-face "red")
+       (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+     
+     (add-hook 'lisp-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'emacs-lisp-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'clojure-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'scheme-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'c++-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'c-mode-hook 'na-highlight-mathing-paren)   
+   #+end_src
+
 * Modes
 ** Dired
+
+   Go up one directory and kill buffer associated with the previous
+   directory.
+
    #+begin_src emacs-lisp 
      (defun na-dired-up-directory-after-kill ()
        "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
@@ -407,6 +442,32 @@
      (when na-os-is-linux
        (setq browse-url-browser-function 'browse-url-generic
              browse-url-generic-program "google-chrome"))
+   #+end_src
+
+   Custom /html/ export. Export to Dropbox public folder.
+
+   #+begin_src emacs-lisp
+     (defun na-export-html ()
+       (interactive)
+       (org-export-as-html nil)
+       (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
+              (out-file (concat "~/Dropbox/public/" file)))
+         (rename-file file out-file t)
+         (org-open-file out-file)))
+   #+end_src
+
+   Custom /html/ export. Export to Dropbox public folder. Delete any
+   temporary files.
+
+   #+begin_src emacs-lisp
+     (defun na-export-pdf ()
+       (interactive)
+       (org-export-as-pdf-and-open nil)
+       (delete-file (concat (car (split-string (buffer-name) "\\.")) ".tex"))
+       (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".pdf"))
+              (out-file (concat "~/Dropbox/public/" file)))
+         (rename-file file out-file t)
+         (org-open-file out-file)))
    #+end_src
 
 *** agenda
@@ -1562,28 +1623,6 @@
       (setq org-confirm-babel-evaluate nil)
     #+end_src
 
-    #+begin_src emacs-lisp
-      (defun na-export-html ()
-        (interactive)
-        (org-export-as-html nil)
-        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
-               (out-file (concat "~/Dropbox/public/" file)))
-          (rename-file file out-file t)
-          (org-open-file out-file)))
-    #+end_src
-
-    #+begin_src emacs-lisp
-      (defun na-export-pdf ()
-        (interactive)
-        (org-export-as-pdf-and-open nil)
-        (delete-file (concat (car (split-string (buffer-name) "\\.")) ".tex"))
-        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".pdf"))
-               (out-file (concat "~/Dropbox/public/" file)))
-          (rename-file file out-file t)
-          (org-open-file out-file)))
-      
-    #+end_src
-
 ** IBuffer
 
    #+begin_src emacs-lisp 
@@ -1672,6 +1711,7 @@
    #+end_src
 
 ** Text Mode
+
    #+begin_src emacs-lisp 
      (delete-selection-mode)
      (setq fill-column 80)
@@ -1679,6 +1719,7 @@
    #+end_src
 
 ** Flyspell
+
    #+begin_src emacs-lisp 
      (when na-os-is-darwin
        (setq ispell-program-name "/opt/local/bin/ispell"))
@@ -1698,42 +1739,9 @@
 ** Lisp
 *** Common
 
+    Custom /run-lisp/ that allows you to choose which lisp to run.
+
     #+begin_src emacs-lisp
-      (defun na-bounce-sexp ()
-        "Will bounce between matching parens just like % in vi"
-        (interactive)
-        (let ((prev-char (char-to-string (preceding-char)))
-              (next-char (char-to-string (following-char))))
-          (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-                ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-                (t (error "%s" "Not on a paren, brace, or bracket")))))
-      
-      (defun lispy-parens ()
-        "Setup parens display for lisp modes"
-        (setq show-paren-delay 0)
-        (setq show-paren-style 'parenthesis)
-        (make-variable-buffer-local 'show-paren-mode)
-        (show-paren-mode 1)
-        (set-face-background 'show-paren-match-face (face-background 'default))
-        (if (boundp 'font-lock-comment-face)
-            (set-face-foreground 'show-paren-match-face 
-                                 (face-foreground 'font-lock-comment-face))
-          (set-face-foreground 'show-paren-match-face 
-                               (face-foreground 'default)))
-        (set-face-foreground 'show-paren-match-face "red")
-        (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
-      
-      (add-hook 'lisp-mode-hook 'lispy-parens)
-      (add-hook 'emacs-lisp-mode-hook 'lispy-parens)
-      (add-hook 'clojure-mode-hook 'lispy-parens)
-      (add-hook 'scheme-mode-hook 'lispy-parens)
-      (add-hook 'c++-mode-hook 'lispy-parens)
-      (add-hook 'c-mode-hook 'lispy-parens)
-    #+end_src
-
-*** Clojure
-
-    #+begin_src emacs-lisp 
       (cond 
        (na-os-is-darwin
         (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
@@ -1756,19 +1764,24 @@
             (dolist (l lisp-programs)
               (if (string= (first l) choice)
                   (run-lisp (second l)))))))
-      
-      (defun remote-repl (arg)
-        (interactive "P")
-        (run-lisp (concat "nc " (read-string "IP: ") " " (read-string "Port: "))))
-      
+    #+end_src
+
+    Select and eval whole buffer.
+
+    #+begin_src emacs-lisp
       (defun na-load-buffer ()
         (interactive)
         (point-to-register 5)
         (mark-whole-buffer)
         (lisp-eval-region (point) (mark) nil)
         (jump-to-register 5))
-      
-      ;;sub process support for clojure
+    #+end_src
+
+*** Clojure
+
+    Sub process support for Clojure.
+
+    #+begin_src emacs-lisp 
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map 
@@ -1787,6 +1800,8 @@
       (define-clojure-indent (from-blackboard 'defun))
     #+end_src
 
+    org-babel support.
+
     #+begin_src emacs-lisp
       (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
       
@@ -1800,6 +1815,8 @@
       
       (provide 'ob-clojure)
     #+end_src
+
+    Replace, /fn/ with /λ/ and /#/ with /ƒ/.
 
     #+begin_src emacs-lisp
       (let ((fn `(("(\\(fn\\)[\[[:space:]]"
@@ -1818,6 +1835,8 @@
     #+end_src
 
 *** Scheme
+
+    Sub process support for Scheme.
 
     #+begin_src emacs-lisp
       (add-hook 'scheme-mode-hook
@@ -1856,15 +1875,6 @@
          (git-status (read-directory-name "Select Directory: "))))
    #+end_src
 
-** Haskell
-
-   #+begin_src emacs-lisp
-     (load "haskell-site-file")
-     (require 'inf-haskell)
-     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-   #+end_src
-
 ** multi-term
 
    #+begin_src emacs-lisp
@@ -1883,13 +1893,14 @@
              (term-char-mode)
              (term-send-raw-string "\C-e"))
          (term-line-mode)))
-     
    #+end_src
 
 ** jump
-   
+
+   Create marks in buffer so you can jump between them using these
+   functions.
+
    #+begin_src emacs-lisp
-     ;;create marks in buffer so you can jump between them using these functions
      (defvar na-cm-ring nil
        "List of markers that points to buffer-positions.")
      (defun na-cm-same-pos ()
