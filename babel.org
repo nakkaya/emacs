@@ -190,12 +190,13 @@
    #+end_src
 
    #+begin_src emacs-lisp 
-     (global-set-key [f1] 'na-fullscreen)
+     (global-set-key [f1] 'jump-to-org-agenda)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f5] 'revert-buffer-no-confirm)
      (global-set-key [f8] 'toggle-truncate-lines)
+     (global-set-key [f12] 'na-maximize-frame)
      
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
