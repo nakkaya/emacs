@@ -502,7 +502,7 @@
             (with-selected-window agenda-window (org-agenda-redo))
             (funcall (lambda () (org-agenda nil "h"))))))
       
-      (run-with-idle-timer 300 t 'jump-to-org-agenda)
+      ;;(run-with-idle-timer 300 t 'jump-to-org-agenda)
     #+end_src
 
 *** latex
