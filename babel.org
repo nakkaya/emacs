@@ -345,13 +345,28 @@
     
       (when na-os-is-linux
         (set-face-attribute 'default nil 
-                            :font "DejaVu Sans Mono-10:style=book"))
-      (when na-os-is-darwin
-        (set-face-attribute 'default nil 
-                            :font "DejaVu Sans Mono-14:style=book")))
+                            :font "DejaVu Sans Mono-10:style=book")))
   #+end_src
 
 ** Misc
+   
+   Maximize frame.
+
+   #+begin_src emacs-lisp
+     (defun na-maximize-frame ()
+       (interactive)
+       (let ((px (display-pixel-width))
+             (py (display-pixel-height))
+             (fx (frame-char-width))
+             (fy (frame-char-height))
+             tx ty)
+     
+         (setq tx (- (/ px fx) 3))
+         (setq ty (- (/ py fy) 4))
+         (set-frame-position (selected-frame) 1 1)
+         (set-frame-width (selected-frame) tx)
+         (set-frame-height (selected-frame) ty)))
+   #+end_src
 
    This is a little function that is useful when editing several files
    that might for any reason change on disk (update from
