@@ -1767,6 +1767,7 @@
       
       (setq lisp-programs 
             (list (list "clojure" clojure-command)
+                  (list "lein1" "/Users/nakkaya/Dropbox/bash/lein1 repl")
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
