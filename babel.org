@@ -1779,6 +1779,12 @@
 
 *** Clojure
 
+    ClojureScript mode.
+
+    #+begin_src emacs-lisp
+      (add-to-list 'auto-mode-alist '("[.]cljs$" . clojure-mode))
+    #+end_src
+
     Sub process support for Clojure.
 
     #+begin_src emacs-lisp 
