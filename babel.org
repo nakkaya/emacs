@@ -356,17 +356,23 @@
    #+begin_src emacs-lisp
      (defun na-maximize-frame ()
        (interactive)
-       (let ((px (display-pixel-width))
-             (py (display-pixel-height))
-             (fx (frame-char-width))
-             (fy (frame-char-height))
-             tx ty)
+       (cond 
+        (na-os-is-darwin  (let ((px (display-pixel-width))
+                                (py (display-pixel-height))
+                                (fx (frame-char-width))
+                                (fy (frame-char-height))
+                                tx ty)
      
-         (setq tx (- (/ px fx) 3))
-         (setq ty (- (/ py fy) 4))
-         (set-frame-position (selected-frame) 1 1)
-         (set-frame-width (selected-frame) tx)
-         (set-frame-height (selected-frame) ty)))
+                            (setq tx (- (/ px fx) 3))
+                            (setq ty (- (/ py fy) 4))
+                            (set-frame-position (selected-frame) 1 1)
+                            (set-frame-width (selected-frame) tx)
+                            (set-frame-height (selected-frame) ty)))
+        (na-os-is-linux (progn 
+                          (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                                                 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+                          (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                                                 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))))))
    #+end_src
 
    This is a little function that is useful when editing several files
