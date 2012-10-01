@@ -1978,6 +1978,21 @@
      (global-smart-tab-mode 1)
    #+end_src
 
+** hide/show mode
+
+   #+begin_src emacs-lisp
+     (setq hs-common-hook (lambda()
+                            (local-set-key (kbd "C-c <right>") 'hs-show-block)
+                            (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+                            (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+                            (local-set-key (kbd "C-c <down>")  'hs-show-all)
+                            (hs-minor-mode t)))
+     
+     (add-hook 'clojure-mode-hook hs-common-hook)
+     (add-hook 'java-mode-hook hs-common-hook)
+     (add-hook 'c-mode-common-hook hs-common-hook)
+   #+end_src
+
 ** dired-details
 
    #+begin_src emacs-lisp
