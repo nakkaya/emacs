@@ -66,6 +66,13 @@
      (setq backup-inhibited t)
    #+end_src
 
+   When a file changes on disk notice the change and start showing the
+   new version unless I have unsaved changes. 
+
+   #+begin_src emacs-lisp
+     (global-auto-revert-mode 1)
+   #+end_src
+
    Detect OS,
 
    #+begin_src emacs-lisp 
@@ -194,7 +201,6 @@
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
-     (global-set-key [f5] 'revert-buffer-no-confirm)
      (global-set-key [f8] 'toggle-truncate-lines)
      (global-set-key [f12] 'na-maximize-frame)
      
@@ -373,29 +379,6 @@
                                                  '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
                           (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
                                                  '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))))))
-   #+end_src
-
-   This is a little function that is useful when editing several files
-   that might for any reason change on disk (update from
-   VersionControl). It reverts all buffers that are visiting a file. 
-
-   #+begin_src emacs-lisp
-     (defun revert-all-buffers ()
-       "Refreshes all open buffers from their respective files."
-       (interactive)
-       (dolist (buf (buffer-list))
-         (with-current-buffer buf
-           (when (and (buffer-file-name) (not (buffer-modified-p)))
-             (revert-buffer t t t) )))
-       (message "Refreshed open files.") )
-   #+end_src
-
-   Revert buffer no questions asked.
-
-   #+begin_src emacs-lisp
-     (defun revert-buffer-no-confirm ()
-       "Revert buffer without confirmation."
-       (interactive) (revert-buffer t t))
    #+end_src
 
    Will bounce between matching parens just like % in vi
