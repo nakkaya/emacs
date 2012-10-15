@@ -234,6 +234,7 @@
      (define-key global-map [end] 'end-of-line)
      
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
+     (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
      
      (define-key gnus-group-mode-map (kbd "Q")
        '(lambda ()
@@ -430,6 +431,17 @@
        (interactive)
        (let ((buf (current-buffer)))
          (dired-up-directory)
+         (kill-buffer buf)))
+   #+end_src
+
+  Works same as above but goes down in a directory tree.
+
+   #+begin_src emacs-lisp 
+     (defun na-dired-down-directory-after-kill ()
+       "Call 'dired-find-alternate-file' after calling '(kill-buffer (current-buffer))'."
+       (interactive)
+       (let ((buf (current-buffer)))
+         (dired-find-alternate-file)
          (kill-buffer buf)))
    #+end_src
 
