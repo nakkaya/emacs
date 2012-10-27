@@ -363,7 +363,7 @@
     
       (when na-os-is-linux
         (set-default-font "monaco")
-        (set-face-attribute 'default nil :height 82)))
+        (set-face-attribute 'default nil :height 105)))
   #+end_src
 
 ** Misc
