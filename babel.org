@@ -2465,3 +2465,25 @@
         >)
      (define-abbrev text-mode-abbrev-table "ocsrc" "" 'skel-org-src)
    #+end_src
+
+   #+begin_src emacs-lisp
+     (define-skeleton skel-org-note
+       "Insert org template for a note."
+       nil
+       >
+       "#+Title: " _ \n >
+       "#+DATE:" \n >
+       "#+OPTIONS: author:nil creator:nil toc:nil" \n >
+       "#+LATEX_HEADER: \\usepackage[cm]{fullpage}" \n >
+       "#+LATEX_HEADER: \usepackage{listings}" \n >
+       "#+LATEX_HEADER: \\renewcommand{\\rmdefault}{phv} % Arial" \n >
+       "#+LATEX_HEADER: \\usepackage{hyperref}" \n >
+       "#+LATEX_HEADER: \\hypersetup{" \n >
+       "#+LATEX_HEADER:     colorlinks,%" \n >
+       "#+LATEX_HEADER:     citecolor=black,%" \n >
+       "#+LATEX_HEADER:     filecolor=black,%" \n >
+       "#+LATEX_HEADER:     linkcolor=blue,%" \n >
+       "#+LATEX_HEADER:     urlcolor=black" \n >
+       "#+LATEX_HEADER: }" \n >
+       >)
+   #+end_src
