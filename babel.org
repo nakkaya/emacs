@@ -251,8 +251,8 @@
           (kill-buffer)
           (jump-to-register 'z)))
      
-     (global-set-key (kbd "C-c t") 'multi-term-next)
-     (global-set-key (kbd "C-c T") 'multi-term) ;; create a new one
+     (global-set-key (kbd "C-x t") 'na-next-term)
+     (global-set-key (kbd "C-x T") 'na-new-term) ;; create a new one
      
      (add-hook 'clojure-mode-hook
                '(lambda ()
@@ -1913,6 +1913,18 @@
    #+begin_src emacs-lisp
      (require 'multi-term)
      (setq multi-term-program "/bin/bash")
+     
+     (defun na-new-term ()
+       (interactive)
+       (multi-term)
+       ;;pass C-c
+       (define-key term-raw-map [?\C-c] 'term-send-raw))
+     
+     (defun na-next-term ()
+       (interactive)
+       (if (> (length (multi-term-list)) 0)
+           (multi-term-next)
+         (na-new-term)))
      
      ;; from https://bitbucket.org/tavisrudd/emacs.d/src/f3738b580538/dss-term.el
      (defun na-term-toggle-mode ()
