@@ -228,7 +228,6 @@
      (global-set-key "\C-xgs" 'na-run-git-switch)
      (global-set-key "\C-xgg" 'na-gnus-switch)
      (global-set-key "\C-xrl" 'na-run-lisp)
-     (global-set-key "\C-xtr" 'na-run-term)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
