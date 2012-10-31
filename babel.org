@@ -2486,7 +2486,7 @@
        "#+DATE:" \n >
        "#+OPTIONS: author:nil creator:nil toc:nil" \n >
        "#+LATEX_HEADER: \\usepackage[cm]{fullpage}" \n >
-       "#+LATEX_HEADER: \usepackage{listings}" \n >
+       "#+LATEX_HEADER: \\usepackage{listings}" \n >
        "#+LATEX_HEADER: \\renewcommand{\\rmdefault}{phv} % Arial" \n >
        "#+LATEX_HEADER: \\usepackage{hyperref}" \n >
        "#+LATEX_HEADER: \\hypersetup{" \n >
