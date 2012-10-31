@@ -1770,15 +1770,15 @@
     #+begin_src emacs-lisp
       (cond 
        (na-os-is-darwin
-        (setq clojure-command (concat "/Users/nakkaya/Dropbox/bash/lein repl")))
+        (setq lein-path "/Users/nakkaya/Dropbox/bash/"))
        (na-os-is-linux
-        (setq clojure-command (concat "/home/nakkaya/Dropbox/bash/lein repl")))
+        (setq lein-path "/home/nakkaya/Dropbox/bash/"))
        (na-os-is-windows
-        (setq clojure-command (concat "/cygdrive/c/Dropbox/bash/lein repl"))))
+        (setq lein-path "/cygdrive/c/Dropbox/bash/")))
       
       (setq lisp-programs 
-            (list (list "clojure" clojure-command)
-                  (list "lein1" "/Users/nakkaya/Dropbox/bash/lein1 repl")
+            (list (list "clojure" (concat lein-path "lein repl"))
+                  (list "lein1" (concat lein-path "lein1 repl"))
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
