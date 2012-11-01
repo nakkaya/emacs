@@ -429,6 +429,12 @@
    #+end_src
 
 * Modes
+** C/C++
+
+   #+begin_src emacs-lisp
+     (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
+   #+end_src
+
 ** Dired
 
    Go up one directory and kill buffer associated with the previous
