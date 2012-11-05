@@ -1692,6 +1692,8 @@
                              (name . "^\\*offlineimap\\*$")
                              (name . "^\\.newsrc-dribble")))
                     ("Emacs" (or
+                              (name . "^\\*Process List\\*$")
+                              (name . "^\\*Dired log\\*$")
                               (name . "^\\*info\\*$")
                               (name . "^\\*tramp.+\\*$")
                               (name . "^\\*trace.+SMTP.+\\*$")
