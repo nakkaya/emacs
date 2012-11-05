@@ -1798,7 +1798,7 @@
         (setq lein-path "/cygdrive/c/Dropbox/bash/")))
       
       (setq lisp-programs 
-            (list (list "clojure" (concat lein-path "lein repl"))
+            (list (list "clojure" (concat lein-path "lein trampoline run -m clojure.main/main"))
                   (list "lein1" (concat lein-path "lein1 repl"))
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
