@@ -450,6 +450,12 @@
 
 ** Dired
 
+   Don't bug me for each directory.
+
+   #+begin_src emacs-lisp
+     (setq dired-recursive-deletes 'always)
+   #+end_src
+
    Go up one directory and kill buffer associated with the previous
    directory.
 
