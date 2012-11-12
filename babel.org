@@ -474,9 +474,12 @@
      (defun na-dired-down-directory-after-kill ()
        "Call 'dired-find-alternate-file' after calling '(kill-buffer (current-buffer))'."
        (interactive)
-       (let ((buf (current-buffer)))
-         (dired-find-alternate-file)
-         (kill-buffer buf)))
+       (let ((file (dired-get-filename))) 
+         (if (file-directory-p file) 
+             (let ((buf (current-buffer)))
+               (dired-find-alternate-file)
+               (kill-buffer buf))
+           (dired-advertised-find-file))))
    #+end_src
 
 ** Org
