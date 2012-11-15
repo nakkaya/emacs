@@ -1837,11 +1837,14 @@
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map 
-                     "\e\C-x" 'lisp-eval-defun)
+                     "\C-c\C-e" '(lambda ()
+                                   (interactive)
+                                   (let ((curr (point)))
+                                     (end-of-defun)
+                                     (lisp-eval-last-sexp)
+                                     (goto-char curr))))
                    (define-key clojure-mode-map 
                      "\C-x\C-e" 'lisp-eval-last-sexp)
-                   (define-key clojure-mode-map 
-                     "\C-c\C-e" 'lisp-eval-last-sexp)
                    (define-key clojure-mode-map 
                      "\C-c\C-r" 'lisp-eval-region)
                    (define-key clojure-mode-map 
