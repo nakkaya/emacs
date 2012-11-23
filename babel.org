@@ -330,7 +330,7 @@
     (if window-system
         (progn 
           (set-face-foreground 'default "#bcbcbc")
-          (set-face-background 'default "#121212")
+          (set-face-background 'default "#060606")
           (set-face-foreground 'font-lock-string-face "#afafff")
           (set-face-foreground 'font-lock-keyword-face "#00affe")
           (set-face-foreground 'font-lock-function-name-face "#f9a505")
@@ -375,7 +375,7 @@
     
       (when na-os-is-linux
         (set-default-font "monaco")
-        (set-face-attribute 'default nil :height 105)))
+        (set-face-attribute 'default nil :height 110)))
   #+end_src
 
 ** Misc
