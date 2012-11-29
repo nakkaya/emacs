@@ -375,8 +375,9 @@
       (variable-pitch-mode -1)
     
       (when na-os-is-linux
-        (set-default-font "monaco")
-        (set-face-attribute 'default nil :height 110)))
+        (set-default-font "monaco-11")
+        ;;(set-face-attribute 'default nil :height 110)
+        ))
   #+end_src
 
 ** Misc
@@ -1695,6 +1696,7 @@
                                (mode . xml-mode)
                                (mode . scheme-mode)
                                (mode . ruby-mode)
+                               (mode . haskell-mode)
                                (mode . shell-script-mode)
                                (mode . sh-mode)
                                (mode . c-mode)
@@ -1942,6 +1944,7 @@
      (require 'inf-haskell)
      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
      (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+     (add-to-list 'auto-mode-alist '("[.]hs$" . haskell-mode))
    #+end_src
 
 ** multi-term
