@@ -1679,6 +1679,14 @@
       (setq org-confirm-babel-evaluate nil)
     #+end_src
 
+** tramp
+
+   C-x C-f /sudo:root@host[#port]:/path/to/file
+
+   #+begin_src emacs-lisp
+     (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+   #+end_src
+
 ** IBuffer
 
    #+begin_src emacs-lisp 
