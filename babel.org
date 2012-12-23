@@ -167,6 +167,12 @@
      (define-key global-map [wheel-down] 'scroll-window-forward-line)
    #+end_src
 
+   Mouse follows focus,
+
+   #+begin_src emacs-lisp
+     (setq mouse-autoselect-window t)
+   #+end_src
+
    Mouse setup when running in a terminal,
 
    #+begin_src emacs-lisp
