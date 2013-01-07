@@ -1711,6 +1711,8 @@
                                (mode . java-mode)
                                (mode . clojure-mode)
                                (mode . org-mode)
+                               (mode . bibtex-mode)
+                               (mode . latex-mode)
                                (mode . xml-mode)
                                (mode . scheme-mode)
                                (mode . ruby-mode)
