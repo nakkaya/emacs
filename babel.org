@@ -569,6 +569,10 @@
 
 *** latex
 
+    #+BEGIN_SRC emacs-lisp
+      (setq org-latex-to-pdf-process '("~/Dropbox/bash/org2pdf.sh %b"))
+    #+END_SRC
+
     #+begin_src emacs-lisp
       (setq-default TeX-master t)
       (setq reftex-default-bibliography
