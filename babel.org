@@ -1833,7 +1833,7 @@
       
       (setq lisp-programs 
             (list (list "clojure" (concat lein-path "lein trampoline run -m clojure.main/main"))
-                  (list "lein1" (concat lein-path "lein1 repl"))
+                  (list "nrepl" (concat lein-path "lein repl"))
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
@@ -2254,6 +2254,15 @@
        nil
        "(use 'clojure.repl)")
      (define-abbrev inferior-lisp-mode-abbrev-table "repl" "" 'skel-inferior-repl)
+     
+     
+     (define-skeleton skel-inferior-load
+       ""
+       nil
+       (let ((ns (read-string "Load NS> " )))
+         (concat "(load \"" ns "\")" "(in-ns '" ns ")")))
+     
+     (define-abbrev inferior-lisp-mode-abbrev-table "load" "" 'skel-inferior-load)
    #+end_src
 
 ** Clojure
