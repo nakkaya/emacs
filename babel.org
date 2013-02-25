@@ -302,6 +302,12 @@
        (raise-frame))
    #+end_src
 
+   Start server,
+
+   #+begin_src emacs-lisp 
+     (server-start)
+   #+end_src
+
 ** Theme
 
   #+begin_src emacs-lisp 
