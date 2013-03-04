@@ -241,7 +241,6 @@
      
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
      (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
-     (define-key sr-mode-map '[\C-return] 'lx-sunrise-display-external)
      
      (define-key gnus-group-mode-map (kbd "Q")
        '(lambda ()
@@ -505,22 +504,22 @@
 ** Dired
 
    #+begin_src emacs-lisp
-     (defun lx-sunrise-display-external ()
-       "Open file at point in an external application."
-       (interactive)
-       (let ((file (dired-get-filename)))
-         (call-process shell-file-name nil nil nil shell-command-switch
-                       (format "%s \"%s\"" lx-sunrise-external-viewer file))))
-     
-     (setq lx-sunrise-external-viewer "xdg-open")
-     
-   #+end_src
-
-   #+begin_src emacs-lisp
      (require 'sunrise-commander)
      (require 'sunrise-x-loop)
      (setq sr-attributes-display-mask '(nil nil nil nil nil nil nil nil))
      (setq sr-show-file-attributes nil)
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (defun lx-sunrise-display-external ()
+       "Open file at point in an external application."
+       (interactive)
+       (let ((file (dired-get-filename))
+             (process-connection-type nil))
+         (start-process "" nil lx-sunrise-external-viewer file)))
+     
+     (setq lx-sunrise-external-viewer "xdg-open")
+     (define-key sr-mode-map '[\C-return] 'lx-sunrise-display-external)
    #+end_src
 
    Don't bug me for each directory.
@@ -1754,6 +1753,19 @@
       (setq org-confirm-babel-evaluate nil)
     #+end_src
 
+*** Capture
+
+    #+begin_src emacs-lisp
+      (require 'org-protocol)
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (setq org-capture-templates
+            '(("l" "Link" entry (file+olp "~/Dropbox/org/gtd.org" "Read Later")
+               "* %a\n %?\n %i")
+              ))
+    #+end_src
+
 ** tramp
 
    C-x C-f /sudo:root@host[#port]:/path/to/file
@@ -1793,7 +1805,8 @@
                                (mode . c++-mode)))
                     ("Terminal" (or (mode . term-mode)
                                     (mode . inferior-lisp-mode)))
-                    ("Dired" (mode . dired-mode))
+                    ("Dired" (or (mode . dired-mode) 
+                                 (mode . sr-mode)))
                     ("Gnus" (or
                              (mode . message-mode)
                              (mode . mail-mode)
