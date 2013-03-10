@@ -267,20 +267,6 @@
           (kill-buffer)
           (jump-to-register 'z)))
      
-     (cond 
-      (na-os-is-darwin
-       (progn 
-         (define-key global-map [(control kp-delete)] 'na-next-term)
-         (add-hook 'term-mode-hook
-                   '(lambda ()
-                      (define-key term-raw-map [(control kp-delete)] 'na-next-term)))))
-      (na-os-is-linux
-       (progn 
-         (define-key global-map [(control delete)] 'na-next-term)
-         (add-hook 'term-mode-hook
-                   '(lambda ()
-                      (define-key term-raw-map [(control delete)] 'na-next-term))))))
-     
      (global-set-key (kbd "C-x t") 'na-new-term) ;; create a new one
      
      (add-hook 'clojure-mode-hook
