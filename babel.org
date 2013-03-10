@@ -232,6 +232,15 @@
                   (define-key term-raw-map [(control \\)] 'other-window)))
      (global-set-key [(control \\)] 'other-window)
      
+     (define-key global-map [(meta \\)] 'na-next-term)
+     (define-key global-map [(super \\)] 'na-next-term)
+     (add-hook 'term-mode-hook
+               '(lambda ()
+                  (define-key term-raw-map [(meta \\)] 'na-next-term)))
+     (add-hook 'term-mode-hook
+               '(lambda ()
+                  (define-key term-raw-map [(super \\)] 'na-next-term)))
+     
      (global-set-key "\C-xgs" 'na-run-git-switch)
      (global-set-key "\C-xgg" 'na-gnus-switch)
      (global-set-key "\C-xrl" 'na-run-lisp)
