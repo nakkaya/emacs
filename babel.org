@@ -396,7 +396,7 @@
           (set-face-background 'modeline-inactive "#380000"))
       (progn 
         (set-face-foreground 'default "color-250")
-        (set-face-background 'default "color-233")
+        (set-face-background 'default "black")
         (set-face-foreground 'font-lock-string-face "color-147")
         (set-face-foreground 'font-lock-keyword-face "color-202")
         (set-face-foreground 'font-lock-function-name-face "color-178")
@@ -410,7 +410,7 @@
         (set-face-background 'diff-header "color-233")
         (set-face-background 'diff-file-header "color-233")
         (set-face-background 'diff-refine-change "color-233")
-        (set-face-background 'modeline "color-32")
+        (set-face-background 'modeline "red")
         (set-face-background 'modeline-inactive "brightblack")))
     
   #+end_src
@@ -499,22 +499,20 @@
 ** Dired
 
    #+begin_src emacs-lisp
-     (require 'sunrise-commander)
-     (require 'sunrise-x-loop)
-     (setq sr-attributes-display-mask '(nil nil nil nil nil nil nil nil))
-     (setq sr-show-file-attributes nil)
+     (require 'dired-details)
+     (dired-details-install)
    #+end_src
 
    #+begin_src emacs-lisp
-     (defun lx-sunrise-display-external ()
+     (defun na-dired-display-external ()
        "Open file at point in an external application."
        (interactive)
        (let ((file (dired-get-filename))
              (process-connection-type nil))
-         (start-process "" nil lx-sunrise-external-viewer file)))
+         (start-process "" nil na-dired-external-viewer file)))
      
-     (setq lx-sunrise-external-viewer "xdg-open")
-     (define-key sr-mode-map '[\C-return] 'lx-sunrise-display-external)
+     (setq na-dired-external-viewer "xdg-open")
+     (define-key dired-mode-map '[\C-return] 'na-dired-display-external)
    #+end_src
 
    Don't bug me for each directory.
@@ -605,7 +603,7 @@
                     ((agenda "" ((org-agenda-ndays 3)))
                      (todo "TODO")
                      (todo "WAITING")
-                     (todo "RESEARCH")))))
+                     (todo "BACKBURNER")))))
       
       (setq org-agenda-window-setup 'other-window)
       (setq org-agenda-restore-windows-after-quit t)
