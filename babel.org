@@ -410,7 +410,7 @@
         (set-face-background 'diff-header "color-233")
         (set-face-background 'diff-file-header "color-233")
         (set-face-background 'diff-refine-change "color-233")
-        (set-face-background 'modeline "red")
+        (set-face-background 'modeline "color-24")
         (set-face-background 'modeline-inactive "brightblack")))
     
   #+end_src
