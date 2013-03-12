@@ -12,6 +12,7 @@
 ;; Load up Org Mode and Babel
 (require 'org-install)
 (require 'ob-tangle)
+(require 'org-element)
 
 ;; load up the main file
 (org-babel-load-file (expand-file-name "babel.org" dotfiles-dir))
