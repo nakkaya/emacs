@@ -1924,35 +1924,47 @@
 
 *** Clojure
 
+    Setup nrepl,
+
+    #+begin_src emacs-lisp
+      (require 'nrepl)
+      (setq nrepl-popup-stacktraces nil)
+    #+end_src
+
+    Kill nrepl process before starting a new one,
+
+    #+begin_src emacs-lisp
+      ;; Disable prompt on killing buffer with a process
+      (setq kill-buffer-query-functions
+            (remq 'process-kill-buffer-query-function
+                  kill-buffer-query-functions))
+      
+      (defun nrepl-kill ()
+        "Kill all nrepl buffers and processes"
+        (interactive)
+        (when (get-process "nrepl-server")
+          (set-process-sentinel (get-process "nrepl-server")
+                                (lambda (proc evt) t)))
+        (dolist (buffer (buffer-list))
+          (when (string-prefix-p "*nrepl" (buffer-name buffer))
+            (kill-buffer buffer))))
+      
+      (defun nrepl-me ()
+        (interactive)
+        (nrepl-kill)
+        (nrepl-jack-in nil))
+    #+end_src
+
+
     ClojureScript mode.
 
     #+begin_src emacs-lisp
       (add-to-list 'auto-mode-alist '("[.]cljs$" . clojure-mode))
     #+end_src
 
-    Sub process support for Clojure.
+    Custom indent,
 
     #+begin_src emacs-lisp 
-      (add-hook 'clojure-mode-hook
-                '(lambda ()
-                   (define-key clojure-mode-map 
-                     "\C-c\C-e" '(lambda ()
-                                   (interactive)
-                                   (let ((curr (point)))
-                                     (end-of-defun)
-                                     (lisp-eval-last-sexp)
-                                     (goto-char curr))))
-                   (define-key clojure-mode-map 
-                     "\C-x\C-e" 'lisp-eval-last-sexp)
-                   (define-key clojure-mode-map 
-                     "\C-c\C-r" 'lisp-eval-region)
-                   (define-key clojure-mode-map 
-                     "\C-c\C-c" '(lambda ()
-                                   (interactive)
-                                   (lisp-eval-string (buffer-string))))
-                   (define-key clojure-mode-map 
-                     "\C-c\C-z" 'run-lisp)))
-      
       (define-clojure-indent (from-blackboard 'defun))
     #+end_src
 
@@ -1966,8 +1978,7 @@
       
       (defun org-babel-execute:clojure (body params)
         "Execute a block of Clojure code with Babel."
-        (lisp-eval-string body)
-        "Done!")
+        (nrepl-interactive-eval body))
       
       (provide 'ob-clojure)
     #+end_src
