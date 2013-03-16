@@ -1797,7 +1797,8 @@
                                (mode . emacs-lisp-mode)
                                (mode . c++-mode)))
                     ("Terminal" (or (mode . term-mode)
-                                    (mode . inferior-lisp-mode)))
+                                    (mode . inferior-lisp-mode)
+                                    (name . "^*nrepl.*")))
                     ("Dired" (or (mode . dired-mode) 
                                  (mode . sr-mode)))
                     ("Gnus" (or
