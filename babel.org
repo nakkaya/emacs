@@ -1753,9 +1753,13 @@
     #+end_src
 
     #+begin_src emacs-lisp
+      (defun na-page-title (link)
+        (let ((title (nth 1 (split-string link "\]\\["))))
+          (substring title 0 (- (length title) 2))))
+      
       (setq org-capture-templates
             '(("l" "Link" entry (file+olp "~/Dropbox/org/gtd.org" "Read Later")
-               "* %a\n %?\n %i")
+               "* %(na-page-title (current-kill 0))\n %i \n %a %?\n")
               ))
     #+end_src
 
