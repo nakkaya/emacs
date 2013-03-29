@@ -244,6 +244,7 @@
      (global-set-key "\C-xgs" 'na-run-git-switch)
      (global-set-key "\C-xgg" 'na-gnus-switch)
      (global-set-key "\C-xrl" 'na-run-lisp)
+     (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
@@ -1936,9 +1937,7 @@
         (setq lein-path "/cygdrive/c/Dropbox/bash/")))
       
       (setq lisp-programs 
-            (list (list "clojure" (concat lein-path "lein trampoline run -m clojure.main/main"))
-                  (list "nrepl" (concat lein-path "lein repl"))
-                  (list "sbcl" "/opt/local/bin/sbcl")
+            (list (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
       (defun na-run-lisp (arg)
@@ -1990,6 +1989,20 @@
 
     #+begin_src emacs-lisp
       (add-to-list 'auto-mode-alist '("[.]cljs$" . clojure-mode))
+    #+end_src
+
+    Eval in S-expr
+
+    #+begin_src emacs-lisp 
+      (add-hook 'clojure-mode-hook
+                '(lambda ()
+                   (define-key clojure-mode-map 
+                     "\C-c\C-c" '(lambda ()
+                                   (interactive)
+                                   (let ((curr (point)))
+                                     (end-of-defun)
+                                     (nrepl-eval-last-expression)
+                                     (goto-char curr))))))
     #+end_src
 
     Custom indent,
