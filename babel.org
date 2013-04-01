@@ -490,6 +490,44 @@
      (add-hook 'c-mode-hook 'na-highlight-mathing-paren)   
    #+end_src
 
+   Indent selected region with different mode than the buffer uses,
+
+   #+begin_src emacs-lisp
+     (defvar na-indent-region-prev "")
+     
+     (defun na-indent-region (start end)
+       (interactive "r")
+       (let ((col (save-excursion (goto-char (region-beginning))
+                       (current-column))))
+         (kill-region start end)
+         (insert
+          (with-temp-buffer
+            (let ((mode (completing-read 
+                         "Mode: "
+                         (mapcar (lambda (e) 
+                                   (list (symbol-name e)))
+                                 (apropos-internal "-mode$" 'commandp))
+                         nil t na-indent-region-prev)))
+              (setq na-indent-region-prev mode)
+              (funcall (intern mode)))
+            (yank)
+            ;;un escape "
+            (goto-char (point-min))
+            (replace-string "\\\"" "\"")
+            (indent-region (point-min) (point-max) nil)
+            ;;escape "
+            (goto-char (point-min))
+            (replace-string "\"" "\\\"")
+            ;;select all but first line
+            (goto-char (point-min))
+            (forward-line)
+            (push-mark (point))
+            (push-mark (point-max) nil t)
+            ;;shift all text to col
+            (indent-rigidly (region-beginning) (region-end) col)
+            (buffer-string)))))
+   #+end_src
+
 * Modes
 ** C/C++
 
@@ -609,7 +647,7 @@
       (setq org-agenda-window-setup 'other-window)
       (setq org-agenda-restore-windows-after-quit t)
       (setq org-agenda-show-all-dates t)
-      
+      (setq org-deadline-warning-days 150)
     #+end_src
 
     if idle for 5 minutes, display the current agenda.
