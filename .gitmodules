@@ -7,3 +7,6 @@
 [submodule "ext/gitsum"]
 	path = ext/gitsum
 	url = https://github.com/chneukirchen/gitsum.git
+[submodule "ext/expand-region.el"]
+	path = ext/expand-region.el
+	url = https://github.com/magnars/expand-region.el.git

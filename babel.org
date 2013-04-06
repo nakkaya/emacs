@@ -12,6 +12,7 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
   #+end_src
 
   #+begin_src emacs-lisp 
@@ -22,6 +23,7 @@
     (require 'dired)
     (require 'git)
     (require 'gitsum)
+    (require 'expand-region)
   #+end_src
 
 * General
@@ -210,6 +212,8 @@
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f8] 'toggle-truncate-lines)
      (global-set-key [f12] 'na-maximize-frame)
+     
+     (global-set-key (kbd "C-=") 'er/expand-region)
      
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
