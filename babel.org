@@ -415,9 +415,14 @@
         (set-face-background 'diff-header "color-233")
         (set-face-background 'diff-file-header "color-233")
         (set-face-background 'diff-refine-change "color-233")
-        (set-face-background 'modeline "color-24")
-        (set-face-background 'modeline-inactive "brightblack")))
-    
+        (set-face-attribute  'mode-line
+                             nil 
+                             :foreground "black"
+                             :background "brightblack")
+        (set-face-attribute  'mode-line-inactive
+                             nil 
+                             :foreground "black"
+                             :background "color-234")))
   #+end_src
 
   #+begin_src emacs-lisp
