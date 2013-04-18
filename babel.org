@@ -1912,7 +1912,9 @@
                               (name . "^\\*Backtrace\\*$")
                               (name . "^TAGS$")
                               (name . "^\\*Help\\*$")
-                              (name . "^\\*Shell Command Output\\*$")))))))
+                              (name . "^\\*Shell Command Output\\*$")
+                              (name . "^\\*Calculator\\*$")
+                              (name . "^\\*Calc Trail\\*$")))))))
      
      (setq ibuffer-show-empty-filter-groups nil)
      
