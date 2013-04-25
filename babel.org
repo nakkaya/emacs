@@ -172,7 +172,7 @@
    Mouse follows focus,
 
    #+begin_src emacs-lisp
-     (setq mouse-autoselect-window t)
+     ;;(setq mouse-autoselect-window t)
    #+end_src
 
    Mouse setup when running in a terminal,
