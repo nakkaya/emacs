@@ -2010,6 +2010,18 @@
       (setq nrepl-popup-stacktraces nil)
     #+end_src
 
+    #+begin_src emacs-lisp
+      (defun nrepl-create-repl-buffer (process)
+        "Create a repl buffer for PROCESS."
+        (nrepl-init-repl-buffer
+         process
+         (let ((buf (generate-new-buffer-name "*nrepl*")))
+           (window-configuration-to-register 'z)
+           (pop-to-buffer buf)
+           (jump-to-register 'z)
+           buf)))
+    #+end_src
+
     Kill nrepl process before starting a new one,
 
     #+begin_src emacs-lisp
