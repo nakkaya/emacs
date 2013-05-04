@@ -248,7 +248,7 @@
      
      (global-set-key "\C-xgs" 'na-run-git-switch)
      (global-set-key "\C-xgg" 'na-gnus-switch)
-     (global-set-key "\C-xrl" 'na-run-lisp)
+     (global-set-key "\C-xrl" 'nrepl-me)
      (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
      
      (define-key global-map [home] 'beginning-of-line)
@@ -2084,6 +2084,13 @@
       (defun org-babel-execute:clojure (body params)
         "Execute a block of Clojure code with Babel."
         (nrepl-interactive-eval body))
+      
+      (add-hook 'org-src-mode-hook
+                '(lambda ()
+                   (set (make-local-variable 'nrepl-buffer-ns) 
+                        (with-current-buffer 
+                            (overlay-buffer org-edit-src-overlay)
+                          nrepl-buffer-ns))))
       
       (provide 'ob-clojure)
     #+end_src
