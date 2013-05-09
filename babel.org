@@ -2094,6 +2094,8 @@
                           nrepl-buffer-ns))))
       
       (provide 'ob-clojure)
+      
+      (define-key global-map (kbd "C-c M-n") 'nrepl-set-ns)
     #+end_src
 
     Replace, /fn/ with /λ/ and /#/ with /ƒ/.
