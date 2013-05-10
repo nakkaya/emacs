@@ -438,7 +438,24 @@
   #+end_src
 
 ** Misc
-   
+
+   Zoom In/Out
+
+   #+BEGIN_SRC emacs-lisp
+     (defun na-font-big ()
+       (interactive)
+       (set-face-attribute 'default nil :height 
+                           (+ (face-attribute 'default :height) 10)))
+     
+     (defun na-font-small ()
+       (interactive)
+       (set-face-attribute 'default nil :height 
+                           (- (face-attribute 'default :height) 10)))
+     
+     (define-key ctl-x-map [(control ?+)] 'na-font-big)
+     (define-key ctl-x-map [(control ?-)] 'na-font-small)
+   #+END_SRC
+
    Maximize frame.
 
    #+begin_src emacs-lisp
