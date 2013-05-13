@@ -718,7 +718,14 @@
         (interactive)
         (cancel-timer my-org-mobile-sync-timer))
       
-      (my-org-mobile-sync-start)
+      ;;(my-org-mobile-sync-start)
+      
+      (add-hook
+       'org-mode-hook
+       (lambda nil
+         (add-hook 'after-save-hook
+                   (lambda nil (my-org-mobile-sync-pull-and-push))
+                   nil 'local))) ;Only in the current buffer 
     #+end_src
 *** latex
 
