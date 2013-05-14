@@ -700,7 +700,7 @@
     #+begin_src emacs-lisp
       (defvar my-org-mobile-sync-timer nil)
       
-      (defvar my-org-mobile-sync-secs (* 60 5))
+      (defvar my-org-mobile-sync-secs (* 60 30))
       
       (defun my-org-mobile-sync-pull-and-push ()
         (org-mobile-pull)
@@ -718,14 +718,7 @@
         (interactive)
         (cancel-timer my-org-mobile-sync-timer))
       
-      ;;(my-org-mobile-sync-start)
-      
-      (add-hook
-       'org-mode-hook
-       (lambda nil
-         (add-hook 'after-save-hook
-                   (lambda nil (my-org-mobile-sync-pull-and-push))
-                   nil 'local))) ;Only in the current buffer 
+      (my-org-mobile-sync-start)
     #+end_src
 *** latex
 
