@@ -2329,6 +2329,8 @@
        ;; allow for updating mail using 'U' in the main view:
        (setq mu4e-get-mail-command "offlineimap"))
      
+     ;;disable smart tab during compose
+     (add-hook 'mu4e-compose-mode-hook (function (lambda () (smart-tab-mode -1))))
    #+end_src
 
    #+begin_src emacs-lisp
