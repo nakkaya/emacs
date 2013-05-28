@@ -1918,6 +1918,20 @@
      (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
    #+end_src
 
+   Tramp Host Completion
+
+   #+begin_src emacs-lisp
+     (require 'tramp)
+     (setq na-tramp-ssh-completions
+           '((tramp-parse-sconfig "~/.ssh/config")
+             ;;(tramp-parse-shosts "~/.ssh/known_hosts")
+             ))
+     (mapc (lambda (method)
+             (tramp-set-completion-function 
+              method na-tramp-ssh-completions))
+           '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
+   #+end_src
+
 ** IBuffer
 
    #+begin_src emacs-lisp 
