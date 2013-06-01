@@ -14,6 +14,7 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/google-contacts/"))
   #+end_src
 
   #+begin_src emacs-lisp 
@@ -730,6 +731,8 @@
       (setq org-agenda-restore-windows-after-quit t)
       (setq org-agenda-show-all-dates t)
       (setq org-deadline-warning-days 150)
+      (org-toggle-sticky-agenda)
+      (org-agenda nil "h")
     #+end_src
 
     if idle for 5 minutes, display the current agenda.
@@ -1996,6 +1999,7 @@
                               (name . "^\\*Messages\\*$")
                               (name . "^\\*Completions\\*$")
                               (name . "^\\*Warnings\\*$")
+                              (name . "^\\*Org Agenda.*\\*$")
                               (name . "^\\*Org Help\\*$")
                               (name . "^\\*Backtrace\\*$")
                               (name . "^TAGS$")
@@ -2400,6 +2404,7 @@
    #+begin_src emacs-lisp
      (require 'gnus)
      (require 'browse-url)
+     (require 'mm-view)
      ;;
      ;;Gnus
      ;;
@@ -2434,6 +2439,10 @@
      
      ;; No HTML mail
      (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+     (add-to-list 'mm-text-html-renderer-alist
+                  '(vilistextum mm-inline-render-with-file nil
+                    "vilistextum" "-l" "-r" "-c" "-s" file "-"))
+     (setq mm-text-html-renderer 'vilistextum)
      
      ;;threading
      (setq gnus-show-threads t
@@ -2444,6 +2453,12 @@
            gnus-thread-ignore-subject t
            ;;default 4
            gnus-thread-indent-level 2)
+     
+     ;;sort by date
+     (setq gnus-thread-sort-functions
+           '(gnus-thread-sort-by-number
+             (not gnus-thread-sort-by-date)))
+     
      
      (define-key gnus-summary-mode-map [(right)] 'gnus-summary-show-thread)
      (define-key gnus-summary-mode-map [(left)]  'gnus-summary-hide-thread)
@@ -2510,20 +2525,146 @@
        (interactive)
        (gnus-summary-move-article nil "[Gmail]/Trash"))
      
-     (define-key gnus-summary-mode-map [(v)] 'na-gmail-move-trash)
+     (define-key gnus-summary-mode-map [(d)] 'na-gmail-move-trash)
+   #+end_src
+
+   #+begin_src emacs-lisp
+     ;; automatic group re-scan without manual effort.
+     ;; assumes: mail groups, level <= 2; nntp groups, level >= 3.
+     ;; look up arg interpretation for gnus-demon-add-handler.
+     ;; overall meaning: check mail every 5 regardless, and
+     ;; check nntp every 20 iff idle for 20.
+     ;;
+     ;; level-specified group scanner.
+     (defun gnus-demon-scan-mail-or-news-and-update (level)
+       "Scan for new mail, updating the *Group* buffer."
+       (let ((win (current-window-configuration)))
+         (unwind-protect
+             (save-window-excursion
+               (save-excursion
+                 (when (gnus-alive-p)
+                   (save-excursion
+                     (set-buffer gnus-group-buffer)
+                     (gnus-group-get-new-news level)))))
+           (set-window-configuration win))))
+     ;;
+     ;; level 1: mail and local news groups are scanned.
+     (defun gnus-demon-scan-news-and-update ()
+       "Scan for new mail, updating the *Group* buffer."
+       (message (concat (current-time-string) " Checking Mail..."))
+       (gnus-demon-scan-mail-or-news-and-update 1))
      
-     (gnus-demon-add-handler 'gnus-group-get-new-news 1 t)
-     (gnus-demon-add-handler 'gnus-group-save-newsrc 1 t)
+     (defun na-init-demon-handlers ()
+       (gnus-demon-add-handler 'gnus-demon-scan-news-and-update 1 1)
+       (gnus-demon-add-handler 'gnus-group-save-newsrc 2 2))
+     
      (gnus-demon-init)
-     
+   #+end_src
+   
+   #+begin_src emacs-lisp
      (defun na-gnus-switch ()
        "Switch to git buffer or run git-status"
        (interactive)  
        (window-configuration-to-register 'z)
        (if (not (eq (get-buffer "*Group*") nil))
            (switch-to-buffer "*Group*")
-         (gnus)))
+         (progn (gnus)
+                (na-init-demon-handlers))))
    #+end_src
+
+*** Browsing URLs in Gnus Article
+
+    #+begin_src emacs-lisp
+      (defun gnus-article-browse-urls ()
+        "Visit a URL from the `gnus-article-buffer' by prompting via a
+          poping up a buffer showing the list of URLs found with the
+          `gnus-button-url-regexp'."
+        (interactive)
+        (gnus-configure-windows 'article)
+        (gnus-summary-select-article nil nil 'pseudo)
+        (let ((temp-buffer (generate-new-buffer " *Article URLS*"))
+              (urls (gnus-article-get-current-urls))
+              (this-window (selected-window))
+              (browse-window (or (get-buffer-window gnus-article-buffer)
+                                 ))
+              (count 0))
+          (save-excursion
+            (save-window-excursion
+              (set-buffer temp-buffer)
+              (mapcar
+               (lambda (string)
+                 (insert (format "\t%d: %s\n" count string))
+                 (setq count (1+ count))) urls)
+              (not-modified)
+              (pop-to-buffer temp-buffer)
+              (setq count (string-to-number (read-input "Browse which URL: ")))
+              (kill-buffer temp-buffer))
+            (if browse-window
+                (progn (select-window browse-window)
+                       (browse-url (nth count urls)))))
+          (select-window this-window)))
+      
+      (defun gnus-article-get-current-urls ()
+        "Return a list of the urls found in the current `gnus-article-buffer'"
+        (let (url-list)
+          (save-excursion
+            (set-buffer gnus-article-buffer)
+            (setq url-list (gnus-article-get-urls-region (point-min) (point-max))))
+          url-list))
+      
+      (defun gnus-article-get-urls-region (min max)
+        "Return a list of urls found in the region between MIN and MAX"
+        (let (url-list)
+          (save-excursion
+            (save-restriction
+              (narrow-to-region min max)
+              (goto-char (point-min))
+              (while (re-search-forward gnus-button-url-regexp nil t)
+                (let ((match-string (match-string-no-properties 0)))
+                  (if (and (not (equal (substring match-string 0 4) "file"))
+                           (not (member match-string url-list)))
+                      (setq url-list (cons match-string url-list)))))))
+          url-list))
+      
+      (define-key gnus-summary-mode-map [(v)] 'gnus-article-browse-urls)
+    #+end_src
+
+*** Window Configuration
+
+    #+begin_src emacs-lisp
+      (gnus-add-configuration
+       '(article (horizontal 1.0 
+                             (summary 0.50 point)
+                             (article 1.0))))
+      
+      (gnus-add-configuration
+       '(summary (horizontal 1.0 
+                             (summary 0.50 point)
+                             (article 1.0))))
+      
+      (gnus-add-configuration
+       '(reply
+         (horizontal 1.0
+                   (article 0.5)
+                   (message 1.0 point))))
+      
+      (gnus-add-configuration
+       '(group
+         (horizontal 1.0
+                   (group 0.5 point)
+                   ("*Org Agenda(h)*" 1.0))))
+    #+end_src
+
+*** Google Contacts
+
+    #+begin_src emacs-lisp
+      (if (>= emacs-major-version 24)
+          (progn (require 'oauth2)
+                 (require 'google-contacts)
+                 (require 'google-contacts-gnus)
+                 (require 'google-contacts-message)
+                 (add-hook 'message-mode-hook (function (lambda () (smart-tab-mode -1))))))
+    #+end_src
 
 ** ERC
 
