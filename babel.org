@@ -2420,6 +2420,7 @@
      (setq gnus-kill-files-directory "~/.gnus/scores")
      (setq gnus-cache-directory "~/.gnus/cache")
      (setq message-auto-save-directory "~/.gnus")
+     (setq gnus-large-newsgroup 500)
      
      ;; General speedups.
      (setq gnus-check-new-newsgroups nil) 
@@ -2520,12 +2521,6 @@
      
      (remove-hook 'gnus-mark-article-hook 'gnus-summary-mark-read-and-unread-as-read)
      (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
-     
-     (defun na-gmail-move-trash ()
-       (interactive)
-       (gnus-summary-move-article nil "[Gmail]/Trash"))
-     
-     (define-key gnus-summary-mode-map [(d)] 'na-gmail-move-trash)
    #+end_src
 
    #+begin_src emacs-lisp
@@ -2560,7 +2555,33 @@
      
      (gnus-demon-init)
    #+end_src
-   
+
+   #+begin_src emacs-lisp
+     (defun my-setup-hl-line ()
+       (hl-line-mode 1)
+       (setq cursor-type nil) ; Comment this out, if you want the cursor to
+                                             ; stay visible.
+       )
+     
+     (add-hook 'gnus-summary-mode-hook 'my-setup-hl-line)
+     (add-hook 'gnus-group-mode-hook 'my-setup-hl-line)
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (defun na-gmail-move-trash ()
+       (interactive)
+       (gnus-summary-move-article nil "[Gmail]/Trash"))
+     
+     (define-key gnus-summary-mode-map [(d)] 'na-gmail-move-trash)
+     
+     (defun na-mark-all-and-delete ()
+       (interactive)
+       (gnus-uu-mark-all)
+       (na-gmail-move-trash))
+     
+     (define-key gnus-summary-mode-map (kbd "C-d") 'na-mark-all-and-delete)
+   #+end_src
+
    #+begin_src emacs-lisp
      (defun na-gnus-switch ()
        "Switch to git buffer or run git-status"
