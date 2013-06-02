@@ -13,7 +13,6 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/google-contacts/"))
   #+end_src
 
@@ -2357,49 +2356,7 @@
      (add-hook 'c-mode-common-hook hs-common-hook)
    #+end_src
 
-** Gnus & mu4e
-
-   #+begin_src emacs-lisp
-     (when (require 'mu4e nil 'noerror)
-       ;;http://wenshanren.org/?p=111
-       ;;http://www.djcbsoftware.nl/code/mu/mu4e/MSGV-Keybindings.html#MSGV-Keybindings
-     
-       (setq mu4e-mu-binary "/home/nakkaya/Apps/mu/bin/mu")
-     
-       ;; default
-       (setq mu4e-maildir "~/Maildir")
-       (setq mu4e-drafts-folder "/[Gmail].Drafts")
-       (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
-       (setq mu4e-trash-folder  "/[Gmail].Trash")
-     
-       (setq mu4e-headers-skip-duplicates t)
-     
-       ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
-       (setq mu4e-sent-messages-behavior 'delete)
-     
-       ;; setup some handy shortcuts
-       ;; you can quickly switch to your Inbox -- press ``ji''
-       ;; then, when you want archive some messages, move them to
-       ;; the 'All Mail' folder by pressing ``ma''.
-       (setq mu4e-maildir-shortcuts
-             '( ("/INBOX"               . ?i)
-                ("/[Gmail].Sent Mail"   . ?s)
-                ("/[Gmail].Trash"       . ?t)
-                ("/[Gmail].All Mail"    . ?a)
-                ))
-     
-       (setq mu4e-bookmarks
-             '(("flag:unread AND NOT flag:trashed" "Unread messages"      ?u)
-               ("date:today..now"                  "Today's messages"     ?t)
-               ("date:7d..now"                     "Last 7 days"          ?w)
-               ("mime:image/*"                     "Messages with images" ?i)))
-     
-       ;; allow for updating mail using 'U' in the main view:
-       (setq mu4e-get-mail-command "offlineimap"))
-     
-     ;;disable smart tab during compose
-     (add-hook 'mu4e-compose-mode-hook (function (lambda () (smart-tab-mode -1))))
-   #+end_src
+** Gnus
 
    #+begin_src emacs-lisp
      (require 'gnus)
