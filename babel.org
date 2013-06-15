@@ -2399,7 +2399,7 @@
      (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
      (add-to-list 'mm-text-html-renderer-alist
                   '(vilistextum mm-inline-render-with-file nil
-                    "vilistextum" "-l" "-r" "-c" "-s" file "-"))
+                    "/home/nakkaya/Dropbox/bash/wash-html.sh" file))
      (setq mm-text-html-renderer 'vilistextum)
      
      ;;threading
@@ -2545,8 +2545,10 @@
        (interactive)  
        (window-configuration-to-register 'z)
        (if (not (eq (get-buffer "*Group*") nil))
-           (progn (switch-to-buffer "*Group*")
+           (progn (delete-other-windows)
+                  (switch-to-buffer "*Group*")
                   (jump-to-org-agenda)
+                  (org-agenda-redo)
                   (other-window -1))
          (progn (gnus)
                 (na-init-demon-handlers))))
