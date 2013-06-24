@@ -248,7 +248,6 @@
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
      
      (global-set-key "\C-xgs" 'na-run-git-switch)
-     (global-set-key "\C-xgg" 'na-gnus-switch)
      (global-set-key "\C-xrl" 'nrepl-me)
      (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
      
@@ -257,11 +256,6 @@
      
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
      (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
-     
-     (define-key gnus-group-mode-map (kbd "Q")
-       '(lambda ()
-          (interactive)
-          (jump-to-register 'z)))
      
      (define-key git-status-mode-map (kbd "Q")
        '(lambda ()
@@ -2242,11 +2236,15 @@
      
      (defun na-run-git-switch ()
        "Switch to git buffer or run git-status"
-       (interactive)  
-       (window-configuration-to-register 'z)
-       (if (not (eq (get-buffer "*git-status*") nil))
-           (switch-to-buffer "*git-status*")
-         (git-status (read-directory-name "Select Directory: "))))
+       (interactive)
+       (if (string= (buffer-name (current-buffer)) "*git-status*")
+           (jump-to-register 'x)
+         (progn 
+           (window-configuration-to-register 'x)
+           (if (not (eq (get-buffer "*git-status*") nil))
+               (switch-to-buffer "*git-status*")
+             (git-status (read-directory-name 
+                          "Select Directory: "))))))
    #+end_src
 
 ** Haskell
@@ -2532,6 +2530,12 @@
      
      (define-key gnus-summary-mode-map [(d)] 'na-gmail-move-trash)
      
+     (defun na-gmail-archive ()
+       (interactive)
+       (gnus-summary-move-article nil "[Gmail]/All Mail"))
+     
+     (define-key gnus-summary-mode-map [(e)] 'na-gmail-archive)
+     
      (defun na-mark-all-and-delete ()
        (interactive)
        (gnus-uu-mark-all)
@@ -2543,17 +2547,20 @@
    #+begin_src emacs-lisp
      (defun na-gnus-switch ()
        "Switch to git buffer or run git-status"
-       (interactive)  
-       (window-configuration-to-register 'z)
-       (if (not (eq (get-buffer "*Group*") nil))
-           (progn (delete-other-windows)
-                  (split-window-right)
-                  (switch-to-buffer "*Group*")
-                  (jump-to-org-agenda)
-                  (org-agenda-redo)
-                  (other-window -1))
-         (progn (gnus)
-                (na-init-demon-handlers))))
+       (interactive)
+       (if (string= (buffer-name (current-buffer)) "*Group*")
+           (jump-to-register 'y)
+         (progn 
+           (window-configuration-to-register 'y)
+           (if (not (eq (get-buffer "*Group*") nil))
+               (progn (delete-other-windows)
+                      (split-window-right)
+                      (switch-to-buffer "*Group*")
+                      (jump-to-org-agenda)
+                      (org-agenda-redo)
+                      (other-window -1))
+             (progn (gnus)
+                    (na-init-demon-handlers))))))
    #+end_src
 
 *** Browsing URLs in Gnus Article
