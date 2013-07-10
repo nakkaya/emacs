@@ -710,8 +710,9 @@
     #+begin_src emacs-lisp
       (setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
       (setq org-mobile-directory "~/Dropbox/mobile-org")
-      (setq org-mobile-files (quote ("gtd.org")))
+      (setq org-mobile-files (list "~/Dropbox/org/gtd.org"))
       (setq org-agenda-files (list "~/Dropbox/org/gtd.org"))
+      
       
       (setq org-mobile-force-id-on-agenda-items nil)
       (setq org-agenda-custom-commands
@@ -3096,3 +3097,8 @@
        "#+LATEX_HEADER: }" \n >
        >)
    #+end_src
+* After Load
+
+  #+begin_src emacs-lisp
+    (delete-other-windows)
+  #+end_src
