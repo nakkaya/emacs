@@ -2377,7 +2377,7 @@
      (setq gnus-kill-files-directory "~/.gnus/scores")
      (setq gnus-cache-directory "~/.gnus/cache")
      (setq message-auto-save-directory "~/.gnus")
-     (setq gnus-large-newsgroup 500)
+     (setq gnus-large-newsgroup 5000)
      
      ;; General speedups.
      (setq gnus-check-new-newsgroups nil) 
