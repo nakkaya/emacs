@@ -567,6 +567,7 @@
    #+begin_src emacs-lisp
      (require 'dired-details)
      (dired-details-install)
+     (add-hook 'dired-mode-hook 'auto-revert-mode)
    #+end_src
 
    #+begin_src emacs-lisp
@@ -628,7 +629,9 @@
       (setq-default tmtxt/dired-async-rsync-compress-mode nil)
       
       (define-key dired-mode-map (kbd "C-c C-t") 'tmtxt/dired-async-rsync-delete)
-      
+    #+end_src
+
+    #+begin_src emacs-lisp      
       (defun na-dired-async-rsync-ssh (dest)
         (interactive ;; offer dwim target as the suggestion
          (list (expand-file-name (read-file-name "Rsync to:" (dired-dwim-target-directory)))))
@@ -661,6 +664,101 @@
                 (tmtxt/dired-async dired-async-rsync-command "rsync"
                                    'tmtxt/dired-async-rsync-process-handler)
                 )))))
+    #+end_src
+
+*** Git Annex
+
+    #+begin_src emacs-lisp
+      (require 'git-annex)
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (defun na-annex-async-add ()
+        (interactive)
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              dired-async-rsync-command)
+      
+          (setq dired-async-rsync-command "git annex add ")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq dired-async-rsync-command
+                  (concat dired-async-rsync-command (shell-quote-argument file) " ")))
+      
+          (setq dired-async-rsync-command
+                (concat dired-async-rsync-command 
+                        "; git commit -a -m \"Updated\""))
+      
+          (tmtxt/dired-async dired-async-rsync-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (defun na-annex-async-get ()
+        (interactive)
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              dired-async-rsync-command)
+      
+          (setq dired-async-rsync-command "")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq dired-async-rsync-command
+                  (concat dired-async-rsync-command 
+                          "git annex get " 
+                          (file-name-nondirectory (shell-quote-argument file)) ";")))
+      
+          (tmtxt/dired-async dired-async-rsync-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
+    #+end_src
+
+    #+begin_src emacs-lisp
+      ;; (setq kiler-repo-list (list "/home/nakkaya/Downloads/stg/"
+      ;;                             "/home/nakkaya/Downloads/tmp1/stg/"
+      ;;                             "/home/nakkaya/Downloads/tmp2/stg/"))
+      
+      (setq kiler-repo-list (list "/media/nakkaya/ozge/kiler/"
+                                  "/media/nakkaya/esra/kiler/"
+                                  "/media/nakkaya/damla/kiler/"
+                                  "/media/nakkaya/sedef/kiler/"))
+      
+      (defun na-annex-find-file (path file)
+        (shell-command-to-string (concat "cd " path 
+                                         ";git annex find *" file " --format='${file}'")))
+      (defun na-annex-open ()
+        (interactive)
+        (let* ((file (file-name-nondirectory (dired-get-filename)))
+               (locations (remove-if-not (lambda (x) (not (string= "" x))) 
+                                         (mapcar (lambda (path)
+                                                   (let ((loc (na-annex-find-file path file)))
+                                                     (if (string= "" loc)
+                                                         ""
+                                                       (concat path loc))))
+                                                 kiler-repo-list)))
+              (process-connection-type nil))
+          (start-process "" nil na-dired-external-viewer (car locations))))
+      
+      (defun na-annex-sync ()
+        (interactive)
+        (tmtxt/dired-async (mapconcat 'identity
+                                      (mapcar (lambda (path)
+                                                (concat "cd " path ";git annex sync"))
+                                              kiler-repo-list)
+                                      ";")
+                           "git-annex"
+                           'tmtxt/dired-async-rsync-process-handler))
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (defvar git-annex-async-dired-map
+        (let ((map (make-keymap)))
+          (define-key map "a" 'na-annex-async-add)
+          (define-key map "g" 'na-annex-async-get)
+          (define-key map "s" 'na-annex-sync)
+          (define-key map (kbd "RET") 'na-annex-open)
+          map)
+        "Git-annex keymap for `dired-mode' buffers.")
+      
+      (add-hook 'dired-mode-hook
+                (lambda () (define-key dired-mode-map "!" git-annex-async-dired-map)))
     #+end_src
 
 ** Org
