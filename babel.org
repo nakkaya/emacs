@@ -2809,6 +2809,7 @@
              (progn (delete-other-windows)
                     (term "/bin/bash")
                     (rename-buffer "cmus")
+                    (term-send-raw-string "cd ~/.cmus/\n")
                     (term-send-raw-string "cmus\n")
                     )))))
    #+end_src
