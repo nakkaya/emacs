@@ -2737,6 +2737,20 @@
                        (browse-url (nth count urls)))))
           (select-window this-window)))
       
+      (defun gnus-article-browse-url-last ()
+        (interactive)
+        (gnus-configure-windows 'article)
+        (gnus-summary-select-article nil nil 'pseudo)
+        (let ((urls (gnus-article-get-current-urls)))
+          (browse-url (car urls))))
+      
+      (defun gnus-article-browse-url-first ()
+        (interactive)
+        (gnus-configure-windows 'article)
+        (gnus-summary-select-article nil nil 'pseudo)
+        (let ((urls (gnus-article-get-current-urls)))
+          (browse-url (car (last urls)))))
+      
       (defun gnus-article-get-current-urls ()
         "Return a list of the urls found in the current `gnus-article-buffer'"
         (let (url-list)
@@ -2760,6 +2774,8 @@
           url-list))
       
       (define-key gnus-summary-mode-map [(v)] 'gnus-article-browse-urls)
+      (define-key gnus-summary-mode-map [(f)] 'gnus-article-browse-url-first)
+      (define-key gnus-summary-mode-map [(l)] 'gnus-article-browse-url-last)
     #+end_src
 
 *** Window Configuration
