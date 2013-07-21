@@ -730,6 +730,27 @@
     #+end_src
 
     #+begin_src emacs-lisp
+      (defun na-annex-whereis ()
+        (interactive)
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              dired-async-rsync-command)
+      
+          (setq dired-async-rsync-command "")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq dired-async-rsync-command
+                  (concat dired-async-rsync-command 
+                          "git annex whereis " 
+                          (file-name-nondirectory (shell-quote-argument file)) ";")))
+          (async-shell-command dired-async-rsync-command "git annex whereis")
+          (other-window 1)
+          (local-set-key (kbd "q") '(lambda () 
+                                      (interactive)
+                                      (kill-this-buffer) 
+                                      (other-window 1)))))
+    #+end_src
+
+    #+begin_src emacs-lisp
       ;; (setq kiler-repo-list (list "/home/nakkaya/Downloads/stg/"
       ;;                             "/home/nakkaya/Downloads/tmp1/stg/"
       ;;                             "/home/nakkaya/Downloads/tmp2/stg/"))
@@ -772,6 +793,7 @@
           (define-key map "a" 'na-annex-async-add)
           (define-key map "g" 'na-annex-async-get)
           (define-key map "s" 'na-annex-sync)
+          (define-key map "w" 'na-annex-whereis)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
