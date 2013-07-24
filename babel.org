@@ -589,6 +589,8 @@
      (define-key dired-mode-map (kbd "?") 'na-dired-get-size)
    #+end_src
 
+   Open file using /xdg-open/,
+
    #+begin_src emacs-lisp
      (defun na-dired-display-external ()
        "Open file at point in an external application."
@@ -691,6 +693,8 @@
       (require 'git-annex)
     #+end_src
 
+    Asynchronous git annex add,
+
     #+begin_src emacs-lisp
       (defun na-annex-async-add ()
         (interactive)
@@ -711,6 +715,8 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
+    Asynchronous git annex get,
+
     #+begin_src emacs-lisp
       (defun na-annex-async-get ()
         (interactive)
@@ -728,6 +734,8 @@
           (tmtxt/dired-async dired-async-rsync-command "git-annex"
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
+
+    Run git annex whereis for marked files,
 
     #+begin_src emacs-lisp
       (defun na-annex-whereis ()
@@ -762,7 +770,7 @@
       
       (defun na-annex-find-file (path file)
         (shell-command-to-string (concat "cd " path 
-                                         ";git annex find *" file " --format='${file}'")))
+                                         ";git annex find \"*" file "\" --format='${file}'")))
       (defun na-annex-open ()
         (interactive)
         (let* ((file (file-name-nondirectory (dired-get-filename)))
@@ -785,6 +793,21 @@
                                       ";")
                            "git-annex"
                            'tmtxt/dired-async-rsync-process-handler))
+      
+      (defun na-annex-status ()
+        (interactive)  
+        (async-shell-command (mapconcat 'identity
+                                        (mapcar (lambda (path)
+                                                  (concat "printf \\\\n\\\\n" path "\\\\n\\\\n;"
+                                                          "cd " path ";git status"))
+                                                kiler-repo-list)
+                                        ";") 
+                             "git annex status")
+        (other-window 1)
+        (local-set-key (kbd "q") '(lambda () 
+                                    (interactive)
+                                    (kill-this-buffer) 
+                                    (other-window 1))))
     #+end_src
 
     #+begin_src emacs-lisp
@@ -2700,7 +2723,8 @@
                       (switch-to-buffer "*Group*")
                       (jump-to-org-agenda)
                       (org-agenda-redo)
-                      (other-window -1))
+                      (other-window -1)
+                      (beginning-of-buffer))
              (progn (gnus)
                     (na-init-demon-handlers))))))
    #+end_src
