@@ -699,19 +699,19 @@
       (defun na-annex-async-add ()
         (interactive)
         (let ((files (dired-get-marked-files nil current-prefix-arg))
-              dired-async-rsync-command)
+              annex-command)
       
-          (setq dired-async-rsync-command "git annex add ")
+          (setq annex-command "git annex add ")
           ;; add all selected file names as arguments to the annex command
           (dolist (file files)
-            (setq dired-async-rsync-command
-                  (concat dired-async-rsync-command (shell-quote-argument file) " ")))
+            (setq annex-command
+                  (concat annex-command (shell-quote-argument file) " ")))
       
-          (setq dired-async-rsync-command
-                (concat dired-async-rsync-command 
+          (setq annex-command
+                (concat annex-command 
                         "; git commit -a -m \"Updated\""))
       
-          (tmtxt/dired-async dired-async-rsync-command "git-annex"
+          (tmtxt/dired-async annex-command "git-annex"
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
@@ -721,17 +721,17 @@
       (defun na-annex-async-get ()
         (interactive)
         (let ((files (dired-get-marked-files nil current-prefix-arg))
-              dired-async-rsync-command)
+              annex-command)
       
-          (setq dired-async-rsync-command "")
+          (setq annex-command "")
           ;; add all selected file names as arguments to the annex command
           (dolist (file files)
-            (setq dired-async-rsync-command
-                  (concat dired-async-rsync-command 
+            (setq annex-command
+                  (concat annex-command 
                           "git annex get " 
                           (file-name-nondirectory (shell-quote-argument file)) ";")))
       
-          (tmtxt/dired-async dired-async-rsync-command "git-annex"
+          (tmtxt/dired-async annex-command "git-annex"
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
@@ -741,16 +741,16 @@
       (defun na-annex-whereis ()
         (interactive)
         (let ((files (dired-get-marked-files nil current-prefix-arg))
-              dired-async-rsync-command)
+              annex-command)
       
-          (setq dired-async-rsync-command "")
+          (setq annex-command "")
           ;; add all selected file names as arguments to the annex command
           (dolist (file files)
-            (setq dired-async-rsync-command
-                  (concat dired-async-rsync-command 
+            (setq annex-command
+                  (concat annex-command 
                           "git annex whereis " 
                           (file-name-nondirectory (shell-quote-argument file)) ";")))
-          (async-shell-command dired-async-rsync-command "git annex whereis")
+          (async-shell-command annex-command "git annex whereis")
           (other-window 1)
           (local-set-key (kbd "q") '(lambda () 
                                       (interactive)
