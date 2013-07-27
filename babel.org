@@ -2727,6 +2727,12 @@
                       (beginning-of-buffer))
              (progn (gnus)
                     (na-init-demon-handlers))))))
+     
+     (define-key gnus-group-mode-map
+       (kbd "q") (lambda ()
+                   (interactive)
+                   (gnus-group-exit)
+                   (jump-to-register 'y)))
    #+end_src
 
 *** Browsing URLs in Gnus Article
