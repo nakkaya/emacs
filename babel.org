@@ -207,7 +207,7 @@
    #+end_src
 
    #+begin_src emacs-lisp 
-     (global-set-key [f1] 'na-gnus-switch)
+     (global-set-key [f1] 'na-mu-switch)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
@@ -2125,17 +2125,10 @@
                     ("Terminal" (or (mode . term-mode)
                                     (mode . inferior-lisp-mode)
                                     (mode . inferior-python-mode)
-                                    (name . "^*nrepl.*")))
+                                    (name . "^*nrepl.*")
+                                    (name . "^\\*offlineimap\\*$")))
                     ("Dired" (or (mode . dired-mode) 
                                  (mode . sr-mode)))
-                    ("Gnus" (or
-                             (mode . message-mode)
-                             (mode . mail-mode)
-                             (mode . gnus-group-mode)
-                             (mode . gnus-summary-mode)
-                             (mode . gnus-article-mode)
-                             (name . "^\\*offlineimap\\*$")
-                             (name . "^\\.newsrc-dribble")))
                     ("Emacs" (or
                               (name . "^\\*Process List\\*$")
                               (name . "^\\*Dired log\\*$")
@@ -2182,7 +2175,6 @@
                              (mark " "
                                    (name 16 -1)
                                    " " filename)))
-     
    #+end_src
 
 ** EasyPG
@@ -2520,105 +2512,58 @@
      (add-hook 'c-mode-common-hook hs-common-hook)
    #+end_src
 
-** Gnus
+** mu4e
+
+   http://wenshanren.org/?p=111
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path "~/Dropbox/code/emacs/ext/mu4e")
+     (require 'mu4e)
+     
+     (setq mu4e-mu-binary "/home/nakkaya/Apps/mu/bin/mu")
+     
+     ;; default
+     (setq mu4e-maildir "~/Maildir")
+     (setq mu4e-drafts-folder "/[Gmail].Drafts")
+     (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+     (setq mu4e-trash-folder  "/[Gmail].Trash")
+     
+     ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+     (setq mu4e-sent-messages-behavior 'delete)
+     
+     ;; setup some handy shortcuts
+     ;; you can quickly switch to your Inbox -- press ``ji''
+     ;; then, when you want archive some messages, move them to
+     ;; the 'Archived' folder by pressing ``ma''.
+     
+     (setq mu4e-maildir-shortcuts
+           '( ("/INBOX"               . ?i)
+              ("/[Gmail].Sent Mail"   . ?s)
+              ("/[Gmail].Trash"       . ?t)
+              ("/Archived"    . ?a)))
+     
+     ;; allow for updating mail using 'U' in the main view:
+     (setq mu4e-get-mail-command "true")
+     (setq mu4e-update-interval nil)
+     (setq mu4e-html2text-command "/home/nakkaya/Dropbox/bash/wash-html.sh")
+     
+     (add-hook 'message-mode-hook 
+               (function (lambda () (smart-tab-mode -1))))
+     
+     (setq mu4e-compose-complete-only-personal nil)
+   #+end_src
 
    #+begin_src emacs-lisp
-     (require 'gnus)
      (require 'browse-url)
-     (require 'mm-view)
-     ;;
-     ;;Gnus
-     ;;
-     (setq gnus-novice-user nil)
      (setq user-full-name "Nurullah Akkaya")
      (setq user-mail-address "nurullah@nakkaya.com")
-     (setq mail-user-agent 'gnus-user-agent)
-     
-     ;;storage
-     (setq gnus-directory "~/.gnus")
-     (setq message-directory "~/.gnus/mail")
-     (setq gnus-article-save-directory "~/.gnus/saved")
-     (setq gnus-kill-files-directory "~/.gnus/scores")
-     (setq gnus-cache-directory "~/.gnus/cache")
-     (setq message-auto-save-directory "~/.gnus")
-     (setq gnus-large-newsgroup 5000)
-     
-     ;; General speedups.
-     (setq gnus-check-new-newsgroups nil) 
-     (setq gnus-nov-is-evil nil) 
-     (setq gnus-interactive-exit nil)
-     (setq gnus-activate-level 1)
-     (setq gnus-use-cache t)
-     (setq gnus-save-newsrc-file t)
-     (setq message-from-style 'angles) 
-     (setq gnus-summary-line-format "%U%R%z%d %I%(%[%3L: %-10,10n%]%) %s\n")
-     (setq gnus-agent nil)
-     
-     (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-     
-     ;; Inline images?
-     (setq mm-attachment-override-types '("image/.*"))
-     
-     ;; No HTML mail
-     (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
-     (add-to-list 'mm-text-html-renderer-alist
-                  '(vilistextum mm-inline-render-with-file nil
-                    "/home/nakkaya/Dropbox/bash/wash-html.sh" file))
-     (setq mm-text-html-renderer 'vilistextum)
-     
-     ;;threading
-     (setq gnus-show-threads t
-           gnus-thread-hide-subtree t        ;all threads will be hidden
-           gnus-thread-hide-killed t
-           ;; if t, the changed subject in the  middle of a thread is ignored.
-           ;; default nil and the change accepted.
-           gnus-thread-ignore-subject t
-           ;;default 4
-           gnus-thread-indent-level 2)
-     
-     ;;sort by date
-     (setq gnus-thread-sort-functions
-           '(gnus-thread-sort-by-number
-             (not gnus-thread-sort-by-date)))
-     
-     
-     (define-key gnus-summary-mode-map [(right)] 'gnus-summary-show-thread)
-     (define-key gnus-summary-mode-map [(left)]  'gnus-summary-hide-thread)
-     
-     ;; Never show vcard stuff, I never need it anyway
-     (setq gnus-ignored-mime-types '("text/x-vcard"))
-     
-     (setq gnus-posting-styles
-           '((".*" (signature "Nurullah Akkaya\nhttp://nakkaya.com"))))
+     (setq message-signature "Nurullah Akkaya\nhttp://nakkaya.com")
      
      (defun add-mail-headers ()
        (message-add-header
         (concat "X-Homepage: http://nakkaya.com")))
      (add-hook 'message-send-hook 'add-mail-headers)
      
-     (setq gnus-visible-headers 
-           (mapconcat 'regexp-quote
-                      '("From:" "Newsgroups:" "Subject:" "Date:" 
-                        "Organization:" "To:" "Cc:" "Followup-To" 
-                        "Gnus-Warnings:"
-                        "X-Sent:" "X-URL:" "User-Agent:" "X-Newsreader:"
-                        "X-Mailer:" "Reply-To:"
-                        "X-Attachments" "X-Diagnostic")
-                      "\\|"))
-     
-     ;;* Higher Scoring of followups to myself
-     ;;*================================
-     (add-hook 'message-sent-hook 'gnus-score-followup-article)
-     (add-hook 'message-sent-hook 'gnus-score-followup-thread)
-     
-     ;; Configure incoming mail (IMAP)
      (load "tls")
-     (setq gnus-select-method '(nnimap "gmail"
-                                       (nnimap-address "imap.gmail.com")
-                                       (nnimap-server-port 993)
-                                       (nnimap-authinfo-file "~/.authinfo")
-                                       (nnimap-stream ssl)))
-     
      (cond 
       (na-os-is-darwin  (setq na-gnutls-program "/opt/local/bin/gnutls-cli"))
       (na-os-is-linux   (setq na-gnutls-program "/usr/bin/gnutls-cli")))
@@ -2639,145 +2584,58 @@
      (require 'smtpmail)
      (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
      (setq message-kill-buffer-on-exit t)
-     
-     (remove-hook 'gnus-mark-article-hook 'gnus-summary-mark-read-and-unread-as-read)
-     (add-hook 'gnus-mark-article-hook 'gnus-summary-mark-unread-as-read)
    #+end_src
 
    #+begin_src emacs-lisp
-     ;; automatic group re-scan without manual effort.
-     ;; assumes: mail groups, level <= 2; nntp groups, level >= 3.
-     ;; look up arg interpretation for gnus-demon-add-handler.
-     ;; overall meaning: check mail every 5 regardless, and
-     ;; check nntp every 20 iff idle for 20.
-     ;;
-     ;; level-specified group scanner.
-     (defun gnus-demon-scan-mail-or-news-and-update (level)
-       "Scan for new mail, updating the *Group* buffer."
-       (let ((win (current-window-configuration)))
-         (unwind-protect
-             (save-window-excursion
-               (save-excursion
-                 (when (gnus-alive-p)
-                   (save-excursion
-                     (set-buffer gnus-group-buffer)
-                     (gnus-group-get-new-news level)))))
-           (set-window-configuration win))))
-     ;;
-     ;; level 1: mail and local news groups are scanned.
-     (defun gnus-demon-scan-news-and-update ()
-       "Scan for new mail, updating the *Group* buffer."
-       (message (concat (current-time-string) " Checking Mail..."))
-       (gnus-demon-scan-mail-or-news-and-update 1))
+     (require 'offlineimap)
      
-     (defun na-init-demon-handlers ()
-       (gnus-demon-add-handler 'gnus-demon-scan-news-and-update 1 1)
-       (gnus-demon-add-handler 'gnus-group-save-newsrc 2 2))
-     
-     (gnus-demon-init)
-   #+end_src
-
-   #+begin_src emacs-lisp
-     (defun my-setup-hl-line ()
-       (hl-line-mode 1)
-       (setq cursor-type nil) ; Comment this out, if you want the cursor to
-                                             ; stay visible.
-       )
-     
-     (add-hook 'gnus-summary-mode-hook 'my-setup-hl-line)
-     (add-hook 'gnus-group-mode-hook 'my-setup-hl-line)
-   #+end_src
-
-   #+begin_src emacs-lisp
-     (defun na-gmail-move-trash ()
+     (defun na-mu-switch ()
+       "Switch to mu buffer or run mu"
        (interactive)
-       (gnus-summary-move-article nil "[Gmail]/Trash"))
-     
-     (define-key gnus-summary-mode-map [(d)] 'na-gmail-move-trash)
-     
-     (defun na-gmail-archive ()
-       (interactive)
-       (gnus-summary-move-article nil "[Gmail]/All Mail"))
-     
-     (define-key gnus-summary-mode-map [(e)] 'na-gmail-archive)
-     
-     (defun na-mark-all-and-delete ()
-       (interactive)
-       (gnus-uu-mark-all)
-       (na-gmail-move-trash))
-     
-     (define-key gnus-summary-mode-map (kbd "C-d") 'na-mark-all-and-delete)
-   #+end_src
-
-   #+begin_src emacs-lisp
-     (defun na-gnus-switch ()
-       "Switch to git buffer or run git-status"
-       (interactive)
-       (if (string= (buffer-name (current-buffer)) "*Group*")
-           (jump-to-register 'y)
+       (if (string= (buffer-name (current-buffer)) " *mu4e-main*")
+           (progn (mu4e-update-mail-and-index nil)
+                  (jump-to-register 'y))
          (progn 
            (window-configuration-to-register 'y)
-           (if (not (eq (get-buffer "*Group*") nil))
+           (if (not (eq (get-buffer " *mu4e-main*") nil))
                (progn (delete-other-windows)
                       (split-window-right)
-                      (switch-to-buffer "*Group*")
+                      (switch-to-buffer " *mu4e-main*")
                       (jump-to-org-agenda)
                       (org-agenda-redo)
                       (other-window -1)
-                      (beginning-of-buffer))
-             (progn (gnus)
-                    (na-init-demon-handlers))))))
+                      (mu4e-update-mail-and-index nil))
+             (progn (mu4e)
+                    (offlineimap)
+                    (mu4e-update-mail-and-index nil))))))
      
-     (define-key gnus-group-mode-map
-       (kbd "q") (lambda ()
-                   (interactive)
-                   (gnus-group-exit)
-                   (jump-to-register 'y)))
+     (add-hook 'mu4e-headers-mode-hook
+               (defun na-setup-mu-view ()
+                 (delete-other-windows)))
+     
+     (add-hook 'mu4e-main-mode-hook
+               (defun na-setup-mu-main-view ()
+                 (delete-other-windows)
+                 (split-window-right)
+                 (switch-to-buffer " *mu4e-main*")
+                 (jump-to-org-agenda)
+                 (org-agenda-redo)
+                 (other-window -1)
+                 (mu4e-update-mail-and-index nil)))
    #+end_src
 
-*** Browsing URLs in Gnus Article
+*** Browsing URLs in Article
 
     #+begin_src emacs-lisp
-      (defun gnus-article-browse-urls ()
-        "Visit a URL from the `gnus-article-buffer' by prompting via a
-          poping up a buffer showing the list of URLs found with the
-          `gnus-button-url-regexp'."
-        (interactive)
-        (gnus-configure-windows 'article)
-        (gnus-summary-select-article nil nil 'pseudo)
-        (let ((temp-buffer (generate-new-buffer " *Article URLS*"))
-              (urls (gnus-article-get-current-urls))
-              (this-window (selected-window))
-              (browse-window (or (get-buffer-window gnus-article-buffer)
-                                 ))
-              (count 0))
-          (save-excursion
-            (save-window-excursion
-              (set-buffer temp-buffer)
-              (mapcar
-               (lambda (string)
-                 (insert (format "\t%d: %s\n" count string))
-                 (setq count (1+ count))) urls)
-              (not-modified)
-              (pop-to-buffer temp-buffer)
-              (setq count (string-to-number (read-input "Browse which URL: ")))
-              (kill-buffer temp-buffer))
-            (if browse-window
-                (progn (select-window browse-window)
-                       (browse-url (nth count urls)))))
-          (select-window this-window)))
+      (require 'gnus-art)
       
       (defun gnus-article-browse-url-last ()
         (interactive)
-        (gnus-configure-windows 'article)
-        (gnus-summary-select-article nil nil 'pseudo)
         (let ((urls (gnus-article-get-current-urls)))
           (browse-url (car urls))))
       
       (defun gnus-article-browse-url-first ()
         (interactive)
-        (gnus-configure-windows 'article)
-        (gnus-summary-select-article nil nil 'pseudo)
         (let ((urls (gnus-article-get-current-urls)))
           (browse-url (car (last urls)))))
       
@@ -2785,7 +2643,7 @@
         "Return a list of the urls found in the current `gnus-article-buffer'"
         (let (url-list)
           (save-excursion
-            (set-buffer gnus-article-buffer)
+            (set-buffer "*mu4e-view*")
             (setq url-list (gnus-article-get-urls-region (point-min) (point-max))))
           url-list))
       
@@ -2803,46 +2661,8 @@
                       (setq url-list (cons match-string url-list)))))))
           url-list))
       
-      (define-key gnus-summary-mode-map [(v)] 'gnus-article-browse-urls)
-      (define-key gnus-summary-mode-map [(f)] 'gnus-article-browse-url-first)
-      (define-key gnus-summary-mode-map [(l)] 'gnus-article-browse-url-last)
-    #+end_src
-
-*** Window Configuration
-
-    #+begin_src emacs-lisp
-      (gnus-add-configuration
-       '(article (horizontal 1.0 
-                             (summary 0.50 point)
-                             (article 1.0))))
-      
-      (gnus-add-configuration
-       '(summary (horizontal 1.0 
-                             (summary 0.50 point)
-                             (article 1.0))))
-      
-      (gnus-add-configuration
-       '(reply
-         (horizontal 1.0
-                   (article 0.5)
-                   (message 1.0 point))))
-      
-      (gnus-add-configuration
-       '(group
-         (horizontal 1.0
-                   (group 0.5 point)
-                   ("*Org Agenda(h)*" 1.0))))
-    #+end_src
-
-*** Google Contacts
-
-    #+begin_src emacs-lisp
-      (if (>= emacs-major-version 24)
-          (progn (require 'oauth2)
-                 (require 'google-contacts)
-                 (require 'google-contacts-gnus)
-                 (require 'google-contacts-message)
-                 (add-hook 'message-mode-hook (function (lambda () (smart-tab-mode -1))))))
+      (define-key mu4e-view-mode-map [(f)] 'gnus-article-browse-url-first)
+      (define-key mu4e-view-mode-map [(l)] 'gnus-article-browse-url-last)
     #+end_src
 
 ** ERC
