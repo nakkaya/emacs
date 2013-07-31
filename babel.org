@@ -616,9 +616,13 @@
      (defun na-dired-up-directory-after-kill ()
        "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
        (interactive)
-       (let ((buf (current-buffer)))
+       (let* ((buf (current-buffer))
+             (kill-curr (if (= (length (get-buffer-window-list buf)) 
+                               1)
+                            t nil)))
          (dired-up-directory)
-         (kill-buffer buf)))
+         (when kill-curr
+           (kill-buffer buf))))
    #+end_src
 
   Works same as above but goes down in a directory tree.
@@ -629,9 +633,13 @@
        (interactive)
        (let ((file (dired-get-filename))) 
          (if (file-directory-p file) 
-             (let ((buf (current-buffer)))
-               (dired-find-alternate-file)
-               (kill-buffer buf))
+             (let* ((buf (current-buffer))
+                   (kill-curr (if (= (length (get-buffer-window-list buf)) 
+                                     1)
+                                  t nil)))
+               (dired-find-file)
+               (when kill-curr
+                 (kill-buffer buf)))
            (dired-advertised-find-file))))
    #+end_src
 
@@ -650,6 +658,9 @@
       (setq-default tmtxt/dired-async-rsync-compress-mode nil)
       
       (define-key dired-mode-map (kbd "C-c C-t") 'tmtxt/dired-async-rsync-delete)
+      (define-key dired-mode-map (kbd "C-c C-z") 'tmtxt/dired-async-zip)
+      (setq-default tmtxt/dired-async-zip-compression-level "9")
+      (define-key dired-mode-map (kbd "C-c C-u") 'tmtxt/dired-async-unzip)
     #+end_src
 
     #+begin_src emacs-lisp      
