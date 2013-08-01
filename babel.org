@@ -769,6 +769,31 @@
                                       (other-window 1)))))
     #+end_src
 
+    Run git annex move/rename
+
+    #+begin_src emacs-lisp
+      (defun na-annex-rename ()
+        (interactive)
+        (let* ((file (file-name-nondirectory (dired-get-filename)))
+               (to-name (read-directory-name "Rename To: "))
+               annex-command)
+      
+          (setq annex-command (concat "git mv " file " " to-name
+                                      "; git commit -m Moved"))
+          (shell-command annex-command)))
+    #+end_src
+
+    Run git annex delete
+
+    #+begin_src emacs-lisp
+      (defun na-annex-delete ()
+        (interactive)
+        (let* ((file (file-name-nondirectory (dired-get-filename)))
+               annex-command)
+          (setq annex-command (concat "git rm " file "; git commit -m Deleted"))
+          (shell-command annex-command)))
+    #+end_src
+
     #+begin_src emacs-lisp
       ;; (setq kiler-repo-list (list "/home/nakkaya/Downloads/stg/"
       ;;                             "/home/nakkaya/Downloads/tmp1/stg/"
@@ -828,6 +853,8 @@
           (define-key map "g" 'na-annex-async-get)
           (define-key map "s" 'na-annex-sync)
           (define-key map "w" 'na-annex-whereis)
+          (define-key map "r" 'na-annex-rename)
+          (define-key map "d" 'na-annex-delete)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
@@ -2551,6 +2578,19 @@
               ("/[Gmail].Sent Mail"   . ?s)
               ("/[Gmail].Trash"       . ?t)
               ("/Archived"    . ?a)))
+     
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.coding.misc"       "misc"       ?m))
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.security"          "security"   ?s))
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.robotics"          "robotics"   ?o))
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.coding.lisp"       "lisp"       ?l))
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.coding.reddit"     "reddit"     ?r))
+     (add-to-list 'mu4e-bookmarks
+                  '("/feeds.coding.hackernews" "hackernews" ?h))
      
      ;; allow for updating mail using 'U' in the main view:
      (setq mu4e-get-mail-command "true")
