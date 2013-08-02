@@ -774,8 +774,8 @@
     #+begin_src emacs-lisp
       (defun na-annex-rename ()
         (interactive)
-        (let* ((file (file-name-nondirectory (dired-get-filename)))
-               (to-name (read-directory-name "Rename To: "))
+        (let* ((file (shell-quote-argument (file-name-nondirectory (dired-get-filename))))
+               (to-name (shell-quote-argument (read-directory-name "Rename To: ")))
                annex-command)
       
           (setq annex-command (concat "git mv " file " " to-name
@@ -788,22 +788,26 @@
     #+begin_src emacs-lisp
       (defun na-annex-delete ()
         (interactive)
-        (let* ((file (file-name-nondirectory (dired-get-filename)))
+        (let* ((file (shell-quote-argument (file-name-nondirectory (dired-get-filename))))
                annex-command)
           (setq annex-command (concat "git rm " file "; git commit -m Deleted"))
           (shell-command annex-command)))
     #+end_src
 
+    Get a list of remote repos,
+
     #+begin_src emacs-lisp
-      ;; (setq kiler-repo-list (list "/home/nakkaya/Downloads/stg/"
-      ;;                             "/home/nakkaya/Downloads/tmp1/stg/"
-      ;;                             "/home/nakkaya/Downloads/tmp2/stg/"))
-      
-      (setq kiler-repo-list (list "/media/nakkaya/ozge/kiler/"
-                                  "/media/nakkaya/esra/kiler/"
-                                  "/media/nakkaya/damla/kiler/"
-                                  "/media/nakkaya/sedef/kiler/"))
-      
+      (defun na-annex-repo-list ()
+        (interactive)
+        (split-string
+         (replace-regexp-in-string
+          "\n" " "
+          (replace-regexp-in-string
+           "remote.*url " "" 
+           (shell-command-to-string "git config --get-regexp remote.*.url")))))
+    #+end_src
+
+    #+begin_src emacs-lisp
       (defun na-annex-find-file (path file)
         (shell-command-to-string (concat "cd " path 
                                          ";git annex find \"*" file "\" --format='${file}'")))
@@ -816,7 +820,7 @@
                                                      (if (string= "" loc)
                                                          ""
                                                        (concat path loc))))
-                                                 kiler-repo-list)))
+                                                 (na-annex-repo-list))))
               (process-connection-type nil))
           (start-process "" nil na-dired-external-viewer (car locations))))
       
@@ -825,7 +829,7 @@
         (tmtxt/dired-async (mapconcat 'identity
                                       (mapcar (lambda (path)
                                                 (concat "cd " path ";git annex sync"))
-                                              kiler-repo-list)
+                                              (cons default-directory (na-annex-repo-list)))
                                       ";")
                            "git-annex"
                            'tmtxt/dired-async-rsync-process-handler))
@@ -836,7 +840,7 @@
                                         (mapcar (lambda (path)
                                                   (concat "printf \\\\n\\\\n" path "\\\\n\\\\n;"
                                                           "cd " path ";git status"))
-                                                kiler-repo-list)
+                                                (cons default-directory (na-annex-repo-list)))
                                         ";") 
                              "git annex status")
         (other-window 1)
@@ -845,6 +849,8 @@
                                     (kill-this-buffer) 
                                     (other-window 1))))
     #+end_src
+
+    Setup keybindings,
 
     #+begin_src emacs-lisp
       (defvar git-annex-async-dired-map
@@ -855,6 +861,7 @@
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
           (define-key map "d" 'na-annex-delete)
+          (define-key map "?" 'na-annex-status)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
