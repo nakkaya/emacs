@@ -410,12 +410,16 @@
         (set-face-foreground 'font-lock-comment-face "color-30")
         (set-face-foreground 'org-block-begin-line "color-236")
         (set-face-foreground 'org-block-end-line "color-236")
+        (set-face-foreground 'org-todo "color-124")
         (set-face-foreground 'diff-added "brightgreen")
         (set-face-foreground 'diff-removed "brightred")
         (set-face-foreground 'diff-header "color-27")
         (set-face-background 'diff-header "color-233")
         (set-face-background 'diff-file-header "color-233")
         (set-face-background 'diff-refine-change "color-233")
+        (eval-after-load "mu4e" '(progn
+                                   (set-face-background 'mu4e-header-highlight-face "color-239")
+                                   (set-face-foreground 'mu4e-unread-face "color-111")))
         (set-face-attribute  'mode-line
                              nil 
                              :foreground "black"
@@ -829,7 +833,8 @@
         (tmtxt/dired-async (mapconcat 'identity
                                       (mapcar (lambda (path)
                                                 (concat "cd " path ";git annex sync"))
-                                              (cons default-directory (na-annex-repo-list)))
+                                              (cons (shell-quote-argument default-directory) 
+                                                    (na-annex-repo-list)))
                                       ";")
                            "git-annex"
                            'tmtxt/dired-async-rsync-process-handler))
@@ -840,8 +845,9 @@
                                         (mapcar (lambda (path)
                                                   (concat "printf \\\\n\\\\n" path "\\\\n\\\\n;"
                                                           "cd " path ";git status"))
-                                                (cons default-directory (na-annex-repo-list)))
-                                        ";") 
+                                                (cons (shell-quote-argument default-directory) 
+                                                      (na-annex-repo-list)))
+                                        ";")
                              "git annex status")
         (other-window 1)
         (local-set-key (kbd "q") '(lambda () 
