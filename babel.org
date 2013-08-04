@@ -52,7 +52,7 @@
        ;; use extended compound-text coding for X clipboard
        (set-selection-coding-system 'compound-text-with-extensions))
      
-     (setq bookmark-default-file "~/Dropbox/bash/emacs.bookmark")
+     (setq bookmark-default-file "~/source/bash/emacs.bookmark")
      (setq column-number-mode t)
      (setq dired-dwim-target t)
      (setq fill-column 72)
@@ -879,7 +879,7 @@
 ** Org
 
    #+begin_src emacs-lisp
-     (setq org-directory "~/Dropbox/org/")
+     (setq org-directory "~/annex/org/")
      (setq org-return-follows-link t)
      (setq org-hide-leading-stars t)
    #+end_src
@@ -899,7 +899,7 @@
        (interactive)
        (org-export-as-html nil)
        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
-              (out-file (concat "~/Dropbox/public/" file)))
+              (out-file (concat "~/annex/public/" file)))
          (rename-file file out-file t)
          (org-open-file out-file)))
    #+end_src
@@ -913,7 +913,7 @@
        (org-export-as-pdf-and-open nil)
        (delete-file (concat (car (split-string (buffer-name) "\\.")) ".tex"))
        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".pdf"))
-              (out-file (concat "~/Dropbox/public/" file)))
+              (out-file (concat "~/annex/public/" file)))
          (rename-file file out-file t)
          (org-open-file out-file)))
    #+end_src
@@ -921,11 +921,10 @@
 *** agenda
 
     #+begin_src emacs-lisp
-      (setq org-mobile-inbox-for-pull "~/Dropbox/org/from-mobile.org")
-      (setq org-mobile-directory "~/Dropbox/mobile-org")
-      (setq org-mobile-files (list "~/Dropbox/org/gtd.org"))
-      (setq org-agenda-files (list "~/Dropbox/org/gtd.org"))
-      
+      (setq org-mobile-inbox-for-pull "~/annex/org/from-mobile.org")
+      (setq org-mobile-directory "/scpc:nakkaya@5.9.103.70#443:/home/nakkaya/mobile-org")
+      (setq org-mobile-files (list "~/annex/org/gtd.org"))
+      (setq org-agenda-files (list "~/annex/org/gtd.org"))
       
       (setq org-mobile-force-id-on-agenda-items nil)
       (setq org-agenda-custom-commands
@@ -979,7 +978,7 @@
         (interactive)
         (cancel-timer my-org-mobile-sync-timer))
       
-      (my-org-mobile-sync-start)
+      ;;(my-org-mobile-sync-start)
     #+end_src
 *** latex
 
@@ -2672,6 +2671,11 @@
              (progn (mu4e)
                     (offlineimap)
                     (mu4e-update-mail-and-index nil))))))
+     
+     (define-key mu4e-main-mode-map [(C)] (defun na-compose-hook ()
+                                            (interactive)
+                                            (delete-other-windows)
+                                            (mu4e-compose-new)))
      
      (add-hook 'mu4e-headers-mode-hook
                (defun na-setup-mu-view ()
