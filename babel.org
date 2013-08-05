@@ -2607,7 +2607,7 @@
      ;; allow for updating mail using 'U' in the main view:
      (setq mu4e-get-mail-command "true")
      (setq mu4e-update-interval nil)
-     (setq mu4e-html2text-command "/home/nakkaya/Dropbox/bash/wash-html.sh")
+     (setq mu4e-html2text-command "/home/nakkaya/source/bash/wash-html.sh")
      
      (add-hook 'message-mode-hook 
                (function (lambda () (smart-tab-mode -1))))
