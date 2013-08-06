@@ -2677,6 +2677,11 @@
                                             (delete-other-windows)
                                             (mu4e-compose-new)))
      
+     (define-key mu4e-headers-mode-map 
+       [(d)] (defun na-mu4e-mu4e-headers-mark-for-delete ()
+               (interactive)
+               (mu4e-headers-mark-for-delete)))
+     
      (add-hook 'mu4e-headers-mode-hook
                (defun na-setup-mu-view ()
                  (delete-other-windows)))
@@ -2689,7 +2694,8 @@
                  (jump-to-org-agenda)
                  (org-agenda-redo)
                  (other-window -1)
-                 (mu4e-update-mail-and-index nil)))
+                 (mu4e-update-mail-and-index nil)
+                 (beginning-of-buffer)))
    #+end_src
 
 *** Browsing URLs in Article
