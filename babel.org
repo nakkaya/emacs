@@ -2115,7 +2115,7 @@
           (substring title 0 (- (length title) 2))))
       
       (setq org-capture-templates
-            '(("l" "Link" entry (file+olp "~/Dropbox/org/gtd.org" "Read Later")
+            '(("l" "Link" entry (file+olp "~/annex/org/gtd.org" "Read Later")
                "* %(na-page-title (current-kill 0))\n %i \n %a %?\n")
               ))
     #+end_src
