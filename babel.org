@@ -917,6 +917,31 @@
          (rename-file file out-file t)
          (org-open-file out-file)))
    #+end_src
+   
+   Do an incremental search on org headers,
+
+   #+begin_src emacs-lisp
+     (defun na-search-org-headers (&optional arg)
+       (interactive "P")
+       (let ((char (read-char (concat "S: " arg))))
+         (if (= char 13)
+             (progn (pop-to-buffer "*Occur*")
+                    (next-line)
+                    (local-set-key (kbd "<return>") 
+                                   '(lambda () 
+                                      (interactive)
+                                      (occur-mode-goto-occurrence)
+                                      (kill-buffer "*Occur*"))))
+           (if (= char 127)
+               (let ((str (substring arg 0 (- (length arg) 1))))
+                 (occur (concat "^\\*+.*" str ".*"))
+                 (na-search-org-headers str))
+             (let ((str (concat arg (char-to-string char))))
+               (occur (concat "^\\*+.*" str ".*"))
+               (na-search-org-headers str))))))
+     
+     (define-key org-mode-map (kbd "C-c C-v") 'na-search-org-headers)
+   #+end_src
 
 *** agenda
 
