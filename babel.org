@@ -899,7 +899,7 @@
        (interactive)
        (org-export-as-html nil)
        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".html"))
-              (out-file (concat "~/annex/public/" file)))
+              (out-file (concat "~/annex/www/dropbox.nakkaya.com/" file)))
          (rename-file file out-file t)
          (org-open-file out-file)))
    #+end_src
@@ -913,7 +913,7 @@
        (org-export-as-pdf-and-open nil)
        (delete-file (concat (car (split-string (buffer-name) "\\.")) ".tex"))
        (let* ((file (concat (car (split-string (buffer-name) "\\.")) ".pdf"))
-              (out-file (concat "~/annex/public/" file)))
+              (out-file (concat "~/annex/www/dropbox.nakkaya.com/" file)))
          (rename-file file out-file t)
          (org-open-file out-file)))
    #+end_src
