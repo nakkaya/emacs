@@ -208,6 +208,7 @@
 
    #+begin_src emacs-lisp 
      (global-set-key [f1] 'na-mu-switch)
+     (global-set-key [S-f1] 'na-mobile-sync)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
@@ -941,6 +942,15 @@
                (na-search-org-headers str))))))
      
      (define-key org-mode-map (kbd "C-c C-v") 'na-search-org-headers)
+   #+end_src
+
+   Do mobile sync,
+
+   #+begin_src emacs-lisp
+     (defun na-mobile-sync ()
+       (interactive)
+       (org-mobile-pull)
+       (org-mobile-push))
    #+end_src
 
 *** agenda
