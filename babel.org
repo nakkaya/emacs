@@ -967,7 +967,7 @@
       (org-agenda nil "h")
     #+end_src
 
-    if idle for 5 minutes, display the current agenda.
+    Display the current agenda.
 
     #+begin_src emacs-lisp
       (defun jump-to-org-agenda ()
@@ -976,35 +976,8 @@
           (if agenda-window
             (with-selected-window agenda-window (org-agenda-redo))
             (funcall (lambda () (org-agenda nil "h"))))))
-      
-      ;;(run-with-idle-timer 1800 t 'jump-to-org-agenda)
     #+end_src
 
-    Run org-mobile- push/pull every 5 idle minutes,
-
-    #+begin_src emacs-lisp
-      (defvar my-org-mobile-sync-timer nil)
-      
-      (defvar my-org-mobile-sync-secs (* 60 30))
-      
-      (defun my-org-mobile-sync-pull-and-push ()
-        (org-mobile-pull)
-        (org-mobile-push))
-      
-      (defun my-org-mobile-sync-start ()
-        "Start automated `org-mobile-push'"
-        (interactive)
-        (setq my-org-mobile-sync-timer
-              (run-with-idle-timer my-org-mobile-sync-secs t
-                                   'my-org-mobile-sync-pull-and-push)))
-      
-      (defun my-org-mobile-sync-stop ()
-        "Stop automated `org-mobile-push'"
-        (interactive)
-        (cancel-timer my-org-mobile-sync-timer))
-      
-      ;;(my-org-mobile-sync-start)
-    #+end_src
 *** latex
 
     #+BEGIN_SRC emacs-lisp
