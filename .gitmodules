@@ -7,3 +7,6 @@
 [submodule "ext/expand-region.el"]
 	path = ext/expand-region.el
 	url = https://github.com/magnars/expand-region.el.git
+[submodule "ext/god-mode"]
+	path = ext/god-mode
+	url = https://github.com/chrisdone/god-mode.git

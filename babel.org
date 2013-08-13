@@ -14,6 +14,7 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
   #+end_src
 
   #+begin_src emacs-lisp 
@@ -2798,6 +2799,21 @@
      (define-key global-map (kbd "C-M-<down>" ) 'buf-move-down)
      (define-key global-map (kbd "C-M-<right>") 'buf-move-right)
      (define-key global-map (kbd "C-M-<left>" ) 'buf-move-left)
+   #+end_src
+
+** god-mode
+
+   #+begin_src emacs-lisp
+     (require 'god-mode)
+     (global-set-key (kbd "<escape>") 'god-local-mode)
+     
+     (defun na-update-god-mode-cursor ()
+       (setq cursor-type (if (or god-local-mode buffer-read-only)
+                             'bar
+                           'box)))
+     
+     (add-hook 'god-mode-enabled-hook 'na-update-god-mode-cursor)
+     (add-hook 'god-mode-disabled-hook 'na-update-god-mode-cursor)
    #+end_src
 
 * Skeletons
