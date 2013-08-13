@@ -2805,7 +2805,7 @@
 
    #+begin_src emacs-lisp
      (require 'god-mode)
-     (global-set-key (kbd "<escape>") 'god-local-mode)
+     (global-set-key (kbd "M-ESC ESC") 'god-local-mode)
      
      (defun na-update-god-mode-cursor ()
        (setq cursor-type (if (or god-local-mode buffer-read-only)
