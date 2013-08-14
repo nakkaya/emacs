@@ -571,7 +571,7 @@
 ** Dired
 
    #+begin_src emacs-lisp
-     (setq dired-listing-switches "-alh")
+     (setq dired-listing-switches "-aBhl  --group-directories-first")
      (require 'dired-details)
      (dired-details-install)
      (add-hook 'dired-mode-hook 'auto-revert-mode)
