@@ -663,10 +663,42 @@
       (setq-default tmtxt/dired-async-rsync-archive-mode t)
       (setq-default tmtxt/dired-async-rsync-compress-mode nil)
       
-      (define-key dired-mode-map (kbd "C-c C-t") 'tmtxt/dired-async-rsync-delete)
+      (define-key dired-mode-map (kbd "C-c C-t") 'na-dired-async-rsync-move)
       (define-key dired-mode-map (kbd "C-c C-z") 'tmtxt/dired-async-zip)
       (setq-default tmtxt/dired-async-zip-compression-level "9")
       (define-key dired-mode-map (kbd "C-c C-u") 'tmtxt/dired-async-unzip)
+    #+end_src
+
+    Use rsync to move files,
+
+    #+begin_src emacs-lisp      
+      (defun na-dired-async-rsync-move (dest)
+        (interactive ;; offer dwim target as the suggestion
+         (list (expand-file-name (read-file-name "Rsync to:" (dired-dwim-target-directory)))))
+      
+        (let* ((dir-str (dired-dwim-target-directory))
+               (files (dired-get-marked-files nil current-prefix-arg))
+               dired-async-rsync-command)
+          ;; the rsync command
+          (setq dired-async-rsync-command 
+                (concat "rsync -avz --remove-source-files "))
+          ;; append the arguments for rsync command
+          (setq dired-async-rsync-command
+                (concat dired-async-rsync-command
+                        (tmtxt/dired-async-rsync-arguments)))
+          ;; add all selected file names as arguments to the rsync command
+          (dolist (file files)
+            (setq dired-async-rsync-command
+                  (concat dired-async-rsync-command 
+                          (shell-quote-argument file) " ")))
+          ;; append the destination to the rsync command
+          (setq dired-async-rsync-command
+                (concat dired-async-rsync-command 
+                        (shell-quote-argument dir-str)))
+      
+          ;;execute the command asynchronously
+          (tmtxt/dired-async dired-async-rsync-command "rsync"
+                             'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
     #+begin_src emacs-lisp      
@@ -700,8 +732,7 @@
 
                 ;;execute the command asynchronously
                 (tmtxt/dired-async dired-async-rsync-command "rsync"
-                                   'tmtxt/dired-async-rsync-process-handler)
-                )))))
+                                   'tmtxt/dired-async-rsync-process-handler))))))
     #+end_src
 
 *** Git Annex
