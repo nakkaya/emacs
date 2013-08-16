@@ -14,6 +14,7 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
     (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
+    (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
   #+end_src
 
   #+begin_src emacs-lisp 
@@ -208,6 +209,7 @@
 
    #+begin_src emacs-lisp 
      (global-set-key [f1] 'na-mu-switch)
+     (global-set-key [S-f1] 'na-mobile-sync)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
@@ -569,7 +571,7 @@
 ** Dired
 
    #+begin_src emacs-lisp
-     (setq dired-listing-switches "-alh")
+     (setq dired-listing-switches "-aBhl  --group-directories-first")
      (require 'dired-details)
      (dired-details-install)
      (add-hook 'dired-mode-hook 'auto-revert-mode)
@@ -661,10 +663,42 @@
       (setq-default tmtxt/dired-async-rsync-archive-mode t)
       (setq-default tmtxt/dired-async-rsync-compress-mode nil)
       
-      (define-key dired-mode-map (kbd "C-c C-t") 'tmtxt/dired-async-rsync-delete)
+      (define-key dired-mode-map (kbd "C-c C-t") 'na-dired-async-rsync-move)
       (define-key dired-mode-map (kbd "C-c C-z") 'tmtxt/dired-async-zip)
       (setq-default tmtxt/dired-async-zip-compression-level "9")
       (define-key dired-mode-map (kbd "C-c C-u") 'tmtxt/dired-async-unzip)
+    #+end_src
+
+    Use rsync to move files,
+
+    #+begin_src emacs-lisp      
+      (defun na-dired-async-rsync-move (dest)
+        (interactive ;; offer dwim target as the suggestion
+         (list (expand-file-name (read-file-name "Rsync to:" (dired-dwim-target-directory)))))
+      
+        (let* ((dir-str (dired-dwim-target-directory))
+               (files (dired-get-marked-files nil current-prefix-arg))
+               dired-async-rsync-command)
+          ;; the rsync command
+          (setq dired-async-rsync-command 
+                (concat "rsync -avz --remove-source-files "))
+          ;; append the arguments for rsync command
+          (setq dired-async-rsync-command
+                (concat dired-async-rsync-command
+                        (tmtxt/dired-async-rsync-arguments)))
+          ;; add all selected file names as arguments to the rsync command
+          (dolist (file files)
+            (setq dired-async-rsync-command
+                  (concat dired-async-rsync-command 
+                          (shell-quote-argument file) " ")))
+          ;; append the destination to the rsync command
+          (setq dired-async-rsync-command
+                (concat dired-async-rsync-command 
+                        (shell-quote-argument dir-str)))
+      
+          ;;execute the command asynchronously
+          (tmtxt/dired-async dired-async-rsync-command "rsync"
+                             'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
     #+begin_src emacs-lisp      
@@ -698,8 +732,7 @@
 
                 ;;execute the command asynchronously
                 (tmtxt/dired-async dired-async-rsync-command "rsync"
-                                   'tmtxt/dired-async-rsync-process-handler)
-                )))))
+                                   'tmtxt/dired-async-rsync-process-handler))))))
     #+end_src
 
 *** Git Annex
@@ -943,6 +976,15 @@
      (define-key org-mode-map (kbd "C-c C-v") 'na-search-org-headers)
    #+end_src
 
+   Do mobile sync,
+
+   #+begin_src emacs-lisp
+     (defun na-mobile-sync ()
+       (interactive)
+       (org-mobile-pull)
+       (org-mobile-push))
+   #+end_src
+
 *** agenda
 
     #+begin_src emacs-lisp
@@ -967,7 +1009,7 @@
       (org-agenda nil "h")
     #+end_src
 
-    if idle for 5 minutes, display the current agenda.
+    Display the current agenda.
 
     #+begin_src emacs-lisp
       (defun jump-to-org-agenda ()
@@ -976,35 +1018,8 @@
           (if agenda-window
             (with-selected-window agenda-window (org-agenda-redo))
             (funcall (lambda () (org-agenda nil "h"))))))
-      
-      ;;(run-with-idle-timer 1800 t 'jump-to-org-agenda)
     #+end_src
 
-    Run org-mobile- push/pull every 5 idle minutes,
-
-    #+begin_src emacs-lisp
-      (defvar my-org-mobile-sync-timer nil)
-      
-      (defvar my-org-mobile-sync-secs (* 60 30))
-      
-      (defun my-org-mobile-sync-pull-and-push ()
-        (org-mobile-pull)
-        (org-mobile-push))
-      
-      (defun my-org-mobile-sync-start ()
-        "Start automated `org-mobile-push'"
-        (interactive)
-        (setq my-org-mobile-sync-timer
-              (run-with-idle-timer my-org-mobile-sync-secs t
-                                   'my-org-mobile-sync-pull-and-push)))
-      
-      (defun my-org-mobile-sync-stop ()
-        "Stop automated `org-mobile-push'"
-        (interactive)
-        (cancel-timer my-org-mobile-sync-timer))
-      
-      ;;(my-org-mobile-sync-start)
-    #+end_src
 *** latex
 
     #+BEGIN_SRC emacs-lisp
@@ -2604,6 +2619,8 @@
      
      ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
      (setq mu4e-sent-messages-behavior 'delete)
+     ;; don't prompt for applying of marks, just apply. 
+     (setq mu4e-headers-leave-behavior 'apply)
      
      (setq mu4e-headers-visible-lines 4)
      
@@ -2813,6 +2830,21 @@
      (define-key global-map (kbd "C-M-<down>" ) 'buf-move-down)
      (define-key global-map (kbd "C-M-<right>") 'buf-move-right)
      (define-key global-map (kbd "C-M-<left>" ) 'buf-move-left)
+   #+end_src
+
+** god-mode
+
+   #+begin_src emacs-lisp
+     (require 'god-mode)
+     (global-set-key (kbd "M-ESC ESC") 'god-local-mode)
+     
+     (defun na-update-god-mode-cursor ()
+       (setq cursor-type (if (or god-local-mode buffer-read-only)
+                             'bar
+                           'box)))
+     
+     (add-hook 'god-mode-enabled-hook 'na-update-god-mode-cursor)
+     (add-hook 'god-mode-disabled-hook 'na-update-god-mode-cursor)
    #+end_src
 
 * Skeletons
