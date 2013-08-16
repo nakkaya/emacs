@@ -794,7 +794,7 @@
         (interactive)
         (let* ((file (shell-quote-argument (file-name-nondirectory (dired-get-filename))))
                annex-command)
-          (setq annex-command (concat "git rm " file "; git commit -m Deleted"))
+          (setq annex-command (concat "git rm -r " file "; git commit -m Deleted"))
           (shell-command annex-command)))
     #+end_src
 
