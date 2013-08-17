@@ -258,6 +258,7 @@
      
      (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
      (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
+     (define-key dired-mode-map [down-mouse-1] 'na-dired-display-external)
      
      (define-key git-status-mode-map (kbd "Q")
        '(lambda ()
