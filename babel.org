@@ -215,7 +215,8 @@
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f4] 'na-cmus-switch)
      (global-set-key [f8] 'toggle-truncate-lines)
-     (global-set-key [f12] 'na-maximize-frame)
+     (global-set-key [f12] 'na-mr-status)
+     (global-set-key [S-f12] 'na-mr-fast-push)
      
      (global-set-key (kbd "C-=") 'er/expand-region)
      
@@ -872,22 +873,6 @@
                                       ";")
                            "git-annex"
                            'tmtxt/dired-async-rsync-process-handler))
-      
-      (defun na-annex-status ()
-        (interactive)  
-        (async-shell-command (mapconcat 'identity
-                                        (mapcar (lambda (path)
-                                                  (concat "printf \\\\n\\\\n" path "\\\\n\\\\n;"
-                                                          "cd " path ";git status"))
-                                                (cons (shell-quote-argument default-directory) 
-                                                      (na-annex-repo-list)))
-                                        ";")
-                             "git annex status")
-        (other-window 1)
-        (local-set-key (kbd "q") '(lambda () 
-                                    (interactive)
-                                    (kill-this-buffer) 
-                                    (other-window 1))))
     #+end_src
 
     Setup keybindings,
@@ -901,13 +886,77 @@
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
           (define-key map "d" 'na-annex-delete)
-          (define-key map "?" 'na-annex-status)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
       
       (add-hook 'dired-mode-hook
                 (lambda () (define-key dired-mode-map "!" git-annex-async-dired-map)))
+    #+end_src
+
+*** Mr
+
+    Run mr command in directory if in dired buffer or home,
+
+    #+begin_src emacs-lisp
+      (defun na-mr-run-aux (cmd)
+        (interactive)
+      
+        (window-configuration-to-register 'a)
+        (let* ((dired-buffer-p (derived-mode-p 'dired-mode))
+               (buffer-dir (expand-file-name default-directory)))
+          
+          (term "/bin/bash")
+          (rename-buffer (concat "mr-" cmd))
+          (if dired-buffer-p
+              (term-send-raw-string 
+               (concat "cd " (shell-quote-argument buffer-dir) "\n"))
+            (term-send-raw-string "cd ~/\n"))
+          (term-send-raw-string (concat "mr "cmd"\n"))
+          (term-send-raw-string "exit\n")
+          
+          (switch-to-buffer (concat "mr-" cmd))
+          
+          (while (get-buffer-process (concat "mr-" cmd))
+            (sit-for 0.5))
+          
+          (beginning-of-buffer)
+          (let ((beg (point)))
+            (re-search-forward (concat "mr "cmd":"))
+            (beginning-of-line)
+            (let ((end (point)))
+              (delete-region beg end)))
+          
+          (replace-regexp (concat "^mr "cmd":.*\n\n") "")
+          
+          (let ((beg (re-search-forward (concat "mr "cmd":.*\ok\)"))))
+            (end-of-buffer)
+            (let ((end (point)))
+              (delete-region beg end)))
+          (beginning-of-buffer)
+          
+          (local-set-key 
+           (kbd "q") 
+           '(lambda () 
+              (interactive)
+              (kill-this-buffer)
+              (jump-to-register 'a)))))
+    #+end_src
+
+    Run mr status,
+
+    #+begin_src emacs-lisp
+      (defun na-mr-status ()
+        (interactive)
+        (na-mr-run-aux "status"))
+    #+end_src
+
+    Run mr fastPush,
+
+    #+begin_src emacs-lisp
+      (defun na-mr-fast-push ()
+        (interactive)
+        (na-mr-run-aux "fastPush"))
     #+end_src
 
 ** Org
