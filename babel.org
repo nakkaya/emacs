@@ -2526,6 +2526,8 @@
      (setq git-committer-name "Nurullah Akkaya")
      (setq git-committer-email "nurullah@nakkaya.com")
      
+     (setq vc-follow-symlinks t)
+     
      (when (equal system-type 'darwin)
        (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
        (push "/opt/local/bin" exec-path))
