@@ -217,6 +217,7 @@
      (global-set-key [f8] 'toggle-truncate-lines)
      (global-set-key [f12] 'na-mr-status)
      (global-set-key [S-f12] 'na-mr-fast-push)
+     (global-set-key [M-f12] 'na-mr-up)
      
      (global-set-key (kbd "C-=") 'er/expand-region)
      
@@ -949,6 +950,14 @@
       (defun na-mr-status ()
         (interactive)
         (na-mr-run-aux "status"))
+    #+end_src
+
+    Run mr up,
+
+    #+begin_src emacs-lisp
+      (defun na-mr-up ()
+        (interactive)
+        (na-mr-run-aux "up"))
     #+end_src
 
     Run mr fastPush,
