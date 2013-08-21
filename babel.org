@@ -2748,6 +2748,12 @@
    #+begin_src emacs-lisp
      (require 'offlineimap)
      
+     (define-key offlineimap-mode-map [(K)] 
+       (defun na-kill-offlineimap ()
+         (interactive)
+         (shell-command "ps aux | grep offlineimap | grep -v grep | awk \"{ print \$2 }\" | xargs kill -9")
+         (offlineimap)))
+     
      (defun na-mu-switch ()
        "Switch to mu buffer or run mu"
        (interactive)
