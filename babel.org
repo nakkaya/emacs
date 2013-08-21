@@ -2760,7 +2760,7 @@
      (define-key offlineimap-mode-map [(K)] 
        (defun na-kill-offlineimap ()
          (interactive)
-         (shell-command "ps aux | grep offlineimap | grep -v grep | awk \"{ print \$2 }\" | xargs kill -9")
+         (shell-command-to-string "~/source/bash/kill_offlineimap")
          (offlineimap)))
      
      (defun na-mu-switch ()
