@@ -2757,11 +2757,15 @@
    #+begin_src emacs-lisp
      (require 'offlineimap)
      
-     (define-key offlineimap-mode-map [(K)] 
+     (define-key mu4e-main-mode-map [(K)] 
        (defun na-kill-offlineimap ()
          (interactive)
+         (other-window 1)
+         (switch-to-buffer "*OfflineIMAP*")
          (shell-command-to-string "~/source/bash/kill_offlineimap")
-         (offlineimap)))
+         (sit-for 0.5)
+         (offlineimap)
+         (other-window 1)))
      
      (defun na-mu-switch ()
        "Switch to mu buffer or run mu"
