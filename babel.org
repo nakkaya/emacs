@@ -760,7 +760,7 @@
       
           (setq annex-command
                 (concat annex-command 
-                        "; git commit -a -m \"Updated\""))
+                        "; git commit -m \"Updated\""))
       
           (tmtxt/dired-async annex-command "git-annex"
                              'tmtxt/dired-async-rsync-process-handler)))
