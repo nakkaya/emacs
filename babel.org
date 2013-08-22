@@ -903,6 +903,9 @@
       (defun na-mr-run-aux (cmd)
         (interactive)
       
+        (if (not (eq nil (get-buffer (concat "mr-" cmd))))
+            (kill-buffer (concat "mr-" cmd)))
+      
         (window-configuration-to-register 'a)
         (let* ((dired-buffer-p (derived-mode-p 'dired-mode))
                (buffer-dir (expand-file-name default-directory)))
