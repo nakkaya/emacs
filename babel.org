@@ -2774,8 +2774,7 @@
        "Switch to mu buffer or run mu"
        (interactive)
        (if (string= (buffer-name (current-buffer)) " *mu4e-main*")
-           (progn (mu4e-update-mail-and-index nil)
-                  (jump-to-register 'y))
+           (jump-to-register 'y)
          (progn 
            (window-configuration-to-register 'y)
            (if (not (eq (get-buffer " *mu4e-main*") nil))
