@@ -2677,9 +2677,9 @@
      
      ;; default
      (setq mu4e-maildir "~/Maildir")
-     (setq mu4e-drafts-folder "/[Gmail].Drafts")
-     (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
-     (setq mu4e-trash-folder  "/[Gmail].Trash")
+     (setq mu4e-drafts-folder "/mu.Drafts")
+     (setq mu4e-sent-folder   "/mu.Sent Mail")
+     (setq mu4e-trash-folder  "/mu.Trash")
      
      ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
      (setq mu4e-sent-messages-behavior 'delete)
@@ -2695,8 +2695,6 @@
      
      (setq mu4e-maildir-shortcuts
            '( ("/INBOX"               . ?i)
-              ("/[Gmail].Sent Mail"   . ?s)
-              ("/[Gmail].Trash"       . ?t)
               ("/Archived"    . ?a)))
      
      (add-to-list 'mu4e-bookmarks
@@ -2774,7 +2772,8 @@
        "Switch to mu buffer or run mu"
        (interactive)
        (if (string= (buffer-name (current-buffer)) " *mu4e-main*")
-           (jump-to-register 'y)
+           (progn ;;(mu4e-update-mail-and-index nil)
+                  (jump-to-register 'y))
          (progn 
            (window-configuration-to-register 'y)
            (if (not (eq (get-buffer " *mu4e-main*") nil))
@@ -2799,6 +2798,16 @@
                (interactive)
                (mu4e-headers-mark-for-delete)))
      
+     (defun na-mu4e-mu4e-headers-mark-for-reply ()
+       (interactive)
+       (mu4e-compose-reply))
+     
+     (define-key mu4e-headers-mode-map 
+       [(r)] 'na-mu4e-mu4e-headers-mark-for-reply)
+     
+     (define-key mu4e-view-mode-map [(r)] 
+       'na-mu4e-mu4e-headers-mark-for-reply)
+     
      (add-hook 'mu4e-headers-mode-hook
                (defun na-setup-mu-view ()
                  (delete-other-windows)))
@@ -2811,7 +2820,6 @@
                  (jump-to-org-agenda)
                  (org-agenda-redo)
                  (other-window -1)
-                 (mu4e-update-mail-and-index nil)
                  (beginning-of-buffer)))
    #+end_src
 
