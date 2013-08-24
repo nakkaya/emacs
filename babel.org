@@ -17,17 +17,6 @@
     (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
   #+end_src
 
-  #+begin_src emacs-lisp 
-    (load "clojure-mode.el")
-    (require 'diff-mode)  
-    (require 'org)
-    (require 'htmlize)
-    (require 'dired)
-    (require 'git)
-    (require 'gitsum)
-    (require 'expand-region)
-  #+end_src
-
 * General
 ** Options
 
@@ -171,12 +160,6 @@
      (define-key global-map [wheel-down] 'scroll-window-forward-line)
    #+end_src
 
-   Mouse follows focus,
-
-   #+begin_src emacs-lisp
-     ;;(setq mouse-autoselect-window t)
-   #+end_src
-
    Mouse setup when running in a terminal,
 
    #+begin_src emacs-lisp
@@ -219,8 +202,6 @@
      (global-set-key [S-f12] 'na-mr-fast-push)
      (global-set-key [M-f12] 'na-mr-up)
      
-     (global-set-key (kbd "C-=") 'er/expand-region)
-     
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
@@ -252,32 +233,11 @@
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
      
      (global-set-key "\C-xgs" 'na-run-git-switch)
-     (global-set-key "\C-xrl" 'nrepl-me)
-     (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
      
-     (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
-     (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
-     (define-key dired-mode-map [down-mouse-1] 'na-dired-display-external)
-     
-     (define-key git-status-mode-map (kbd "Q")
-       '(lambda ()
-          (interactive)
-          (jump-to-register 'z)))
-     
-     (define-key git-status-mode-map (kbd "K")
-       '(lambda ()
-          (interactive)
-          (kill-buffer)
-          (jump-to-register 'z)))
-     
      (global-set-key (kbd "C-x t") 'na-new-term) ;; create a new one
-     
-     (add-hook 'clojure-mode-hook
-               '(lambda ()
-                  (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
    #+end_src
 
 ** Session
@@ -392,12 +352,18 @@
           (set-face-foreground 'org-todo "#ff5f00")
           (set-face-foreground 'org-warning "#ff5f00")
           (set-face-foreground 'org-agenda-structure "#00affe")
-          (set-face-foreground 'diff-added "#00ff00")
-          (set-face-foreground 'diff-removed "#ff0000")
-          (set-face-foreground 'diff-header "#005fff")
-          (set-face-background 'diff-header "#121212")
-          (set-face-background 'diff-file-header "#121212")
-          (set-face-background 'diff-refine-change "#121212")
+          
+          (eval-after-load "diff-mode" 
+            '(progn
+               (set-face-foreground 'diff-added "#00ff00")
+               (set-face-foreground 'diff-removed "#ff0000")
+               (set-face-foreground 'diff-header "#005fff")
+               (set-face-background 'diff-header "#060606")
+               (set-face-background 'diff-file-header "#060606")
+               (set-face-background 'diff-file-header "#121212")
+               (set-face-background 'diff-refine-change "#121212")))
+          
+          
           (if (string= system-name "belentepe")
               (progn
                 (set-face-background 'mode-line "#8a0000")
@@ -416,15 +382,20 @@
         (set-face-foreground 'org-block-begin-line "color-236")
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
-        (set-face-foreground 'diff-added "brightgreen")
-        (set-face-foreground 'diff-removed "brightred")
-        (set-face-foreground 'diff-header "color-27")
-        (set-face-background 'diff-header "color-233")
-        (set-face-background 'diff-file-header "color-233")
-        (set-face-background 'diff-refine-change "color-233")
+    
+        (eval-after-load "diff-mode" 
+          '(progn
+             (set-face-foreground 'diff-added "brightgreen")
+             (set-face-foreground 'diff-removed "brightred")
+             (set-face-foreground 'diff-header "color-27")
+             (set-face-background 'diff-header "color-233")
+             (set-face-background 'diff-file-header "color-233")
+             (set-face-background 'diff-refine-change "color-233")))
+    
         (eval-after-load "mu4e" '(progn
                                    (set-face-background 'mu4e-header-highlight-face "color-239")
                                    (set-face-foreground 'mu4e-unread-face "color-111")))
+    
         (set-face-attribute  'mode-line
                              nil 
                              :foreground "black"
@@ -437,13 +408,9 @@
 
   #+begin_src emacs-lisp
     (when window-system
-    
       (variable-pitch-mode -1)
-    
       (when na-os-is-linux
-        (set-default-font "monaco-11")
-        ;;(set-face-attribute 'default nil :height 110)
-        ))
+        (set-default-font "monaco-11")))
   #+end_src
 
 ** Misc
@@ -572,6 +539,10 @@
    #+end_src
 
 ** Dired
+   
+   #+begin_src emacs-lisp
+     (require 'dired)
+   #+end_src
 
    #+begin_src emacs-lisp
      (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -651,6 +622,12 @@
                  (kill-buffer buf)))
            (dired-advertised-find-file))))
    #+end_src
+
+  #+begin_src emacs-lisp
+    (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
+    (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
+    (define-key dired-mode-map [down-mouse-1] 'na-dired-display-external)
+  #+end_src
 
 *** Dired Rsync
 
@@ -972,6 +949,11 @@
     #+end_src
 
 ** Org
+
+   #+begin_src emacs-lisp
+     (require 'org)
+     (require 'htmlize)
+   #+end_src
 
    #+begin_src emacs-lisp
      (setq org-directory "~/source/org/")
@@ -2397,6 +2379,10 @@
 
 *** Clojure
 
+    #+begin_src emacs-lisp
+      (load "clojure-mode.el")
+    #+end_src
+
     Setup nrepl,
 
     #+begin_src emacs-lisp
@@ -2509,6 +2495,14 @@
             (font-lock-add-keywords 'org-mode inline-fn))
     #+end_src
 
+    #+begin_src emacs-lisp
+      (global-set-key "\C-xrl" 'nrepl-me)
+      (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
+      (add-hook 'clojure-mode-hook
+                '(lambda ()
+                   (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
+    #+end_src
+
 *** Scheme
 
     Sub process support for Scheme.
@@ -2534,6 +2528,11 @@
 
 ** Git
 
+   #+begin_src emacs-lisp
+     (require 'git)
+     (require 'gitsum)
+   #+end_src
+
    #+begin_src emacs-lisp 
      (setq git-committer-name "Nurullah Akkaya")
      (setq git-committer-email "nurullah@nakkaya.com")
@@ -2556,6 +2555,17 @@
                (switch-to-buffer "*git-status*")
              (git-status (read-directory-name 
                           "Select Directory: "))))))
+     
+     (define-key git-status-mode-map (kbd "Q")
+       '(lambda ()
+          (interactive)
+          (jump-to-register 'z)))
+     
+     (define-key git-status-mode-map (kbd "K")
+       '(lambda ()
+          (interactive)
+          (kill-buffer)
+          (jump-to-register 'z)))
    #+end_src
 
 ** Haskell
@@ -2926,6 +2936,13 @@
      
      (add-hook 'god-mode-enabled-hook 'na-update-god-mode-cursor)
      (add-hook 'god-mode-disabled-hook 'na-update-god-mode-cursor)
+   #+end_src
+
+** expand-region
+
+   #+begin_src emacs-lisp
+     (require 'expand-region)
+     (global-set-key (kbd "C-=") 'er/expand-region)
    #+end_src
 
 * Skeletons
