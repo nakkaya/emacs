@@ -2683,6 +2683,7 @@
    #+begin_src emacs-lisp
      (add-to-list 'load-path "~/Dropbox/code/emacs/ext/mu4e")
      (require 'mu4e)
+     (require 'org-mu4e)
      
      (setq mu4e-mu-binary "/home/nakkaya/Apps/mu/bin/mu")
      
