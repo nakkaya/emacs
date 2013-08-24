@@ -1,23 +1,24 @@
 #+property: results silent
 
-* Load Path
-  #+begin_src emacs-lisp 
-    (setq dotfiles-dir (file-name-directory
-                        (or load-file-name (buffer-file-name))))
-    
-    (add-to-list 'load-path dotfiles-dir)
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/haskell-mode/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
-    (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
-  #+end_src
-
 * General
+** Load Path
+
+   #+begin_src emacs-lisp 
+     (setq dotfiles-dir (file-name-directory
+                         (or load-file-name (buffer-file-name))))
+     
+     (add-to-list 'load-path dotfiles-dir)
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/haskell-mode/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
+   #+end_src
+
 ** Options
 
    #+begin_src emacs-lisp 
