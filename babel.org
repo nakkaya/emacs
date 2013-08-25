@@ -2557,16 +2557,11 @@
              (git-status (read-directory-name 
                           "Select Directory: "))))))
      
-     (define-key git-status-mode-map (kbd "Q")
-       '(lambda ()
-          (interactive)
-          (jump-to-register 'z)))
-     
      (define-key git-status-mode-map (kbd "K")
        '(lambda ()
           (interactive)
           (kill-buffer)
-          (jump-to-register 'z)))
+          (jump-to-register 'x)))
    #+end_src
 
 ** Haskell
