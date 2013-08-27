@@ -2497,6 +2497,15 @@
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
     #+end_src
 
+*** Common Lisp
+    
+    #+begin_src emacs-lisp
+      (add-hook 'lisp-mode-hook
+                (lambda ()
+                  (set (make-local-variable 'lisp-indent-function)
+                       'common-lisp-indent-function)))
+    #+end_src
+    
 *** Scheme
 
     Sub process support for Scheme.
