@@ -2355,16 +2355,9 @@
     Custom /run-lisp/ that allows you to choose which lisp to run.
 
     #+begin_src emacs-lisp
-      (cond 
-       (na-os-is-darwin
-        (setq lein-path "/Users/nakkaya/Dropbox/bash/"))
-       (na-os-is-linux
-        (setq lein-path "/home/nakkaya/Dropbox/bash/"))
-       (na-os-is-windows
-        (setq lein-path "/cygdrive/c/Dropbox/bash/")))
-      
       (setq lisp-programs 
-            (list (list "sbcl" "/opt/local/bin/sbcl")
+            (list (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
+                  (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
       (defun na-run-lisp (arg)
@@ -2515,8 +2508,6 @@
                      "\e\C-x" 'lisp-eval-defun)
                    (define-key scheme-mode-map 
                      "\C-x\C-e" 'lisp-eval-last-sexp)
-                   (define-key scheme-mode-map 
-                     "\C-c\C-e" 'lisp-eval-last-sexp)
                    (define-key scheme-mode-map 
                      "\C-c\C-r" 'lisp-eval-region)
                    (define-key scheme-mode-map 
