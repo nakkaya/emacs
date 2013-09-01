@@ -878,6 +878,52 @@
     Run mr command in directory if in dired buffer or home,
 
     #+begin_src emacs-lisp
+      (defun na-mr-run-setup-term (cmd buffer-dir)
+        (term "/bin/bash")
+        (rename-buffer (concat "mr-" cmd))
+        (if dired-buffer-p
+            (term-send-raw-string 
+             (concat "cd " (shell-quote-argument buffer-dir) "\n"))
+          (term-send-raw-string "cd ~/\n"))
+        (term-send-raw-string (concat "mr "cmd"\n"))
+        (term-send-raw-string "exit\n")
+        (switch-to-buffer (concat "mr-" cmd))
+        
+        (add-hook 'after-change-functions
+                  `(lambda (b e l)
+                     (na-mr-run-cleanup-when-done ,cmd))
+                  nil
+                  t))
+      
+      (defun na-mr-run-cleanup-when-done (cmd)
+        (when (not (get-buffer-process (concat "mr-" cmd)))
+          (with-current-buffer (concat "mr-" cmd)
+            (beginning-of-buffer)
+            (let ((beg (point)))
+              (re-search-forward (concat "mr "cmd":"))
+              (goto-char (match-beginning 0))
+              (let ((end (point)))
+                (delete-region beg end)))
+            
+            (replace-regexp (concat "^ terminal") "")
+            (replace-regexp (concat "^mr "cmd":.*\n\n") "")
+            
+            (highlight-lines-matching-regexp 
+             (concat "^mr "cmd":") 'hi-green)
+            
+            (let ((beg (re-search-forward (concat "mr "cmd":.*\ok\)"))))
+              (end-of-buffer)
+              (let ((end (point)))
+                (delete-region beg end)))
+            (beginning-of-buffer)
+      
+            (local-set-key 
+             (kbd "q") 
+             '(lambda () 
+                (interactive)
+                (kill-this-buffer)
+                (jump-to-register 'a))))))
+      
       (defun na-mr-run-aux (cmd)
         (interactive)
       
@@ -887,42 +933,7 @@
         (window-configuration-to-register 'a)
         (let* ((dired-buffer-p (derived-mode-p 'dired-mode))
                (buffer-dir (expand-file-name default-directory)))
-          
-          (term "/bin/bash")
-          (rename-buffer (concat "mr-" cmd))
-          (if dired-buffer-p
-              (term-send-raw-string 
-               (concat "cd " (shell-quote-argument buffer-dir) "\n"))
-            (term-send-raw-string "cd ~/\n"))
-          (term-send-raw-string (concat "mr "cmd"\n"))
-          (term-send-raw-string "exit\n")
-          
-          (switch-to-buffer (concat "mr-" cmd))
-          
-          (while (get-buffer-process (concat "mr-" cmd))
-            (sit-for 0.5))
-          
-          (beginning-of-buffer)
-          (let ((beg (point)))
-            (re-search-forward (concat "mr "cmd":"))
-            (beginning-of-line)
-            (let ((end (point)))
-              (delete-region beg end)))
-          
-          (replace-regexp (concat "^mr "cmd":.*\n\n") "")
-          
-          (let ((beg (re-search-forward (concat "mr "cmd":.*\ok\)"))))
-            (end-of-buffer)
-            (let ((end (point)))
-              (delete-region beg end)))
-          (beginning-of-buffer)
-          
-          (local-set-key 
-           (kbd "q") 
-           '(lambda () 
-              (interactive)
-              (kill-this-buffer)
-              (jump-to-register 'a)))))
+          (na-mr-run-setup-term cmd buffer-dir)))
     #+end_src
 
     Run mr status,
