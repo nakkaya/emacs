@@ -720,6 +720,7 @@
 
     #+begin_src emacs-lisp
       (require 'git-annex)
+      (defvar git-annex-exec "~/Apps/git-annex.linux/git-annex")
     #+end_src
 
     Asynchronous git annex add,
@@ -730,7 +731,7 @@
         (let ((files (dired-get-marked-files nil current-prefix-arg))
               annex-command)
       
-          (setq annex-command "git annex add ")
+          (setq annex-command (concat git-annex-exec " add "))
           ;; add all selected file names as arguments to the annex command
           (dolist (file files)
             (setq annex-command
@@ -757,7 +758,7 @@
           (dolist (file files)
             (setq annex-command
                   (concat annex-command 
-                          "git annex get " 
+                          (concat git-annex-exec " get ")
                           (file-name-nondirectory (shell-quote-argument file)) ";")))
       
           (tmtxt/dired-async annex-command "git-annex"
@@ -777,9 +778,10 @@
           (dolist (file files)
             (setq annex-command
                   (concat annex-command 
-                          "git annex whereis " 
+                          (concat git-annex-exec " whereis ")
+                           
                           (file-name-nondirectory (shell-quote-argument file)) ";")))
-          (async-shell-command annex-command "git annex whereis")
+          (async-shell-command annex-command (concat git-annex-exec " whereis "))
           (other-window 1)
           (local-set-key (kbd "q") '(lambda () 
                                       (interactive)
@@ -833,7 +835,7 @@
     #+begin_src emacs-lisp
       (defun na-annex-find-file (path file)
         (shell-command-to-string (concat "cd " path 
-                                         ";git annex find \"*" file "\" --format='${file}'")))
+                                         ";" git-annex-exec " find \"*" file "\" --format='${file}'")))
       (defun na-annex-open ()
         (interactive)
         (let* ((file (file-name-nondirectory (dired-get-filename)))
@@ -851,7 +853,7 @@
         (interactive)
         (tmtxt/dired-async (mapconcat 'identity
                                       (mapcar (lambda (path)
-                                                (concat "cd " path ";git annex sync"))
+                                                (concat "cd " path ";" git-annex-exec " sync"))
                                               (cons (shell-quote-argument default-directory) 
                                                     (na-annex-repo-list)))
                                       ";")
