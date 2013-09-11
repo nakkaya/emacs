@@ -647,7 +647,7 @@
 
    #+begin_src emacs-lisp
      (setq na-dired-external-viewer "xdg-open")
-
+     
      (defun na-dired-display-external ()
        "Open file at point in an external application."
        (interactive)
@@ -665,6 +665,9 @@
          (if (or (equal file-extension "pdf")
                  (equal file-extension "avi")
                  (equal file-extension "mp4")
+                 (equal file-extension "wmv")
+                 (equal file-extension "jpg")
+                 (equal file-extension "JPG")
                  (equal file-extension "m4v")
                  (equal file-extension "mpg"))
              (na-dired-display-external)
