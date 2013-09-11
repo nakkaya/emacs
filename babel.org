@@ -575,20 +575,6 @@
      (define-key dired-mode-map (kbd "?") 'na-dired-get-size)
    #+end_src
 
-   Open file using /xdg-open/,
-
-   #+begin_src emacs-lisp
-     (defun na-dired-display-external ()
-       "Open file at point in an external application."
-       (interactive)
-       (let ((file (dired-get-filename))
-             (process-connection-type nil))
-         (start-process "" nil na-dired-external-viewer file)))
-     
-     (setq na-dired-external-viewer "xdg-open")
-     (define-key dired-mode-map '[\C-return] 'na-dired-display-external)
-   #+end_src
-
    Don't bug me for each directory.
 
    #+begin_src emacs-lisp
@@ -629,10 +615,38 @@
            (dired-advertised-find-file))))
    #+end_src
 
+   Open file using /xdg-open/,
+
+   #+begin_src emacs-lisp
+     (setq na-dired-external-viewer "xdg-open")
+
+     (defun na-dired-display-external ()
+       "Open file at point in an external application."
+       (interactive)
+       (let ((file (dired-get-filename))
+             (process-connection-type nil))
+         (start-process "" nil na-dired-external-viewer file)))
+     
+     (setq na-dired-external-viewer "xdg-open")
+     (define-key dired-mode-map '[\C-return] 'na-dired-display-external)
+     
+     (defun na-dired-open ()
+       "Open file at point in an external application."
+       (interactive)
+       (let ((file-extension (file-name-extension (dired-get-filename))))
+         (if (or (equal file-extension "pdf")
+                 (equal file-extension "avi")
+                 (equal file-extension "mp4")
+                 (equal file-extension "m4v")
+                 (equal file-extension "mpg"))
+             (na-dired-display-external)
+             (na-dired-down-directory-after-kill))))
+   #+end_src
+
   #+begin_src emacs-lisp
     (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
-    (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
-    (define-key dired-mode-map [down-mouse-1] 'na-dired-display-external)
+    (define-key dired-mode-map [return] 'na-dired-open)
+    (define-key dired-mode-map (kbd "RET") 'na-dired-open)
   #+end_src
 
 *** Dired Rsync
