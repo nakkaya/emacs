@@ -203,6 +203,11 @@
      (global-set-key [S-f12] 'na-mr-fast-push)
      (global-set-key [M-f12] 'na-mr-up)
      
+     (global-set-key "\M-[1;5C" 'forward-word)
+     (global-set-key "\M-[1;5D" 'backward-word)
+     (global-set-key "\M-[1;5A" 'backward-paragraph)
+     (global-set-key "\M-[1;5B" 'forward-paragraph)
+     
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
