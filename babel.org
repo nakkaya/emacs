@@ -201,6 +201,7 @@
      (global-set-key [f8] 'toggle-truncate-lines)
      (global-set-key [f12] 'na-mr-status)
      (global-set-key [S-f12] 'na-mr-fast-push)
+     (global-set-key [C-f2] 'na-mr-fast-push)
      (global-set-key [M-f12] 'na-mr-up)
      
      (global-set-key "\M-[1;5C" 'forward-word)
@@ -2638,6 +2639,10 @@
              (term-char-mode)
              (term-send-raw-string "\C-e"))
          (term-line-mode)))
+     
+     (add-hook 'term-mode-hook
+               '(lambda ()
+                  (define-key term-raw-map [(control y)] 'term-paste)))
    #+end_src
 
 ** jump
