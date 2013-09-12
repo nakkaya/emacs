@@ -668,6 +668,7 @@
                  (equal file-extension "wmv")
                  (equal file-extension "jpg")
                  (equal file-extension "JPG")
+                 (equal file-extension "png")
                  (equal file-extension "m4v")
                  (equal file-extension "mpg"))
              (na-dired-display-external)
