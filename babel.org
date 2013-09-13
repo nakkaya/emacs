@@ -661,18 +661,22 @@
      (defun na-dired-open ()
        "Open file at point in an external application."
        (interactive)
-       (let ((file-extension (file-name-extension (dired-get-filename))))
-         (if (or (equal file-extension "pdf")
-                 (equal file-extension "avi")
-                 (equal file-extension "mp4")
-                 (equal file-extension "wmv")
-                 (equal file-extension "jpg")
-                 (equal file-extension "JPG")
-                 (equal file-extension "png")
-                 (equal file-extension "m4v")
-                 (equal file-extension "mpg"))
-             (na-dired-display-external)
-             (na-dired-down-directory-after-kill))))
+       (let ((file-extension (file-name-extension 
+                              (dired-get-filename))))
+         (if file-extension
+             (if (or (equal (downcase file-extension) "pdf")
+                     (equal (downcase file-extension) "avi")
+                     (equal (downcase file-extension) "mp4")
+                     (equal (downcase file-extension) "wmv")
+                     (equal (downcase file-extension) "mov")
+                     (equal (downcase file-extension) "mkv")
+                     (equal (downcase file-extension) "jpg")
+                     (equal (downcase file-extension) "png")
+                     (equal (downcase file-extension) "m4v")
+                     (equal (downcase file-extension) "mpg"))
+                 (na-dired-display-external)
+               (na-dired-down-directory-after-kill))
+           (na-dired-down-directory-after-kill))))
    #+end_src
 
   #+begin_src emacs-lisp
