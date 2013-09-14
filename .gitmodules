@@ -19,3 +19,12 @@
 [submodule "ext/nrepl.el.git"]
 	path = ext/nrepl.el.git
 	url = https://github.com/clojure-emacs/nrepl.el.git
+[submodule "ext/dash.el.git"]
+	path = ext/dash.el.git
+	url = https://github.com/magnars/dash.el.git
+[submodule "ext/pkg-info.el.git"]
+	path = ext/pkg-info.el.git
+	url = https://github.com/lunaryorn/pkg-info.el.git
+[submodule "ext/s.el.git"]
+	path = ext/s.el.git
+	url = https://github.com/magnars/s.el.git
