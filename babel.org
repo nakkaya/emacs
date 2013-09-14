@@ -235,6 +235,7 @@
      (global-set-key [S-f12] 'na-mr-fast-push)
      (global-set-key [C-f2] 'na-mr-fast-push)
      (global-set-key [M-f12] 'na-mr-up)
+     (global-set-key [f60] 'na-mr-up)
      
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
@@ -919,6 +920,12 @@
       (defun na-mr-run-cleanup-when-done (cmd)
         (when (not (get-buffer-process (concat "mr-" cmd)))
           (with-current-buffer (concat "mr-" cmd)
+            (local-set-key 
+             (kbd "q") 
+             '(lambda () 
+                (interactive)
+                (kill-this-buffer)
+                (jump-to-register 'a)))
             (beginning-of-buffer)
             (let ((beg (point)))
               (re-search-forward (concat "mr "cmd":"))
@@ -936,14 +943,7 @@
               (end-of-buffer)
               (let ((end (point)))
                 (delete-region beg end)))
-            (beginning-of-buffer)
-      
-            (local-set-key 
-             (kbd "q") 
-             '(lambda () 
-                (interactive)
-                (kill-this-buffer)
-                (jump-to-register 'a))))))
+            (beginning-of-buffer))))
       
       (defun na-mr-run-aux (cmd)
         (interactive)
