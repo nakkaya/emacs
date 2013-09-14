@@ -1037,7 +1037,7 @@
          (if (= char 13)
              (progn (pop-to-buffer "*Occur*")
                     (next-line)
-                    (local-set-key (kbd "<return>") 
+                    (local-set-key (kbd "RET") 
                                    '(lambda () 
                                       (interactive)
                                       (occur-mode-goto-occurrence)
