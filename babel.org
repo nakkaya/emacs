@@ -10,13 +10,15 @@
      (add-to-list 'load-path dotfiles-dir)
      (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/haskell-mode/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/git-annex-el.git/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/tmtxt-dired-async.git/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/nrepl.el.git/"))
    #+end_src
 
 ** Options
@@ -308,67 +310,20 @@
   #+begin_src emacs-lisp 
     (setq frame-title-format (list "GNU Emacs " emacs-version))
     
-    (if window-system
-        (progn 
-          (require 'powerline)
-          (powerline-default)
-          (setq-default mode-line-format
-                        '("%e"
-                          (:eval
-                           (let* ((active (eq (frame-selected-window) (selected-window)))
-                                  (face1 (if active 'powerline-active1 'powerline-inactive1))
-                                  (face2 (if active 'powerline-active2 'powerline-inactive2))
-                                  (lhs (list
-                                        (powerline-raw "%*" nil 'l)
-                                        (powerline-buffer-size nil 'l)
-                                        (powerline-buffer-id nil 'l)
-                                        
-                                        (powerline-raw " ")
-                                        (powerline-arrow-right nil face1)
-                                        
-                                        (powerline-major-mode face1 'l)
-                                        (powerline-minor-modes face1 'l)
-                                        (powerline-raw mode-line-process face1 'l)
-                                        
-                                        (powerline-narrow face1 'l)
-                                        
-                                        (powerline-arrow-right face1 face2)
-                                        
-                                        (powerline-vc face2)
-                                        ))
-                                  (rhs (list
-                                        (powerline-raw global-mode-string face2 'r)
-                                        
-                                        (powerline-arrow-left face2 face1)
-                                        
-                                        (powerline-raw "%4l" face1 'r)
-                                        (powerline-raw ":" face1)
-                                        (powerline-raw "%3c" face1 'r)
-                                        
-                                        (powerline-arrow-left face1 nil)
-                                        (powerline-raw " ")
-                                        
-                                        (powerline-raw "%6p" nil 'r)
-                                        
-                                        (powerline-hud face2 face1))))
-                             (concat
-                              (powerline-render lhs)
-                              (powerline-fill face2 (powerline-width rhs))
-                              (powerline-render rhs)))))))
-      (setq-default mode-line-format
-                    '(""
-                      mode-line-modified
-                      (-3 . "%p") ;; position
-                      "[%b]"
-                      "%[("
-                      mode-name
-                      mode-line-process
-                      minor-mode-alist
-                      "%n" ")%]-"
-                      (line-number-mode "L%l-")
-                      (column-number-mode "C%c - ")
-                      "%f"                ;; print file with full path
-                      " %-")))
+    (setq-default mode-line-format
+                  '(""
+                    mode-line-modified
+                    (-3 . "%p") ;; position
+                    "[%b]"
+                    "%[("
+                    mode-name
+                    mode-line-process
+                    minor-mode-alist
+                    "%n" ")%]-"
+                    (line-number-mode "L%l-")
+                    (column-number-mode "C%c - ")
+                    "%f"                ;; print file with full path
+                    " %-"))
   #+end_src
 
   #+begin_src emacs-lisp 
@@ -2322,7 +2277,6 @@
                                (mode . scheme-mode)
                                (mode . python-mode)
                                (mode . ruby-mode)
-                               (mode . haskell-mode)
                                (mode . shell-script-mode)
                                (mode . sh-mode)
                                (mode . c-mode)
@@ -2636,16 +2590,6 @@
           (interactive)
           (kill-buffer)
           (jump-to-register 'x)))
-   #+end_src
-
-** Haskell
-
-   #+begin_src emacs-lisp
-     (load "haskell-site-file")
-     (require 'inf-haskell)
-     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-     (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-     (add-to-list 'auto-mode-alist '("[.]hs$" . haskell-mode))
    #+end_src
 
 ** multi-term

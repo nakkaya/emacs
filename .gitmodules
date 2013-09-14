@@ -10,3 +10,12 @@
 [submodule "ext/god-mode"]
 	path = ext/god-mode
 	url = https://github.com/chrisdone/god-mode.git
+[submodule "ext/git-annex-el.git"]
+	path = ext/git-annex-el.git
+	url = https://github.com/jwiegley/git-annex-el.git
+[submodule "ext/tmtxt-dired-async.git"]
+	path = ext/tmtxt-dired-async.git
+	url = https://github.com/tmtxt/tmtxt-dired-async.git
+[submodule "ext/nrepl.el.git"]
+	path = ext/nrepl.el.git
+	url = https://github.com/clojure-emacs/nrepl.el.git
