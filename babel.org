@@ -850,7 +850,9 @@
     #+begin_src emacs-lisp
       (defun na-annex-find-file (path file)
         (shell-command-to-string (concat "cd " path 
-                                         ";" git-annex-exec " find \"*" file "\" --format='${file}'")))
+                                         ";" git-annex-exec " find \"*" 
+                                         (shell-quote-argument file)
+                                         "\" --format='${file}'")))
       (defun na-annex-open ()
         (interactive)
         (let* ((file (file-name-nondirectory (dired-get-filename)))
@@ -861,19 +863,8 @@
                                                          ""
                                                        (concat path loc))))
                                                  (na-annex-repo-list))))
-              (process-connection-type nil))
+               (process-connection-type nil))
           (start-process "" nil na-dired-external-viewer (car locations))))
-      
-      (defun na-annex-sync ()
-        (interactive)
-        (tmtxt/dired-async (mapconcat 'identity
-                                      (mapcar (lambda (path)
-                                                (concat "cd " path ";" git-annex-exec " sync"))
-                                              (cons (shell-quote-argument default-directory) 
-                                                    (na-annex-repo-list)))
-                                      ";")
-                           "git-annex"
-                           'tmtxt/dired-async-rsync-process-handler))
     #+end_src
 
     Setup keybindings,
