@@ -2404,6 +2404,11 @@
     #+begin_src emacs-lisp
       (require 'nrepl)
       (setq nrepl-popup-stacktraces nil)
+      
+      (add-hook 'nrepl-interaction-mode-hook
+        'nrepl-turn-on-eldoc-mode)
+
+      (add-hook 'nrepl-mode-hook 'subword-mode)
     #+end_src
 
     #+begin_src emacs-lisp
