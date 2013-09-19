@@ -980,7 +980,7 @@
    #+end_src
 
    #+begin_src emacs-lisp
-     (setq org-directory "~/source/org/")
+     (setq org-directory "~/source/notes/")
      (setq org-return-follows-link t)
      (setq org-hide-leading-stars t)
    #+end_src
@@ -1056,10 +1056,10 @@
 *** agenda
 
     #+begin_src emacs-lisp
-      (setq org-mobile-inbox-for-pull "~/source/org/from-mobile.org")
+      (setq org-mobile-inbox-for-pull "~/source/notes/from-mobile.org")
       (setq org-mobile-directory "/scpc:nakkaya@5.9.103.70#443:/home/nakkaya/mobile-org")
-      (setq org-mobile-files (list "~/source/org/gtd.org"))
-      (setq org-agenda-files (list "~/source/org/gtd.org"))
+      (setq org-mobile-files (list "~/source/notes/gtd.org"))
+      (setq org-agenda-files (list "~/source/notes/gtd.org"))
       
       (setq org-mobile-force-id-on-agenda-items nil)
       (setq org-agenda-custom-commands
@@ -1098,7 +1098,7 @@
       (setq-default TeX-master t)
       (setq reftex-default-bibliography
             (quote
-             ("~/Dropbox/org/default.bib")))
+             ("~/default.bib")))
       
       (defun na-org-mode-reftex-setup ()
         (interactive)
@@ -2223,7 +2223,7 @@
           (substring title 0 (- (length title) 2))))
       
       (setq org-capture-templates
-            '(("l" "Link" entry (file+olp "~/source/org/gtd.org" "Read Later")
+            '(("l" "Link" entry (file+olp "~/source/notes/gtd.org" "Read Later")
                "* %(na-page-title (current-kill 0))\n %i \n %a %?\n")
               ))
     #+end_src
