@@ -1053,6 +1053,14 @@
        (org-mobile-push))
    #+end_src
 
+   #+BEGIN_SRC sh :tangle ~/.org-mobile-sync.sh
+     #!/bin/bash
+     
+     # @hourly sh /home/nakkaya/.org-mobile-sync.sh >/dev/null 2>&1
+     
+     emacsclient --batch --load ~/.emacs --eval "(org-mobile-pull)" --eval "(org-mobile-push)"
+   #+END_SRC
+
 *** agenda
 
     #+begin_src emacs-lisp
@@ -1091,14 +1099,28 @@
 *** latex
 
     #+BEGIN_SRC emacs-lisp
-      (setq org-latex-to-pdf-process '("~/Dropbox/bash/org2pdf.sh %b"))
+      (setq org-latex-to-pdf-process '("~/.org2pdf.sh %b"))
+    #+END_SRC
+
+    #+BEGIN_SRC sh :tangle ~/.org2pdf.sh
+      #!/bin/sh -f
+      # first argument should be base latex file name
+      F=$1
+      echo 'Using ' $F
+      echo '--------------------------------- running pdflatex first'
+      pdflatex -interaction=batchmode $F
+      echo '--------------------------------- running bibtex next'
+      bibtex $(basename $F)
+      echo '--------------------------------- running pdflatex again (and again)'
+      pdflatex -interaction=batchmode $F
+      pdflatex -interaction=batchmode $F
     #+END_SRC
 
     #+begin_src emacs-lisp
       (setq-default TeX-master t)
       (setq reftex-default-bibliography
             (quote
-             ("~/default.bib")))
+             ("~/.default.bib")))
       
       (defun na-org-mode-reftex-setup ()
         (interactive)
@@ -2217,6 +2239,21 @@
       (require 'org-protocol)
     #+end_src
 
+    #+BEGIN_SRC conf :tangle ~/.org-protocol.desktop
+      [Desktop Entry]
+      Name=org-protocol
+      Exec=emacsclient %u
+      Type=Application
+      Terminal=false
+      Categories=System;
+      MimeType=x-scheme-handler/org-protocol;
+    #+END_SRC
+
+    #+BEGIN_EXAMPLE
+      ln -s ~/.org-protocol.desktop ~/.local/share/applications/org-protocol.desktop
+      update-desktop-database ~/.local/share/applications/
+    #+END_EXAMPLE
+
     #+begin_src emacs-lisp
       (defun na-page-title (link)
         (let ((title (nth 1 (split-string link "\]\\["))))
@@ -2741,12 +2778,21 @@
      ;; allow for updating mail using 'U' in the main view:
      (setq mu4e-get-mail-command "true")
      (setq mu4e-update-interval nil)
-     (setq mu4e-html2text-command "/home/nakkaya/source/bash/wash-html.sh")
+     (setq mu4e-html2text-command "/home/nakkaya/.wash-html.sh")
      
      (add-hook 'message-mode-hook 
                (function (lambda () (smart-tab-mode -1))))
      
      (setq mu4e-compose-complete-only-personal nil)
+   #+end_src
+
+   #+begin_src sh :tangle ~/.wash-html.sh
+     vilistextum -l -r -c -s -m - -
+     
+     # for gnus
+     # tmp=$(cat $1 | recode HTML_4.0)
+     # echo $tmp > $1
+     # vilistextum -l -r -c -s -m -u $1 -
    #+end_src
 
    #+begin_src emacs-lisp
@@ -2783,6 +2829,39 @@
      (setq message-kill-buffer-on-exit t)
    #+end_src
 
+   #+BEGIN_SRC sh :tangle ~/.kill-offlineimap.sh
+     #!/bin/bash
+     
+     ps aux | grep offlineimap | grep -v grep | awk "{ print \$2 }" | xargs kill -9
+   #+END_SRC
+
+   #+BEGIN_SRC sh :tangle ~/.offlineimaprc
+     [general]
+     accounts = Gmail
+     maxsyncaccounts = 3
+     
+     [Account Gmail]
+     localrepository = Local
+     remoterepository = Remote
+     maxage = 7
+     autorefresh = 5
+     
+     [Repository Local]
+     type = Maildir
+     localfolders = ~/Maildir
+     
+     [Repository Remote]
+     type = Gmail
+     cert_fingerprint=b0ba392bba326e6feb1add4d04fa0fb86cd173fa
+     remotehost = imap.gmail.com
+     remoteuser = user
+     remotepass = pass
+     ssl = yes
+     realdelete = no
+     holdconnectionopen = true
+     idlefolders = ['INBOX']
+   #+END_SRC
+
    #+begin_src emacs-lisp
      (require 'offlineimap)
      
@@ -2791,7 +2870,7 @@
          (interactive)
          (other-window 1)
          (switch-to-buffer "*OfflineIMAP*")
-         (shell-command-to-string "~/source/bash/kill_offlineimap")
+         (shell-command-to-string "~/.kill-offlineimap.sh")
          (sit-for 0.5)
          (offlineimap)
          (other-window 1)))
