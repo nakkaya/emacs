@@ -24,6 +24,30 @@
      (add-to-list 'load-path (concat dotfiles-dir "/ext/s.el.git/"))
    #+end_src
 
+** Load/Install Melpa Packages
+
+   #+begin_src emacs-lisp
+     ; list the packages you want
+     (setq package-list '(magit))
+     
+     ; list the repositories containing them
+     (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+                              ("gnu" . "http://elpa.gnu.org/packages/")
+                              ("marmalade" . "http://marmalade-repo.org/packages/")))
+     
+     ; activate all the packages (in particular autoloads)
+     (package-initialize)
+     
+     ; fetch the list of packages available 
+     (when (not package-archive-contents)
+       (package-refresh-contents))
+     
+     ; install the missing packages
+     (dolist (package package-list)
+       (when (not (package-installed-p package))
+         (package-install package)))
+   #+end_src
+
 ** Options
 
    #+begin_src emacs-lisp 
