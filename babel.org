@@ -72,7 +72,7 @@
        ;; use extended compound-text coding for X clipboard
        (set-selection-coding-system 'compound-text-with-extensions))
      
-     (setq bookmark-default-file "~/source/bash/emacs.bookmark")
+     (setq bookmark-default-file "~/annex/notes/emacs.bookmark")
      (setq column-number-mode t)
      (setq dired-dwim-target t)
      (setq fill-column 72)
