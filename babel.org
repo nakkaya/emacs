@@ -762,6 +762,8 @@
       (defvar git-annex-exec "~/Apps/git-annex.linux/git-annex")
     #+end_src
 
+**** Add
+
     Asynchronous git annex add,
 
     #+begin_src emacs-lisp
@@ -784,6 +786,8 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
+**** Get
+
     Asynchronous git annex get,
 
     #+begin_src emacs-lisp
@@ -804,10 +808,6 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
-    Run git annex whereis for marked files,
-
-    #+begin_src emacs-lisp
-      (defun na-annex-whereis ()
 **** Move
 
     #+begin_src emacs-lisp
@@ -838,6 +838,10 @@
 
 **** Whereis
 
+    Run git annex whereis for marked files,
+
+    #+begin_src emacs-lisp
+      (defun na-annex-whereis ()
         (interactive)
         (let ((files (dired-get-marked-files nil current-prefix-arg))
               annex-command)
@@ -858,6 +862,8 @@
                                       (other-window 1)))))
     #+end_src
 
+**** Rename
+
     Run git annex move/rename
 
     #+begin_src emacs-lisp
@@ -871,6 +877,8 @@
                                       "; git commit -m Moved"))
           (shell-command annex-command)))
     #+end_src
+
+**** Delete
 
     Run git annex delete
 
@@ -887,6 +895,8 @@
                                       (kill-this-buffer) 
                                       (other-window 1)))))
     #+end_src
+
+**** Find File
 
     Get a list of remote repos,
 
@@ -920,6 +930,8 @@
                (process-connection-type nil))
           (start-process "" nil na-dired-external-viewer (car locations))))
     #+end_src
+
+**** Keybindings
 
     Setup keybindings,
 
