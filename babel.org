@@ -296,7 +296,7 @@
                '(lambda ()
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
      
-     (global-set-key "\C-xgs" 'na-run-git-switch)
+     (global-set-key "\C-xgs" 'magit-status)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
