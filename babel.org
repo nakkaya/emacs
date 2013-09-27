@@ -883,17 +883,22 @@
     Run git annex delete
 
     #+begin_src emacs-lisp
-      (defun na-annex-delete ()
-        (interactive)
-        (let* ((file (shell-quote-argument (file-name-nondirectory (dired-get-filename))))
-               annex-command)
-          (setq annex-command (concat "git rm -r " file "; git commit -m Deleted"))
-          (async-shell-command annex-command annex-command)
-          (other-window 1)
-          (local-set-key (kbd "q") '(lambda () 
-                                      (interactive)
-                                      (kill-this-buffer) 
-                                      (other-window 1)))))
+      (defun na-annex-delete (arg)
+        (interactive "P")
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              annex-command)
+      
+          (setq annex-command "git rm -r ")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq annex-command
+                  (concat annex-command 
+                          (file-name-nondirectory (shell-quote-argument file)) " ")))
+      
+          (setq annex-command (concat annex-command "; git commit -m Deleted"))
+          
+          (tmtxt/dired-async annex-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
 **** Find File
