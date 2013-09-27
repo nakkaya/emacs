@@ -945,6 +945,7 @@
         (let ((map (make-keymap)))
           (define-key map "a" 'na-annex-async-add)
           (define-key map "g" 'na-annex-async-get)
+          (define-key map "m" 'na-annex-async-move)
           (define-key map "s" 'na-annex-sync)
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
