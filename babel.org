@@ -1001,7 +1001,7 @@
             (highlight-lines-matching-regexp 
              (concat "^mr "cmd":") 'hi-green)
             
-            (let ((beg (re-search-forward (concat "mr "cmd":.*\ok\)"))))
+            (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
               (end-of-buffer)
               (let ((end (point)))
                 (delete-region beg end)))
