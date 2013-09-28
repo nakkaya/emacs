@@ -829,8 +829,34 @@
                           (file-name-nondirectory (shell-quote-argument file)) " ")))
           
           (setq annex-command
-                (concat annex-command " --to " move-to ";"
-                        git-annex-exec " sync"))
+                (concat annex-command " --to " move-to ";"))
+      
+          (tmtxt/dired-async annex-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
+    #+end_src
+
+**** Copy
+
+    #+begin_src emacs-lisp
+      (defun na-annex-async-copy (arg)
+        (interactive "P")
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              annex-command
+              copy-to)
+      
+          (setq move-to (completing-read 
+                         "Remote: " 
+                         (split-string (shell-command-to-string "git remote") "\n")))
+      
+          (setq annex-command (concat git-annex-exec " copy "))
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq annex-command
+                  (concat annex-command 
+                          (file-name-nondirectory (shell-quote-argument file)) " ")))
+          
+          (setq annex-command
+                (concat annex-command " --to " copy-to ";"))
       
           (tmtxt/dired-async annex-command "git-annex"
                              'tmtxt/dired-async-rsync-process-handler)))
@@ -946,6 +972,7 @@
           (define-key map "a" 'na-annex-async-add)
           (define-key map "g" 'na-annex-async-get)
           (define-key map "m" 'na-annex-async-move)
+          (define-key map "c" 'na-annex-async-copy)
           (define-key map "s" 'na-annex-sync)
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
