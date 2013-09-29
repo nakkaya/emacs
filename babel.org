@@ -9,26 +9,18 @@
      
      (add-to-list 'load-path dotfiles-dir)
      (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/clojure-mode/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/gitsum/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/expand-region.el/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/mu4e/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/god-mode/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/git-annex-el.git/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/tmtxt-dired-async.git/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/nrepl.el.git/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/dash.el.git/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/pkg-info.el.git/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/s.el.git/"))
    #+end_src
 
 ** Load/Install Melpa Packages
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit))
+     (setq package-list '(magit clojure-mode nrepl god-mode expand-region))
      
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -2443,8 +2435,6 @@
                               (name . "^\\*magit.*\\*$")
                               (name . "^\\*git-diff\\*$")
                               (name . "^\\*git-commit\\*$")
-                              (name . "^\\*gitsum\\*$")
-                              (name . "^\\*gitsum-commit\\*$")
                               (name . "^\\*Git Command Output\\*$")
                               (name . "^\\*Org Export/Publishing Help\\*$")
                               (name . "^\\*Org-Babel Error Output\\*$")
@@ -2704,7 +2694,6 @@
 
    #+begin_src emacs-lisp
      (require 'git)
-     (require 'gitsum)
    #+end_src
 
    #+begin_src emacs-lisp 

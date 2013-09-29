@@ -1,30 +1,6 @@
-[submodule "ext/clojure-mode"]
-	path = ext/clojure-mode
-	url = git://github.com/jochu/clojure-mode.git
-[submodule "ext/gitsum"]
-	path = ext/gitsum
-	url = https://github.com/chneukirchen/gitsum.git
-[submodule "ext/expand-region.el"]
-	path = ext/expand-region.el
-	url = https://github.com/magnars/expand-region.el.git
-[submodule "ext/god-mode"]
-	path = ext/god-mode
-	url = https://github.com/chrisdone/god-mode.git
 [submodule "ext/git-annex-el.git"]
 	path = ext/git-annex-el.git
 	url = https://github.com/jwiegley/git-annex-el.git
 [submodule "ext/tmtxt-dired-async.git"]
 	path = ext/tmtxt-dired-async.git
 	url = https://github.com/tmtxt/tmtxt-dired-async.git
-[submodule "ext/nrepl.el.git"]
-	path = ext/nrepl.el.git
-	url = https://github.com/clojure-emacs/nrepl.el.git
-[submodule "ext/dash.el.git"]
-	path = ext/dash.el.git
-	url = https://github.com/magnars/dash.el.git
-[submodule "ext/pkg-info.el.git"]
-	path = ext/pkg-info.el.git
-	url = https://github.com/lunaryorn/pkg-info.el.git
-[submodule "ext/s.el.git"]
-	path = ext/s.el.git
-	url = https://github.com/magnars/s.el.git
