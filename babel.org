@@ -399,6 +399,7 @@
         (set-face-foreground 'org-block-begin-line "color-236")
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
+        (set-face-background 'secondary-selection "black")
     
         (eval-after-load "diff-mode" 
           '(progn
