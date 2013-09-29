@@ -1072,6 +1072,14 @@
         (na-mr-run-aux "fastPush"))
     #+end_src
 
+    Run mr sync,
+
+    #+begin_src emacs-lisp
+      (defun na-mr-sync ()
+        (interactive)
+        (na-mr-run-aux "sync"))
+    #+end_src
+
 ** Org
 
    #+begin_src emacs-lisp
