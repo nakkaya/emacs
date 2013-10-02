@@ -371,11 +371,6 @@
                (set-face-background 'diff-file-header "#060606")
                (set-face-background 'diff-file-header "#121212")
                (set-face-background 'diff-refine-change "#121212")))
-    
-          (eval-after-load "magit" 
-            '(progn
-               (set-face-background 'magit-item-highlight "color-236")))
-          
           
           (if (string= system-name "belentepe")
               (progn
@@ -396,6 +391,10 @@
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
         (set-face-background 'secondary-selection "black")
+    
+        (eval-after-load "magit" 
+          '(progn
+             (set-face-background 'magit-item-highlight "color-236")))
         
         (eval-after-load "diff-mode" 
           '(progn
