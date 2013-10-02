@@ -394,7 +394,8 @@
     
         (eval-after-load "magit" 
           '(progn
-             (set-face-background 'magit-item-highlight "color-236")))
+             (set-face-background 'magit-item-highlight "color-236")
+             (set-face-background 'magit-branch "black")))
         
         (eval-after-load "diff-mode" 
           '(progn
