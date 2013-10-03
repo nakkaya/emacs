@@ -841,7 +841,7 @@
               annex-command
               copy-to)
       
-          (setq move-to (completing-read 
+          (setq copy-to (completing-read 
                          "Remote: " 
                          (split-string (shell-command-to-string "git remote") "\n")))
       
