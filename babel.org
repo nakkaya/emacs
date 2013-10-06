@@ -1073,7 +1073,7 @@
       (defvar na-mr-fast-push-timer)
       
       (setq na-mr-fast-push-timer
-            (run-with-idle-timer 60 t
+            (run-with-idle-timer 600 t
                                  (lambda ()
                                    (na-mr-fast-push "~/"))))
       
