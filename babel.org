@@ -990,10 +990,8 @@
       (defun na-mr-run-setup-term (cmd buffer-dir)
         (term "/bin/bash")
         (rename-buffer (concat "mr-" cmd))
-        (if dired-buffer-p
-            (term-send-raw-string 
-             (concat "cd " (shell-quote-argument buffer-dir) "\n"))
-          (term-send-raw-string "cd ~/\n"))
+        (term-send-raw-string 
+         (concat "cd " (shell-quote-argument buffer-dir) "\n"))
         (term-send-raw-string (concat "mr "cmd"\n"))
         (term-send-raw-string "exit\n")
         (switch-to-buffer (concat "mr-" cmd))
@@ -1032,7 +1030,7 @@
                 (delete-region beg end)))
             (beginning-of-buffer))))
       
-      (defun na-mr-run-aux (cmd)
+      (defun na-mr-run-aux (cmd &optional dir)
         (interactive)
       
         (if (not (eq nil (get-buffer (concat "mr-" cmd))))
@@ -1040,7 +1038,12 @@
       
         (window-configuration-to-register 'a)
         (let* ((dired-buffer-p (derived-mode-p 'dired-mode))
-               (buffer-dir (expand-file-name default-directory)))
+               (buffer-dir (expand-file-name (if dir
+                                                 dir
+                                                 (if dired-buffer-p
+                                                     default-directory
+                                                   "~/")
+                                               ))))
           (na-mr-run-setup-term cmd buffer-dir)))
     #+end_src
 
@@ -1063,9 +1066,18 @@
     Run mr fastPush,
 
     #+begin_src emacs-lisp
-      (defun na-mr-fast-push ()
+      (defun na-mr-fast-push (&optional dir)
         (interactive)
-        (na-mr-run-aux "fastPush"))
+        (na-mr-run-aux "fastPush" dir))
+      
+      (defvar na-mr-fast-push-timer)
+      
+      (setq na-mr-fast-push-timer
+            (run-with-idle-timer 60 t
+                                 (lambda ()
+                                   (na-mr-fast-push "~/"))))
+      
+      ;;(cancel-timer na-mr-fast-push-timer)
     #+end_src
 
     Run mr sync,
