@@ -1169,12 +1169,12 @@
        (org-mobile-push))
    #+end_src
 
-   #+BEGIN_SRC sh :tangle ~/.org-mobile-sync.sh
+   #+BEGIN_SRC sh :tangle ~/.bin/org-mobile-sync.sh
      #!/bin/bash
      
-     # @hourly sh /home/nakkaya/.org-mobile-sync.sh >/dev/null 2>&1
+     # @hourly sh /home/nakkaya/.bin/org-mobile-sync.sh >/dev/null 2>&1
      
-     emacsclient --batch --load ~/.emacs --eval "(org-mobile-pull)" --eval "(org-mobile-push)"
+     emacsclient --eval "(org-mobile-pull)" --eval "(org-mobile-push)"
    #+END_SRC
 
 *** agenda
