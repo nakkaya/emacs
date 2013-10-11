@@ -654,7 +654,8 @@
                      (equal (downcase file-extension) "jpg")
                      (equal (downcase file-extension) "png")
                      (equal (downcase file-extension) "m4v")
-                     (equal (downcase file-extension) "mpg"))
+                     (equal (downcase file-extension) "mpg")
+                     (equal (downcase file-extension) "mpeg"))
                  (na-dired-display-external)
                (na-dired-down-directory-after-kill))
            (na-dired-down-directory-after-kill))))
@@ -1070,12 +1071,12 @@
         (interactive)
         (na-mr-run-aux "fastPush" dir))
       
-      (defvar na-mr-fast-push-timer)
+      ;; (defvar na-mr-fast-push-timer)
       
-      (setq na-mr-fast-push-timer
-            (run-with-idle-timer 600 t
-                                 (lambda ()
-                                   (na-mr-fast-push "~/"))))
+      ;; (setq na-mr-fast-push-timer
+      ;;       (run-with-idle-timer 600 t
+      ;;                            (lambda ()
+      ;;                              (na-mr-fast-push "~/"))))
       
       ;;(cancel-timer na-mr-fast-push-timer)
     #+end_src
