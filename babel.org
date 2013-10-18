@@ -298,14 +298,24 @@
 
 ** Session
 
+   Start server,
+
+   #+begin_src emacs-lisp 
+     (load "server")
+     (unless (server-running-p) 
+       (server-start))
+   #+end_src
+
    Save buffer state on exit and reload on startup.
 
    #+begin_src emacs-lisp 
-     (load "desktop")
-     (desktop-load-default)
-     (setq desktop-enable t)
-     (require 'saveplace)
-     (setq-default save-place t)
+     (unless (server-running-p) 
+       (load "desktop")
+       (desktop-load-default)
+       (setq desktop-enable t)
+       (require 'saveplace)
+       (setq-default save-place t))
+     
      (setq bookmark-save-flag 1)
    #+end_src
 
@@ -317,12 +327,6 @@
      
      (defun call-raise-frame ()
        (raise-frame))
-   #+end_src
-
-   Start server,
-
-   #+begin_src emacs-lisp 
-     (server-start)
    #+end_src
 
 ** Theme
