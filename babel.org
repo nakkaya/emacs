@@ -964,6 +964,28 @@
           (start-process "" nil na-dired-external-viewer (car locations))))
     #+end_src
 
+**** Jump
+
+    #+begin_src emacs-lisp
+      (defun na-annex-jump (arg)
+        (interactive "P")
+        (let* ((top-level (replace-regexp-in-string
+                           "\n" ""
+                           (shell-command-to-string "git rev-parse --show-toplevel")))
+               (relative (replace-regexp-in-string top-level "" default-directory))
+               remote)
+          (setq remote (completing-read 
+                        "Remote: " 
+                        (split-string (shell-command-to-string "git remote") "\n")))
+      
+          (let ((remote-path (replace-regexp-in-string
+                              "/\n" ""
+                              (shell-command-to-string 
+                               (concat "git config remote." remote ".url")))))
+            (kill-this-buffer)
+            (find-file (concat remote-path relative)))))
+    #+end_src
+
 **** Keybindings
 
     Setup keybindings,
@@ -975,7 +997,7 @@
           (define-key map "g" 'na-annex-async-get)
           (define-key map "m" 'na-annex-async-move)
           (define-key map "c" 'na-annex-async-copy)
-          (define-key map "s" 'na-annex-sync)
+          (define-key map "j" 'na-annex-jump)
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
           (define-key map "d" 'na-annex-delete)
