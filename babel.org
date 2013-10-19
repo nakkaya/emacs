@@ -298,24 +298,22 @@
 
 ** Session
 
-   Start server,
+   Start server, save buffer state on exit and reload on startup,
 
    #+begin_src emacs-lisp 
      (load "server")
      (unless (server-running-p) 
-       (server-start))
-   #+end_src
-
-   Save buffer state on exit and reload on startup.
-
-   #+begin_src emacs-lisp 
-     (unless (server-running-p) 
+       (server-start)
        (load "desktop")
        (desktop-load-default)
        (setq desktop-enable t)
        (require 'saveplace)
        (setq-default save-place t))
-     
+   #+end_src
+
+   Always save bookmarks.
+
+   #+begin_src emacs-lisp 
      (setq bookmark-save-flag 1)
    #+end_src
 
