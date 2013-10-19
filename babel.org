@@ -651,7 +651,7 @@
              (if (or (equal (downcase file-extension) "pdf")
                      (equal (downcase file-extension) "avi")
                      (equal (downcase file-extension) "mp4")
-                     (equal (downcase file-extension) "flv'")
+                     (equal (downcase file-extension) "flv")
                      (equal (downcase file-extension) "wmv")
                      (equal (downcase file-extension) "mov")
                      (equal (downcase file-extension) "mkv")
