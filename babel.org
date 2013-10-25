@@ -2468,6 +2468,7 @@
                               (name . "^\\*Process List\\*$")
                               (name . "^\\*Dired log\\*$")
                               (name . "^\\*info\\*$")
+                              (name . "^\\*Man.*\\*$")
                               (name . "^\\*tramp.+\\*$")
                               (name . "^\\*trace.+SMTP.+\\*$")
                               (name . "^\\.todo-do")
