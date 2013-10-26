@@ -687,6 +687,12 @@
       (define-key dired-mode-map (kbd "C-c C-z") 'tmtxt/dired-async-zip)
       (setq-default tmtxt/dired-async-zip-compression-level "9")
       (define-key dired-mode-map (kbd "C-c C-u") 'tmtxt/dired-async-unzip)
+      
+      (defun tmtxt/dired-async-rsync-progress-argument ()
+        "Return the progress argument for rsync command"
+        (tmtxt/dired-async-argument
+         tmtxt/dired-async-rsync-show-progress
+         "--progress -L "))
     #+end_src
 
     Use rsync to move files,
