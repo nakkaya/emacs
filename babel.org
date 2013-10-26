@@ -1200,19 +1200,32 @@
        (org-mobile-push))
    #+end_src
 
-   #+BEGIN_SRC sh :tangle ~/.bin/org-mobile-sync.sh
-     #!/bin/bash
+   #+BEGIN_SRC emacs-lisp
+     (defvar org-mobile-push-timer nil
+       "Timer that `org-mobile-push-timer' used to reschedule itself, or nil.")
      
-     # @hourly sh /home/nakkaya/.bin/org-mobile-sync.sh >/dev/null 2>&1
+     (defun org-mobile-push-with-delay (secs)
+       (when org-mobile-push-timer
+         (cancel-timer org-mobile-push-timer))
+       (setq org-mobile-push-timer
+             (run-with-idle-timer
+              (* 1 secs) nil 'org-mobile-push)))
      
-     emacsclient --eval "(org-mobile-pull)" --eval "(org-mobile-push)"
+     (add-hook 'after-save-hook 
+      (lambda () 
+        (when (eq major-mode 'org-mode)
+          (dolist (file (org-mobile-files-alist))
+           (if (string= (file-truename (expand-file-name (car file)))
+                        (file-truename (buffer-file-name)))
+                (org-mobile-push-with-delay 30)))
+        )))
    #+END_SRC
 
 *** agenda
 
     #+begin_src emacs-lisp
       (setq org-mobile-inbox-for-pull "~/annex/notes/from-mobile.org")
-      (setq org-mobile-directory "/scpc:nakkaya@kocatepe:/home/nakkaya/mobile-org")
+      (setq org-mobile-directory "~/annex/notes/mobile-org")
       (setq org-mobile-files (list "~/annex/notes/gtd.org"))
       (setq org-agenda-files (list "~/annex/notes/gtd.org"))
       
