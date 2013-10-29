@@ -1099,7 +1099,7 @@
     #+begin_src emacs-lisp
       (defun na-mr-fast-push (&optional dir)
         (interactive)
-        (na-mr-run-aux "fastPush" dir))
+        (na-mr-run-aux "push" dir))
       
       ;; (defvar na-mr-fast-push-timer)
       
