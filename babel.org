@@ -1124,6 +1124,7 @@
    #+begin_src emacs-lisp
      (require 'org)
      (require 'htmlize)
+     (require 'org-mobile)
    #+end_src
 
    #+begin_src emacs-lisp
