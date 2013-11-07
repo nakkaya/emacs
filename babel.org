@@ -2720,6 +2720,9 @@
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
+      
+      (define-key nrepl-mode-map "\M-[1;5A" 'nrepl-previous-input)
+      (define-key nrepl-mode-map "\M-[1;5B" 'nrepl-next-input)
     #+end_src
 
 *** Common Lisp
