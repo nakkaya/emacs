@@ -20,7 +20,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode nrepl god-mode expand-region))
+     (setq package-list '(magit clojure-mode nrepl god-mode expand-region dash))
      
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -966,6 +966,43 @@
                                                  (na-annex-repo-list))))
                (process-connection-type nil))
           (start-process "" nil na-dired-external-viewer (car locations))))
+    #+end_src
+
+**** Replicate
+
+    #+begin_src emacs-lisp
+      (defun na-annex-remotes-by-free-space ()
+        (interactive)
+        (let* ((shell-out 
+                (shell-command-to-string 
+                 "for remote in $(git remote); do
+                    printf \"$(df -k $(git config --get-regexp remote.$remote.url | awk '{print $2}') | tail -n +2 | awk '{print $4}') $remote \";
+                  done;")))
+          
+          
+          (->> (split-string shell-out " ")
+            (-partition 2)
+            (--sort (> (string-to-number (car it)) 
+                       (string-to-number (car other))))
+            (-map 'cdr)
+            (-flatten))))
+      
+      (defun na-annex-replicate ()
+        (interactive)
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              annex-command)
+          
+          (setq annex-command " ")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq annex-command
+                  (concat annex-command
+                          "for remote in "(mapconcat 'identity (na-annex-remotes-by-free-space) " ")"; do git annex copy " 
+                          (file-name-nondirectory (shell-quote-argument file)) 
+                          " --not --copies 2 --to $remote; done;")))
+          
+          (tmtxt/dired-async annex-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
 **** Jump
