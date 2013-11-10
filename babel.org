@@ -1058,6 +1058,7 @@
           (define-key map "w" 'na-annex-whereis)
           (define-key map "r" 'na-annex-rename)
           (define-key map "d" 'na-annex-delete)
+          (define-key map "x" 'na-annex-replicate)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
