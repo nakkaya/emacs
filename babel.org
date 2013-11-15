@@ -1009,7 +1009,7 @@
                   (concat annex-command
                           "for remote in " (mapconcat 'identity remotes " ") "; "
                           "do "
-                          "cd $remote" relative ";"
+                          "cd $remote" (shell-quote-argument relative) ";"
                           git-annex-exec " get " 
                           (file-name-nondirectory (shell-quote-argument file)) 
                           " --not --copies 2;"
