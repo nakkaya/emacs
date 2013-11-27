@@ -1276,6 +1276,23 @@
         )))
    #+END_SRC
 
+   #+begin_src emacs-lisp
+     ;; any headline with level <= 4 is a target
+     (setq org-refile-targets '((nil :maxlevel . 4)
+                                     ; all top-level headlines in the
+                                     ; current buffer are used (first) as a
+                                     ; refile target
+                                (org-agenda-files :maxlevel . 2)))
+     
+     ;; provide refile targets as paths, including the file name
+     ;; (without directory) as level 1 of the path
+     (setq org-refile-use-outline-path 'file)
+     
+     ;; allow to create new nodes (must be confirmed by the user) as
+     ;; refile targets
+     (setq org-refile-allow-creating-parent-nodes 'confirm)
+   #+end_src
+
 *** agenda
 
     #+begin_src emacs-lisp
