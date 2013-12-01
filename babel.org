@@ -792,6 +792,16 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
+**** Sync
+
+    #+begin_src emacs-lisp
+      (defun na-annex-async-sync ()
+        (interactive)
+        (let ((annex-command (concat git-annex-exec " sync")))
+          (tmtxt/dired-async annex-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
+    #+end_src
+
 **** Get
 
     Asynchronous git annex get,
@@ -1059,6 +1069,7 @@
           (define-key map "r" 'na-annex-rename)
           (define-key map "d" 'na-annex-delete)
           (define-key map "x" 'na-annex-replicate)
+          (define-key map "s" 'na-annex-async-sync)
           (define-key map (kbd "RET") 'na-annex-open)
           map)
         "Git-annex keymap for `dired-mode' buffers.")
