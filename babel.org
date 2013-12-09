@@ -241,7 +241,6 @@
 
    #+begin_src emacs-lisp 
      (global-set-key [f1] 'na-mu-switch)
-     (global-set-key [S-f1] 'na-mobile-sync)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
@@ -1189,7 +1188,6 @@
    #+begin_src emacs-lisp
      (require 'org)
      (require 'htmlize)
-     (require 'org-mobile)
    #+end_src
 
    #+begin_src emacs-lisp
@@ -1257,36 +1255,6 @@
      (define-key org-mode-map (kbd "C-c C-v") 'na-search-org-headers)
    #+end_src
 
-   Do mobile sync,
-
-   #+begin_src emacs-lisp
-     (defun na-mobile-sync ()
-       (interactive)
-       (org-mobile-pull)
-       (org-mobile-push))
-   #+end_src
-
-   #+BEGIN_SRC emacs-lisp
-     (defvar org-mobile-push-timer nil
-       "Timer that `org-mobile-push-timer' used to reschedule itself, or nil.")
-     
-     (defun org-mobile-push-with-delay (secs)
-       (when org-mobile-push-timer
-         (cancel-timer org-mobile-push-timer))
-       (setq org-mobile-push-timer
-             (run-with-idle-timer
-              (* 1 secs) nil 'org-mobile-push)))
-     
-     (add-hook 'after-save-hook 
-      (lambda () 
-        (when (eq major-mode 'org-mode)
-          (dolist (file (org-mobile-files-alist))
-           (if (string= (file-truename (expand-file-name (car file)))
-                        (file-truename (buffer-file-name)))
-                (org-mobile-push-with-delay 30)))
-        )))
-   #+END_SRC
-
    #+begin_src emacs-lisp
      ;; any headline with level <= 4 is a target
      (setq org-refile-targets '((nil :maxlevel . 4)
@@ -1307,12 +1275,8 @@
 *** agenda
 
     #+begin_src emacs-lisp
-      (setq org-mobile-inbox-for-pull "~/annex/notes/from-mobile.org")
-      (setq org-mobile-directory "~/annex/notes/mobile-org")
-      (setq org-mobile-files (list "~/annex/notes/gtd.org"))
       (setq org-agenda-files (list "~/annex/notes/gtd.org"))
       
-      (setq org-mobile-force-id-on-agenda-items nil)
       (setq org-agenda-custom-commands
             '(("h" "Agenda and Todo"
                     ((agenda "" ((org-agenda-ndays 3)))
@@ -2538,8 +2502,7 @@
                     ("Notes"
                      (or (name . "^gtd.org$")
                          (name . "^pass.gpg$")
-                         (name . "^gtd.org_archive$")
-                         (name . "^from-mobile.org$")))
+                         (name . "^gtd.org_archive$")))
                     ("IRC" (mode . erc-mode))
                     ("Source" (or
                                (mode . java-mode)
