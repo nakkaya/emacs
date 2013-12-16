@@ -20,7 +20,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode nrepl god-mode expand-region dash))
+     (setq package-list '(magit clojure-mode nrepl expand-region dash))
      
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -38,6 +38,9 @@
      (dolist (package package-list)
        (when (not (package-installed-p package))
          (package-install package)))
+     
+     (require 'nrepl)
+     (require 'dash)
    #+end_src
 
 ** Options
@@ -2767,8 +2770,10 @@
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
       
-      (define-key nrepl-mode-map "\M-[1;5A" 'nrepl-previous-input)
-      (define-key nrepl-mode-map "\M-[1;5B" 'nrepl-next-input)
+      (add-hook 'nrepl-mode-hook
+                '(lambda ()
+                   (define-key nrepl-mode-map "\M-[1;5A" 'nrepl-previous-input)
+                   (define-key nrepl-mode-map "\M-[1;5B" 'nrepl-next-input)))
     #+end_src
 
 *** Common Lisp
@@ -3231,21 +3236,6 @@
      (global-set-key "\M-[1;4c" 'buf-move-right)
      (define-key global-map (kbd "S-M-<left>" ) 'buf-move-left)
      (global-set-key "\M-[1;4D" 'buf-move-left)
-   #+end_src
-
-** god-mode
-
-   #+begin_src emacs-lisp
-     (require 'god-mode)
-     (global-set-key (kbd "M-ESC ESC") 'god-local-mode)
-     
-     (defun na-update-god-mode-cursor ()
-       (setq cursor-type (if (or god-local-mode buffer-read-only)
-                             'bar
-                           'box)))
-     
-     (add-hook 'god-mode-enabled-hook 'na-update-god-mode-cursor)
-     (add-hook 'god-mode-disabled-hook 'na-update-god-mode-cursor)
    #+end_src
 
 ** expand-region
