@@ -13,6 +13,7 @@
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/git-annex-el.git/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/tmtxt-dired-async.git/"))
+     (add-to-list 'load-path (concat dotfiles-dir "/ext/hy-mode/"))
    #+end_src
 
 ** Load/Install Melpa Packages
@@ -2619,7 +2620,8 @@
 
     #+begin_src emacs-lisp
       (setq lisp-programs 
-            (list (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
+            (list (list "hy" "hy")
+                  (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
       
@@ -2798,6 +2800,16 @@
                                    (lisp-eval-string (buffer-string))))
                    (define-key scheme-mode-map 
                      "\C-c\C-z" 'run-lisp)))
+    #+end_src
+
+*** Hy
+
+    #+begin_src emacs-lisp
+      (require 'hy-mode)
+    #+end_src
+
+    #+begin_src emacs-lisp
+      (define-key hy-mode-map "\C-xrl" 'na-run-lisp)
     #+end_src
 
 ** Git
