@@ -2505,6 +2505,7 @@
                     ("IRC" (mode . erc-mode))
                     ("Source" (or
                                (mode . java-mode)
+                               (mode . hy-mode)
                                (mode . clojure-mode)
                                (mode . org-mode)
                                (mode . bibtex-mode)
