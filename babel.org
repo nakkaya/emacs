@@ -821,6 +821,28 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
+**** Drop
+
+    Asynchronous git annex drop,
+
+    #+begin_src emacs-lisp
+      (defun na-annex-async-drop ()
+        (interactive)
+        (let ((files (dired-get-marked-files nil current-prefix-arg))
+              annex-command)
+      
+          (setq annex-command "")
+          ;; add all selected file names as arguments to the annex command
+          (dolist (file files)
+            (setq annex-command
+                  (concat annex-command 
+                          (concat git-annex-exec " drop ")
+                          (file-name-nondirectory (shell-quote-argument file)) ";")))
+      
+          (tmtxt/dired-async annex-command "git-annex"
+                             'tmtxt/dired-async-rsync-process-handler)))
+    #+end_src
+
 **** Move
 
     #+begin_src emacs-lisp
