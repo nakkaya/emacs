@@ -2501,7 +2501,8 @@
                      (or (name . "^gtd.org$")
                          (name . "^bookmarks.org$")
                          (name . "^pass.gpg$")
-                         (name . "^gtd.org_archive$")))
+                         (name . "^gtd.org_archive$")
+                         (name . "^bookmarks.org_archive$")))
                     ("IRC" (mode . erc-mode))
                     ("Source" (or
                                (mode . java-mode)
