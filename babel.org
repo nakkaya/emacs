@@ -252,8 +252,8 @@
      (global-set-key [f12] 'na-mr-status)
      (global-set-key [S-f12] 'na-mr-fast-push)
      (global-set-key [C-f2] 'na-mr-fast-push)
-     (global-set-key [M-f12] 'na-mr-up)
-     (global-set-key [f60] 'na-mr-up)
+     (global-set-key [M-f12] 'na-mr-pull)
+     (global-set-key [f60] 'na-mr-pull)
      
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
@@ -1156,9 +1156,9 @@
     Run mr up,
 
     #+begin_src emacs-lisp
-      (defun na-mr-up ()
+      (defun na-mr-pull ()
         (interactive)
-        (na-mr-run-aux "up"))
+        (na-mr-run-aux "pull"))
     #+end_src
 
     Run mr fastPush,
@@ -1167,15 +1167,6 @@
       (defun na-mr-fast-push (&optional dir)
         (interactive)
         (na-mr-run-aux "push" dir))
-      
-      ;; (defvar na-mr-fast-push-timer)
-      
-      ;; (setq na-mr-fast-push-timer
-      ;;       (run-with-idle-timer 600 t
-      ;;                            (lambda ()
-      ;;                              (na-mr-fast-push "~/"))))
-      
-      ;;(cancel-timer na-mr-fast-push-timer)
     #+end_src
 
     Run mr sync,
