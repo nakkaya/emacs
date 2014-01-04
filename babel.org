@@ -2827,6 +2827,20 @@
       (define-key hy-mode-map "\C-xrl" 'na-run-lisp)
     #+end_src
 
+    Eval in S-expr
+
+    #+begin_src emacs-lisp 
+      (add-hook 'hy-mode-hook
+                '(lambda ()
+                   (define-key hy-mode-map 
+                     "\C-c\C-c" '(lambda ()
+                                   (interactive)
+                                   (let ((curr (point)))
+                                     (end-of-defun)
+                                     (lisp-eval-last-sexp)
+                                     (goto-char curr))))))
+    #+end_src
+
 ** Git
 
    #+begin_src emacs-lisp
