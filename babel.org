@@ -3054,48 +3054,6 @@
      (define-abbrev-table 'c++-mode-abbrev-table '())
    #+end_src
 
-** Inferior Lisp
-
-   #+begin_src emacs-lisp
-     (define-skeleton skel-inferior-doc
-       ""
-       nil
-       "(doc "_")")
-     (define-abbrev inferior-lisp-mode-abbrev-table "doc" "" 'skel-inferior-doc)
-     
-     (define-skeleton skel-inferior-repl
-       ""
-       nil
-       "(use 'clojure.repl)")
-     (define-abbrev inferior-lisp-mode-abbrev-table "repl" "" 'skel-inferior-repl)
-     
-     
-     (define-skeleton skel-inferior-load
-       ""
-       nil
-       (let ((ns (read-string "Load NS> " )))
-         (concat "(load \"" ns "\")" "(in-ns '" ns ")")))
-     
-     (define-abbrev inferior-lisp-mode-abbrev-table "load" "" 'skel-inferior-load)
-     
-     
-     ;;NeuIslanders
-     
-     (define-skeleton skel-inferior-exec-sim
-       ""
-       nil
-       "(exec-sim  "_")")
-     (define-abbrev inferior-lisp-mode-abbrev-table "es" "" 'skel-inferior-exec-sim)
-     
-     (define-skeleton skel-inferior-exec-tree
-       ""
-       nil
-       "(exec-tree  "_")")
-     (define-abbrev inferior-lisp-mode-abbrev-table "et" "" 'skel-inferior-exec-tree)
-     
-     (define-abbrev inferior-lisp-mode-abbrev-table "ppw" "(pprint-world)")
-   #+end_src
-
 ** Clojure
 
    #+begin_src emacs-lisp 
