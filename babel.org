@@ -503,7 +503,8 @@
      (add-hook 'clojure-mode-hook 'na-highlight-mathing-paren)
      (add-hook 'scheme-mode-hook 'na-highlight-mathing-paren)
      (add-hook 'c++-mode-hook 'na-highlight-mathing-paren)
-     (add-hook 'c-mode-hook 'na-highlight-mathing-paren)   
+     (add-hook 'c-mode-hook 'na-highlight-mathing-paren)
+     (add-hook 'hy-mode-hook 'na-highlight-mathing-paren)
    #+end_src
 
    Indent selected region with different mode than the buffer uses,
