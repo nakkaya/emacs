@@ -2651,6 +2651,13 @@
                   (run-lisp (second l)))))))
     #+end_src
 
+    #+begin_src emacs-lisp
+      (add-hook 'inferior-lisp-mode-hook
+                '(lambda ()
+                   (define-key inferior-lisp-mode-map "\M-[1;5A" 'comint-previous-input)
+                   (define-key inferior-lisp-mode-map "\M-[1;5B" 'comint-next-input)))
+    #+end_src
+
 *** Clojure
 
     #+begin_src emacs-lisp
@@ -3037,6 +3044,7 @@
      (add-hook 'c++-mode-hook 'abbrev-mode)
      (add-hook 'c-mode-hook 'abbrev-mode)
      (add-hook 'org-mode-hook 'abbrev-mode)
+     (add-hook 'hy-mode-hook 'abbrev-mode)
      
      (add-hook 'clojure-mode-hook 
                (lambda ()
@@ -3134,7 +3142,36 @@
        "(map #() "_")")
      
      (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
+   #+end_src
+
+** Hy
+
+   #+begin_src emacs-lisp
+     (define-skeleton skel-hy-print
+       ""
+       nil
+       "(print "_")")
      
+     (define-abbrev hy-mode-abbrev-table "prt" "" 'skel-hy-print)
+     
+     (define-skeleton skel-hy-map
+       ""
+       nil
+       "(map (fn [] ) "_")")
+     
+     (define-abbrev hy-mode-abbrev-table "map" "" 'skel-clojure-map)
+     
+     (define-abbrev hy-mode-abbrev-table "defn" "" 'skel-clojure-defn)
+     
+     (define-abbrev hy-mode-abbrev-table "if" "" 'skel-clojure-if)
+          
+     (define-skeleton skel-hy-let
+       ""
+       nil
+       "(let [["_"]] )")
+     (define-abbrev hy-mode-abbrev-table "let" "" 'skel-hy-let)
+     
+     (define-abbrev hy-mode-abbrev-table "do" "" 'skel-clojure-do)
    #+end_src
 
 ** Scheme
