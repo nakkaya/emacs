@@ -3000,7 +3000,7 @@
      (setq erc-track-remove-disconnected-buffers t)
      (setq erc-hide-list '("JOIN" "PART" "QUIT"))
      
-     (load "~/Dropbox/bash/erc-auth.el" t)
+     (load "~/.erc-auth.el" t)
    #+END_SRC
 
 ** tiling
