@@ -837,7 +837,7 @@
           (dolist (file files)
             (setq annex-command
                   (concat annex-command 
-                          (concat git-annex-exec " drop ")
+                          (concat git-annex-exec " --force drop ")
                           (file-name-nondirectory (shell-quote-argument file)) ";")))
       
           (tmtxt/dired-async annex-command "git-annex"
