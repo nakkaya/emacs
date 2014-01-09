@@ -725,40 +725,6 @@
                              'tmtxt/dired-async-rsync-process-handler)))
     #+end_src
 
-    #+begin_src emacs-lisp      
-      (defun na-dired-async-rsync-ssh (dest)
-        (interactive ;; offer dwim target as the suggestion
-         (list (expand-file-name (read-file-name "Rsync to:" (dired-dwim-target-directory)))))
-      
-        (let ((dir-str (dired-dwim-target-directory)))
-          (when (string-match ".*:\\(.*\\)@\\(.*\\)#\\(.*\\):\\(.*\\)" dir-str)
-            (let ((user (match-string 1 dir-str))
-                  (host (match-string 2 dir-str))
-                  (port (match-string 3 dir-str))
-                  (path (match-string 4 dir-str)))
-              
-              (let ((files (dired-get-marked-files nil current-prefix-arg))
-                    dired-async-rsync-command)
-                ;; the rsync command
-                (setq dired-async-rsync-command (concat "rsync -avz -e 'ssh -p " port "' "))
-                ;; append the arguments for rsync command
-                (setq dired-async-rsync-command
-                      (concat dired-async-rsync-command
-                              (tmtxt/dired-async-rsync-arguments)))
-                ;; add all selected file names as arguments to the rsync command
-                (dolist (file files)
-                  (setq dired-async-rsync-command
-                        (concat dired-async-rsync-command (shell-quote-argument file) " ")))
-                ;; append the destination to the rsync command
-                (setq dired-async-rsync-command
-                      (concat dired-async-rsync-command 
-                              (shell-quote-argument (concat user "@" host ":" path))))
-
-                ;;execute the command asynchronously
-                (tmtxt/dired-async dired-async-rsync-command "rsync"
-                                   'tmtxt/dired-async-rsync-process-handler))))))
-    #+end_src
-
 *** Git Annex
 
     #+begin_src emacs-lisp
