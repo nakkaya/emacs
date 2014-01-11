@@ -2634,7 +2634,6 @@
     Setup nrepl,
 
     #+begin_src emacs-lisp
-      (require 'nrepl)
       (setq nrepl-popup-stacktraces nil)
       
       (add-hook 'nrepl-interaction-mode-hook
@@ -2755,10 +2754,10 @@
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
       
-      (add-hook 'nrepl-mode-hook
+      (add-hook 'nrepl-connected-hook
                 '(lambda ()
-                   (define-key nrepl-mode-map "\M-[1;5A" 'nrepl-previous-input)
-                   (define-key nrepl-mode-map "\M-[1;5B" 'nrepl-next-input)))
+                   (define-key nrepl-repl-mode-map "\M-[1;5A" 'nrepl-previous-input)
+                   (define-key nrepl-repl-mode-map "\M-[1;5B" 'nrepl-next-input)))
     #+end_src
 
 *** Common Lisp
