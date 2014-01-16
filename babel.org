@@ -295,6 +295,7 @@
      (define-key global-map [end] 'end-of-line)
      
      (global-set-key (kbd "C-x t") 'na-new-term) ;; create a new one
+     (global-set-key (kbd "C-z") 'undo) ; 【Ctrl+z】
    #+end_src
 
 ** Session
