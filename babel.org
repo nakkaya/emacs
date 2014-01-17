@@ -338,16 +338,13 @@
                   '(""
                     mode-line-modified
                     (-3 . "%p") ;; position
-                    "[%b]"
-                    "%[("
+                    " %b - "
                     mode-name
                     mode-line-process
                     minor-mode-alist
-                    "%n" ")%]-"
-                    (line-number-mode "L%l-")
-                    (column-number-mode "C%c - ")
-                    "%f"                ;; print file with full path
-                    " %-"))
+                    "%n" " - "
+                    (line-number-mode "L%l ")
+                    (column-number-mode "C%c ")))
   #+end_src
 
   #+begin_src emacs-lisp 
