@@ -2881,6 +2881,15 @@
                   (define-key term-raw-map [(control y)] 'term-paste)))
    #+end_src
 
+   #+begin_src emacs-lisp
+     (add-hook 'term-mode-hook
+                     (lambda () 
+                       (setq mode-line-format
+                             '((-3 . "%p") ;; position
+                               " %b "
+                               mode-line-process))))
+   #+end_src
+
 ** jump
 
    Create marks in buffer so you can jump between them using these
