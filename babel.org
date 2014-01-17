@@ -243,7 +243,7 @@
    #+end_src
 
    #+begin_src emacs-lisp 
-     (global-set-key [f1] 'na-mu-switch)
+     (global-set-key [f1] (lambda () (interactive) (org-agenda nil "h")))
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
