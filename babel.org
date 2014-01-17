@@ -2442,9 +2442,14 @@
         (let ((title (nth 1 (split-string link "\]\\["))))
           (substring title 0 (- (length title) 2))))
       
+      (defun na-org-capture-email-gmail (title)
+        (replace-regexp-in-string " - nurullah@nakkaya.com - nakkaya.com Mail" "" title))
+      
       (setq org-capture-templates
             '(("l" "Link" entry (file+olp "~/annex/notes/bookmarks.org" "Read Later")
-               "* %(na-page-title (current-kill 0))\n %i \n %a %?\n")
+               "* %(na-page-title (current-kill 0))\n %i \n  %l %?\n" :immediate-finish t :prepend t)
+              ("e" "Email" entry (file+olp "~/annex/notes/brain.org" "Tasks")
+               "* EMAIL %(na-org-capture-email-gmail (na-page-title (current-kill 0)))\n  %?%i\n  %l\n" :prepend t)
               ))
     #+end_src
 
