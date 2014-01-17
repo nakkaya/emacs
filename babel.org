@@ -2442,14 +2442,23 @@
         (let ((title (nth 1 (split-string link "\]\\["))))
           (substring title 0 (- (length title) 2))))
       
-      (defun na-org-capture-email-gmail (title)
-        (replace-regexp-in-string " - nurullah@nakkaya.com - nakkaya.com Mail" "" title))
+      (defun na-org-capture-url (link)
+        (let ((title (nth 0 (split-string link "\]\\["))))
+          (url-unhex-string (substring title 2 (length title)))))
+      
+      (defun na-org-capture-email-gmail-title (title)
+        (replace-regexp-in-string " - nurullah@nakkaya.com - nakkaya.com Mail" "" 
+                                  title))
+      
+      (defun na-org-capture-email-gmail-id (url)
+        (string-match "&th=\\(.*\\)&" url)
+        (match-string-no-properties 1 url))
       
       (setq org-capture-templates
             '(("l" "Link" entry (file+olp "~/annex/notes/bookmarks.org" "Read Later")
-               "* %(na-page-title (current-kill 0))\n %i \n  %l %?\n" :immediate-finish t :prepend t)
+               "* %(na-page-title (current-kill 0))\n %i \n  %(na-org-capture-url (current-kill 0)) %?\n" :immediate-finish t :prepend t)
               ("e" "Email" entry (file+olp "~/annex/notes/brain.org" "Tasks")
-               "* EMAIL %(na-org-capture-email-gmail (na-page-title (current-kill 0)))\n  %?%i\n  %l\n" :prepend t)
+               "* EMAIL %(na-org-capture-email-gmail-title (na-page-title (current-kill 0)))\n  %?%i\n  https://mail.google.com/mail/#inbox/%(na-org-capture-email-gmail-id (na-org-capture-url (current-kill 0)))\n" :prepend t)
               ))
     #+end_src
 
