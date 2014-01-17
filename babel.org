@@ -338,7 +338,7 @@
                   '(""
                     mode-line-modified
                     (-3 . "%p") ;; position
-                    " %b - "
+                    " - %b - "
                     mode-name
                     mode-line-process
                     minor-mode-alist
