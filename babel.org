@@ -1271,6 +1271,7 @@
       (setq org-agenda-custom-commands
             '(("h" "Agenda and Todo"
                     ((agenda "" ((org-agenda-ndays 3)))
+                     (todo "EMAIL")
                      (todo "TODO")
                      (todo "WAITING")
                      (todo "BACKBURNER")))))
