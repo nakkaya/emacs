@@ -1251,6 +1251,21 @@
 *** agenda
 
     #+begin_src emacs-lisp
+      (setq org-todo-keyword-faces
+            '(("EMAIL" . font-lock-builtin-face)
+              ("TODO" . "color-160")
+              ("WAITING" . font-lock-function-name-face)
+              ("BACKBURNER" . font-lock-function-name-face)
+              ("FEEDBACK" . font-lock-function-name-face)
+              ("VERIFY" . font-lock-function-name-face)
+              ("DONE" . "color-26")
+              ("CANCELED" . "color-24")))
+      
+      (setq org-todo-keywords
+            '((sequence "TODO" "EMAIL" "URGENT" "WAITING" "BACKBURNER" "FEEDBACK" "VERIFY" "|" "DONE" "CANCELED")))
+    #+end_src
+
+    #+begin_src emacs-lisp
       (setq org-agenda-files (list "~/annex/notes/brain.org"))
       
       (setq org-agenda-custom-commands
