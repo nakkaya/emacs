@@ -1251,7 +1251,7 @@
 *** agenda
 
     #+begin_src emacs-lisp
-      (setq org-agenda-files (list "~/annex/notes/gtd.org"))
+      (setq org-agenda-files (list "~/annex/notes/brain.org"))
       
       (setq org-agenda-custom-commands
             '(("h" "Agenda and Todo"
@@ -2476,10 +2476,10 @@
      (setq ibuffer-saved-filter-groups
            (quote (("default"
                     ("Notes"
-                     (or (name . "^gtd.org$")
+                     (or (name . "^brain.org$")
                          (name . "^bookmarks.org$")
                          (name . "^pass.gpg$")
-                         (name . "^gtd.org_archive$")
+                         (name . "^brain.org_archive$")
                          (name . "^bookmarks.org_archive$")))
                     ("IRC" (mode . erc-mode))
                     ("Source" (or
