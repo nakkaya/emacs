@@ -1276,7 +1276,7 @@
                      (todo "WAITING")
                      (todo "BACKBURNER")))))
       
-      (setq org-agenda-window-setup 'other-window)
+      (setq org-agenda-window-setup 'same-window)
       (setq org-agenda-restore-windows-after-quit t)
       (setq org-agenda-show-all-dates t)
       (setq org-deadline-warning-days 150)
