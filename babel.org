@@ -568,6 +568,15 @@
    #+end_src
 
    #+begin_src emacs-lisp
+     (add-hook 'dired-mode-hook
+               (lambda () 
+                 (setq mode-line-format
+                       '((-3 . "%p") ;; position
+                         minor-mode-alist
+                         " " default-directory))))
+   #+end_src
+
+   #+begin_src emacs-lisp
      (defun na-dired-get-size ()
        (interactive)
        (let ((files (dired-get-marked-files)))
