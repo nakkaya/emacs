@@ -1091,24 +1091,21 @@
                 (interactive)
                 (kill-this-buffer)
                 (jump-to-register 'a)))
+      
             (beginning-of-buffer)
-            (let ((beg (point)))
+            (let ((begin)
+                  (end))
               (re-search-forward (concat "mr "cmd":"))
               (goto-char (match-beginning 0))
-              (let ((end (point)))
-                (delete-region beg end)))
-            
-            (replace-regexp (concat "^ terminal") "")
-            (replace-regexp (concat "^mr "cmd":.*\n\n") "")
-            
-            (highlight-lines-matching-regexp 
-             (concat "^mr "cmd":") 'hi-green)
-            
-            (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
+              (setq begin (point))
               (end-of-buffer)
-              (let ((end (point)))
-                (delete-region beg end)))
-            (beginning-of-buffer))))
+              (re-search-backward (concat "mr "cmd":"))
+              (goto-char (match-beginning 0))
+              (next-line)
+              (setq end (point))
+              (kill-region begin end)
+              (erase-buffer)
+              (yank)))))
       
       (defun na-mr-run-aux (cmd &optional dir)
         (interactive)
