@@ -1076,6 +1076,34 @@
     Run mr command in directory if in dired buffer or home,
 
     #+begin_src emacs-lisp
+      (defun na-mr-cleanup-term (cmd)
+        (beginning-of-buffer)
+        (let ((beg (point)))
+          (re-search-forward (concat "mr "cmd":"))
+          (goto-char (match-beginning 0))
+          (let ((end (point)))
+            (delete-region beg end)))
+        
+        (replace-regexp (concat "^ terminal") "")
+        (replace-regexp (concat "^mr "cmd":.*\n\n") "")
+        
+        (highlight-lines-matching-regexp 
+         (concat "^mr "cmd":") 'hi-green)
+        
+        (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
+          (end-of-buffer)
+          (let ((end (point)))
+            (delete-region beg end)))
+        (beginning-of-buffer))
+      
+      (defun na-mr-run-handle-close (cmd)
+        "Close current term buffer when `exit' from term buffer."
+        (when (ignore-errors (get-buffer-process (current-buffer)))
+          (set-process-sentinel (get-buffer-process (current-buffer))
+                                `(lambda (proc change)
+                                  (when (string-match "\\(finished\\|exited\\)" change)
+                                    (na-mr-cleanup-term ,cmd))))))
+      
       (defun na-mr-run-setup-term (cmd buffer-dir)
         (term "/bin/bash")
         (rename-buffer (concat "mr-" cmd))
@@ -1084,40 +1112,13 @@
         (term-send-raw-string (concat "mr "cmd"\n"))
         (term-send-raw-string "exit\n")
         (switch-to-buffer (concat "mr-" cmd))
-        
-        (add-hook 'after-change-functions
-                  `(lambda (b e l)
-                     (na-mr-run-cleanup-when-done ,cmd))
-                  nil
-                  t))
-      
-      (defun na-mr-run-cleanup-when-done (cmd)
-        (when (not (get-buffer-process (concat "mr-" cmd)))
-          (with-current-buffer (concat "mr-" cmd)
-            (local-set-key 
-             (kbd "q") 
-             '(lambda () 
-                (interactive)
-                (kill-this-buffer)
-                (jump-to-register 'a)))
-            (beginning-of-buffer)
-            (let ((beg (point)))
-              (re-search-forward (concat "mr "cmd":"))
-              (goto-char (match-beginning 0))
-              (let ((end (point)))
-                (delete-region beg end)))
-            
-            (replace-regexp (concat "^ terminal") "")
-            (replace-regexp (concat "^mr "cmd":.*\n\n") "")
-            
-            (highlight-lines-matching-regexp 
-             (concat "^mr "cmd":") 'hi-green)
-            
-            (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
-              (end-of-buffer)
-              (let ((end (point)))
-                (delete-region beg end)))
-            (beginning-of-buffer))))
+        (na-mr-run-handle-close cmd)
+        (local-set-key 
+         (kbd "q") 
+         '(lambda () 
+            (interactive)
+            (kill-this-buffer)
+            (jump-to-register 'a))))
       
       (defun na-mr-run-aux (cmd &optional dir)
         (interactive)
@@ -1131,8 +1132,7 @@
                                                  dir
                                                  (if dired-buffer-p
                                                      default-directory
-                                                   "~/")
-                                               ))))
+                                                   "~/")))))
           (na-mr-run-setup-term cmd buffer-dir)))
     #+end_src
 
