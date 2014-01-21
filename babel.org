@@ -1077,24 +1077,25 @@
 
     #+begin_src emacs-lisp
       (defun na-mr-cleanup-term (cmd)
-        (beginning-of-buffer)
-        (let ((beg (point)))
-          (re-search-forward (concat "mr "cmd":"))
-          (goto-char (match-beginning 0))
-          (let ((end (point)))
-            (delete-region beg end)))
-        
-        (replace-regexp (concat "^ terminal") "")
-        (replace-regexp (concat "^mr "cmd":.*\n\n") "")
-        
-        (highlight-lines-matching-regexp 
-         (concat "^mr "cmd":") 'hi-green)
-        
-        (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
-          (end-of-buffer)
-          (let ((end (point)))
-            (delete-region beg end)))
-        (beginning-of-buffer))
+        (with-current-buffer (concat "mr-" cmd)
+          (beginning-of-buffer)
+          (let ((beg (point)))
+            (re-search-forward (concat "mr "cmd":"))
+            (goto-char (match-beginning 0))
+            (let ((end (point)))
+              (delete-region beg end)))
+          
+          (replace-regexp (concat "^ terminal") "")
+          (replace-regexp (concat "^mr "cmd":.*\n\n") "")
+          
+          (highlight-lines-matching-regexp 
+           (concat "^mr "cmd":") 'hi-green)
+          
+          (let ((beg (re-search-forward (concat "mr "cmd":.*\ok.*\)"))))
+            (end-of-buffer)
+            (let ((end (point)))
+              (delete-region beg end)))
+          (beginning-of-buffer)))
       
       (defun na-mr-run-handle-close (cmd)
         "Close current term buffer when `exit' from term buffer."
