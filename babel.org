@@ -630,20 +630,41 @@
            (dired-advertised-find-file))))
    #+end_src
 
-   Open file using /xdg-open/,
+  #+begin_src emacs-lisp
+    (setq na-external-open-files-types 
+          '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" "jpg" "png" "m4v" "mpg" "mpeg"))
+  #+end_src
+
+  #+begin_src emacs-lisp
+    (setq na-file-assocs (make-hash-table :test 'equal))
+    
+    (puthash "avi" "vlc" na-file-assocs)
+    (puthash "mp4" "vlc" na-file-assocs)
+    (puthash "flv" "vlc" na-file-assocs)
+    (puthash "wmv" "vlc" na-file-assocs)
+    (puthash "mov" "vlc" na-file-assocs)
+    (puthash "mkv" "vlc" na-file-assocs)
+    (puthash "m4v" "vlc" na-file-assocs)
+    (puthash "mpg" "vlc" na-file-assocs)
+    (puthash "mpeg" "vlc" na-file-assocs)
+    (puthash "jpg" "gpicview" na-file-assocs)
+    (puthash "png" "gpicview" na-file-assocs)
+  #+end_src
+
+   Open file using external app or /xdg-open/,
 
    #+begin_src emacs-lisp
      (setq na-dired-external-viewer "xdg-open")
      
-     (defun na-dired-display-external ()
+     (defun na-dired-display-external (extension)
        "Open file at point in an external application."
        (interactive)
        (let ((file (dired-get-filename))
+             (ext-viewer (gethash extension na-file-assocs))
              (process-connection-type nil))
-         (start-process "" nil na-dired-external-viewer file)))
-     
-     (setq na-dired-external-viewer "xdg-open")
-     (define-key dired-mode-map '[\C-return] 'na-dired-display-external)
+         (if ext-viewer
+             (start-process "" nil ext-viewer file)
+             (start-process "" nil na-dired-external-viewer file))))
      
      (defun na-dired-open ()
        "Open file at point in an external application."
@@ -651,19 +672,8 @@
        (let ((file-extension (file-name-extension 
                               (dired-get-filename))))
          (if file-extension
-             (if (or (equal (downcase file-extension) "pdf")
-                     (equal (downcase file-extension) "avi")
-                     (equal (downcase file-extension) "mp4")
-                     (equal (downcase file-extension) "flv")
-                     (equal (downcase file-extension) "wmv")
-                     (equal (downcase file-extension) "mov")
-                     (equal (downcase file-extension) "mkv")
-                     (equal (downcase file-extension) "jpg")
-                     (equal (downcase file-extension) "png")
-                     (equal (downcase file-extension) "m4v")
-                     (equal (downcase file-extension) "mpg")
-                     (equal (downcase file-extension) "mpeg"))
-                 (na-dired-display-external)
+             (if (member (downcase file-extension) na-external-open-files-types)
+                 (na-dired-display-external (downcase file-extension))
                (na-dired-down-directory-after-kill))
            (na-dired-down-directory-after-kill))))
    #+end_src
