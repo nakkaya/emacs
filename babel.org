@@ -1123,13 +1123,7 @@
         (term-send-raw-string (concat "mr "cmd"\n"))
         (term-send-raw-string "exit\n")
         (switch-to-buffer (concat "mr-" cmd))
-        (na-mr-run-handle-close cmd)
-        (local-set-key 
-         (kbd "q") 
-         '(lambda () 
-            (interactive)
-            (kill-this-buffer)
-            (jump-to-register 'a))))
+        (na-mr-run-handle-close cmd))
       
       (defun na-mr-run-aux (cmd &optional dir)
         (interactive)
