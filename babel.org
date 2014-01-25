@@ -53,6 +53,9 @@
      (blink-cursor-mode 1)
      (put 'erase-buffer 'disabled nil)
      
+     ;;do not bug me when undo limit is reached.
+     (add-to-list 'warning-suppress-types '(undo discard-info))
+     
      (when window-system
        ;;disable scroll bar
        (toggle-scroll-bar nil)
@@ -76,7 +79,7 @@
      (setq query-replace-highlight t)
      (setq search-highlight t)
      (setq transient-mark-mode t)
-
+     
      ;; I hate tabs!
      (setq-default indent-tabs-mode nil)
      (setq delete-by-moving-to-trash nil)
