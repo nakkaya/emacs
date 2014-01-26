@@ -635,7 +635,8 @@
 
   #+begin_src emacs-lisp
     (setq na-external-open-files-types 
-          '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" "jpg" "png" "m4v" "mpg" "mpeg"))
+          '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" 
+            "jpg" "png" "m4v" "mpg" "mpeg" "ts"))
   #+end_src
 
   #+begin_src emacs-lisp
@@ -649,6 +650,7 @@
     (puthash "mkv" "vlc" na-file-assocs)
     (puthash "m4v" "vlc" na-file-assocs)
     (puthash "mpg" "vlc" na-file-assocs)
+    (puthash "ts" "vlc" na-file-assocs)
     (puthash "mpeg" "vlc" na-file-assocs)
     (puthash "jpg" "gpicview" na-file-assocs)
     (puthash "png" "gpicview" na-file-assocs)
