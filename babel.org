@@ -376,13 +376,8 @@
                (set-face-background 'diff-file-header "#121212")
                (set-face-background 'diff-refine-change "#121212")))
           
-          (if (string= system-name "belentepe")
-              (progn
-                (set-face-background 'mode-line "#8a0000")
-                (set-face-background 'mode-line-inactive "#380000"))
-            (progn
-              (set-face-background 'modeline "#8a0000")
-              (set-face-background 'modeline-inactive "#380000"))))
+          (set-face-background 'modeline "#8a0000")
+          (set-face-background 'modeline-inactive "#380000"))
       (progn 
         (set-face-foreground 'default "color-250")
         (set-face-background 'default "black")
