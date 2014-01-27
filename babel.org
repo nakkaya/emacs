@@ -1285,7 +1285,8 @@
     #+end_src
 
     #+begin_src emacs-lisp
-      (setq org-agenda-files (list "~/annex/notes/brain.org"))
+      (when (file-exists-p "~/annex/notes/brain.org")
+        (setq org-agenda-files (list "~/annex/notes/brain.org")))
       
       (setq org-agenda-custom-commands
             '(("h" "Agenda and Todo"
@@ -1300,7 +1301,6 @@
       (setq org-agenda-show-all-dates t)
       (setq org-deadline-warning-days 150)
       (org-toggle-sticky-agenda)
-      (org-agenda nil "h")
     #+end_src
 
     Display the current agenda.
