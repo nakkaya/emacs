@@ -555,7 +555,10 @@
    #+end_src
 
    #+begin_src emacs-lisp
-     (setq dired-listing-switches "-aBhl  --group-directories-first")
+     (if na-os-is-darwin
+         (setq dired-listing-switches "-aBhl")
+       (setq dired-listing-switches "-aBhl  --group-directories-first"))
+     
      (require 'dired-details)
      (dired-details-install)
      (add-hook 'dired-mode-hook 'auto-revert-mode)
