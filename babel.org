@@ -2610,7 +2610,7 @@
      (epa-file-enable)
      
      (cond 
-      (na-os-is-darwin  (setq epg-gpg-program "/opt/local/bin/gpg"))
+      (na-os-is-darwin  (setq epg-gpg-program "/usr/local/bin/gpg"))
       (na-os-is-windows (setq epg-gpg-program (concat "/bin/gpg"))))
    #+end_src
 
