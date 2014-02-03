@@ -749,7 +749,11 @@
 
     #+begin_src emacs-lisp
       (require 'git-annex)
+      
       (defvar git-annex-exec "~/Apps/git-annex.linux/git-annex")
+      
+      (cond 
+       (na-os-is-darwin  (setq git-annex-exec "/Applications/git-annex.app/Contents/MacOS/git-annex")))
     #+end_src
 
 **** Add
