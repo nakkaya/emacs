@@ -640,18 +640,33 @@
   #+begin_src emacs-lisp
     (setq na-file-assocs (make-hash-table :test 'equal))
     
-    (puthash "avi" "vlc" na-file-assocs)
-    (puthash "mp4" "vlc" na-file-assocs)
-    (puthash "flv" "vlc" na-file-assocs)
-    (puthash "wmv" "vlc" na-file-assocs)
-    (puthash "mov" "vlc" na-file-assocs)
-    (puthash "mkv" "vlc" na-file-assocs)
-    (puthash "m4v" "vlc" na-file-assocs)
-    (puthash "mpg" "vlc" na-file-assocs)
-    (puthash "ts" "vlc" na-file-assocs)
-    (puthash "mpeg" "vlc" na-file-assocs)
-    (puthash "jpg" "gpicview" na-file-assocs)
-    (puthash "png" "gpicview" na-file-assocs)
+    (if na-os-is-darwin
+        (progn 
+          (puthash "avi" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "mp4" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "flv" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "wmv" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "mov" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "mkv" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "m4v" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "mpg" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "ts" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
+          (puthash "mpeg" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)))
+    
+    (if na-os-is-linux
+        (progn 
+          (puthash "avi" "vlc" na-file-assocs)
+          (puthash "mp4" "vlc" na-file-assocs)
+          (puthash "flv" "vlc" na-file-assocs)
+          (puthash "wmv" "vlc" na-file-assocs)
+          (puthash "mov" "vlc" na-file-assocs)
+          (puthash "mkv" "vlc" na-file-assocs)
+          (puthash "m4v" "vlc" na-file-assocs)
+          (puthash "mpg" "vlc" na-file-assocs)
+          (puthash "ts" "vlc" na-file-assocs)
+          (puthash "mpeg" "vlc" na-file-assocs)
+          (puthash "jpg" "gpicview" na-file-assocs)
+          (puthash "png" "gpicview" na-file-assocs)))
   #+end_src
 
    Open file using external app or /xdg-open/,
