@@ -182,7 +182,7 @@
              (shell-command-on-region (region-beginning) (region-end)
                                       (cond
                                        ((eq system-type 'cygwin) "putclip")
-                                       ((eq system-type 'darwin) "pbcopy")
+                                       ((eq system-type 'darwin) "reattach-to-user-namespace pbcopy")
                                        (t "xsel -ib")))
              (message "Yanked region to clipboard!")
              (deactivate-mark))
@@ -193,7 +193,7 @@
        (shell-command
         (cond
          ((eq system-type 'cygwin) "getclip")
-         ((eq system-type 'darwin) "pbpaste")
+         ((eq system-type 'darwin) "reattach-to-user-namespace pbpaste")
          (t "xsel -ob"))
         1))
    #+end_src
