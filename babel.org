@@ -261,7 +261,12 @@
      (global-set-key "\M-[1;5D" 'backward-word)
      (global-set-key "\M-[1;5A" 'backward-paragraph)
      (global-set-key "\M-[1;5B" 'forward-paragraph)
-     
+
+     (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+     (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+     (global-set-key (kbd "C-S-<down>") 'shrink-window)
+     (global-set-key (kbd "C-S-<up>") 'enlarge-window)
+
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
