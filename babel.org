@@ -566,9 +566,7 @@
    #+end_src
 
    #+begin_src emacs-lisp
-     (if na-os-is-darwin
-         (setq dired-listing-switches "-aBhl")
-       (setq dired-listing-switches "-aBhl  --group-directories-first"))
+     (setq dired-listing-switches "-aBhl  --group-directories-first")
      
      (require 'dired-details)
      (dired-details-install)
