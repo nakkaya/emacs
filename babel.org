@@ -2905,24 +2905,6 @@
        (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
        (push "/opt/local/bin" exec-path))
      (setq exec-path (append exec-path '("/opt/local/bin")))
-     
-     (defun na-run-git-switch ()
-       "Switch to git buffer or run git-status"
-       (interactive)
-       (if (string= (buffer-name (current-buffer)) "*git-status*")
-           (jump-to-register 'x)
-         (progn 
-           (window-configuration-to-register 'x)
-           (if (not (eq (get-buffer "*git-status*") nil))
-               (switch-to-buffer "*git-status*")
-             (git-status (read-directory-name 
-                          "Select Directory: "))))))
-     
-     (define-key git-status-mode-map (kbd "K")
-       '(lambda ()
-          (interactive)
-          (kill-buffer)
-          (jump-to-register 'x)))
    #+end_src
 
 ** multi-term
