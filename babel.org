@@ -2900,13 +2900,14 @@
      (setq git-committer-email "nurullah@nakkaya.com")
      
      (setq vc-follow-symlinks t)
+     (setq magit-hide-diffs t)
      
      (when (equal system-type 'darwin)
        (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
        (push "/opt/local/bin" exec-path))
      (setq exec-path (append exec-path '("/opt/local/bin")))
    #+end_src
-
+ 
 ** multi-term
 
    #+begin_src emacs-lisp
