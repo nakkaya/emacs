@@ -246,7 +246,7 @@
    #+end_src
 
    #+begin_src emacs-lisp 
-     (global-set-key [f1] (lambda () (interactive) (org-agenda nil "h")))
+     (global-set-key [f1] 'jump-to-org-agenda)
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
@@ -1334,10 +1334,14 @@
     #+begin_src emacs-lisp
       (defun jump-to-org-agenda ()
         (interactive)
-        (let ((agenda-window (get-buffer-window org-agenda-buffer-name t)))
+        (let ((agenda-window (get-buffer-window "*Org Agenda(h)*" t)))
           (if agenda-window
             (with-selected-window agenda-window (org-agenda-redo))
-            (funcall (lambda () (org-agenda nil "h"))))))
+            (funcall (lambda () 
+                       (org-agenda nil "h") 
+                       (org-agenda-redo))))))
+      
+      (run-with-idle-timer 1800 t 'jump-to-org-agenda)
     #+end_src
 
 *** latex
