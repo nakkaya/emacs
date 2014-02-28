@@ -2659,9 +2659,6 @@
 ** Flyspell
 
    #+begin_src emacs-lisp 
-     (when na-os-is-darwin
-       (setq ispell-program-name "/opt/local/bin/ispell"))
-     
      (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
      
      (add-hook 'message-mode-hook 'turn-on-flyspell)
