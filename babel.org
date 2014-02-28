@@ -681,7 +681,9 @@
    Open file using external app or /xdg-open/,
 
    #+begin_src emacs-lisp
-     (setq na-dired-external-viewer "xdg-open")
+     (if na-os-is-linux
+         (setq na-dired-external-viewer "xdg-open")
+       (setq na-dired-external-viewer "open"))
      
      (defun na-dired-display-external (extension)
        "Open file at point in an external application."
