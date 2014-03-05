@@ -1335,16 +1335,17 @@
     Display the current agenda.
 
     #+begin_src emacs-lisp
-      (defun jump-to-org-agenda ()
-        (interactive)
-        (window-configuration-to-register 'b)
-        (delete-other-windows)
-        (org-agenda nil "h")
-        (local-set-key [f1] '(lambda () 
-                               (interactive)
-                               (kill-this-buffer)
-                               (jump-to-register 'b))))
-                 
+      (let ((window-configuration))
+        (defun jump-to-org-agenda ()
+          (interactive)
+          (setq window-configuration (current-window-configuration))
+          (delete-other-windows)
+          (org-agenda nil "h")
+          (org-agenda-redo)
+          (local-set-key [f1] '(lambda () 
+                                 (interactive)
+                                 (kill-this-buffer)
+                                 (set-window-configuration window-configuration)))))
     #+end_src
 
 *** latex
