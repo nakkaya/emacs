@@ -1337,12 +1337,14 @@
     #+begin_src emacs-lisp
       (defun jump-to-org-agenda ()
         (interactive)
-        (let ((agenda-window (get-buffer-window "*Org Agenda(h)*" t)))
-          (if agenda-window
-            (with-selected-window agenda-window (org-agenda-redo))
-            (funcall (lambda () 
-                       (org-agenda nil "h") 
-                       (org-agenda-redo))))))
+        (window-configuration-to-register 'b)
+        (delete-other-windows)
+        (org-agenda nil "h")
+        (local-set-key [f1] '(lambda () 
+                               (interactive)
+                               (kill-this-buffer)
+                               (jump-to-register 'b))))
+                 
     #+end_src
 
 *** latex
