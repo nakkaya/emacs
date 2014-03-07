@@ -949,7 +949,9 @@
       (defun na-annex-rename ()
         (interactive)
         (let* ((file (shell-quote-argument (file-name-nondirectory (dired-get-filename))))
-               (to-name (shell-quote-argument (read-file-name "Rename to:" (dired-dwim-target-directory))))
+               (to-name (shell-quote-argument 
+                         (expand-file-name 
+                          (read-file-name "Rename to:" (dired-dwim-target-directory)))))
                annex-command)
       
           (setq annex-command (concat "git mv " file " " to-name
