@@ -1124,10 +1124,6 @@
     #+begin_src emacs-lisp
       (defun na-mr-cleanup-term (cmd)
         (with-current-buffer (concat "mr-" cmd)
-          (local-set-key (kbd "q") '(lambda () 
-                                      (interactive)
-                                      (kill-this-buffer) 
-                                      (jump-to-register 'a)))
           (beginning-of-buffer)
           (let ((beg (point)))
             (re-search-forward (concat "mr "cmd":"))
