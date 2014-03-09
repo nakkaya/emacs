@@ -20,7 +20,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode nrepl expand-region dash))
+     (setq package-list '(magit clojure-mode cider expand-region dash))
      
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -39,7 +39,7 @@
        (when (not (package-installed-p package))
          (package-install package)))
      
-     (require 'nrepl)
+     (require 'cider)
      (require 'dash)
    #+end_src
 
@@ -2590,6 +2590,7 @@
                                     (mode . inferior-lisp-mode)
                                     (mode . inferior-python-mode)
                                     (name . "^*nrepl.*")
+                                    (name . "^*cider.*")
                                     (name . "^\\*offlineimap\\*$")))
                     ("Dired" (or (mode . dired-mode) 
                                  (mode . sr-mode)))
@@ -2711,53 +2712,15 @@
       (load "clojure-mode.el")
     #+end_src
 
-    Setup nrepl,
+    Setup cider,
 
     #+begin_src emacs-lisp
-      (setq nrepl-popup-stacktraces nil)
+      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
       
-      (add-hook 'nrepl-interaction-mode-hook
-        'nrepl-turn-on-eldoc-mode)
+      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
-      (add-hook 'nrepl-mode-hook 'subword-mode)
+      (add-hook 'cider-repl-mode-hook 'subword-mode)
     #+end_src
-
-    #+begin_src emacs-lisp
-      (defun nrepl-create-repl-buffer (process)
-        "Create a repl buffer for PROCESS."
-        (nrepl-init-repl-buffer
-         process
-         (let ((buf (generate-new-buffer-name "*nrepl*")))
-           (window-configuration-to-register 'z)
-           (pop-to-buffer buf)
-           (jump-to-register 'z)
-           buf)))
-    #+end_src
-
-    Kill nrepl process before starting a new one,
-
-    #+begin_src emacs-lisp
-      ;; Disable prompt on killing buffer with a process
-      (setq kill-buffer-query-functions
-            (remq 'process-kill-buffer-query-function
-                  kill-buffer-query-functions))
-      
-      (defun nrepl-kill ()
-        "Kill all nrepl buffers and processes"
-        (interactive)
-        (when (get-process "nrepl-server")
-          (set-process-sentinel (get-process "nrepl-server")
-                                (lambda (proc evt) t)))
-        (dolist (buffer (buffer-list))
-          (when (string-prefix-p "*nrepl" (buffer-name buffer))
-            (kill-buffer buffer))))
-      
-      (defun nrepl-me ()
-        (interactive)
-        (nrepl-kill)
-        (nrepl-jack-in nil))
-    #+end_src
-
 
     ClojureScript mode.
 
@@ -2775,7 +2738,7 @@
                                    (interactive)
                                    (let ((curr (point)))
                                      (end-of-defun)
-                                     (nrepl-eval-last-expression)
+                                     (cider-eval-last-expression)
                                      (goto-char curr))))))
     #+end_src
 
@@ -2795,7 +2758,7 @@
       
       (defun org-babel-execute:clojure (body params)
         "Execute a block of Clojure code with Babel."
-        (nrepl-interactive-eval body))
+        (cider-interactive-eval body))
       
       (add-hook 'org-src-mode-hook
                 '(lambda ()
@@ -2806,7 +2769,7 @@
       
       (provide 'ob-clojure)
       
-      (define-key global-map (kbd "C-c M-n") 'nrepl-set-ns)
+      (define-key global-map (kbd "C-c M-n") 'cider-repl-set-ns)
     #+end_src
 
     Replace, /fn/ with /λ/ and /#/ with /ƒ/.
@@ -2828,16 +2791,16 @@
     #+end_src
 
     #+begin_src emacs-lisp
-      (global-set-key "\C-xrl" 'nrepl-me)
-      (define-key clojure-mode-map "\C-xrl" 'nrepl-me)
+      (global-set-key "\C-xrl" '(lambda () (interactive) (cider-jack-in nil)))
+      (define-key clojure-mode-map "\C-xrl" '(lambda () (interactive) (cider-jack-in nil)))
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
       
       (add-hook 'nrepl-connected-hook
                 '(lambda ()
-                   (define-key nrepl-repl-mode-map "\M-[1;5A" 'nrepl-previous-input)
-                   (define-key nrepl-repl-mode-map "\M-[1;5B" 'nrepl-next-input)))
+                   (define-key cider-repl-mode-map "\M-[1;5A" 'nrepl-previous-input)
+                   (define-key cide-repl-mode-map "\M-[1;5B" 'nrepl-next-input)))
     #+end_src
 
 *** Common Lisp
