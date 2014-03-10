@@ -2740,6 +2740,8 @@
                                      (end-of-defun)
                                      (cider-eval-last-expression)
                                      (goto-char curr))))))
+      
+      (define-key clojure-mode-map (kbd "C-x C-e") 'cider-eval-last-sexp)
     #+end_src
 
     Custom indent,
