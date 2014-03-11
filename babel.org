@@ -314,7 +314,6 @@
      (load "server")
      (unless (server-running-p) 
        (server-start)
-       (run-with-idle-timer 1800 t 'jump-to-org-agenda)
        (load "desktop")
        (desktop-load-default)
        (setq desktop-enable t)
