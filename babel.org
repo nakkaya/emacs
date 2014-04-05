@@ -312,7 +312,11 @@
 
    #+begin_src emacs-lisp 
      (load "server")
-     (unless (server-running-p) 
+     
+     (setq main-instance-found (member "-main-instance" command-line-args))
+     (setq command-line-args (delete "-main-instance" command-line-args))
+     
+     (when main-instance-found 
        (server-start)
        (load "desktop")
        (desktop-load-default)
