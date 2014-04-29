@@ -54,7 +54,8 @@
      (put 'erase-buffer 'disabled nil)
      
      ;;do not bug me when undo limit is reached.
-     (add-to-list 'warning-suppress-types '(undo discard-info))
+     (custom-set-variables
+      '(warning-suppress-types (quote ((undo discard-info)))))
      
      (when window-system
        ;;disable scroll bar
