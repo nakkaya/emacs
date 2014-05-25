@@ -713,6 +713,16 @@
            (na-dired-down-directory-after-kill))))
    #+end_src
 
+   Open file with Beamer app for Apple TV streaming,
+
+   #+begin_src emacs-lisp
+     (defun na-dired-display-beamer ()
+       (interactive)
+       (let ((file (dired-get-filename))
+             (process-connection-type nil))
+         (start-process "" nil "/Applications/Beamer.app/Contents/MacOS/Beamer" file)))
+   #+end_src
+
   #+begin_src emacs-lisp
     (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
     (define-key dired-mode-map [return] 'na-dired-open)
