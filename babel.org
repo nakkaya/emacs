@@ -385,10 +385,7 @@
                (set-face-background 'diff-header "#060606")
                (set-face-background 'diff-file-header "#060606")
                (set-face-background 'diff-file-header "#121212")
-               (set-face-background 'diff-refine-change "#121212")))
-          
-          (set-face-background 'modeline "#8a0000")
-          (set-face-background 'modeline-inactive "#380000"))
+               (set-face-background 'diff-refine-change "#121212"))))
       (progn 
         (set-face-foreground 'default "color-250")
         (set-face-background 'default "black")
