@@ -739,22 +739,22 @@
      (defun na-stream-kiler-beamer ()
        (interactive)
        (na-stream-nfs "/Applications/Beamer.app/Contents/MacOS/Beamer"
-                      "/Volumes/kiler"))
+                      "/Volumes/base/home/nakkaya/kiler/"))
      
      (defun na-stream-kiler-vlc ()
        (interactive)
        (na-stream-nfs "/Applications/VLC.app/Contents/MacOS/VLC"
-                      "/Volumes/kiler"))
+                      "/Volumes/base/home/nakkaya/kiler/"))
      
      (defun na-stream-music-beamer ()
        (interactive)
        (na-stream-nfs "/Applications/Beamer.app/Contents/MacOS/Beamer"
-                      "/Volumes/music"))
+                      "/Volumes/base/home/nakkaya/music/"))
      
      (defun na-stream-music-vlc ()
        (interactive)
        (na-stream-nfs "/Applications/VLC.app/Contents/MacOS/VLC"
-                      "/Volumes/music"))
+                      "/Volumes/base/home/nakkaya/music/"))
    #+end_src
 
   #+begin_src emacs-lisp
