@@ -1475,7 +1475,9 @@
         
                        \\titleformat{\\subsubsection}[hang]{\\color{seccol}\\sffamily\\bfseries}
                        {}{0pt}{\\linebreak\\large}[]
-        
+
+                       \\titleformat{\\paragraph}[hang]{\\color{black}\\sffamily\\bfseries}
+                       {}{0pt}{\\linebreak\\normalsize}[]        
         
                        \\usepackage{listings}
                        
