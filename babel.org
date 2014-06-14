@@ -717,6 +717,7 @@
        (interactive)
        (let ((file (dired-get-filename))
              (process-connection-type nil))
+         (shell-command "killall Beamer")
          (start-process "" nil "/Applications/Beamer.app/Contents/MacOS/Beamer" file)))
    #+end_src
 
