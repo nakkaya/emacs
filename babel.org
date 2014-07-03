@@ -236,6 +236,7 @@
    #+begin_src emacs-lisp 
      (global-set-key [delete] 'delete-char)
      (global-set-key [kp-delete] 'delete-char)
+     (define-key key-translation-map [?\C-h] [?\C-?])
    #+end_src
 
    Mac specific,
