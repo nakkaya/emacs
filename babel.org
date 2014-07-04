@@ -254,10 +254,7 @@
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f5] 'na-search-org-headers)
      (global-set-key [f8] 'toggle-truncate-lines)
-     (global-set-key [f12] 'na-mr-status)
-     (global-set-key [S-f12] 'na-mr-fast-push)
-     (global-set-key [C-f2] 'na-mr-fast-push)
-     (global-set-key [M-f12] 'na-mr-pull)
+     (global-set-key [f12] 'org-capture)
      (global-set-key [f60] 'na-mr-pull)
      
      (global-set-key "\M-[1;5C" 'forward-word)
@@ -2581,6 +2578,8 @@
                "* %(na-page-title (current-kill 0))\n %i \n  %(na-org-capture-url (current-kill 0)) %?\n" :immediate-finish t :prepend t)
               ("e" "Email" entry (file+olp "~/annex/notes/brain.org" "Tasks")
                "* EMAIL %(na-org-capture-email-gmail-title (na-page-title (current-kill 0)))\n  %?%i\n  https://mail.google.com/mail/#inbox/%(na-org-capture-email-gmail-id (na-org-capture-url (current-kill 0)))\n" :prepend t)
+              ("t" "Todo" entry (file+olp "~/annex/notes/brain.org" "Tasks")
+               "* TODO %?\n %i\n" :prepend t)
               ))
     #+end_src
 
