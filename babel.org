@@ -252,10 +252,9 @@
      (global-set-key [f2] 'org-babel-tangle)
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
+     (global-set-key [f4] 'org-capture)
      (global-set-key [f5] 'na-search-org-headers)
      (global-set-key [f8] 'toggle-truncate-lines)
-     (global-set-key [f12] 'org-capture)
-     (global-set-key [f60] 'na-mr-pull)
      
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
