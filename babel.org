@@ -718,6 +718,14 @@
          (start-process "" nil "/Applications/Beamer.app/Contents/MacOS/Beamer" file)))
    #+end_src
 
+   #+begin_src emacs-lisp
+     (defun na-dired-display-xee ()
+       (interactive)
+       (let ((file (dired-get-filename))
+             (process-connection-type nil))
+         (start-process "" nil "open" "-a" "Xee³" file)))
+   #+end_src
+
   #+begin_src emacs-lisp
     (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
     (define-key dired-mode-map [return] 'na-dired-open)
