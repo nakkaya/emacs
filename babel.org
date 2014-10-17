@@ -718,43 +718,6 @@
          (start-process "" nil "/Applications/Beamer.app/Contents/MacOS/Beamer" file)))
    #+end_src
 
-   When run in a local annex repo, it will open the file in the annex
-   repo mounted via NFS using VLC/Beamer for streaming,
-
-   #+begin_src emacs-lisp
-     (defun na-stream-nfs (app loc)
-       (interactive)
-       (let* ((file (dired-get-filename))
-              (top-level (->> (shell-command-to-string 
-                               "git rev-parse --show-toplevel")
-                           (replace-regexp-in-string "\n" "" )))
-              (relative (replace-regexp-in-string top-level "" file))
-              (process-connection-type nil))
-         (start-process "" nil 
-                        app
-                        (concat loc relative))))
-     
-     (defun na-stream-kiler-beamer ()
-       (interactive)
-       (na-stream-nfs "/Applications/Beamer.app/Contents/MacOS/Beamer"
-                      "/Volumes/base/home/nakkaya/kiler/"))
-     
-     (defun na-stream-kiler-vlc ()
-       (interactive)
-       (na-stream-nfs "/Applications/VLC.app/Contents/MacOS/VLC"
-                      "/Volumes/base/home/nakkaya/kiler/"))
-     
-     (defun na-stream-music-beamer ()
-       (interactive)
-       (na-stream-nfs "/Applications/Beamer.app/Contents/MacOS/Beamer"
-                      "/Volumes/base/home/nakkaya/music/"))
-     
-     (defun na-stream-music-vlc ()
-       (interactive)
-       (na-stream-nfs "/Applications/VLC.app/Contents/MacOS/VLC"
-                      "/Volumes/base/home/nakkaya/music/"))
-   #+end_src
-
   #+begin_src emacs-lisp
     (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
     (define-key dired-mode-map [return] 'na-dired-open)
