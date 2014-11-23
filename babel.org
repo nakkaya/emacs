@@ -253,19 +253,18 @@
      (global-set-key [S-f2] 'na-export-html)
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f4] 'org-capture)
-     (global-set-key [f5] 'na-search-org-headers)
      (global-set-key [f8] 'toggle-truncate-lines)
      
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
      (global-set-key "\M-[1;5A" 'backward-paragraph)
      (global-set-key "\M-[1;5B" 'forward-paragraph)
-
+     
      (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
      (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
      (global-set-key (kbd "C-S-<down>") 'shrink-window)
      (global-set-key (kbd "C-S-<up>") 'enlarge-window)
-
+     
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
@@ -297,6 +296,7 @@
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
      
      (global-set-key "\C-xgs" 'magit-status)
+     (global-set-key "\C-cs" 'na-search-org-headers)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
