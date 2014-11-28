@@ -2822,7 +2822,7 @@
       (add-hook 'nrepl-connected-hook
                 '(lambda ()
                    (define-key cider-repl-mode-map "\M-[1;5A" 'nrepl-previous-input)
-                   (define-key cide-repl-mode-map "\M-[1;5B" 'nrepl-next-input)))
+                   (define-key cider-repl-mode-map "\M-[1;5B" 'nrepl-next-input)))
     #+end_src
 
 *** Common Lisp
