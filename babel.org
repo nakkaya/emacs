@@ -296,7 +296,7 @@
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
      
      (global-set-key "\C-xgs" 'magit-status)
-     (global-set-key "\C-cs" 'na-search-org-headers)
+     (global-set-key "\C-xgl" 'na-search-org-headers)
      
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
