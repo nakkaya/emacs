@@ -2908,7 +2908,7 @@
      
      (defun na-next-term ()
        (interactive)
-       (if (> (length (multi-term-list)) 0)
+       (if (> (length multi-term-buffer-list) 0)
            (multi-term-next)
          (na-new-term)))
      
