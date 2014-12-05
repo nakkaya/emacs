@@ -2728,10 +2728,6 @@
 
 *** Clojure
 
-    #+begin_src emacs-lisp
-      (load "clojure-mode.el")
-    #+end_src
-
     Setup cider,
 
     #+begin_src emacs-lisp

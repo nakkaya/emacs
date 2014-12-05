@@ -1,6 +1,6 @@
 ;;; ox-groff.el --- Groff Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2013  Free Software Foundation, Inc.
+;; Copyright (C) 2011-2014  Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;; Author: Luis R Anaya <papoanaya aroba hot mail punto com>
@@ -1253,12 +1253,8 @@ INFO is a plist holding contextual information.  See
          (path (cond
                 ((member type '("http" "https" "ftp" "mailto"))
                  (concat type ":" raw-path))
-                ((string= type "file")
-                 (when (string-match "\\(.+\\)::.+" raw-path)
-                   (setq raw-path (match-string 1 raw-path)))
-                 (if (file-name-absolute-p raw-path)
-                     (concat "file://" (expand-file-name raw-path))
-                   (concat "file://" raw-path)))
+                ((and (string= type "file") (file-name-absolute-p raw-path))
+                 (concat "file://" raw-path))
                 (t raw-path)))
          protocol)
     (cond
@@ -1272,9 +1268,10 @@ INFO is a plist holding contextual information.  See
      ;; description.
      ((string= type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
-        (when destination
+        (if (not destination) desc
           (format "\\fI [%s] \\fP"
-                  (org-export-solidify-link-text path)))))
+                  (org-export-solidify-link-text
+		   (org-element-property :value destination))))))
 
      ;; Links pointing to a headline: find destination and build
      ;; appropriate referencing command.
@@ -1855,20 +1852,11 @@ file-local settings.
 
 Return output file's name."
   (interactive)
-  (let ((outfile (org-export-output-file-name ".groff" subtreep)))
-    (if async
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'groff))
-	  (let ((org-groff-registered-references nil)
-		(org-groff-special-content nil))
-	    `(expand-file-name
-	      (org-export-to-file
-	       'groff ,outfile ,subtreep ,visible-only ,body-only
-	       ',ext-plist))))
-      (let ((org-groff-registered-references nil)
-	    (org-groff-special-content nil))
-	(org-export-to-file
-	 'groff outfile subtreep visible-only body-only ext-plist)))))
+  (let ((outfile (org-export-output-file-name ".groff" subtreep))
+	(org-groff-registered-references nil)
+	(org-groff-special-content nil))
+    (org-export-to-file 'groff outfile
+      async subtreep visible-only body-only ext-plist)))
 
 (defun org-groff-export-to-pdf
   (&optional async subtreep visible-only body-only ext-plist)
@@ -1896,18 +1884,10 @@ file-local settings.
 
 Return PDF file's name."
   (interactive)
-  (if async
-      (let ((outfile (org-export-output-file-name ".groff" subtreep)))
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'groff))
-	  `(expand-file-name
-	    (org-groff-compile
-	     (org-export-to-file
-	      'groff ,outfile ,subtreep ,visible-only ,body-only
-	      ',ext-plist)))))
-    (org-groff-compile
-     (org-groff-export-to-groff
-      nil subtreep visible-only body-only ext-plist))))
+  (let ((outfile (org-export-output-file-name ".groff" subtreep)))
+    (org-export-to-file 'groff outfile
+      async subtreep visible-only body-only ext-plist
+      (lambda (file) (org-groff-compile file)))))
 
 (defun org-groff-compile (file)
   "Compile a Groff file.
@@ -1919,9 +1899,10 @@ Return PDF file name or an error if it couldn't be produced."
   (let* ((base-name (file-name-sans-extension (file-name-nondirectory file)))
 	 (full-name (file-truename file))
 	 (out-dir (file-name-directory file))
-	 ;; Make sure `default-directory' is set to FILE directory,
-	 ;; not to whatever value the current buffer may have.
-	 (default-directory (file-name-directory full-name))
+	 ;; Properly set working directory for compilation.
+	 (default-directory (if (file-name-absolute-p file)
+				(file-name-directory full-name)
+			      default-directory))
          errors)
     (message (format "Processing Groff file %s ..." file))
     (save-window-excursion

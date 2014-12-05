@@ -1,9 +1,11 @@
 ;;; ox-md.el --- Markdown Back-End for Org Export Engine
 
-;; Copyright (C) 2012, 2013  Free Software Foundation, Inc.
+;; Copyright (C) 2012-2014 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: org, wp, markdown
+
+;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,12 +22,9 @@
 
 ;;; Commentary:
 
-;; This library implements a Markdown back-end (vanilla flavour) for
-;; Org exporter, based on `html' back-end.
-;;
-;; It provides two commands for export, depending on the desired
-;; output: `org-md-export-as-markdown' (temporary buffer) and
-;; `org-md-export-to-markdown' ("md" file).
+;; This library implements a Markdown back-end (vanilla flavor) for
+;; Org exporter, based on `html' back-end.  See Org manual for more
+;; information.
 
 ;;; Code:
 
@@ -69,7 +68,6 @@ This variable can be set to either `atx' or `setext'."
 		(org-open-file (org-md-export-to-markdown nil s v)))))))
   :translate-alist '((bold . org-md-bold)
 		     (code . org-md-verbatim)
-		     (underline . org-md-verbatim)
 		     (comment . (lambda (&rest args) ""))
 		     (comment-block . (lambda (&rest args) ""))
 		     (example-block . org-md-example-block)
@@ -79,6 +77,7 @@ This variable can be set to either `atx' or `setext'."
 		     (headline . org-md-headline)
 		     (horizontal-rule . org-md-horizontal-rule)
 		     (inline-src-block . org-md-verbatim)
+		     (inner-template . org-md-inner-template)
 		     (italic . org-md-italic)
 		     (item . org-md-item)
 		     (line-break . org-md-line-break)
@@ -98,19 +97,33 @@ This variable can be set to either `atx' or `setext'."
 ;;; Filters
 
 (defun org-md-separate-elements (tree backend info)
-  "Make sure elements are separated by at least one blank line.
+  "Fix blank lines between elements.
 
 TREE is the parse tree being exported.  BACKEND is the export
 back-end used.  INFO is a plist used as a communication channel.
 
+Enforce a blank line between elements.  There are three
+exceptions to this rule:
+
+  1. Preserve blank lines between sibling items in a plain list,
+
+  2. Outside of plain lists, preserve blank lines between
+     a paragraph and a plain list,
+
+  3. In an item, remove any blank line before the very first
+     paragraph and the next sub-list.
+
 Assume BACKEND is `md'."
-  (org-element-map tree org-element-all-elements
-    (lambda (elem)
-      (unless (eq (org-element-type elem) 'org-data)
-	(org-element-put-property
-	 elem :post-blank
-	 (let ((post-blank (org-element-property :post-blank elem)))
-	   (if (not post-blank) 1 (max 1 post-blank)))))))
+  (org-element-map tree (remq 'item org-element-all-elements)
+    (lambda (e)
+      (cond
+       ((not (and (eq (org-element-type e) 'paragraph)
+		  (eq (org-element-type (org-export-get-next-element e info))
+		      'plain-list)))
+	(org-element-put-property e :post-blank 1))
+       ((not (eq (org-element-type (org-element-property :parent e)) 'item)))
+       (t (org-element-put-property
+	   e :post-blank (if (org-export-get-previous-element e info) 1 0))))))
   ;; Return updated tree.
   tree)
 
@@ -151,7 +164,7 @@ channel."
   (replace-regexp-in-string
    "^" "    "
    (org-remove-indentation
-    (org-element-property :value example-block))))
+    (org-export-format-code-default example-block info))))
 
 
 ;;;; Headline
@@ -176,6 +189,14 @@ a communication channel."
 	    (and (plist-get info :with-priority)
 		 (let ((char (org-element-property :priority headline)))
 		   (and char (format "[#%c] " char)))))
+	   (anchor
+	    (when (plist-get info :with-toc)
+	      (org-html--anchor
+	       (or (org-element-property :CUSTOM_ID headline)
+		   (concat "sec-"
+			   (mapconcat 'number-to-string
+				      (org-export-get-headline-number
+				       headline info) "-"))))))
 	   ;; Headline text without tags.
 	   (heading (concat todo priority title)))
       (cond
@@ -196,12 +217,12 @@ a communication channel."
 		       (replace-regexp-in-string "^" "    " contents)))))
        ;; Use "Setext" style.
        ((eq org-md-headline-style 'setext)
-	(concat heading tags "\n"
+	(concat heading tags anchor "\n"
 		(make-string (length heading) (if (= level 1) ?= ?-))
 		"\n\n"
 		contents))
        ;; Use "atx" style.
-       (t (concat (make-string level ?#) " " heading tags "\n\n" contents))))))
+       (t (concat (make-string level ?#) " " heading tags anchor "\n\n" contents))))))
 
 
 ;;;; Horizontal Rule
@@ -246,7 +267,8 @@ a communication channel."
 	      (off "[ ] "))
 	    (let ((tag (org-element-property :tag item)))
 	      (and tag (format "**%s:** "(org-export-data tag info))))
-	    (org-trim (replace-regexp-in-string "^" "    " contents)))))
+	    (and contents
+		 (org-trim (replace-regexp-in-string "^" "    " contents))))))
 
 
 ;;;; Line Break
@@ -264,75 +286,73 @@ channel."
   "Transcode LINE-BREAK object into Markdown format.
 CONTENTS is the link's description.  INFO is a plist used as
 a communication channel."
-  (let ((--link-org-files-as-html-maybe
+  (let ((link-org-files-as-md
 	 (function
-	  (lambda (raw-path info)
-	    ;; Treat links to `file.org' as links to `file.html', if
-            ;; needed.  See `org-html-link-org-files-as-html'.
-	    (cond
-	     ((and org-html-link-org-files-as-html
-		   (string= ".org"
-			    (downcase (file-name-extension raw-path "."))))
-	      (concat (file-name-sans-extension raw-path) "."
-		      (plist-get info :html-extension)))
-	     (t raw-path)))))
+	  (lambda (raw-path)
+	    ;; Treat links to `file.org' as links to `file.md'.
+	    (if (string= ".org" (downcase (file-name-extension raw-path ".")))
+		(concat (file-name-sans-extension raw-path) ".md")
+	      raw-path))))
 	(type (org-element-property :type link)))
-    (cond ((member type '("custom-id" "id"))
-	   (let ((destination (org-export-resolve-id-link link info)))
-	     (if (stringp destination)	; External file.
-		 (let ((path (funcall --link-org-files-as-html-maybe
-				      destination info)))
-		   (if (not contents) (format "<%s>" path)
-		     (format "[%s](%s)" contents path)))
-	       (concat
-		(and contents (concat contents " "))
-		(format "(%s)"
-			(format (org-export-translate "See section %s" :html info)
-				(mapconcat 'number-to-string
-					   (org-export-get-headline-number
-					    destination info)
-					   ".")))))))
-	  ((org-export-inline-image-p link org-html-inline-image-rules)
-	   (let ((path (let ((raw-path (org-element-property :path link)))
-			 (if (not (file-name-absolute-p raw-path)) raw-path
-			   (expand-file-name raw-path)))))
-	     (format "![%s](%s)"
-		     (let ((caption (org-export-get-caption
-				     (org-export-get-parent-element link))))
-		       (when caption (org-export-data caption info)))
-		     path)))
-	  ((string= type "coderef")
-	   (let ((ref (org-element-property :path link)))
-	     (format (org-export-get-coderef-format ref contents)
-		     (org-export-resolve-coderef ref info))))
-	  ((equal type "radio")
-	   (let ((destination (org-export-resolve-radio-link link info)))
-	     (org-export-data (org-element-contents destination) info)))
-	  ((equal type "fuzzy")
-	   (let ((destination (org-export-resolve-fuzzy-link link info)))
-	     (if (org-string-nw-p contents) contents
-	       (when destination
-		 (let ((number (org-export-get-ordinal destination info)))
-		   (when number
-		     (if (atom number) (number-to-string number)
-		       (mapconcat 'number-to-string number "."))))))))
-	  (t (let* ((raw-path (org-element-property :path link))
-		    (path (cond
-			   ((member type '("http" "https" "ftp"))
-			    (concat type ":" raw-path))
-			   ((equal type "file")
-			    ;; Treat links to ".org" files as ".html",
-			    ;; if needed.
-			    (setq raw-path
-				  (funcall --link-org-files-as-html-maybe
-					   raw-path info))
-			    ;; If file path is absolute, prepend it
-			    ;; with protocol component - "file://".
-			    (if (not (file-name-absolute-p raw-path)) raw-path
-			      (concat "file://" (expand-file-name raw-path))))
-			   (t raw-path))))
-	       (if (not contents) (format "<%s>" path)
-		 (format "[%s](%s)" contents path)))))))
+    (cond
+     ((member type '("custom-id" "id"))
+      (let ((destination (org-export-resolve-id-link link info)))
+	(if (stringp destination)	; External file.
+	    (let ((path (funcall link-org-files-as-md destination)))
+	      (if (not contents) (format "<%s>" path)
+		(format "[%s](%s)" contents path)))
+	  (concat
+	   (and contents (concat contents " "))
+	   (format "(%s)"
+		   (format (org-export-translate "See section %s" :html info)
+			   (mapconcat 'number-to-string
+				      (org-export-get-headline-number
+				       destination info)
+				      ".")))))))
+     ((org-export-inline-image-p link org-html-inline-image-rules)
+      (let ((path (let ((raw-path (org-element-property :path link)))
+		    (if (not (file-name-absolute-p raw-path)) raw-path
+		      (expand-file-name raw-path))))
+	    (caption (org-export-data
+		      (org-export-get-caption
+		       (org-export-get-parent-element link)) info)))
+	(format "![img](%s)"
+		(if (not (org-string-nw-p caption)) path
+		  (format "%s \"%s\"" path caption)))))
+     ((string= type "coderef")
+      (let ((ref (org-element-property :path link)))
+	(format (org-export-get-coderef-format ref contents)
+		(org-export-resolve-coderef ref info))))
+     ((equal type "radio") contents)
+     ((equal type "fuzzy")
+      (let ((destination (org-export-resolve-fuzzy-link link info)))
+	(if (org-string-nw-p contents) contents
+	  (when destination
+	    (let ((number (org-export-get-ordinal destination info)))
+	      (when number
+		(if (atom number) (number-to-string number)
+		  (mapconcat 'number-to-string number "."))))))))
+     ;; Link type is handled by a special function.
+     ((let ((protocol (nth 2 (assoc type org-link-protocols))))
+	(and (functionp protocol)
+	     (funcall protocol
+		      (org-link-unescape (org-element-property :path link))
+		      contents
+		      'md))))
+     (t (let* ((raw-path (org-element-property :path link))
+	       (path
+		(cond
+		 ((member type '("http" "https" "ftp"))
+		  (concat type ":" raw-path))
+		 ((string= type "file")
+		  (let ((path (funcall link-org-files-as-md raw-path)))
+		    (if (not (file-name-absolute-p path)) path
+		      ;; If file path is absolute, prepend it
+		      ;; with "file:" component.
+		      (concat "file:" path))))
+		 (t raw-path))))
+	  (if (not contents) (format "<%s>" path)
+	    (format "[%s](%s)" contents path)))))))
 
 
 ;;;; Paragraph
@@ -405,6 +425,14 @@ a communication channel."
 
 ;;;; Template
 
+(defun org-md-inner-template (contents info)
+  "Return body of document after converting it to Markdown syntax.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  ;; Make sure CONTENTS is separated from table of contents and
+  ;; footnotes with at least a blank line.
+  (org-trim (org-html-inner-template (concat "\n" contents "\n") info)))
+
 (defun org-md-template (contents info)
   "Return complete document string after Markdown conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist used
@@ -439,21 +467,8 @@ Export is done in a buffer named \"*Org MD Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
-  (if async
-      (org-export-async-start
-	  (lambda (output)
-	    (with-current-buffer (get-buffer-create "*Org MD Export*")
-	      (erase-buffer)
-	      (insert output)
-	      (goto-char (point-min))
-	      (text-mode)
-	      (org-export-add-to-stack (current-buffer) 'md)))
-	`(org-export-as 'md ,subtreep ,visible-only))
-    (let ((outbuf (org-export-to-buffer
-		   'md "*Org MD Export*" subtreep visible-only)))
-      (with-current-buffer outbuf (text-mode))
-      (when org-export-show-temporary-export-buffer
-	(switch-to-buffer-other-window outbuf)))))
+  (org-export-to-buffer 'md "*Org MD Export*"
+    async subtreep visible-only nil nil (lambda () (text-mode))))
 
 ;;;###autoload
 (defun org-md-convert-region-to-md ()
@@ -488,12 +503,7 @@ contents of hidden elements.
 Return output file's name."
   (interactive)
   (let ((outfile (org-export-output-file-name ".md" subtreep)))
-    (if async
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'md))
-	  `(expand-file-name
-	    (org-export-to-file 'md ,outfile ,subtreep ,visible-only)))
-      (org-export-to-file 'md outfile subtreep visible-only))))
+    (org-export-to-file 'md outfile async subtreep visible-only)))
 
 
 (provide 'ox-md)

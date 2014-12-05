@@ -1,9 +1,11 @@
 ;;; ox-org.el --- Org Back-End for Org Export Engine
 
-;; Copyright (C) 2013  Free Software Foundation, Inc.
+;; Copyright (C) 2013-2014 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: org, wp
+
+;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,15 +22,8 @@
 
 ;;; Commentary:
 
-;; This library implements an Org back-end for Org exporter.
-;;
-;; It introduces two interactive functions, `org-org-export-as-org'
-;; and `org-org-export-to-org', which export, respectively, to
-;; a temporary buffer and to a file.
-;;
-;; A publishing function is also provided: `org-org-publish-to-org'.
-
 ;;; Code:
+
 (require 'ox)
 (declare-function htmlize-buffer "htmlize" (&optional buffer))
 
@@ -70,7 +65,7 @@ setting of `org-html-htmlize-output-type' is 'css."
     (entity . org-org-identity)
     (example-block . org-org-identity)
     (fixed-width . org-org-identity)
-    (footnote-definition . org-org-identity)
+    (footnote-definition . ignore)
     (footnote-reference . org-org-identity)
     (headline . org-org-headline)
     (horizontal-rule . org-org-identity)
@@ -92,7 +87,7 @@ setting of `org-html-htmlize-output-type' is 'css."
     (quote-block . org-org-identity)
     (quote-section . org-org-identity)
     (radio-target . org-org-identity)
-    (section . org-org-identity)
+    (section . org-org-section)
     (special-block . org-org-identity)
     (src-block . org-org-identity)
     (statistics-cookie . org-org-identity)
@@ -119,18 +114,24 @@ setting of `org-html-htmlize-output-type' is 'css."
 (defun org-org-identity (blob contents info)
   "Transcode BLOB element or object back into Org syntax.
 CONTENTS is its contents, as a string or nil.  INFO is ignored."
-  (org-export-expand blob contents t))
+  (let ((case-fold-search t))
+    (replace-regexp-in-string
+     "^[ \t]*#\\+ATTR_[-_A-Za-z0-9]+:\\(?: .*\\)?\n" ""
+     (org-export-expand blob contents t))))
 
 (defun org-org-headline (headline contents info)
   "Transcode HEADLINE element back into Org syntax.
 CONTENTS is its contents, as a string or nil.  INFO is ignored."
-  (unless (plist-get info :with-todo-keywords)
-    (org-element-put-property headline :todo-keyword nil))
-  (unless (plist-get info :with-tags)
-    (org-element-put-property headline :tags nil))
-  (unless (plist-get info :with-priority)
-    (org-element-put-property headline :priority nil))
-  (org-element-headline-interpreter headline contents))
+  (unless (org-element-property :footnote-section-p headline)
+    (unless (plist-get info :with-todo-keywords)
+      (org-element-put-property headline :todo-keyword nil))
+    (unless (plist-get info :with-tags)
+      (org-element-put-property headline :tags nil))
+    (unless (plist-get info :with-priority)
+      (org-element-put-property headline :priority nil))
+    (org-element-put-property headline :level
+			      (org-export-get-relative-level headline info))
+    (org-element-headline-interpreter headline contents)))
 
 (defun org-org-keyword (keyword contents info)
   "Transcode KEYWORD element back into Org syntax.
@@ -143,6 +144,33 @@ keywords targeted at other export back-ends."
 			  (car block-cons)))
 		   org-element-block-name-alist))
     (org-element-keyword-interpreter keyword nil)))
+
+(defun org-org-section (section contents info)
+  "Transcode SECTION element back into Org syntax.
+CONTENTS is the contents of the section.  INFO is a plist used as
+a communication channel."
+  (concat
+   (org-element-normalize-string contents)
+   ;; Insert footnote definitions appearing for the first time in this
+   ;; section.  Indeed, some of them may not be available to narrowing
+   ;; so we make sure all of them are included in the result.
+   (let ((footnotes-alist
+	  (org-element-map section 'footnote-reference
+	    (lambda (fn)
+	      (and (eq (org-element-property :type fn) 'standard)
+		   (org-export-footnote-first-reference-p fn info)
+		   (cons (org-element-property :label fn)
+			 (org-export-get-footnote-definition fn info))))
+	    info)))
+     (and footnotes-alist
+	  (concat "\n"
+		  (mapconcat
+		   (lambda (d)
+		     (org-element-normalize-string
+		      (concat (format "[%s] "(car d))
+			      (org-export-data (cdr d) info))))
+		   footnotes-alist "\n"))))
+   (make-string (or (org-element-property :post-blank section) 0) ?\n)))
 
 ;;;###autoload
 (defun org-org-export-as-org (&optional async subtreep visible-only ext-plist)
@@ -172,22 +200,8 @@ Export is done in a buffer named \"*Org ORG Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
-  (if async
-      (org-export-async-start
-	  (lambda (output)
-	    (with-current-buffer (get-buffer-create "*Org ORG Export*")
-	      (erase-buffer)
-	      (insert output)
-	      (goto-char (point-min))
-	      (org-mode)
-	      (org-export-add-to-stack (current-buffer) 'org)))
-	`(org-export-as 'org ,subtreep ,visible-only nil ',ext-plist))
-    (let ((outbuf
-	   (org-export-to-buffer
-	    'org "*Org ORG Export*" subtreep visible-only nil ext-plist)))
-      (with-current-buffer outbuf (org-mode))
-      (when org-export-show-temporary-export-buffer
-	(switch-to-buffer-other-window outbuf)))))
+  (org-export-to-buffer 'org "*Org ORG Export*"
+    async subtreep visible-only nil ext-plist (lambda () (org-mode))))
 
 ;;;###autoload
 (defun org-org-export-to-org (&optional async subtreep visible-only ext-plist)
@@ -216,13 +230,8 @@ file-local settings.
 Return output file name."
   (interactive)
   (let ((outfile (org-export-output-file-name ".org" subtreep)))
-    (if async
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'org))
-	  `(expand-file-name
-	    (org-export-to-file
-	     'org ,outfile ,subtreep ,visible-only nil ',ext-plist)))
-      (org-export-to-file 'org outfile subtreep visible-only nil ext-plist))))
+    (org-export-to-file 'org outfile
+      async subtreep visible-only nil ext-plist)))
 
 ;;;###autoload
 (defun org-org-publish-to-org (plist filename pub-dir)
@@ -245,6 +254,8 @@ Return output file name."
 	   (work-buffer (or visitingp (find-file filename)))
 	   newbuf)
       (font-lock-fontify-buffer)
+      (show-all)
+      (org-show-block-all)
       (setq newbuf (htmlize-buffer))
       (with-current-buffer newbuf
 	(when org-org-htmlized-css-url

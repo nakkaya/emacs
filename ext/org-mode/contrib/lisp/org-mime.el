@@ -1,6 +1,6 @@
 ;;; org-mime.el --- org html export for text/html MIME emails
 
-;; Copyright (C) 2010-2013 Eric Schulte
+;; Copyright (C) 2010-2014 Eric Schulte
 
 ;; Author: Eric Schulte
 ;; Keywords: mime, mail, email, html
@@ -163,10 +163,13 @@ and images in a multipart/related part."
     ('semi (concat
             "--" "<<alternative>>-{\n"
             "--" "[[text/plain]]\n" plain
-	    (when images (concat "--" "<<alternative>>-{\n"))
-            "--" "[[text/html]]\n"  html
-	    images
-	    (when images (concat "--" "}-<<alternative>>\n"))
+	    (if (and images (> (length images) 0))
+		(concat "--" "<<related>>-{\n"
+			"--" "[[text/html]]\n"  html
+			images
+			"--" "}-<<related>>\n")
+	      (concat "--" "[[text/html]]\n"  html
+		      images))
             "--" "}-<<alternative>>\n"))
     ('vm "?")))
 
@@ -212,14 +215,12 @@ export that region, otherwise export the entire body."
          (tmp-file (make-temp-name (expand-file-name
 				    "mail" temporary-file-directory)))
          (body (org-export-string-as raw-body 'org t))
-         ;; because we probably don't want to skip part of our mail
-         (org-export-skip-text-before-1st-heading nil)
          ;; because we probably don't want to export a huge style file
          (org-export-htmlize-output-type 'inline-css)
          ;; makes the replies with ">"s look nicer
          (org-export-preserve-breaks org-mime-preserve-breaks)
 	 ;; dvipng for inline latex because MathJax doesn't work in mail
-	 (org-export-with-LaTeX-fragments 'dvipng)
+	 (org-html-with-latex 'dvipng)
          ;; to hold attachments for inline html images
          (html-and-images
           (org-mime-replace-images
@@ -271,8 +272,10 @@ export that region, otherwise export the entire body."
 (defun org-mime-send-buffer (&optional fmt)
   (run-hooks 'org-mime-send-buffer-hook)
   (let* ((region-p (org-region-active-p))
-	 (subject (org-export-grab-title-from-buffer))
-         (file (buffer-file-name (current-buffer)))
+	 (file (buffer-file-name (current-buffer)))
+	 (subject (if (not file) (buffer-name (buffer-base-buffer))
+		   (file-name-sans-extension
+		    (file-name-nondirectory file))))
          (body-start (or (and region-p (region-beginning))
                          (save-excursion (goto-char (point-min)))))
          (body-end (or (and region-p (region-end)) (point-max)))

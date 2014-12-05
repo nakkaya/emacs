@@ -1,11 +1,13 @@
 ;;; ox-icalendar.el --- iCalendar Back-End for Org Export Engine
 
-;; Copyright (C) 2004-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;      Nicolas Goaziou <n dot goaziou at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
+
+;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,23 +25,9 @@
 ;;; Commentary:
 ;;
 ;; This library implements an iCalendar back-end for Org generic
-;; exporter.
+;; exporter.  See Org manual for more information.
 ;;
-;; It provides three commands for export, depending on the chosen
-;; source and desired output: `org-icalendar-export-to-ics' (current
-;; file), `org-icalendar-export-agenda-files' (agenda files into
-;; separate calendars) and `org-icalendar-combined-agenda-file'
-;; (agenda files into one combined calendar).
-;;
-;; It also provides `org-icalendar-export-current-agenda' function,
-;; which will create a calendar file from current agenda view.  It is
-;; meant to be called through `org-agenda-write'.
-;;
-;; This back-end introduces a new keyword, ICALENDAR_EXCLUDE_TAGS,
-;; which allows to specify a different set of exclude tags from other
-;; back-ends.
-;;
-;; It should follow RFC 5545 specifications.
+;; It is expected to conform to RFC 5545.
 
 ;;; Code:
 
@@ -186,8 +174,7 @@ The anniversaries are defined in the BBDB database."
 
 (defcustom org-icalendar-include-sexps t
   "Non-nil means export to iCalendar files should also cover sexp entries.
-These are entries like in the diary, but directly in an Org mode
-file."
+These are entries like in the diary, but directly in an Org file."
   :group 'org-export-icalendar
   :type 'boolean)
 
@@ -314,14 +301,14 @@ which will be updated."
 
 INFO is a plist used as a communication channel.
 
-a headline is blocked when either:
+A headline is blocked when either
 
-  - It has children which are not all in a completed state.
+  - it has children which are not all in a completed state;
 
-  - It has a parent with the property :ORDERED:, and there are
-    siblings prior to it with incomplete status.
+  - it has a parent with the property :ORDERED:, and there are
+    siblings prior to it with incomplete status;
 
-  - Its parent is blocked because it has siblings that should be
+  - its parent is blocked because it has siblings that should be
     done first or is a child of a blocked grandparent entry."
   (or
    ;; Check if any child is not done.
@@ -490,10 +477,10 @@ or subject for the event."
 ;;; Filters
 
 (defun org-icalendar-clear-blank-lines (headline back-end info)
-  "Remove trailing blank lines in HEADLINE export.
+  "Remove blank lines in HEADLINE export.
 HEADLINE is a string representing a transcoded headline.
 BACK-END and INFO are ignored."
-  (replace-regexp-in-string "^\\(?:[ \t]*\n\\)*" "" headline))
+  (replace-regexp-in-string "^\\(?:[ \t]*\n\\)+" "" headline))
 
 
 
@@ -582,13 +569,19 @@ inlinetask within the section."
 	    ;; happen once ENTRY is one of them.
 	    (let ((counter 0))
 	      (mapconcat
-	       'identity
+	       #'identity
 	       (org-element-map (cons (org-element-property :title entry)
 				      (org-element-contents inside))
 		   'timestamp
 		 (lambda (ts)
-		   (let ((uid (format "TS%d-%s" (incf counter) uid)))
-		     (org-icalendar--vevent entry ts uid summary loc desc cat)))
+		   (when (let ((type (org-element-property :type ts)))
+			   (case (plist-get info :with-timestamps)
+			     (active (memq type '(active active-range)))
+			     (inactive (memq type '(inactive inactive-range)))
+			     ((t) t)))
+		     (let ((uid (format "TS%d-%s" (incf counter) uid)))
+		       (org-icalendar--vevent
+			entry ts uid summary loc desc cat))))
 		 info nil (and (eq type 'headline) 'inlinetask))
 	       ""))
 	    ;; Task: First check if it is appropriate to export it.
@@ -601,7 +594,7 @@ inlinetask within the section."
 			  (and (eq type 'headline)
 			       (not (org-icalendar-blocked-headline-p
 				     entry info))))
-			 ('t (eq todo-type 'todo))))
+			 ((t) (eq todo-type 'todo))))
 	      (org-icalendar--vtodo entry uid summary loc desc cat))
 	    ;; Diary-sexp: Collect every diary-sexp element within
 	    ;; ENTRY and its title, and transcode them.  If ENTRY is
@@ -609,7 +602,7 @@ inlinetask within the section."
 	    ;; separately.
 	    (when org-icalendar-include-sexps
 	      (let ((counter 0))
-		(mapconcat 'identity
+		(mapconcat #'identity
 			   (org-element-map
 			       (cons (org-element-property :title entry)
 				     (org-element-contents inside))
@@ -625,7 +618,7 @@ inlinetask within the section."
        ;; inlinetask within it.  In agenda export, this is independent
        ;; from the mark (or lack thereof) on the entry.
        (when (eq type 'headline)
-	 (mapconcat 'identity
+	 (mapconcat #'identity
 		    (org-element-map inside 'inlinetask
 		      (lambda (task) (org-icalendar-entry task nil info))
 		      info) ""))
@@ -826,21 +819,10 @@ Return ICS file name."
   ;; Export part.  Since this back-end is backed up by `ascii', ensure
   ;; links will not be collected at the end of sections.
   (let ((outfile (org-export-output-file-name ".ics" subtreep)))
-    (if async
-	(org-export-async-start
-	    (lambda (f)
-	      (org-export-add-to-stack f 'icalendar)
-	      (run-hook-with-args 'org-icalendar-after-save-hook f))
-	  `(let ((org-ascii-links-to-notes nil))
-	     (expand-file-name
-	      (org-export-to-file
-	       'icalendar ,outfile ,subtreep ,visible-only ,body-only
-	       '(:ascii-charset utf-8)))))
-      (let ((org-ascii-links-to-notes nil))
-	(org-export-to-file 'icalendar outfile subtreep visible-only body-only
-			    '(:ascii-charset utf-8)))
-      (run-hook-with-args 'org-icalendar-after-save-hook outfile)
-      outfile)))
+    (org-export-to-file 'icalendar outfile
+      async subtreep visible-only body-only '(:ascii-charset utf-8)
+      (lambda (file)
+	(run-hook-with-args 'org-icalendar-after-save-hook file) nil))))
 
 ;;;###autoload
 (defun org-icalendar-export-agenda-files (&optional async)
@@ -987,9 +969,7 @@ files to build the calendar from."
 	     ;; BBDB anniversaries.
 	     (when (and org-icalendar-include-bbdb-anniversaries
 			(require 'org-bbdb nil t))
-	       (with-temp-buffer
-		 (org-bbdb-anniv-export-ical)
-		 (buffer-string)))))))
+	       (with-output-to-string (org-bbdb-anniv-export-ical)))))))
 	(run-hook-with-args 'org-icalendar-after-save-hook
 			    org-icalendar-combined-agenda-file))
     (org-release-buffers org-agenda-new-buffers)))

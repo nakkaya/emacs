@@ -1,6 +1,6 @@
 ;;; org-capture.el --- Fast note taking in Org-mode
 
-;; Copyright (C) 2010-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -24,14 +24,14 @@
 ;;
 ;;; Commentary:
 
-;; This file contains an alternative implementation of the same functionality
-;; that is also provided by org-remember.el.  The implementation is more
+;; This file contains an alternative implementation of the functionality
+;; that used to be provided by org-remember.el.  The implementation is more
 ;; streamlined, can produce more target types (e.g. plain list items or
 ;; table lines).  Also, it does not use a temporary buffer for editing
 ;; the captured entry - instead it uses an indirect buffer that visits
 ;; the new entry already in the target buffer (this was an idea by Samuel
-;; Wales).  John Wiegley's excellent `remember.el' is not needed for this
-;; implementation, even though we borrow heavily from its ideas.
+;; Wales).  John Wiegley's excellent `remember.el' is not needed anymore
+;; for this implementation, even though we borrow heavily from its ideas.
 
 ;; This implementation heavily draws on ideas by James TD Smith and
 ;; Samuel Wales, and, of cause, uses John Wiegley's remember.el as inspiration.
@@ -577,8 +577,9 @@ of the day at point (if any) or the current HH:MM time."
 			      (file-name-nondirectory
 			       (buffer-file-name orig-buf)))
 			 :annotation annotation
-			 :initial initial)
-	(org-capture-put :default-time
+			 :initial initial
+			 :return-to-wconf (current-window-configuration)
+			 :default-time
 			 (or org-overriding-default-time
 			     (org-current-time)))
 	(org-capture-set-target-location)
@@ -593,7 +594,8 @@ of the day at point (if any) or the current HH:MM time."
 	    ;;insert at point
 	    (org-capture-insert-template-here)
 	  (condition-case error
-	      (org-capture-place-template)
+	      (org-capture-place-template
+	       (equal (car (org-capture-get :target)) 'function))
 	    ((error quit)
 	     (if (and (buffer-base-buffer (current-buffer))
 		      (string-match "\\`CAPTURE-" (buffer-name)))
@@ -739,7 +741,8 @@ captured item after finalizing."
 	      (pos (org-capture-get :initial-target-position))
 	      (ipt (org-capture-get :insertion-point))
 	      (size (org-capture-get :captured-entry-size)))
-	  (when reg
+	  (if (not reg)
+	      (widen)
 	    (cond ((< ipt (car reg))
 		   ;; insertion point is before the narrowed region
 		   (narrow-to-region (+ size (car reg)) (+ size (cdr reg))))
@@ -787,14 +790,14 @@ already gone.  Any prefix argument will be passed to the refile command."
   (let ((pos (point))
 	(base (buffer-base-buffer (current-buffer)))
 	(org-refile-for-capture t))
-    (org-capture-finalize)
     (save-window-excursion
       (with-current-buffer (or base (current-buffer))
 	(save-excursion
 	  (save-restriction
 	    (widen)
 	    (goto-char pos)
-	    (call-interactively 'org-refile)))))))
+	    (call-interactively 'org-refile)))))
+    (org-capture-finalize)))
 
 (defun org-capture-kill ()
   "Abort the current capture process."
@@ -909,7 +912,8 @@ Store them in the capture property list."
 				(current-time))))
 	      (org-capture-put
 	       :default-time
-	       (cond ((and (not org-time-was-given)
+	       (cond ((and (or (not (boundp 'org-time-was-given))
+			       (not org-time-was-given))
 			   (not (= (time-to-days prompt-time) (org-today))))
 		      ;; Use 00:00 when no time is given for another date than today?
 		      (apply 'encode-time (append '(0 0 0) (cdddr (decode-time prompt-time)))))
@@ -985,9 +989,12 @@ it.  When it is a variable, retrieve the value.  Return whatever we get."
 	  (ignore-errors (org-set-local (car v) (cdr v))))
 	(buffer-local-variables buffer)))
 
-(defun org-capture-place-template ()
-  "Insert the template at the target location, and display the buffer."
-  (org-capture-put :return-to-wconf (current-window-configuration))
+(defun org-capture-place-template (&optional inhibit-wconf-store)
+  "Insert the template at the target location, and display the buffer.
+When `inhibit-wconf-store', don't store the window configuration, as it
+may have been stored before."
+  (unless inhibit-wconf-store
+    (org-capture-put :return-to-wconf (current-window-configuration)))
   (delete-other-windows)
   (org-switch-to-buffer-other-window
    (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
@@ -1266,8 +1273,11 @@ Of course, if exact position has been required, just put it there."
 	(save-restriction
 	  (widen)
 	  (goto-char pos)
-	  (with-demoted-errors
-	    (bookmark-set "org-capture-last-stored"))
+	  (let ((bookmark-name (plist-get org-bookmark-names-plist
+					  :last-capture)))
+	    (when bookmark-name
+	      (with-demoted-errors
+		(bookmark-set bookmark-name))))
 	  (move-marker org-capture-last-stored-marker (point)))))))
 
 (defun org-capture-narrow (beg end)
@@ -1519,8 +1529,8 @@ The template may still contain \"%?\" for cursor positioning."
 	 (v-x (or (org-get-x-clipboard 'PRIMARY)
 		  (org-get-x-clipboard 'CLIPBOARD)
 		  (org-get-x-clipboard 'SECONDARY)))
-	 (v-t (format-time-string (car org-time-stamp-formats) ct))
-	 (v-T (format-time-string (cdr org-time-stamp-formats) ct))
+	 (v-t (format-time-string (car org-time-stamp-formats) ct1))
+	 (v-T (format-time-string (cdr org-time-stamp-formats) ct1))
 	 (v-u (concat "[" (substring v-t 1 -1) "]"))
 	 (v-U (concat "[" (substring v-T 1 -1) "]"))
 	 ;; `initial' and `annotation' might habe been passed.
@@ -1577,7 +1587,7 @@ The template may still contain \"%?\" for cursor positioning."
       (insert template)
       (goto-char (point-min))
       (org-capture-steal-local-variables buffer)
-      (setq buffer-file-name nil)
+      (setq buffer-file-name nil mark-active nil)
 
       ;; %[] Insert contents of a file.
       (goto-char (point-min))
@@ -1664,7 +1674,9 @@ The template may still contain \"%?\" for cursor positioning."
 		(or (equal (char-before) ?:) (insert ":"))
 		(insert ins)
 		(or (equal (char-after) ?:) (insert ":"))
-		(and (org-at-heading-p) (org-set-tags nil 'align)))))
+		(and (org-at-heading-p)
+		     (let ((org-ignore-region t))
+		       (org-set-tags nil 'align))))))
 	   ((equal char "C")
 	    (cond ((= (length clipboards) 1) (insert (car clipboards)))
 		  ((> (length clipboards) 1)
@@ -1733,11 +1745,15 @@ The template may still contain \"%?\" for cursor positioning."
       (goto-char (match-beginning 0))
       (let ((template-start (point)))
 	(forward-char 1)
-	(let ((result (org-eval
-		       (org-capture--expand-keyword-in-embedded-elisp
-			(read (current-buffer))))))
+	(let* ((sexp (read (current-buffer)))
+	       (result (org-eval
+			(org-capture--expand-keyword-in-embedded-elisp sexp))))
 	  (delete-region template-start (point))
-	  (insert result))))))
+	  (when result
+	    (if (stringp result)
+		(insert result)
+	      (error "Capture template sexp `%s' must evaluate to string or nil"
+		     sexp))))))))
 
 (defun org-capture--expand-keyword-in-embedded-elisp (attr)
   "Recursively replace capture link keywords in ATTR sexp.

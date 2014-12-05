@@ -1,6 +1,6 @@
 ;;; org-colview.el --- Column View in Org-mode
 
-;; Copyright (C) 2004-2013 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2014 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -169,10 +169,12 @@ This is the compiled version of the format.")
 			    (get-text-property (point-at-bol) 'face))
 		       'default))
 	 (color (list :foreground (face-attribute ref-face :foreground)))
-	 (face (list color 'org-column ref-face))
-	 (face1 (list color 'org-agenda-column-dateline ref-face))
+	 (font (list :height (face-attribute 'default :height)
+		     :family (face-attribute 'default :family)))
+	 (face (list color font 'org-column ref-face))
+	 (face1 (list color font 'org-agenda-column-dateline ref-face))
 	 (cphr (get-text-property (point-at-bol) 'org-complex-heading-regexp))
-	 pom property ass width f string ov column val modval s2 title calc)
+	 pom property ass width f fc string fm ov column val modval s2 title calc)
     ;; Check if the entry is in another buffer.
     (unless props
       (if (eq major-mode 'org-agenda-mode)
@@ -202,6 +204,8 @@ This is the compiled version of the format.")
 		      (nth 2 column)
 		      (length property))
 	    f (format "%%-%d.%ds | " width width)
+	    fm (nth 4 column)
+	    fc (nth 5 column)
 	    calc (nth 7 column)
 	    val (or (cdr ass) "")
 	    modval (cond ((and org-columns-modify-value-for-display-function
@@ -213,13 +217,14 @@ This is the compiled version of the format.")
 			  (org-columns-cleanup-item
 			   val org-columns-current-fmt-compiled
 			   (or org-complex-heading-regexp cphr)))
+			 (fc (org-columns-number-to-string
+			      (org-columns-string-to-number val fm) fm fc))
 			 ((and calc (functionp calc)
 			       (not (string= val ""))
 			       (not (get-text-property 0 'org-computed val)))
 			  (org-columns-number-to-string
 			   (funcall calc (org-columns-string-to-number
-					  val (nth 4 column)))
-			   (nth 4 column)))))
+					  val fm)) fm))))
       (setq s2 (org-columns-add-ellipses (or modval val) width))
       (setq string (format f s2))
       ;; Create the overlay
@@ -321,6 +326,7 @@ for the duration of the command.")
 (defvar org-colview-initial-truncate-line-value nil
   "Remember the value of `truncate-lines' across colview.")
 
+;;;###autoload
 (defun org-columns-remove-overlays ()
   "Remove all currently active column overlays."
   (interactive)
@@ -413,6 +419,10 @@ If yes, throw an error indicating that changing it does not make sense."
 		    (get-char-property (point) 'org-columns-value))
       (org-columns-next-allowed-value)
     (org-columns-edit-value "TAGS")))
+
+(defvar org-agenda-overriding-columns-format nil
+  "When set, overrides any other format definition for the agenda.
+Don't set this, this is meant for dynamic scoping.")
 
 (defun org-columns-edit-value (&optional key)
   "Edit the value of the property at point in column view.
@@ -664,6 +674,7 @@ around it."
   (let ((value (get-char-property (point) 'org-columns-value)))
     (org-open-link-from-string value arg)))
 
+;;;###autoload
 (defun org-columns-get-format-and-top-level ()
   (let ((fmt (org-columns-get-format)))
     (org-columns-goto-top-level)
@@ -899,10 +910,6 @@ display, or in the #+COLUMNS line of the current buffer."
 		(insert-before-markers "#+COLUMNS: " fmt "\n")))
 	    (org-set-local 'org-columns-default-format fmt))))))
 
-(defvar org-agenda-overriding-columns-format nil
-  "When set, overrides any other format definition for the agenda.
-Don't set this, this is meant for dynamic scoping.")
-
 (defun org-columns-get-autowidth-alist (s cache)
   "Derive the maximum column widths from the format and the cache."
   (let ((start 0) rtn)
@@ -949,6 +956,8 @@ Don't set this, this is meant for dynamic scoping.")
 
 (defvar org-inlinetask-min-level
   (if (featurep 'org-inlinetask) org-inlinetask-min-level 15))
+
+;;;###autoload
 (defun org-columns-compute (property)
   "Sum the values of property PROPERTY hierarchically, for the entire buffer."
   (interactive)
@@ -1052,6 +1061,7 @@ Don't set this, this is meant for dynamic scoping.")
 	(setq sum (+ (string-to-number (pop l)) (/ sum 60))))
       sum)))
 
+;;;###autoload
 (defun org-columns-number-to-string (n fmt &optional printf)
   "Convert a computed column number to a string value, according to FMT."
   (cond
@@ -1304,10 +1314,10 @@ PARAMS is a property list of parameters:
 			    (if (eq 'hline x) x (cons "" x)))
 			  tbl))
 	(setq tbl (append tbl (list (cons "/" (make-list nfields "<>"))))))
-      (setq pos (point))
       (when content-lines
 	(while (string-match "^#" (car content-lines))
 	  (insert (pop content-lines) "\n")))
+      (setq pos (point))
       (insert (org-listtable-to-string tbl))
       (when (plist-get params :width)
 	(insert "\n|" (mapconcat (lambda (x) (format "<%d>" (max 3 x)))

@@ -1,6 +1,6 @@
 ;; ox-man.el --- Man Back-End for Org Export Engine
 
-;; Copyright (C) 2011-2013  Free Software Foundation, Inc.
+;; Copyright (C) 2011-2014 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;;      Luis R Anaya <papoanaya aroba hot mail punto com>
@@ -638,21 +638,15 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 DESC is the description part of the link, or the empty string.
 INFO is a plist holding contextual information.  See
 `org-export-data'."
-
   (let* ((type (org-element-property :type link))
          (raw-path (org-element-property :path link))
          ;; Ensure DESC really exists, or set it to nil.
          (desc (and (not (string= desc "")) desc))
-
          (path (cond
                 ((member type '("http" "https" "ftp" "mailto"))
                  (concat type ":" raw-path))
-                ((string= type "file")
-                 (when (string-match "\\(.+\\)::.+" raw-path)
-                   (setq raw-path (match-string 1 raw-path)))
-                 (if (file-name-absolute-p raw-path)
-                     (concat "file://" (expand-file-name raw-path))
-                   (concat "file://" raw-path)))
+                ((and (string= type "file") (file-name-absolute-p raw-path))
+                 (concat "file:" raw-path))
                 (t raw-path)))
          protocol)
     (cond
@@ -1144,14 +1138,8 @@ file-local settings.
 Return output file's name."
   (interactive)
   (let ((outfile (org-export-output-file-name ".man" subtreep)))
-    (if async
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'man))
-	  `(expand-file-name
-	    (org-export-to-file
-	     'man ,outfile ,subtreep ,visible-only ,body-only ',ext-plist)))
-      (org-export-to-file
-       'man outfile subtreep visible-only body-only ext-plist))))
+    (org-export-to-file 'man outfile
+      async subtreep visible-only body-only ext-plist)))
 
 (defun org-man-export-to-pdf
   (&optional async subtreep visible-only body-only ext-plist)
@@ -1182,17 +1170,10 @@ file-local settings.
 
 Return PDF file's name."
   (interactive)
-  (if async
-      (let ((outfile (org-export-output-file-name ".man" subtreep)))
-	(org-export-async-start
-	    (lambda (f) (org-export-add-to-stack f 'man))
-	  `(expand-file-name
-	    (org-man-compile
-	     (org-export-to-file
-	      'man ,outfile ,subtreep ,visible-only ,body-only
-	      ',ext-plist)))))
-    (org-man-compile
-     (org-man-export-to-man nil subtreep visible-only body-only ext-plist))))
+  (let ((outfile (org-export-output-file-name ".man" subtreep)))
+    (org-export-to-file 'man outfile
+      async subtreep visible-only body-only ext-plist
+      (lambda (file) (org-latex-compile file)))))
 
 (defun org-man-compile (file)
   "Compile a Groff file.
@@ -1204,9 +1185,10 @@ Return PDF file name or an error if it couldn't be produced."
   (let* ((base-name (file-name-sans-extension (file-name-nondirectory file)))
 	 (full-name (file-truename file))
 	 (out-dir (file-name-directory file))
-	 ;; Make sure `default-directory' is set to FILE directory,
-	 ;; not to whatever value the current buffer may have.
-	 (default-directory (file-name-directory full-name))
+	 ;; Properly set working directory for compilation.
+	 (default-directory (if (file-name-absolute-p file)
+				(file-name-directory full-name)
+			      default-directory))
          errors)
     (message (format "Processing Groff file %s..." file))
     (save-window-excursion

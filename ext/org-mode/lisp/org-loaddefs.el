@@ -14,7 +14,7 @@
 ;;;;;;  org-babel-pop-to-session-maybe org-babel-load-in-session-maybe
 ;;;;;;  org-babel-expand-src-block-maybe org-babel-view-src-block-info
 ;;;;;;  org-babel-execute-maybe org-babel-execute-safely-maybe) "ob-core"
-;;;;;;  "ob-core.el" "060007d1642de84b3d45d0110559fd82")
+;;;;;;  "ob-core.el" "81e011c3c1419cbf51b1656694bf42f8")
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -229,7 +229,7 @@ Mark current src block.
 ;;;***
 
 ;;;### (autoloads (org-babel-describe-bindings) "ob-keys" "ob-keys.el"
-;;;;;;  "f41a561a02eb66238c2824e76e3f8cc8")
+;;;;;;  "25a1e7a65f088c34d9576789abaaebc6")
 ;;; Generated autoloads from ob-keys.el
 
 (autoload 'org-babel-describe-bindings "ob-keys" "\
@@ -240,7 +240,7 @@ Describe all keybindings behind `org-babel-key-prefix'.
 ;;;***
 
 ;;;### (autoloads (org-babel-lob-get-info org-babel-lob-execute-maybe)
-;;;;;;  "ob-lob" "ob-lob.el" "be09335287121c6bf4403a57f3244b94")
+;;;;;;  "ob-lob" "ob-lob.el" "6452edf7fff14c5ebb5c1cece08ba833")
 ;;; Generated autoloads from ob-lob.el
 
 (autoload 'org-babel-lob-execute-maybe "ob-lob" "\
@@ -258,7 +258,7 @@ Return a Library of Babel function call as a string.
 ;;;***
 
 ;;;### (autoloads (org-babel-tangle org-babel-tangle-file) "ob-tangle"
-;;;;;;  "ob-tangle.el" "f2e6212ecf8512d3893e6198962eb888")
+;;;;;;  "ob-tangle.el" "1fc39a5a416a66ab63a506ccc0a122ff")
 ;;; Generated autoloads from ob-tangle.el
 
 (autoload 'org-babel-tangle-file "ob-tangle" "\
@@ -267,6 +267,7 @@ Source code blocks are extracted with `org-babel-tangle'.
 Optional argument TARGET-FILE can be used to specify a default
 export file for all source blocks.  Optional argument LANG can be
 used to limit the exported source code blocks by language.
+Return a list whose CAR is the tangled file name.
 
 \(fn FILE &optional TARGET-FILE LANG)" t nil)
 
@@ -285,12 +286,13 @@ used to limit the exported source code blocks by language.
 
 ;;;***
 
-;;;### (autoloads (org-agenda-to-appt org-calendar-goto-agenda org-diary
-;;;;;;  org-agenda-list-stuck-projects org-tags-view org-todo-list
+;;;### (autoloads (org-agenda-to-appt org-calendar-goto-agenda org-agenda-set-restriction-lock
+;;;;;;  org-agenda-check-for-timestamp-as-reason-to-ignore-todo-item
+;;;;;;  org-diary org-agenda-list-stuck-projects org-tags-view org-todo-list
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
 ;;;;;;  org-agenda org-toggle-sticky-agenda) "org-agenda" "org-agenda.el"
-;;;;;;  (20858 3138))
+;;;;;;  (21562 65218))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-toggle-sticky-agenda "org-agenda" "\
@@ -507,6 +509,19 @@ function from a program - use `org-agenda-get-day-entries' instead.
 
 \(fn &rest ARGS)" nil nil)
 
+(autoload 'org-agenda-check-for-timestamp-as-reason-to-ignore-todo-item "org-agenda" "\
+Do we have a reason to ignore this TODO entry because it has a time stamp?
+
+\(fn &optional END)" nil nil)
+
+(autoload 'org-agenda-set-restriction-lock "org-agenda" "\
+Set restriction lock for agenda, to current subtree or file.
+Restriction will be the file if TYPE is `file', or if type is the
+universal prefix '(4), or if the cursor is before the first headline
+in the file.  Otherwise, restriction will be to the current subtree.
+
+\(fn &optional TYPE)" t nil)
+
 (autoload 'org-calendar-goto-agenda "org-agenda" "\
 Compute the Org-mode agenda for the calendar date displayed at the cursor.
 This is a command that has to be installed in `calendar-mode-map'.
@@ -552,8 +567,16 @@ to override `appt-message-warning-time'.
 
 ;;;### (autoloads (org-archive-subtree-default-with-confirmation
 ;;;;;;  org-archive-subtree-default org-toggle-archive-tag org-archive-to-archive-sibling
-;;;;;;  org-archive-subtree) "org-archive" "org-archive.el" "bc3cb1755c5b20dc90bde801f0202eca")
+;;;;;;  org-archive-subtree org-add-archive-files) "org-archive"
+;;;;;;  "org-archive.el" "9a54b246691497eb10c911c2c12f9742")
 ;;; Generated autoloads from org-archive.el
+
+(autoload 'org-add-archive-files "org-archive" "\
+Splice the archive files into the list of files.
+This implies visiting all these files and finding out what the
+archive file is.
+
+\(fn FILES)" nil nil)
 
 (autoload 'org-archive-subtree "org-archive" "\
 Move the current subtree to the archive.
@@ -598,7 +621,7 @@ This command is set with the variable `org-archive-default-command'.
 
 ;;;***
 
-;;;### (autoloads (org-attach) "org-attach" "org-attach.el" "0f042777440a0b6677b74d048cc07bba")
+;;;### (autoloads (org-attach) "org-attach" "org-attach.el" "5ca6eaa6ba7fa7c7eddc8d339f2a2170")
 ;;; Generated autoloads from org-attach.el
 
 (autoload 'org-attach "org-attach" "\
@@ -610,7 +633,7 @@ Shows a list of commands and prompts for another key to execute a command.
 ;;;***
 
 ;;;### (autoloads (org-bbdb-anniversaries) "org-bbdb" "org-bbdb.el"
-;;;;;;  "867e99974c8aab087ba115fc8f89e956")
+;;;;;;  "5fed335fd36cec704d37da4b5f5d54a7")
 ;;; Generated autoloads from org-bbdb.el
 
 (autoload 'org-bbdb-anniversaries "org-bbdb" "\
@@ -621,8 +644,8 @@ Extract anniversaries from BBDB for display in the agenda.
 ;;;***
 
 ;;;### (autoloads (org-capture-import-remember-templates org-capture
-;;;;;;  org-capture-string) "org-capture" "org-capture.el" (20858
-;;;;;;  3117))
+;;;;;;  org-capture-string) "org-capture" "org-capture.el" (21562
+;;;;;;  3391))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture-string "org-capture" "\
@@ -664,10 +687,12 @@ Set `org-capture-templates' to be similar to `org-remember-templates'.
 
 ;;;***
 
-;;;### (autoloads (org-dblock-write:clocktable org-clock-report org-clock-get-clocktable
-;;;;;;  org-clock-display org-clock-sum org-clock-goto org-clock-cancel
-;;;;;;  org-clock-out org-clock-in-last org-clock-in org-resolve-clocks)
-;;;;;;  "org-clock" "org-clock.el" "0f274d2658b26a2eeb8abe47d476b180")
+;;;### (autoloads (org-clock-update-time-maybe org-dblock-write:clocktable
+;;;;;;  org-clocktable-shift org-clock-report org-clock-get-clocktable
+;;;;;;  org-clock-remove-overlays org-clock-display org-clock-sum
+;;;;;;  org-clock-goto org-clock-cancel org-clock-out org-clock-in-last
+;;;;;;  org-clock-in org-resolve-clocks) "org-clock" "org-clock.el"
+;;;;;;  "32564b628bbb84d0342715e3d7097a29")
 ;;; Generated autoloads from org-clock.el
 
 (autoload 'org-resolve-clocks "org-clock" "\
@@ -742,6 +767,13 @@ Use \\[org-clock-remove-overlays] to remove the subtree times.
 
 \(fn &optional TOTAL-ONLY)" t nil)
 
+(autoload 'org-clock-remove-overlays "org-clock" "\
+Remove the occur highlights from the buffer.
+BEG and END are ignored.  If NOREMOVE is nil, remove this function
+from the `before-change-functions' in the current buffer.
+
+\(fn &optional BEG END NOREMOVE)" t nil)
+
 (autoload 'org-clock-get-clocktable "org-clock" "\
 Get a formatted clocktable with parameters according to PROPS.
 The table is created in a temporary buffer, fully formatted and
@@ -761,22 +793,62 @@ buffer and update it.
 
 \(fn &optional ARG)" t nil)
 
+(autoload 'org-clocktable-shift "org-clock" "\
+Try to shift the :block date of the clocktable at point.
+Point must be in the #+BEGIN: line of a clocktable, or this function
+will throw an error.
+DIR is a direction, a symbol `left', `right', `up', or `down'.
+Both `left' and `down' shift the block toward the past, `up' and `right'
+push it toward the future.
+N is the number of shift steps to take.  The size of the step depends on
+the currently selected interval size.
+
+\(fn DIR N)" nil nil)
+
 (autoload 'org-dblock-write:clocktable "org-clock" "\
 Write the standard clocktable.
 
 \(fn PARAMS)" nil nil)
 
+(autoload 'org-clock-update-time-maybe "org-clock" "\
+If this is a CLOCK line, update it and return t.
+Otherwise, return nil.
+
+\(fn)" t nil)
+
 ;;;***
 
 ;;;### (autoloads (org-agenda-columns org-insert-columns-dblock org-dblock-write:columnview
-;;;;;;  org-columns) "org-colview" "org-colview.el" (20858 3117))
+;;;;;;  org-columns-number-to-string org-columns-compute org-columns
+;;;;;;  org-columns-get-format-and-top-level org-columns-remove-overlays)
+;;;;;;  "org-colview" "org-colview.el" (21562 3391))
 ;;; Generated autoloads from org-colview.el
+
+(autoload 'org-columns-remove-overlays "org-colview" "\
+Remove all currently active column overlays.
+
+\(fn)" t nil)
+
+(autoload 'org-columns-get-format-and-top-level "org-colview" "\
+Not documented
+
+\(fn)" nil nil)
 
 (autoload 'org-columns "org-colview" "\
 Turn on column view on an org-mode file.
 When COLUMNS-FMT-STRING is non-nil, use it as the column format.
 
 \(fn &optional COLUMNS-FMT-STRING)" t nil)
+
+(autoload 'org-columns-compute "org-colview" "\
+Sum the values of property PROPERTY hierarchically, for the entire buffer.
+
+\(fn PROPERTY)" t nil)
+
+(autoload 'org-columns-number-to-string "org-colview" "\
+Convert a computed column number to a string value, according to FMT.
+
+\(fn N FMT &optional PRINTF)" nil nil)
 
 (autoload 'org-dblock-write:columnview "org-colview" "\
 Write the column view table.
@@ -813,7 +885,7 @@ Turn on or update column view in the agenda.
 ;;;***
 
 ;;;### (autoloads (org-check-version) "org-compat" "org-compat.el"
-;;;;;;  (20858 3117))
+;;;;;;  (21562 3391))
 ;;; Generated autoloads from org-compat.el
 
 (autoload 'org-check-version "org-compat" "\
@@ -824,7 +896,7 @@ Try very hard to provide sensible version strings.
 ;;;***
 
 ;;;### (autoloads (org-datetree-find-date-create) "org-datetree"
-;;;;;;  "org-datetree.el" "954f9d30ea6ea9b72b310bba030ca9a4")
+;;;;;;  "org-datetree.el" "448ccbc2749a60a5e276fc3c9a9c5605")
 ;;; Generated autoloads from org-datetree.el
 
 (autoload 'org-datetree-find-date-create "org-datetree" "\
@@ -838,7 +910,7 @@ tree can be found.
 ;;;***
 
 ;;;### (autoloads (org-element-context org-element-at-point org-element-interpret-data)
-;;;;;;  "org-element" "org-element.el" "78d7aa9f46fea545cfcc39af16e1762b")
+;;;;;;  "org-element" "org-element.el" "40b84110bb3b104027a4d7ca4fda8d30")
 ;;; Generated autoloads from org-element.el
 
 (autoload 'org-element-interpret-data "org-element" "\
@@ -900,7 +972,7 @@ Providing it allows for quicker computation.
 ;;;***
 
 ;;;### (autoloads (org-feed-show-raw-feed org-feed-goto-inbox org-feed-update
-;;;;;;  org-feed-update-all) "org-feed" "org-feed.el" "f5f190118c0e7321f88972d9a4749f5f")
+;;;;;;  org-feed-update-all) "org-feed" "org-feed.el" "d29a33e181e81cddc70543c0ba8fdbe4")
 ;;; Generated autoloads from org-feed.el
 
 (autoload 'org-feed-update-all "org-feed" "\
@@ -928,7 +1000,7 @@ Show the raw feed buffer of a feed.
 ;;;***
 
 ;;;### (autoloads (org-footnote-normalize org-footnote-action) "org-footnote"
-;;;;;;  "org-footnote.el" "0c5e60ed6c35672fea1ddebc70d622d7")
+;;;;;;  "org-footnote.el" "9906c2a4ea425a7c96d7c1371b2e35f9")
 ;;; Generated autoloads from org-footnote.el
 
 (autoload 'org-footnote-action "org-footnote" "\
@@ -959,9 +1031,10 @@ referenced sequence.
 
 ;;;***
 
-;;;### (autoloads (org-id-store-link org-id-find-id-file org-id-find
-;;;;;;  org-id-goto org-id-get org-id-get-create) "org-id" "org-id.el"
-;;;;;;  "7b374ed9fe87717fa9c66320c507cd02")
+;;;### (autoloads (org-id-store-link org-id-find-id-file org-id-update-id-locations
+;;;;;;  org-id-new org-id-find org-id-goto org-id-get-with-outline-drilling
+;;;;;;  org-id-get-with-outline-path-completion org-id-get org-id-copy
+;;;;;;  org-id-get-create) "org-id" "org-id.el" "82e762bd5cca2e3d24252745fca306d7")
 ;;; Generated autoloads from org-id.el
 
 (autoload 'org-id-get-create "org-id" "\
@@ -970,6 +1043,12 @@ If the entry already has an ID, just return it.
 With optional argument FORCE, force the creation of a new ID.
 
 \(fn &optional FORCE)" t nil)
+
+(autoload 'org-id-copy "org-id" "\
+Copy the ID of the entry at point to the kill ring.
+Create an ID if necessary.
+
+\(fn)" t nil)
 
 (autoload 'org-id-get "org-id" "\
 Get the ID property of the entry at point-or-marker POM.
@@ -980,6 +1059,22 @@ PREFIX will be passed through to `org-id-new'.
 In any case, the ID of the entry is returned.
 
 \(fn &optional POM CREATE PREFIX)" nil nil)
+
+(autoload 'org-id-get-with-outline-path-completion "org-id" "\
+Use `outline-path-completion' to retrieve the ID of an entry.
+TARGETS may be a setting for `org-refile-targets' to define
+eligible headlines.  When omitted, all headlines in the current
+file are eligible.  This function returns the ID of the entry.
+If necessary, the ID is created.
+
+\(fn &optional TARGETS)" nil nil)
+
+(autoload 'org-id-get-with-outline-drilling "org-id" "\
+Use an outline-cycling interface to retrieve the ID of an entry.
+This only finds entries in the current buffer, using `org-get-location'.
+It returns the ID of the entry.  If necessary, the ID is created.
+
+\(fn &optional TARGETS)" nil nil)
 
 (autoload 'org-id-goto "org-id" "\
 Switch to the buffer containing the entry with id ID.
@@ -995,6 +1090,31 @@ With optional argument MARKERP, return the position as a new marker.
 
 \(fn ID &optional MARKERP)" nil nil)
 
+(autoload 'org-id-new "org-id" "\
+Create a new globally unique ID.
+
+An ID consists of two parts separated by a colon:
+- a prefix
+- a unique part that will be created according to `org-id-method'.
+
+PREFIX can specify the prefix, the default is given by the variable
+`org-id-prefix'.  However, if PREFIX is the symbol `none', don't use any
+prefix even if `org-id-prefix' specifies one.
+
+So a typical ID could look like \"Org:4nd91V40HI\".
+
+\(fn &optional PREFIX)" nil nil)
+
+(autoload 'org-id-update-id-locations "org-id" "\
+Scan relevant files for IDs.
+Store the relation between files and corresponding IDs.
+This will scan all agenda files, all associated archives, and all
+files currently mentioned in `org-id-locations'.
+When FILES is given, scan these files instead.
+When CHECK is given, prepare detailed information about duplicate IDs.
+
+\(fn &optional FILES SILENT)" t nil)
+
 (autoload 'org-id-find-id-file "org-id" "\
 Query the id database for the file in which this ID is located.
 
@@ -1008,7 +1128,7 @@ Store a link to the current entry, using its ID.
 ;;;***
 
 ;;;### (autoloads (org-indent-mode) "org-indent" "org-indent.el"
-;;;;;;  "5257f4635c377537f302a83dc69419dd")
+;;;;;;  "3d658901e4f096f04688498e4a709eb5")
 ;;; Generated autoloads from org-indent.el
 
 (autoload 'org-indent-mode "org-indent" "\
@@ -1025,7 +1145,7 @@ during idle time.
 
 ;;;***
 
-;;;### (autoloads (org-irc-store-link) "org-irc" "org-irc.el" "f5d45d21f475b63408f333384ce1cc61")
+;;;### (autoloads (org-irc-store-link) "org-irc" "org-irc.el" "2432d5cd8271c05b0e8778cd26bf11ab")
 ;;; Generated autoloads from org-irc.el
 
 (autoload 'org-irc-store-link "org-irc" "\
@@ -1036,7 +1156,7 @@ Dispatch to the appropriate function to store a link to an IRC session.
 ;;;***
 
 ;;;### (autoloads (org-load-noerror-mustsuffix) "org-macs" "org-macs.el"
-;;;;;;  (20858 3117))
+;;;;;;  (21562 3391))
 ;;; Generated autoloads from org-macs.el
 
 (autoload 'org-load-noerror-mustsuffix "org-macs" "\
@@ -1047,7 +1167,7 @@ Load FILE with optional arguments NOERROR and MUSTSUFFIX.  Drop the MUSTSUFFIX a
 ;;;***
 
 ;;;### (autoloads (org-mobile-pull org-mobile-push) "org-mobile"
-;;;;;;  "org-mobile.el" "385f6e8212babd40eb1d232951b3aa53")
+;;;;;;  "org-mobile.el" "c2e770357d2065c4eba6fc96b5c17573")
 ;;; Generated autoloads from org-mobile.el
 
 (autoload 'org-mobile-push "org-mobile" "\
@@ -1066,7 +1186,7 @@ agenda view showing the flagged items.
 
 ;;;***
 
-;;;### (autoloads (org-plot/gnuplot) "org-plot" "org-plot.el" "99a279b8b25fe56779d7c49fc617f1bf")
+;;;### (autoloads (org-plot/gnuplot) "org-plot" "org-plot.el" "62748a5b07b07d7afa43d16955d0b294")
 ;;; Generated autoloads from org-plot.el
 
 (autoload 'org-plot/gnuplot "org-plot" "\
@@ -1093,12 +1213,13 @@ line directly before or after the table.
 ;;;;;;  org-table-move-row org-table-move-row-up org-table-move-row-down
 ;;;;;;  org-table-move-column org-table-move-column-left org-table-move-column-right
 ;;;;;;  org-table-delete-column org-table-insert-column org-table-goto-column
-;;;;;;  org-table-current-dline org-table-field-info org-table-copy-down
-;;;;;;  org-table-next-row org-table-previous-field org-table-next-field
-;;;;;;  org-table-justify-field-maybe org-table-align org-table-export
-;;;;;;  org-table-import org-table-convert-region org-table-create
-;;;;;;  org-table-create-or-convert-from-region org-table-create-with-table\.el)
-;;;;;;  "org-table" "org-table.el" "8ac6181842bc26f731614ef0dcc386be")
+;;;;;;  org-table-current-dline org-table-field-info org-table-blank-field
+;;;;;;  org-table-copy-down org-table-next-row org-table-previous-field
+;;;;;;  org-table-next-field org-table-justify-field-maybe org-table-end
+;;;;;;  org-table-begin org-table-align org-table-export org-table-import
+;;;;;;  org-table-convert-region org-table-create org-table-create-or-convert-from-region
+;;;;;;  org-table-create-with-table\.el) "org-table" "org-table.el"
+;;;;;;  "9b6e8818ec6951cc97eba4e5d0822cef")
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-create-with-table\.el "org-table" "\
@@ -1173,6 +1294,18 @@ Align the table at point by aligning all vertical bars.
 
 \(fn)" t nil)
 
+(autoload 'org-table-begin "org-table" "\
+Find the beginning of the table and return its position.
+With argument TABLE-TYPE, go to the beginning of a table.el-type table.
+
+\(fn &optional TABLE-TYPE)" nil nil)
+
+(autoload 'org-table-end "org-table" "\
+Find the end of the table and return its position.
+With argument TABLE-TYPE, go to the end of a table.el-type table.
+
+\(fn &optional TABLE-TYPE)" nil nil)
+
 (autoload 'org-table-justify-field-maybe "org-table" "\
 Justify the current field, text to left, number to right.
 Optional argument NEW may specify text to replace the current field content.
@@ -1210,6 +1343,11 @@ field is an integer or a timestamp, it will be incremented while
 copying.  In the case of a timestamp, increment by one day.
 
 \(fn N)" t nil)
+
+(autoload 'org-table-blank-field "org-table" "\
+Blank the current table field or active region.
+
+\(fn)" t nil)
 
 (autoload 'org-table-field-info "org-table" "\
 Show info about the current field, and highlight any reference at point.
@@ -1692,7 +1830,7 @@ provide ORGTBL directives for the generated table.
 ;;;***
 
 ;;;### (autoloads (org-timer-set-timer org-timer-item org-timer-change-times-in-region
-;;;;;;  org-timer org-timer-start) "org-timer" "org-timer.el" "24d58bf234f548224d83186703c58ff0")
+;;;;;;  org-timer org-timer-start) "org-timer" "org-timer.el" "54b0453041fa05a477a9da6054ed8b31")
 ;;; Generated autoloads from org-timer.el
 
 (autoload 'org-timer-start "org-timer" "\
@@ -1753,7 +1891,7 @@ replace any running timer.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (20859 13012))
+;;;;;;  (21562 65320))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1779,7 +1917,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (20859 12984))
+;;;;;;  "org" "org.el" (21562 3391))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2002,7 +2140,7 @@ Call the customize function with org as argument.
 
 ;;;### (autoloads (org-ascii-publish-to-utf8 org-ascii-publish-to-latin1
 ;;;;;;  org-ascii-publish-to-ascii org-ascii-export-to-ascii org-ascii-export-as-ascii)
-;;;;;;  "ox-ascii" "ox-ascii.el" "abc629eafbbb12c10e5bb955453d7eef")
+;;;;;;  "ox-ascii" "ox-ascii.el" "8bba507846964285c7ecb40e66b6afe3")
 ;;; Generated autoloads from ox-ascii.el
 
 (autoload 'org-ascii-export-as-ascii "ox-ascii" "\
@@ -2105,7 +2243,7 @@ Return output file name.
 ;;;### (autoloads (org-beamer-publish-to-pdf org-beamer-publish-to-latex
 ;;;;;;  org-beamer-insert-options-template org-beamer-select-environment
 ;;;;;;  org-beamer-export-to-pdf org-beamer-export-to-latex org-beamer-export-as-latex
-;;;;;;  org-beamer-mode) "ox-beamer" "ox-beamer.el" "659b9bf388e8584c3cdb190a66310ad3")
+;;;;;;  org-beamer-mode) "ox-beamer" "ox-beamer.el" "6e708817388023e1e1df3de8f27188ce")
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2247,7 +2385,7 @@ Return output file name.
 
 ;;;### (autoloads (org-html-publish-to-html org-html-export-to-html
 ;;;;;;  org-html-convert-region-to-html org-html-export-as-html org-html-htmlize-generate-css)
-;;;;;;  "ox-html" "ox-html.el" "6b62230620125fafb1c2978ff1615f51")
+;;;;;;  "ox-html" "ox-html.el" "65604b7a2a80c70979b37eb44119d6f9")
 ;;; Generated autoloads from ox-html.el
 
 (put 'org-html-head-include-default-style 'safe-local-variable 'booleanp)
@@ -2355,7 +2493,7 @@ Return output file name.
 
 ;;;### (autoloads (org-icalendar-combine-agenda-files org-icalendar-export-agenda-files
 ;;;;;;  org-icalendar-export-to-ics) "ox-icalendar" "ox-icalendar.el"
-;;;;;;  "c6f84f8db517191e8801d63586766cf9")
+;;;;;;  "74a493ca40404cb8fd648526fd898b6f")
 ;;; Generated autoloads from ox-icalendar.el
 
 (autoload 'org-icalendar-export-to-ics "ox-icalendar" "\
@@ -2407,7 +2545,7 @@ The file is stored under the name chosen in
 
 ;;;### (autoloads (org-latex-publish-to-pdf org-latex-publish-to-latex
 ;;;;;;  org-latex-export-to-pdf org-latex-export-to-latex org-latex-convert-region-to-latex
-;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" "6081c5add37935d8aa8771dc50453556")
+;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" "6277aa86c5275b5aae6c2c2d578a04fb")
 ;;; Generated autoloads from ox-latex.el
 
 (autoload 'org-latex-export-as-latex "ox-latex" "\
@@ -2476,8 +2614,6 @@ EXT-PLIST, when provided, is a property list with external
 parameters overriding Org default settings, but still inferior to
 file-local settings.
 
-Return output file's name.
-
 \(fn &optional ASYNC SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" t nil)
 
 (autoload 'org-latex-export-to-pdf "ox-latex" "\
@@ -2535,7 +2671,7 @@ Return output file name.
 ;;;***
 
 ;;;### (autoloads (org-md-export-to-markdown org-md-convert-region-to-md
-;;;;;;  org-md-export-as-markdown) "ox-md" "ox-md.el" "e4971933f3bd3bb0b00a31c61658dd0b")
+;;;;;;  org-md-export-as-markdown) "ox-md" "ox-md.el" "02d27e093680dff82b16ebedcda8cba8")
 ;;; Generated autoloads from ox-md.el
 
 (autoload 'org-md-export-as-markdown "ox-md" "\
@@ -2597,7 +2733,7 @@ Return output file's name.
 ;;;***
 
 ;;;### (autoloads (org-odt-convert org-odt-export-to-odt org-odt-export-as-odf-and-open
-;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" "666b1c6727d15696cdf644831b67ac04")
+;;;;;;  org-odt-export-as-odf) "ox-odt" "ox-odt.el" "688d009902f7a23ab86bb93a843abdf5")
 ;;; Generated autoloads from ox-odt.el
 
 (put 'org-odt-preferred-output-format 'safe-local-variable 'stringp)
@@ -2660,7 +2796,7 @@ using `org-open-file'.
 ;;;***
 
 ;;;### (autoloads (org-org-publish-to-org org-org-export-to-org org-org-export-as-org)
-;;;;;;  "ox-org" "ox-org.el" "f98bca16d7ddf4ac4fae1846af828ddf")
+;;;;;;  "ox-org" "ox-org.el" "952b4282cdf7bddd86e2e7660934888f")
 ;;; Generated autoloads from ox-org.el
 
 (autoload 'org-org-export-as-org "ox-org" "\
@@ -2734,7 +2870,7 @@ Return output file name.
 
 ;;;### (autoloads (org-publish-current-project org-publish-current-file
 ;;;;;;  org-publish-all org-publish) "ox-publish" "ox-publish.el"
-;;;;;;  "04287b1657a576d2a7c6d8e90977aba0")
+;;;;;;  "e9f7e2ede20ea11ead21108abf19db90")
 ;;; Generated autoloads from ox-publish.el
 
 (defalias 'org-publish-project 'org-publish)
@@ -2778,7 +2914,7 @@ the project.
 ;;;***
 
 ;;;### (autoloads (org-texinfo-convert-region-to-texinfo org-texinfo-publish-to-texinfo)
-;;;;;;  "ox-texinfo" "ox-texinfo.el" "12840e4137c9ed76adb18035e1023493")
+;;;;;;  "ox-texinfo" "ox-texinfo.el" "ae3f8dd17715c8093138512ae3c347cc")
 ;;; Generated autoloads from ox-texinfo.el
 
 (autoload 'org-texinfo-publish-to-texinfo "ox-texinfo" "\
@@ -2802,13 +2938,17 @@ this command to convert it.
 
 ;;;***
 
-;;;### (autoloads (org-export-dispatch org-export-insert-default-template
-;;;;;;  org-export-replace-region-by org-export-string-as org-export-to-file
-;;;;;;  org-export-to-buffer org-export-as) "ox" "ox.el" "1576a5dc867d5750f51b5d7c56dd0c69")
+;;;### (autoloads (org-export-dispatch org-export-to-file org-export-to-buffer
+;;;;;;  org-export-insert-default-template org-export-replace-region-by
+;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" "abbaf953c164e76b9957d5ea22f805c8")
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\
 Transcode current Org buffer into BACKEND code.
+
+BACKEND is either an export back-end, as returned by, e.g.,
+`org-export-create-backend', or a symbol referring to
+a registered back-end.
 
 If narrowing is active in the current buffer, only transcode its
 narrowed part.
@@ -2833,40 +2973,12 @@ Return code as a string.
 
 \(fn BACKEND &optional SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" nil nil)
 
-(autoload 'org-export-to-buffer "ox" "\
-Call `org-export-as' with output to a specified buffer.
-
-BACKEND is the back-end used for transcoding, as a symbol.
-
-BUFFER is the output buffer.  If it already exists, it will be
-erased first, otherwise, it will be created.
-
-Optional arguments SUBTREEP, VISIBLE-ONLY, BODY-ONLY and
-EXT-PLIST are similar to those used in `org-export-as', which
-see.
-
-Depending on `org-export-copy-to-kill-ring', add buffer contents
-to kill ring.  Return buffer.
-
-\(fn BACKEND BUFFER &optional SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" nil nil)
-
-(autoload 'org-export-to-file "ox" "\
-Call `org-export-as' with output to a specified file.
-
-BACKEND is the back-end used for transcoding, as a symbol.  FILE
-is the name of the output file, as a string.
-
-Optional arguments SUBTREEP, VISIBLE-ONLY, BODY-ONLY and
-EXT-PLIST are similar to those used in `org-export-as', which
-see.
-
-Depending on `org-export-copy-to-kill-ring', add file contents
-to kill ring.  Return output file's name.
-
-\(fn BACKEND FILE &optional SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" nil nil)
-
 (autoload 'org-export-string-as "ox" "\
 Transcode STRING into BACKEND code.
+
+BACKEND is either an export back-end, as returned by, e.g.,
+`org-export-create-backend', or a symbol referring to
+a registered back-end.
 
 When optional argument BODY-ONLY is non-nil, only return body
 code, without preamble nor postamble.
@@ -2881,27 +2993,99 @@ Return code as a string.
 
 (autoload 'org-export-replace-region-by "ox" "\
 Replace the active region by its export to BACKEND.
+BACKEND is either an export back-end, as returned by, e.g.,
+`org-export-create-backend', or a symbol referring to
+a registered back-end.
 
 \(fn BACKEND)" nil nil)
 
 (autoload 'org-export-insert-default-template "ox" "\
 Insert all export keywords with default values at beginning of line.
 
-BACKEND is a symbol representing the export back-end for which
-specific export options should be added to the template, or
-`default' for default template.  When it is nil, the user will be
-prompted for a category.
+BACKEND is a symbol referring to the name of a registered export
+back-end, for which specific export options should be added to
+the template, or `default' for default template.  When it is nil,
+the user will be prompted for a category.
 
 If SUBTREEP is non-nil, export configuration will be set up
 locally for the subtree through node properties.
 
 \(fn &optional BACKEND SUBTREEP)" t nil)
 
+(autoload 'org-export-to-buffer "ox" "\
+Call `org-export-as' with output to a specified buffer.
+
+BACKEND is either an export back-end, as returned by, e.g.,
+`org-export-create-backend', or a symbol referring to
+a registered back-end.
+
+BUFFER is the name of the output buffer.  If it already exists,
+it will be erased first, otherwise, it will be created.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting buffer should then be accessible
+through the `org-export-stack' interface.  When ASYNC is nil, the
+buffer is displayed if `org-export-show-temporary-export-buffer'
+is non-nil.
+
+Optional arguments SUBTREEP, VISIBLE-ONLY, BODY-ONLY and
+EXT-PLIST are similar to those used in `org-export-as', which
+see.
+
+Optional argument POST-PROCESS is a function which should accept
+no argument.  It is always called within the current process,
+from BUFFER, with point at its beginning.  Export back-ends can
+use it to set a major mode there, e.g,
+
+  (defun org-latex-export-as-latex
+    (&optional async subtreep visible-only body-only ext-plist)
+    (interactive)
+    (org-export-to-buffer 'latex \"*Org LATEX Export*\"
+      async subtreep visible-only body-only ext-plist (lambda () (LaTeX-mode))))
+
+This function returns BUFFER.
+
+\(fn BACKEND BUFFER &optional ASYNC SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST POST-PROCESS)" nil nil)
+
+(autoload 'org-export-to-file "ox" "\
+Call `org-export-as' with output to a specified file.
+
+BACKEND is either an export back-end, as returned by, e.g.,
+`org-export-create-backend', or a symbol referring to
+a registered back-end.  FILE is the name of the output file, as
+a string.
+
+A non-nil optional argument ASYNC means the process should happen
+asynchronously.  The resulting buffer will then be accessible
+through the `org-export-stack' interface.
+
+Optional arguments SUBTREEP, VISIBLE-ONLY, BODY-ONLY and
+EXT-PLIST are similar to those used in `org-export-as', which
+see.
+
+Optional argument POST-PROCESS is called with FILE as its
+argument and happens asynchronously when ASYNC is non-nil.  It
+has to return a file name, or nil.  Export back-ends can use this
+to send the output file through additional processing, e.g,
+
+  (defun org-latex-export-to-latex
+    (&optional async subtreep visible-only body-only ext-plist)
+    (interactive)
+    (let ((outfile (org-export-output-file-name \".tex\" subtreep)))
+      (org-export-to-file 'latex outfile
+        async subtreep visible-only body-only ext-plist
+        (lambda (file) (org-latex-compile file)))
+
+The function returns either a file name returned by POST-PROCESS,
+or FILE.
+
+\(fn BACKEND FILE &optional ASYNC SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST POST-PROCESS)" nil nil)
+
 (autoload 'org-export-dispatch "ox" "\
 Export dispatcher for Org mode.
 
 It provides an access to common export related tasks in a buffer.
-Its interface comes in two flavours: standard and expert.
+Its interface comes in two flavors: standard and expert.
 
 While both share the same set of bindings, only the former
 displays the valid keys associations in a dedicated buffer.
@@ -2909,7 +3093,7 @@ Scrolling (resp. line-wise motion) in this buffer is done with
 SPC and DEL (resp. C-n and C-p) keys.
 
 Set variable `org-export-dispatch-use-expert-ui' to switch to one
-flavour or the other.
+flavor or the other.
 
 When ARG is \\[universal-argument], repeat the last export action, with the same set
 of options used back then, on the current buffer.
