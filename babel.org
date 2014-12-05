@@ -20,26 +20,25 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode cider expand-region dash))
-     
+     (setq package-list '(magit clojure-mode expand-region dash))
+
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
                               ("gnu" . "http://elpa.gnu.org/packages/")
                               ("marmalade" . "http://marmalade-repo.org/packages/")))
-     
+
      ; activate all the packages (in particular autoloads)
      (package-initialize)
-     
+
      ; fetch the list of packages available 
      (when (not package-archive-contents)
        (package-refresh-contents))
-     
+
      ; install the missing packages
      (dolist (package package-list)
        (when (not (package-installed-p package))
          (package-install package)))
-     
-     (require 'cider)
+
      (require 'dash)
    #+end_src
 
@@ -2609,8 +2608,7 @@
                     ("Terminal" (or (mode . term-mode)
                                     (mode . inferior-lisp-mode)
                                     (mode . inferior-python-mode)
-                                    (name . "^*nrepl.*")
-                                    (name . "^*cider.*")
+                                    (name . "^*monroe.*")
                                     (name . "^\\*offlineimap\\*$")))
                     ("Dired" (or (mode . dired-mode) 
                                  (mode . sr-mode)))
@@ -2728,14 +2726,10 @@
 
 *** Clojure
 
-    Setup cider,
-
     #+begin_src emacs-lisp
-      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-      
-      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-
-      (add-hook 'cider-repl-mode-hook 'subword-mode)
+      (require 'clojure-mode)
+      (require 'monroe)
+      (add-hook 'clojure-mode-hook 'clojure-enable-monroe)
     #+end_src
 
     ClojureScript mode.
@@ -2744,50 +2738,21 @@
       (add-to-list 'auto-mode-alist '("[.]cljs$" . clojure-mode))
     #+end_src
 
-    Eval in S-expr
-
-    #+begin_src emacs-lisp 
-      (add-hook 'clojure-mode-hook
-                '(lambda ()
-                   (define-key clojure-mode-map 
-                     "\C-c\C-c" '(lambda ()
-                                   (interactive)
-                                   (let ((curr (point)))
-                                     (end-of-defun)
-                                     (cider-eval-last-expression)
-                                     (goto-char curr))))))
-      
-      (define-key clojure-mode-map (kbd "C-x C-e") 'cider-eval-last-sexp)
-    #+end_src
-
-    Custom indent,
-
-    #+begin_src emacs-lisp 
-      (define-clojure-indent (from-blackboard 'defun))
-    #+end_src
-
     org-babel support.
 
     #+begin_src emacs-lisp
       (add-to-list 'org-babel-tangle-lang-exts '("clojure" . "clj"))
-      
+
       (defvar org-babel-default-header-args:clojure 
         '((:results . "silent")))
-      
+
       (defun org-babel-execute:clojure (body params)
         "Execute a block of Clojure code with Babel."
-        (cider-interactive-eval body))
-      
-      (add-hook 'org-src-mode-hook
-                '(lambda ()
-                   (set (make-local-variable 'nrepl-buffer-ns) 
-                        (with-current-buffer 
-                            (overlay-buffer org-edit-src-overlay)
-                          nrepl-buffer-ns))))
-      
+        (with-temp-buffer
+          (insert body)
+          (monroe-eval-buffer)))
+
       (provide 'ob-clojure)
-      
-      (define-key global-map (kbd "C-c M-n") 'cider-repl-set-ns)
     #+end_src
 
     Replace, /fn/ with /λ/ and /#/ with /ƒ/.
@@ -2809,8 +2774,8 @@
     #+end_src
 
     #+begin_src emacs-lisp
-      (global-set-key "\C-xrl" '(lambda () (interactive) (cider-jack-in nil)))
-      (define-key clojure-mode-map "\C-xrl" '(lambda () (interactive) (cider-jack-in nil)))
+      (global-set-key "\C-xrl" 'monroe)
+      (define-key clojure-mode-map "\C-xrl" 'monroe)
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
