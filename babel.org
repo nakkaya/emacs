@@ -2543,7 +2543,7 @@
         (match-string-no-properties 1 url))
       
       (setq org-capture-templates
-            '(("l" "Link" entry (file+olp "~/annex/notes/bookmarks.org" "Read Later")
+            '(("l" "Link" entry (file+olp "~/annex/notes/brain.org" "Read Later")
                "* %(na-page-title (current-kill 0))\n %i \n  %(na-org-capture-url (current-kill 0)) %?\n" :immediate-finish t :prepend t)
               ("e" "Email" entry (file+olp "~/annex/notes/brain.org" "Tasks")
                "* EMAIL %(na-org-capture-email-gmail-title (na-page-title (current-kill 0)))\n  %?%i\n  https://mail.google.com/mail/#inbox/%(na-org-capture-email-gmail-id (na-org-capture-url (current-kill 0)))\n" :prepend t)
@@ -2581,7 +2581,6 @@
            (quote (("default"
                     ("Notes"
                      (or (name . "^brain.org$")
-                         (name . "^bookmarks.org$")
                          (name . "^pass.gpg$")
                          (name . "^brain.org_archive$")
                          (name . "^bookmarks.org_archive$")))
