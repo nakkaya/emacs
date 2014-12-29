@@ -20,7 +20,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region dash))
+     (setq package-list '(magit clojure-mode expand-region dash python-mode evil))
 
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
@@ -253,17 +253,18 @@
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f4] 'org-capture)
      (global-set-key [f8] 'toggle-truncate-lines)
-     
+     (global-set-key [f12] 'evil-mode)
+
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
      (global-set-key "\M-[1;5A" 'backward-paragraph)
      (global-set-key "\M-[1;5B" 'forward-paragraph)
-     
+
      (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
      (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
      (global-set-key (kbd "C-S-<down>") 'shrink-window)
      (global-set-key (kbd "C-S-<up>") 'enlarge-window)
-     
+
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
@@ -271,20 +272,20 @@
      (add-hook 'c-mode-hook
          '(lambda ()
             (local-set-key [(control d)] 'na-bounce-sexp)))
-     
+
      (define-key global-map [(control \])] 'ibuffer)
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(control \])] 'ibuffer)))
-     
+
      (define-key global-map [(meta p)] 'na-cm-rotate)
      (define-key global-map [(meta control  p)] 'na-cm-save-point)
-     
+
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(control \\)] 'other-window)))
      (global-set-key [(control \\)] 'other-window)
-     
+
      (define-key global-map [(meta \\)] 'na-next-term)
      (define-key global-map [(super \\)] 'na-next-term)
      (add-hook 'term-mode-hook
@@ -293,13 +294,13 @@
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
-     
+
      (global-set-key "\C-xgs" 'magit-status)
      (global-set-key "\C-xgl" 'na-search-org-headers)
-     
+
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
-     
+
      (global-set-key (kbd "C-x t") 'na-new-term) ;; create a new one
      (global-set-key (kbd "C-z") 'undo) ; 【Ctrl+z】
    #+end_src
@@ -3041,6 +3042,88 @@
                                           (list (cons ?* "w") (cons ?- "w"))))
            (turn-on-font-lock))))
        "Mode for arff-files.")
+   #+end_src
+
+** Python Mode
+
+   Code exec,
+
+   - C-c ! - repl
+   - C-c C-c - Execute Buffer
+   - C-c | - Region
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'python-mode)
+
+     ; use IPython
+     (setq-default py-shell-name "ipython")
+     (setq-default py-which-bufname "IPython")
+     ; use the wx backend, for both mayavi and matplotlib
+     (setq py-python-command-args
+       '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+     (setq py-force-py-shell-name-p t)
+
+     ; switch to the interpreter after executing code
+     (setq py-shell-switch-buffers-on-execute-p t)
+     (setq py-switch-buffers-on-execute-p nil)
+     ; don't split windows
+     (setq py-split-windows-on-execute-p nil)
+     ; try to automagically figure out indentation
+     (setq py-smart-indentation t)
+   #+END_SRC
+
+** Evil Mode
+
+   #+begin_src emacs-lisp
+     (require 'evil)
+
+     (defalias 'list-buffers 'ibuffer)
+
+     (evil-set-initial-state 'ibuffer-mode 'normal)
+
+     (defun evil-space-del (statemap)
+       (define-key statemap (kbd "SPC") (lambda ()
+                                          (interactive)
+                                          (evil-scroll-down nil)))
+       (define-key statemap [backspace] (lambda ()
+                                          (interactive)
+                                          (evil-scroll-up nil)))
+       (define-key statemap (kbd "DEL") (lambda ()
+                                          (interactive)
+                                          (evil-scroll-up nil)))
+       (define-key statemap (kbd "]") (lambda ()
+                                        (interactive)
+                                        (ibuffer))))
+
+     (evil-space-del evil-normal-state-map)
+     (evil-space-del evil-visual-state-map)
+
+     (define-minor-mode evil-org-mode
+       "Buffer local minor mode for evil-org"
+       :init-value nil
+       :lighter " EvilOrg"
+       :keymap (make-sparse-keymap) ; defines evil-org-mode-map
+       :group 'evil-org)
+
+     (add-hook 'org-mode-hook 'evil-org-mode) ;; only load with org-mode
+     (evil-define-key 'normal evil-org-mode-map
+       "a" 'jump-to-org-agenda
+       "c" 'org-archive-subtree
+       "s" 'na-search-org-headers
+       "gh" 'outline-up-heading
+       "gj" 'org-forward-heading-same-level
+       "gk" 'org-backward-heading-same-level
+       "gl" 'outline-next-visible-heading
+       "H" 'org-beginning-of-line
+       "L" 'org-end-of-line
+       "o" 'org-insert-heading-respect-content
+       "$" 'org-end-of-line
+       "^" 'org-beginning-of-line
+       "<" 'org-metaleft
+       ">" 'org-metaright
+       "-" 'org-cycle-list-bullet
+       (kbd "TAB") 'org-cycle
+       (kbd "RET") 'org-return)
    #+end_src
 
 * Skeletons
