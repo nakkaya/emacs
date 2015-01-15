@@ -648,9 +648,10 @@
 
   #+begin_src emacs-lisp
     (setq na-file-assocs (make-hash-table :test 'equal))
-    
+
     (if na-os-is-darwin
         (progn 
+          (puthash "m3u" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
           (puthash "avi" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
           (puthash "mp4" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
           (puthash "flv" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
@@ -661,7 +662,7 @@
           (puthash "mpg" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
           (puthash "ts" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)
           (puthash "mpeg" "/Applications/VLC.app/Contents/MacOS/VLC" na-file-assocs)))
-    
+
     (if na-os-is-linux
         (progn 
           (puthash "avi" "vlc" na-file-assocs)
