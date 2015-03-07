@@ -643,7 +643,7 @@
   #+begin_src emacs-lisp
     (setq na-external-open-files-types 
           '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" 
-            "jpg" "png" "m4v" "mpg" "mpeg" "ts"))
+            "jpg" "png" "m4v" "mpg" "mpeg" "ts" "m3u"))
   #+end_src
 
   #+begin_src emacs-lisp
