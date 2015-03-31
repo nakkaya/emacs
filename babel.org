@@ -557,6 +557,7 @@
 
    #+begin_src emacs-lisp
      (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
+     (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
    #+end_src
 
 ** Dired
@@ -3339,8 +3340,23 @@
        \n >
        "cout<< " _ " <<endl;"
        \n >)
-     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt )
-     
+     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+     (define-skeleton skel-cpp-sprint
+       ""
+       nil
+       \n >
+       "Serial.print(" _ ");"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "sprt"  "" 'skel-cpp-sprint)
+
+     (define-skeleton skel-cpp-sprintln
+       ""
+       nil
+       \n >
+       "Serial.println(" _ ");"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "sprtn"  "" 'skel-cpp-println)
    #+end_src
 
 ** ELisp
