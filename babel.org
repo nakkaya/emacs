@@ -3357,6 +3357,36 @@
        "Serial.println(" _ ");"
        \n >)
      (define-abbrev c++-mode-abbrev-table "sprtn"  "" 'skel-cpp-println)
+
+     (define-skeleton skel-arduino
+       ""
+       nil
+       \n >
+       "#define DEBUG
+
+     // Machine States
+     typedef void *(*StateFunc)();
+
+     void *StateBoot(void);
+
+     void *StateBoot(){
+       delay(100);
+       return (void*)StateBoot;
+     }
+
+     void setup(){
+     #ifdef DEBUG
+       Serial.begin(9600);
+     #endif
+     }
+
+     void loop(){
+       StateFunc stateFunc = StateBoot;
+
+       while(1) {
+         stateFunc = (StateFunc)(*stateFunc)();
+       }
+     }")
    #+end_src
 
 ** ELisp
