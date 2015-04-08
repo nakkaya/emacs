@@ -3342,13 +3342,21 @@
        \n >)
      (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
 
-     (define-skeleton skel-cpp-sprint
+     (define-skeleton skel-cpp-prt
        ""
        nil
        \n >
-       "Serial.print(" _ ");"
+       "cout<< " _ " <<endl;"
        \n >)
-     (define-abbrev c++-mode-abbrev-table "sprt"  "" 'skel-cpp-sprint)
+     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+     (define-skeleton skel-cpp-lambda
+       ""
+       nil
+       \n >
+       "auto " _ " = [] () { };"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "lambda"  "" 'skel-cpp-lambda)
 
      (define-skeleton skel-cpp-sprintln
        ""
