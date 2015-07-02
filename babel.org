@@ -556,6 +556,7 @@
 
    #+begin_src emacs-lisp
      (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
+     (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
    #+end_src
 
 ** Dired
@@ -3284,8 +3285,61 @@
        \n >
        "cout<< " _ " <<endl;"
        \n >)
-     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt )
-     
+     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+     (define-skeleton skel-cpp-prt
+       ""
+       nil
+       \n >
+       "cout<< " _ " <<endl;"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+     (define-skeleton skel-cpp-lambda
+       ""
+       nil
+       \n >
+       "auto " _ " = [] () { };"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "lambda"  "" 'skel-cpp-lambda)
+
+     (define-skeleton skel-cpp-sprintln
+       ""
+       nil
+       \n >
+       "Serial.println(" _ ");"
+       \n >)
+     (define-abbrev c++-mode-abbrev-table "sprtn"  "" 'skel-cpp-println)
+
+     (define-skeleton skel-arduino
+       ""
+       nil
+       \n >
+       "#define DEBUG
+
+     // Machine States
+     typedef void *(*StateFunc)();
+
+     void *StateBoot(void);
+
+     void *StateBoot(){
+       delay(100);
+       return (void*)StateBoot;
+     }
+
+     void setup(){
+     #ifdef DEBUG
+       Serial.begin(9600);
+     #endif
+     }
+
+     void loop(){
+       StateFunc stateFunc = StateBoot;
+
+       while(1) {
+         stateFunc = (StateFunc)(*stateFunc)();
+       }
+     }")
    #+end_src
 
 ** ELisp
