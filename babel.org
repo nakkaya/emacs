@@ -434,6 +434,20 @@
 
 ** Misc
 
+   Split frame into four windows,
+
+   #+BEGIN_SRC emacs-lisp
+     (defun na-split-window-four ()
+       (interactive)
+       (delete-other-windows)
+       (split-window-horizontally)
+       (other-window 1)
+       (split-window-vertically)
+       (other-window 1)
+       (other-window 1)
+       (split-window-vertically))
+   #+END_SRC
+
    Zoom In/Out
 
    #+BEGIN_SRC emacs-lisp
