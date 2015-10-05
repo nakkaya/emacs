@@ -394,17 +394,17 @@
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
         (set-face-background 'secondary-selection "black")
-    
+
         (eval-after-load "magit" 
           '(progn
-             (set-face-background 'magit-item-highlight "color-236")
-             (set-face-background 'magit-branch "black")
-             (set-face-background 'magit-item-highlight "black")
-             (set-face-background 'magit-diff-add "black")
-             (set-face-background 'magit-diff-del "black")
-             (set-face-background 'magit-diff-file-header "black")
-             (set-face-background 'magit-diff-hunk-header "black")
-             (set-face-background 'magit-section-title "black")))
+             (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+             (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+             (set-face-background 'magit-diff-added "black")
+             (set-face-foreground 'magit-diff-added "brightgreen")
+             (set-face-background 'magit-diff-removed "black")
+             (set-face-foreground 'magit-diff-removed "brightred")
+             (set-face-background 'magit-diff-hunk-heading "black")
+             (set-face-foreground 'magit-diff-hunk-heading "color-27")))
         
         (eval-after-load "diff-mode" 
           '(progn
