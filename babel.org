@@ -2991,7 +2991,7 @@
      (require 'erc-join)
      (erc-autojoin-mode 1)
      (setq erc-autojoin-channels-alist
-               '(("freenode.net" "#clojure" "#xmonad")
+               '(("freenode.net" "#clojure" "#hy" "#pixie-lang")
                  ("oftc.net" "#pentadactyl")))
      
      (setq erc-fill-column 75)
