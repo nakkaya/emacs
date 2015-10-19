@@ -2879,19 +2879,28 @@
    #+begin_src emacs-lisp
      (require 'multi-term)
      (setq multi-term-program "/bin/bash")
-     
+
      (defun na-new-term ()
        (interactive)
        (multi-term)
        ;;pass C-c
        (define-key term-raw-map [?\C-c] 'term-send-raw))
-     
+
      (defun na-next-term ()
        (interactive)
        (if (> (length multi-term-buffer-list) 0)
-           (multi-term-next)
+           (let* ((term-buffers (copy-tree multi-term-buffer-list))
+                  (buff-list (if (get-buffer "*monroe*")
+                                 (append term-buffers (list (get-buffer "*monroe*")))
+                               term-buffers))
+                  (buffer-list-len (length buff-list))
+                  (index (position (current-buffer) buff-list)))
+             (if index
+                 (let ((target-index (mod (+ index 1) buffer-list-len)))
+                   (switch-to-buffer (nth target-index buff-list)))
+               (switch-to-buffer (car buff-list))))
          (na-new-term)))
-     
+
      ;; from https://bitbucket.org/tavisrudd/emacs.d/src/f3738b580538/dss-term.el
      (defun na-term-toggle-mode ()
        "Toggle between term-char-mode and term-line-mode."
@@ -2901,7 +2910,7 @@
              (term-char-mode)
              (term-send-raw-string "\C-e"))
          (term-line-mode)))
-     
+
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(control y)] 'term-paste)))
