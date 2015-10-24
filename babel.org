@@ -20,10 +20,11 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region dash python-mode))
+     (setq package-list '(magit clojure-mode pixie-mode yaml-mode expand-region dash python-mode))
 
      ; list the repositories containing them
-     (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+     (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                              ("elpa" . "http://tromey.com/elpa/")
                               ("gnu" . "http://elpa.gnu.org/packages/")
                               ("marmalade" . "http://marmalade-repo.org/packages/")))
 
@@ -2617,6 +2618,8 @@
                                (mode . c-mode)
                                (mode . lisp-mode)
                                (mode . cperl-mode)
+                               (mode . pixie-mode)
+                               (mode . yaml-mode)
                                (mode . asm-mode)
                                (mode . emacs-lisp-mode)
                                (mode . c++-mode)))
@@ -2657,14 +2660,14 @@
                               (name . "^\\*Shell Command Output\\*$")
                               (name . "^\\*Calculator\\*$")
                               (name . "^\\*Calc Trail\\*$")))))))
-     
+
      (setq ibuffer-show-empty-filter-groups nil)
-     
+
      (add-hook 'ibuffer-mode-hook
             (lambda ()
               (ibuffer-switch-to-saved-filter-groups "default")))
      (setq ibuffer-expert t)
-     
+
      (setq ibuffer-formats '((mark modified read-only " "
                                    (name 18 18 :left :elide)
                                    " "
@@ -2717,10 +2720,11 @@
     #+begin_src emacs-lisp
       (setq lisp-programs 
             (list (list "hy" "hy")
+                  (list "pixie" "dust repl")
                   (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
-      
+
       (defun na-run-lisp (arg)
         (interactive "P")
         (if (null arg)
@@ -2853,6 +2857,13 @@
                                      (end-of-defun)
                                      (lisp-eval-last-sexp)
                                      (goto-char curr))))))
+    #+end_src
+
+*** Pixie
+
+    #+begin_src emacs-lisp
+      (require 'pixie-mode)
+      (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
     #+end_src
 
 ** Git
