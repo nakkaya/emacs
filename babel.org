@@ -20,7 +20,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region dash python-mode))
+     (setq package-list '(magit clojure-mode expand-region dash python-mode dired-details))
 
      ; list the repositories containing them
      (setq package-archives '(("elpa" . "http://tromey.com/elpa/")
