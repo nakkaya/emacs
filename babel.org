@@ -26,7 +26,8 @@
      (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                               ("elpa" . "http://tromey.com/elpa/")
                               ("gnu" . "http://elpa.gnu.org/packages/")
-                              ("marmalade" . "http://marmalade-repo.org/packages/")))
+                              ;;("marmalade" . "http://marmalade-repo.org/packages/")
+                              ))
 
      ; activate all the packages (in particular autoloads)
      (package-initialize)
@@ -2798,7 +2799,7 @@
       (add-hook 'clojure-mode-hook
                 '(lambda ()
                    (define-key clojure-mode-map (kbd "C-c t") 'multi-term-next)))
-      
+
       (add-hook 'nrepl-connected-hook
                 '(lambda ()
                    (define-key cider-repl-mode-map "\M-[1;5A" 'nrepl-previous-input)
