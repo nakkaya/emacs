@@ -403,6 +403,9 @@
           '(progn
              (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
              (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+             (set-face-background 'magit-diff-removed-highlight "black")
+             (set-face-background 'magit-diff-added-highlight "black")
+             (set-face-background 'magit-diff-context-highlight "black")
              (set-face-background 'magit-diff-added "black")
              (set-face-foreground 'magit-diff-added "brightgreen")
              (set-face-background 'magit-diff-removed "black")
