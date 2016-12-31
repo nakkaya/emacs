@@ -389,6 +389,7 @@
         (set-face-foreground 'default "color-250")
         (set-face-background 'default "black")
         (set-face-background 'match "black")
+        (set-face-background 'italic "black")
         (set-face-foreground 'font-lock-string-face "color-147")
         (set-face-foreground 'font-lock-keyword-face "color-202")
         (set-face-foreground 'font-lock-function-name-face "color-178")
