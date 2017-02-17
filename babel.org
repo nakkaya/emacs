@@ -20,8 +20,9 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region dash python-mode git-annex hy-mode monroe
-                                multi-term dired-details pixie-mode yaml-mode))
+     (setq package-list '(magit clojure-mode expand-region dash python-mode git-annex hy-mode
+                                monroe multi-term dired-details pixie-mode yaml-mode
+                                clojure-mode-extra-font-locking))
 
      ; list the repositories containing them
      (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -2755,7 +2756,9 @@
     #+begin_src emacs-lisp
       (require 'clojure-mode)
       (require 'monroe)
+      (require 'clojure-mode-extra-font-locking)
       (add-hook 'clojure-mode-hook 'clojure-enable-monroe)
+
     #+end_src
 
     ClojureScript mode.
@@ -2880,12 +2883,12 @@
    #+end_src
 
    #+begin_src emacs-lisp 
-     (setq git-committer-name "Nurullah Akkaya")
-     (setq git-committer-email "nurullah@nakkaya.com")
-     
+     (setq git-committer-name "Tolga Yirtici")
+     (setq git-committer-email "tolgayirtici90@gmail.com")
+
      (setq vc-follow-symlinks t)
      (setq magit-hide-diffs t)
-     
+
      (when (equal system-type 'darwin)
        (setenv "PATH" (concat "/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
        (push "/opt/local/bin" exec-path))
@@ -3125,7 +3128,7 @@
      (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
      (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
      (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
-     
+
      (setq abbrev-mode t)
      (add-hook 'inferior-lisp-mode-hook 'abbrev-mode)
      (add-hook 'lisp-mode-hook 'abbrev-mode)
@@ -3136,15 +3139,15 @@
      (add-hook 'c-mode-hook 'abbrev-mode)
      (add-hook 'org-mode-hook 'abbrev-mode)
      (add-hook 'hy-mode-hook 'abbrev-mode)
-     
+
      (add-hook 'clojure-mode-hook 
                (lambda ()
                  (setq local-abbrev-table clojure-mode-abbrev-table)))
-     
+
      (add-hook 'inferior-lisp-mode-hook 
                (lambda ()
                  (setq local-abbrev-table inferior-lisp-mode-abbrev-table)))
-     
+
      (define-abbrev-table 'inferior-lisp-mode-abbrev-table '())
      (define-abbrev-table 'java-mode-abbrev-table '())
      (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
@@ -3322,20 +3325,13 @@
 ** Cpp
 
    #+begin_src emacs-lisp 
-     (define-skeleton skel-cpp-prt
-       ""
-       nil
-       \n >
-       "cout<< " _ " <<endl;"
-       \n >)
-     (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
 
      (define-skeleton skel-cpp-prt
        ""
        nil
        \n >
        "cout<< " _ " <<endl;"
-       \n >)
+       >)
      (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
 
      (define-skeleton skel-cpp-lambda
