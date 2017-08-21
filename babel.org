@@ -579,6 +579,8 @@
    #+begin_src emacs-lisp
      (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
      (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
+     (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
+     (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
    #+end_src
 
 ** Dired
@@ -3324,7 +3326,7 @@
        ""
        nil
        \n >
-       "cout<< " _ " <<endl;"
+       "std::cout << " _ " << std::endl;"
        \n >)
      (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
 
