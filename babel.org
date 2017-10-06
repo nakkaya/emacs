@@ -2641,6 +2641,13 @@
                                     (name . "^\\*offlineimap\\*$")))
                     ("Dired" (or (mode . dired-mode) 
                                  (mode . sr-mode)))
+                    ("Magit" (or (name . "^\\*magit.*\\*$")
+                                 (mode . magit-status-mode)
+                                 (mode . magit-diff-mode)
+                                 (mode . magit-process-mode)
+                                 (mode . magit-stash-mode)
+                                 (mode . magit-revision-mode)
+                                 (mode . magit-log-mode)))
                     ("Emacs" (or
                               (name . "^\\*Process List\\*$")
                               (name . "^\\*Dired log\\*$")
@@ -2651,7 +2658,6 @@
                               (name . "^\\.todo-do")
                               (name . "^\\*scratch\\*$")
                               (name . "^\\*git-status\\*$")
-                              (name . "^\\*magit.*\\*$")
                               (name . "^\\*git-diff\\*$")
                               (name . "^\\*git-commit\\*$")
                               (name . "^\\*Git Command Output\\*$")
@@ -2670,7 +2676,8 @@
                               (name . "^\\*Help\\*$")
                               (name . "^\\*Shell Command Output\\*$")
                               (name . "^\\*Calculator\\*$")
-                              (name . "^\\*Calc Trail\\*$")))))))
+                              (name . "^\\*Calc Trail\\*$")
+                              (name . "^\\*Compile-Log\\*$")))))))
 
      (setq ibuffer-show-empty-filter-groups nil)
 
