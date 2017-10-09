@@ -59,19 +59,11 @@
      (custom-set-variables
       '(warning-suppress-types (quote ((undo discard-info)))))
      
-     (when window-system
-       ;;disable scroll bar
-       (toggle-scroll-bar nil)
-       (tool-bar-mode -1))
-     
      (menu-bar-mode -1)
      ;;do not continue line when split frame
      (setq truncate-partial-width-windows nil)
      ;; turn on font-lock mode
      (global-font-lock-mode t)
-     (when window-system
-       ;; use extended compound-text coding for X clipboard
-       (set-selection-coding-system 'compound-text-with-extensions))
      
      (setq bookmark-default-file "~/annex/notes/emacs.bookmark")
      (setq column-number-mode t)
@@ -361,85 +353,54 @@
   #+end_src
 
   #+begin_src emacs-lisp 
-    (defvar theme-background "#060606")
+    (defvar theme-background "color-232")
+    (defvar theme-text-color "color-250")
 
-    (if window-system
-        (progn 
-          (set-face-foreground 'default "#bcbcbc")
-          (set-face-background 'default theme-background)
-          (set-face-foreground 'font-lock-string-face "#afafff")
-          (set-face-foreground 'font-lock-keyword-face "#00affe")
-          (set-face-foreground 'font-lock-function-name-face "#f9a505")
-          (set-face-foreground 'font-lock-builtin-face "#28ed00")
-          (set-face-foreground 'font-lock-comment-face "#008787")
-          (set-face-foreground 'org-block-begin-line "#303030")
-          (set-face-foreground 'org-block-end-line "#303030")
-          (set-face-foreground 'org-todo "#ff5f00")
-          (set-face-foreground 'org-warning "#ff5f00")
-          (set-face-foreground 'org-agenda-structure "#00affe")
-          
-          (eval-after-load "diff-mode" 
-            '(progn
-               (set-face-foreground 'diff-added "#00ff00")
-               (set-face-foreground 'diff-removed "#ff0000")
-               (set-face-foreground 'diff-header "#005fff")
-               (set-face-background 'diff-header theme-background)
-               (set-face-background 'diff-file-header theme-background)
-               (set-face-background 'diff-file-header "#121212")
-               (set-face-background 'diff-refine-change "#121212"))))
-      (progn 
-        (set-face-foreground 'default "color-250")
-        (set-face-background 'default theme-background)
-        (set-face-background 'match "black")
-        (set-face-background 'italic "black")
-        (set-face-foreground 'font-lock-string-face "color-147")
-        (set-face-foreground 'font-lock-keyword-face "color-202")
-        (set-face-foreground 'font-lock-function-name-face "color-178")
-        (set-face-foreground 'font-lock-builtin-face "color-148")
-        (set-face-foreground 'font-lock-comment-face "color-30")
-        (set-face-foreground 'org-block-begin-line "color-236")
-        (set-face-foreground 'org-block-end-line "color-236")
-        (set-face-foreground 'org-todo "color-124")
-        (set-face-background 'secondary-selection "black")
+    (set-face-foreground 'default theme-text-color)
+    (set-face-background 'default theme-background)
+    (set-face-background 'match theme-background)
+    (set-face-background 'italic theme-background)
+    (set-face-foreground 'font-lock-string-face "color-147")
+    (set-face-foreground 'font-lock-keyword-face "color-202")
+    (set-face-foreground 'font-lock-function-name-face "color-178")
+    (set-face-foreground 'font-lock-builtin-face "color-148")
+    (set-face-foreground 'font-lock-comment-face "color-30")
+    (set-face-foreground 'org-block-begin-line "color-236")
+    (set-face-foreground 'org-block-end-line "color-236")
+    (set-face-foreground 'org-todo "color-124")
+    (set-face-background 'secondary-selection theme-background)
 
-        (eval-after-load "magit" 
-          '(progn
-             (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-             (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-             (set-face-background 'magit-diff-removed-highlight "black")
-             (set-face-background 'magit-diff-added-highlight "black")
-             (set-face-background 'magit-diff-context-highlight "black")
-             (set-face-background 'magit-diff-added "black")
-             (set-face-foreground 'magit-diff-added "brightgreen")
-             (set-face-background 'magit-diff-removed "black")
-             (set-face-foreground 'magit-diff-removed "brightred")
-             (set-face-background 'magit-diff-hunk-heading "black")
-             (set-face-foreground 'magit-diff-hunk-heading "color-27")))
-        
-        (eval-after-load "diff-mode" 
-          '(progn
-             (set-face-foreground 'diff-added "brightgreen")
-             (set-face-foreground 'diff-removed "brightred")
-             (set-face-foreground 'diff-header "color-27")
-             (set-face-background 'diff-header "color-233")
-             (set-face-background 'diff-file-header "color-233")
-             (set-face-background 'diff-refine-change "color-233")))
-        
-        (set-face-attribute  'mode-line
-                             nil 
-                             :foreground "color-166"
-                             :background "color-235")
-        (set-face-attribute  'mode-line-inactive
-                             nil 
-                             :foreground "color-240"
-                             :background "color-234")))
-  #+end_src
+    (eval-after-load "magit" 
+      '(progn
+         (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+         (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+         (set-face-background 'magit-diff-removed-highlight theme-background)
+         (set-face-background 'magit-diff-added-highlight theme-background)
+         (set-face-background 'magit-diff-context-highlight theme-background)
+         (set-face-background 'magit-diff-added theme-background)
+         (set-face-foreground 'magit-diff-added "brightgreen")
+         (set-face-background 'magit-diff-removed theme-background)
+         (set-face-foreground 'magit-diff-removed "brightred")
+         (set-face-background 'magit-diff-hunk-heading theme-background)
+         (set-face-foreground 'magit-diff-hunk-heading "color-27")))
 
-  #+begin_src emacs-lisp
-    (when window-system
-      (variable-pitch-mode -1)
-      (when na-os-is-linux
-        (set-default-font "monaco-11")))
+    (eval-after-load "diff-mode" 
+      '(progn
+         (set-face-foreground 'diff-added "brightgreen")
+         (set-face-foreground 'diff-removed "brightred")
+         (set-face-foreground 'diff-header "color-27")
+         (set-face-background 'diff-header "color-233")
+         (set-face-background 'diff-file-header "color-233")
+         (set-face-background 'diff-refine-change "color-233")))
+
+    (set-face-attribute  'mode-line
+                         nil 
+                         :foreground "color-166"
+                         :background "color-235")
+    (set-face-attribute  'mode-line-inactive
+                         nil 
+                         :foreground "color-240"
+                         :background "color-234")
   #+end_src
 
 ** Misc
