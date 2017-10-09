@@ -361,10 +361,12 @@
   #+end_src
 
   #+begin_src emacs-lisp 
+    (defvar theme-background "#060606")
+
     (if window-system
         (progn 
           (set-face-foreground 'default "#bcbcbc")
-          (set-face-background 'default "#060606")
+          (set-face-background 'default theme-background)
           (set-face-foreground 'font-lock-string-face "#afafff")
           (set-face-foreground 'font-lock-keyword-face "#00affe")
           (set-face-foreground 'font-lock-function-name-face "#f9a505")
@@ -381,13 +383,13 @@
                (set-face-foreground 'diff-added "#00ff00")
                (set-face-foreground 'diff-removed "#ff0000")
                (set-face-foreground 'diff-header "#005fff")
-               (set-face-background 'diff-header "#060606")
-               (set-face-background 'diff-file-header "#060606")
+               (set-face-background 'diff-header theme-background)
+               (set-face-background 'diff-file-header theme-background)
                (set-face-background 'diff-file-header "#121212")
                (set-face-background 'diff-refine-change "#121212"))))
       (progn 
         (set-face-foreground 'default "color-250")
-        (set-face-background 'default "black")
+        (set-face-background 'default theme-background)
         (set-face-background 'match "black")
         (set-face-background 'italic "black")
         (set-face-foreground 'font-lock-string-face "color-147")
