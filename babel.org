@@ -11,18 +11,16 @@
      (add-to-list 'load-path (concat dotfiles-dir "/ext/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/lisp/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/org-mode/contrib/lisp/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/git-annex-el.git/"))
      (add-to-list 'load-path (concat dotfiles-dir "/ext/tmtxt-dired-async.git/"))
-     (add-to-list 'load-path (concat dotfiles-dir "/ext/hy-mode/"))
    #+end_src
 
 ** Load/Install Melpa Packages
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region dash python-mode git-annex hy-mode
+     (setq package-list '(magit clojure-mode expand-region python-mode git-annex
                                 monroe clojure-mode-extra-font-locking autopair
-                                multi-term dired-details pixie-mode yaml-mode))
+                                multi-term dired-details yaml-mode))
 
      ; list the repositories containing them
      (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -42,7 +40,6 @@
        (when (not (package-installed-p package))
          (package-install package)))
 
-     (require 'dash)
    #+end_src
 
 ** Options
@@ -495,7 +492,6 @@
      (add-hook 'scheme-mode-hook 'na-highlight-mathing-paren)
      (add-hook 'c++-mode-hook 'na-highlight-mathing-paren)
      (add-hook 'c-mode-hook 'na-highlight-mathing-paren)
-     (add-hook 'hy-mode-hook 'na-highlight-mathing-paren)
    #+end_src
 
    Indent selected region with different mode than the buffer uses,
@@ -2576,7 +2572,6 @@
                     ("IRC" (mode . erc-mode))
                     ("Source" (or
                                (mode . java-mode)
-                               (mode . hy-mode)
                                (mode . clojure-mode)
                                (mode . org-mode)
                                (mode . bibtex-mode)
@@ -2700,9 +2695,7 @@
 
     #+begin_src emacs-lisp
       (setq lisp-programs 
-            (list (list "hy" "hy")
-                  (list "pixie" "dust repl")
-                  (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
+            (list (list "ccl" "/home/nakkaya/Apps/ccl/lx86cl64")
                   (list "sbcl" "/opt/local/bin/sbcl")
                   (list "gambit" "/opt/local/bin/gambit-gsc")))
 
@@ -2815,37 +2808,6 @@
                                    (lisp-eval-string (buffer-string))))
                    (define-key scheme-mode-map 
                      "\C-c\C-z" 'run-lisp)))
-    #+end_src
-
-*** Hy
-
-    #+begin_src emacs-lisp
-      (require 'hy-mode)
-    #+end_src
-
-    #+begin_src emacs-lisp
-      (define-key hy-mode-map "\C-xrl" 'na-run-lisp)
-    #+end_src
-
-    Eval in S-expr
-
-    #+begin_src emacs-lisp 
-      (add-hook 'hy-mode-hook
-                '(lambda ()
-                   (define-key hy-mode-map 
-                     "\C-c\C-c" '(lambda ()
-                                   (interactive)
-                                   (let ((curr (point)))
-                                     (end-of-defun)
-                                     (lisp-eval-last-sexp)
-                                     (goto-char curr))))))
-    #+end_src
-
-*** Pixie
-
-    #+begin_src emacs-lisp
-      (require 'pixie-mode)
-      (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
     #+end_src
 
 ** Git
@@ -2995,7 +2957,7 @@
      (require 'erc-join)
      (erc-autojoin-mode 1)
      (setq erc-autojoin-channels-alist
-               '(("freenode.net" "#clojure" "#hy" "#pixie-lang")
+               '(("freenode.net" "#clojure")
                  ("oftc.net" "#pentadactyl")))
      
      (setq erc-fill-column 75)
@@ -3107,7 +3069,6 @@
      (add-hook 'c++-mode-hook 'abbrev-mode)
      (add-hook 'c-mode-hook 'abbrev-mode)
      (add-hook 'org-mode-hook 'abbrev-mode)
-     (add-hook 'hy-mode-hook 'abbrev-mode)
 
      (add-hook 'clojure-mode-hook 
                (lambda ()
@@ -3205,36 +3166,6 @@
        "(map #() "_")")
      
      (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
-   #+end_src
-
-** Hy
-
-   #+begin_src emacs-lisp
-     (define-skeleton skel-hy-print
-       ""
-       nil
-       "(print "_")")
-     
-     (define-abbrev hy-mode-abbrev-table "prt" "" 'skel-hy-print)
-     
-     (define-skeleton skel-hy-map
-       ""
-       nil
-       "(map (fn [] ) "_")")
-     
-     (define-abbrev hy-mode-abbrev-table "map" "" 'skel-clojure-map)
-     
-     (define-abbrev hy-mode-abbrev-table "defn" "" 'skel-clojure-defn)
-     
-     (define-abbrev hy-mode-abbrev-table "if" "" 'skel-clojure-if)
-          
-     (define-skeleton skel-hy-let
-       ""
-       nil
-       "(let [["_"]] )")
-     (define-abbrev hy-mode-abbrev-table "let" "" 'skel-hy-let)
-     
-     (define-abbrev hy-mode-abbrev-table "do" "" 'skel-clojure-do)
    #+end_src
 
 ** Scheme
