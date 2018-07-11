@@ -2853,8 +2853,8 @@
                                  (append term-buffers (list (get-buffer "*monroe*")))
                                term-buffers))
                   (buff-list (if (get-buffer "*MATLAB*")
-                                 (append term-buffers (list (get-buffer "*MATLAB*")))
-                               term-buffers))
+                                 (append buff-list (list (get-buffer "*MATLAB*")))
+                               buff-list))
                   (buffer-list-len (length buff-list))
                   (index (position (current-buffer) buff-list)))
              (if index
