@@ -245,17 +245,17 @@
      (global-set-key [f3] 'na-term-toggle-mode)
      (global-set-key [f4] 'org-capture)
      (global-set-key [f8] 'toggle-truncate-lines)
-     
+
      (global-set-key "\M-[1;5C" 'forward-word)
      (global-set-key "\M-[1;5D" 'backward-word)
      (global-set-key "\M-[1;5A" 'backward-paragraph)
      (global-set-key "\M-[1;5B" 'forward-paragraph)
-     
+
      (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
      (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
      (global-set-key (kbd "C-S-<down>") 'shrink-window)
      (global-set-key (kbd "C-S-<up>") 'enlarge-window)
-     
+
      (global-set-key [(control d)] 'na-bounce-sexp)
      (add-hook 'c++-mode-hook
          '(lambda ()
@@ -263,20 +263,23 @@
      (add-hook 'c-mode-hook
          '(lambda ()
             (local-set-key [(control d)] 'na-bounce-sexp)))
-     
+     (add-hook 'java-mode-hook
+         '(lambda ()
+            (local-set-key [(control d)] 'na-bounce-sexp)))
+
      (define-key global-map [(control \])] 'ibuffer)
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(control \])] 'ibuffer)))
-     
+
      (define-key global-map [(meta p)] 'na-cm-rotate)
      (define-key global-map [(meta control  p)] 'na-cm-save-point)
-     
+
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(control \\)] 'other-window)))
      (global-set-key [(control \\)] 'other-window)
-     
+
      (define-key global-map [(meta \\)] 'na-next-term)
      (define-key global-map [(super \\)] 'na-next-term)
      (add-hook 'term-mode-hook
@@ -285,13 +288,13 @@
      (add-hook 'term-mode-hook
                '(lambda ()
                   (define-key term-raw-map [(super \\)] 'na-next-term)))
-     
+
      (global-set-key "\C-xgs" 'magit-status)
      (global-set-key "\C-xgl" 'na-search-org-headers)
-     
+
      (define-key global-map [home] 'beginning-of-line)
      (define-key global-map [end] 'end-of-line)
-     
+
      (global-set-key (kbd "C-x t") 'na-new-term) ;; create a new one
      (global-set-key (kbd "C-z") 'undo) ; 【Ctrl+z】
    #+end_src
