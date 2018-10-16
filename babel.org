@@ -1227,6 +1227,14 @@
      (setq org-hide-leading-stars t)
    #+end_src
 
+   #+begin_src emacs-lisp
+     (org-babel-do-load-languages 'org-babel-load-languages
+                                  (append org-babel-load-languages
+                                          '((python     . t))))
+
+     (setq org-babel-python-command "python3")
+   #+end_src
+
    Use firefox for links when on Linux,
 
    #+begin_src emacs-lisp
