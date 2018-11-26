@@ -1228,9 +1228,12 @@
    #+end_src
 
    #+begin_src emacs-lisp
+     (setq org-src-preserve-indentation t)
+
      (org-babel-do-load-languages 'org-babel-load-languages
-                                  (append org-babel-load-languages
-                                          '((python     . t))))
+                             (append org-babel-load-languages
+                                     '((python     . t)
+                                       (makefile     . t))))
 
      (setq org-babel-python-command "python3")
    #+end_src
