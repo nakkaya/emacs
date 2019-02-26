@@ -19,8 +19,8 @@
    #+begin_src emacs-lisp
      ; list the packages you want
      (setq package-list '(magit clojure-mode expand-region python-mode git-annex
-                                monroe clojure-mode-extra-font-locking autopair
-                                multi-term dired-details yaml-mode matlab-mode))
+                          monroe clojure-mode-extra-font-locking autopair
+                          multi-term dired-details yaml-mode matlab-mode polymode))
 
      ; list the repositories containing them
      (setq package-archives '(("melpa" . "http://melpa.org/packages/")
