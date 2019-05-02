@@ -18,7 +18,7 @@
 
    #+begin_src emacs-lisp
      ; list the packages you want
-     (setq package-list '(magit clojure-mode expand-region python-mode git-annex
+     (setq package-list '(magit clojure-mode expand-region python-mode ein git-annex
                           monroe clojure-mode-extra-font-locking autopair
                           multi-term yaml-mode matlab-mode polymode))
 
@@ -368,6 +368,11 @@
     (set-face-foreground 'org-block-end-line "color-236")
     (set-face-foreground 'org-todo "color-124")
     (set-face-background 'secondary-selection theme-background)
+
+    (set-face-attribute  'widget-button
+                         nil
+                         :foreground "color-160"
+                         :background theme-background)
 
     (eval-after-load "magit" 
       '(progn
@@ -3073,6 +3078,21 @@
                      (interactive)
                      (matlab-shell-run-region)))
    #+END_SRC
+
+** Python
+
+#+BEGIN_SRC emacs-lisp
+(require 'python)
+(require 'ein)
+
+(add-hook 'python-mode-hook 'auto-complete-mode)
+(setq ein:use-auto-complete-superpack t)
+
+(set-face-attribute  'ein:cell-input-area    nil :background theme-background)
+(set-face-attribute  'ein:cell-input-prompt  nil :background theme-background)
+(set-face-attribute  'ein:cell-output-area   nil :background theme-background)
+(set-face-attribute  'ein:cell-output-prompt nil :background theme-background)
+#+END_SRC
 
 * Skeletons
 ** Setup
