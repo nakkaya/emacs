@@ -2591,6 +2591,10 @@
                          (name . "^brain.org_archive$")
                          (name . "^bookmarks.org_archive$")))
                     ("IRC" (mode . erc-mode))
+                    ("Notebooks" (or (mode . ein:notebooklist-mode)
+                                     (mode . ein:notebook-mode)
+                                     (mode . ein:notebook-multilang-mode)
+                                     (name . "^\\*ein:log-all\\*$")))
                     ("Source" (or
                                (mode . java-mode)
                                (mode . clojure-mode)
