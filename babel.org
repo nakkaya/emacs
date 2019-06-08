@@ -375,8 +375,9 @@
      (set-face-background 'magit-diff-context-highlight theme-background)
      (set-face-background 'magit-diff-added theme-background)
      (set-face-background 'magit-diff-removed theme-background)
-     (set-face-background 'magit-diff-hunk-heading theme-background)))
-
+     (set-face-background 'magit-diff-hunk-heading theme-background)
+     (set-face-foreground 'magit-diff-hunk-heading
+                          (face-attribute 'font-lock-keyword-face :foreground))))
 
 (when (not (display-graphic-p))
   (set-face-attribute  'mode-line
