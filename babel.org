@@ -366,6 +366,9 @@
 (set-face-background 'font-lock-comment-face
                      (face-attribute 'font-lock-string-face :foreground))
 
+(set-face-foreground 'dired-directory
+                     (face-attribute 'font-lock-variable-name-face :foreground))
+
 (eval-after-load "magit" 
   '(progn
      (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
