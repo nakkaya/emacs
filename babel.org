@@ -3025,7 +3025,8 @@
      (set-face-attribute  'ein:cell-input-area    nil :background theme-background)
      (set-face-attribute  'ein:cell-input-prompt  nil :background theme-background)
      (set-face-attribute  'ein:cell-output-area   nil :background theme-background)
-     (set-face-attribute  'ein:cell-output-prompt nil :background theme-background)))
+     (set-face-attribute  'ein:cell-output-prompt nil :background theme-background)
+     (set-face-attribute  'ein:cell-output-stderr nil :background theme-background)))
 #+END_SRC
 
 * Skeletons
