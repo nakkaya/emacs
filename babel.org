@@ -20,7 +20,7 @@
      ; list the packages you want
      (setq package-list '(magit clojure-mode expand-region python-mode ein git-annex
                           monroe clojure-mode-extra-font-locking autopair
-                          multi-term yaml-mode matlab-mode doom-themes))
+                          multi-term yaml-mode matlab-mode))
 
      ; list the repositories containing them
      (setq package-archives '(("melpa" . "http://melpa.org/packages/")
@@ -352,24 +352,29 @@
 #+end_src
 
 #+begin_src emacs-lisp 
-(load-theme 'doom-Iosvkem t)
-(doom-themes-org-config)
+(defvar theme-background "color-232")
+(defvar theme-text-color "color-250")
 
-(defvar theme-background (face-attribute 'default :background))
+(set-face-foreground 'default theme-text-color)
+(set-face-background 'default theme-background)
+(set-face-background 'match theme-background)
+(set-face-background 'italic theme-background)
+(set-face-foreground 'font-lock-string-face "color-147")
+(set-face-foreground 'font-lock-keyword-face "color-202")
+(set-face-foreground 'font-lock-function-name-face "color-178")
+(set-face-foreground 'font-lock-builtin-face "color-148")
+(set-face-foreground 'font-lock-comment-face "color-30")
+(set-face-foreground 'org-block-begin-line "color-236")
+(set-face-foreground 'org-block-end-line "color-236")
+(set-face-foreground 'org-todo "color-124")
+(set-face-background 'secondary-selection theme-background)
 
+(set-face-attribute  'widget-button
+                     nil
+                     :foreground "color-160"
+                     :background theme-background)
 
-(set-face-background 'org-block-background theme-background)
-(set-face-background 'org-block theme-background)
-
-(set-face-foreground 'font-lock-comment-face
-                     theme-background)
-(set-face-background 'font-lock-comment-face
-                     (face-attribute 'font-lock-string-face :foreground))
-
-(set-face-foreground 'dired-directory
-                     (face-attribute 'font-lock-variable-name-face :foreground))
-
-(eval-after-load "magit" 
+(eval-after-load "magit"
   '(progn
      (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
      (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
@@ -377,20 +382,29 @@
      (set-face-background 'magit-diff-added-highlight theme-background)
      (set-face-background 'magit-diff-context-highlight theme-background)
      (set-face-background 'magit-diff-added theme-background)
+     (set-face-foreground 'magit-diff-added "brightgreen")
      (set-face-background 'magit-diff-removed theme-background)
+     (set-face-foreground 'magit-diff-removed "brightred")
      (set-face-background 'magit-diff-hunk-heading theme-background)
-     (set-face-foreground 'magit-diff-hunk-heading
-                          (face-attribute 'font-lock-keyword-face :foreground))))
+     (set-face-foreground 'magit-diff-hunk-heading "color-27")))
 
-(when (not (display-graphic-p))
-  (set-face-attribute  'mode-line
-                       nil 
-                       :foreground "color-166"
-                       :background "color-235")
-  (set-face-attribute  'mode-line-inactive
-                       nil 
-                       :foreground "color-240"
-                       :background "color-235"))
+(eval-after-load "diff-mode"
+  '(progn
+     (set-face-foreground 'diff-added "brightgreen")
+     (set-face-foreground 'diff-removed "brightred")
+     (set-face-foreground 'diff-header "color-27")
+     (set-face-background 'diff-header "color-233")
+     (set-face-background 'diff-file-header "color-233")
+     (set-face-background 'diff-refine-change "color-233")))
+
+(set-face-attribute  'mode-line
+                     nil
+                     :foreground "color-166"
+                     :background "color-235")
+(set-face-attribute  'mode-line-inactive
+                     nil
+                     :foreground "color-240"
+                     :background "color-234")
 #+end_src
 
 ** Misc
