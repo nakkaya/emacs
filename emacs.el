@@ -60,6 +60,20 @@
 
 ;;;;Theme
 
+(setq frame-title-format (list "GNU Emacs " emacs-version))
+
+(setq-default mode-line-format
+              '(""
+                mode-line-modified
+                (-3 . "%p") ;; position
+                " - %b - "
+                mode-name
+                mode-line-process
+                minor-mode-alist
+                "%n" " - "
+                (line-number-mode "L%l ")
+                (column-number-mode "C%c ")))
+
 (require 'doom-themes)
 (load-theme 'doom-one t)
 
