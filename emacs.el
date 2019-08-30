@@ -69,10 +69,14 @@
 (require 'org)
 (require 'ob-ipython)
 
+(setq org-hide-leading-stars t)
+(setq org-return-follows-link t)
 (setq org-startup-with-inline-images t)
+(setq org-src-window-setup 'current-window)
 (setq org-src-fontify-natively t)
 (setq org-confirm-babel-evaluate nil)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(setq org-babel-python-command "python3")
 
 ;; Run/highlight code using babel in org-mode
 (org-babel-do-load-languages
