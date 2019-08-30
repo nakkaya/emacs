@@ -32,6 +32,10 @@
 ;;;;Editor wide settings
 (set-face-attribute 'default nil :height 120)
 
+(delete-selection-mode)
+(setq fill-column 80)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -43,6 +47,7 @@
 (toggle-scroll-bar -1)
 (tool-bar-mode -1) 
 (global-font-lock-mode t)
+(setq make-backup-files nil)
 
 (setq query-replace-highlight t)
 (setq search-highlight t)
