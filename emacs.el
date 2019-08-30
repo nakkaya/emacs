@@ -192,7 +192,29 @@
                         (mark " "
                               (name 16 -1)
                               " " filename)))
+
+;;;;dired
+
+(require 'dired)
+(setq dired-recursive-deletes 'always)
+
+(add-hook 'dired-mode-hook
+      (lambda ()
+        (dired-hide-details-mode)))
+
+(defun na-dired-up-directory-after-kill ()
+  "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
+  (interactive)
+  (let* ((buf (current-buffer))
+        (kill-curr (if (= (length (get-buffer-window-list buf)) 
+                          1)
+                       t nil)))
+    (dired-up-directory)
+    (when kill-curr
+      (kill-buffer buf))))
+
 ;;;;Keybindings
+
 (define-key global-map [(control \])] 'ibuffer)
 (add-hook 'term-mode-hook
           '(lambda ()
@@ -206,3 +228,5 @@
              (define-key term-raw-map [(control \\)] 'other-window)))
 
 (global-set-key "\C-xgs" 'magit-status)
+
+(define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
