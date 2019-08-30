@@ -30,7 +30,6 @@
     (package-install package)))
 
 ;;;;Editor wide settings
-(set-face-attribute 'default nil :height 120)
 
 (delete-selection-mode)
 (setq fill-column 80)
@@ -59,7 +58,7 @@
   (y-or-n-p arg))
 
 ;;;;Theme
-
+(set-frame-font "DejaVu Sans Mono 11" nil t)
 (setq frame-title-format (list "GNU Emacs " emacs-version))
 
 (setq-default mode-line-format
