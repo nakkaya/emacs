@@ -84,7 +84,9 @@ Will bounce between matching parens just like % in vi
 * Org-Mode
 
 #+BEGIN_SRC emacs-lisp
+  (require 'ob)
   (require 'ob-ipython)
+  (require 'ob-shell)
 
   (setq org-hide-leading-stars t)
   (setq org-return-follows-link t)
@@ -106,6 +108,24 @@ Will bounce between matching parens just like % in vi
 
   ;; Fix an incompatibility between the ob-async and ob-ipython packages
   (setq ob-async-no-async-languages-alist '("ipython"))
+#+END_SRC
+
+* Clojure
+
+#+BEGIN_SRC emacs-lisp
+  (require 'clojure-mode)
+  (require 'monroe)
+  (require 'clojure-mode-extra-font-locking)
+  (add-hook 'clojure-mode-hook 'clojure-enable-monroe)
+#+END_SRC
+
+* C/C++
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
+  (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
+  (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
+  (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
 #+END_SRC
 
 * Python
@@ -135,6 +155,37 @@ Will bounce between matching parens just like % in vi
       (dired-up-directory)
       (when kill-curr
 	(kill-buffer buf))))
+#+END_SRC
+
+* Tramp
+
+#+BEGIN_SRC emacs-lisp
+  (require 'tramp)
+
+  (setq na-tramp-ssh-completions
+	'((tramp-parse-sconfig "~/.ssh/config")
+	  ;;(tramp-parse-shosts "~/.ssh/known_hosts")
+	  ))
+
+  (mapc (lambda (method)
+	  (tramp-set-completion-function 
+	   method na-tramp-ssh-completions))
+	'("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
+#+END_SRC
+
+* Flyspell
+
+#+BEGIN_SRC emacs-lisp
+  (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+
+  (add-hook 'message-mode-hook 'turn-on-flyspell)
+  (add-hook 'text-mode-hook 'turn-on-flyspell)
+  (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
+
+  (defun turn-on-flyspell ()
+    "Force flyspell-mode on using a positive arg.  For use in hooks."
+    (interactive)
+    (flyspell-mode 1))
 #+END_SRC
 
 * IBuffer
@@ -242,12 +293,24 @@ Will bounce between matching parens just like % in vi
 				" " filename)))
 #+END_SRC
 
+* Git
+
+#+BEGIN_SRC emacs-lisp
+  (setq git-committer-name "Nurullah Akkaya")
+  (setq git-committer-email "nurullah@nakkaya.com")
+
+  (setq vc-follow-symlinks t)
+  (setq magit-hide-diffs t)
+#+END_SRC
+
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-]")  'ibuffer)
   (global-set-key (kbd "C-\\") 'other-window)
+  (global-set-key (kbd "C-d")  'na-bounce-sexp)
   (global-set-key "\C-xgs"     'magit-status)
+  (global-set-key "\C-xrl"     'monroe)
 
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
