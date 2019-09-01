@@ -12,15 +12,46 @@
   (setq fill-column 80)
   (delete-selection-mode)
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (global-font-lock-mode t)
   (setq make-backup-files nil)
   (setq query-replace-highlight t)
   (setq search-highlight t)
   (global-auto-revert-mode 1)
 
+  (global-font-lock-mode t)
+  (show-paren-mode 1)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun yes-or-no-p (arg)
     "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
     (y-or-n-p arg))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun scroll-window-forward-line ()
+    "Move window forward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-up 1))
+
+  (defun scroll-window-backward-line ()
+    "Move window backward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-down 1)) 
+
+  (define-key global-map [wheel-up] 'scroll-window-backward-line)
+  (define-key global-map [wheel-down] 'scroll-window-forward-line)
+#+END_SRC
+
+Will bounce between matching parens just like % in vi
+
+#+BEGIN_SRC emacs-lisp
+  (defun na-bounce-sexp ()
+    (interactive)
+    (let ((prev-char (char-to-string (preceding-char)))
+          (next-char (char-to-string (following-char))))
+      (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+            ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+            (t (error "%s" "Not on a paren, brace, or bracket")))))
 #+END_SRC
 
 * Theme
