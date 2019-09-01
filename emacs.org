@@ -214,19 +214,10 @@
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
-  (define-key global-map [(control \])] 'ibuffer)
-  (add-hook 'term-mode-hook
-	    '(lambda ()
-	       (define-key term-raw-map [(control \])] 'ibuffer)))
+  (global-set-key (kbd "C-]")  'ibuffer)
+  (global-set-key (kbd "C-\\") 'other-window)
+  (global-set-key "\C-xgs"     'magit-status)
 
-  (global-set-key [f3] 'na-term-toggle-mode)
 
-  (global-set-key [(control \\)] 'other-window)
-  (add-hook 'term-mode-hook
-	    '(lambda ()
-	       (define-key term-raw-map [(control \\)] 'other-window)))
-
-  (global-set-key "\C-xgs" 'magit-status)
-
-  (define-key dired-mode-map "\C-w" 'na-dired-up-directory-after-kill)
+  (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
 #+END_SRC
