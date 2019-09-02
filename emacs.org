@@ -28,18 +28,8 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defun scroll-window-forward-line ()
-    "Move window forward one line leaving cursor at relative position in window."
-    (interactive)
-    (scroll-up 1))
-
-  (defun scroll-window-backward-line ()
-    "Move window backward one line leaving cursor at relative position in window."
-    (interactive)
-    (scroll-down 1)) 
-
-  (define-key global-map [wheel-up] 'scroll-window-backward-line)
-  (define-key global-map [wheel-down] 'scroll-window-forward-line)
+(setq mouse-wheel-scroll-amount '(1))
+(setq mouse-wheel-progressive-speed nil)
 #+END_SRC
 
 Will bounce between matching parens just like % in vi
