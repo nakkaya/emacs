@@ -371,5 +371,7 @@ Will bounce between matching parens just like % in vi
   (global-set-key (kbd "M-\\")  'na-next-term)
   (add-hook 'term-mode-hook
 	    '(lambda ()
-	       (define-key term-raw-map (kbd "C-y") 'term-paste)))
+	       (define-key term-raw-map (kbd "C-y")  'term-paste)
+	       (define-key term-raw-map (kbd "C-\\") 'other-window)
+	       (define-key term-raw-map (kbd "C-]")  'ibuffer)))
 #+END_SRC
