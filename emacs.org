@@ -293,6 +293,55 @@ Will bounce between matching parens just like % in vi
   (setq magit-hide-diffs t)
 #+END_SRC
 
+* Multi Term
+
+#+BEGIN_SRC emacs-lisp
+  (require 'multi-term)
+  (setq multi-term-program "/bin/bash")
+
+  (defun na-new-term ()
+    (interactive)
+    (multi-term)
+    ;;pass C-c
+    (define-key term-raw-map [?\C-c] 'term-send-raw))
+
+  (defun na-next-term ()
+    (interactive)
+    (if (> (length multi-term-buffer-list) 0)
+	(let* ((term-buffers (sort (copy-tree multi-term-buffer-list)
+				   (lambda (x y)
+				     (string< (buffer-name x) (buffer-name y)))))
+	       (buff-list (if (get-buffer "*monroe*")
+			      (append term-buffers (list (get-buffer "*monroe*")))
+			    term-buffers))
+	       (buff-list (if (get-buffer "*MATLAB*")
+			      (append buff-list (list (get-buffer "*MATLAB*")))
+			    buff-list))
+	       (buffer-list-len (length buff-list))
+	       (index (position (current-buffer) buff-list)))
+	  (if index
+	      (let ((target-index (mod (+ index 1) buffer-list-len)))
+		(switch-to-buffer (nth target-index buff-list)))
+	    (switch-to-buffer (car buff-list))))
+      (na-new-term)))
+
+  (defun na-term-toggle-mode ()
+    "Toggle between term-char-mode and term-line-mode."
+    (interactive)
+    (if (term-in-line-mode)
+	(progn
+	  (term-char-mode)
+	  (term-send-raw-string "\C-e"))
+      (term-line-mode)))
+
+  (add-hook 'term-mode-hook
+	    (lambda () 
+	      (setq mode-line-format
+		    '((-3 . "%p") ;; position
+		      " %b "
+		      mode-line-process))))
+#+END_SRC
+
 * Keybindings
 
 #+BEGIN_SRC emacs-lisp
@@ -304,4 +353,10 @@ Will bounce between matching parens just like % in vi
 
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
+
+  (global-set-key (kbd "C-x t") 'na-new-term)
+  (global-set-key (kbd "M-\\")  'na-next-term)
+  (add-hook 'term-mode-hook
+	    '(lambda ()
+	       (define-key term-raw-map (kbd "C-y") 'term-paste)))
 #+END_SRC
