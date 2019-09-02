@@ -118,6 +118,19 @@ Will bounce between matching parens just like % in vi
   (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
 #+END_SRC
 
+* Matlab
+
+#+BEGIN_SRC emacs-lisp
+  (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
+
+  (add-to-list
+   'auto-mode-alist
+   '("\\.m$" . matlab-mode))
+
+  (setq matlab-indent-function t)
+  (setq matlab-shell-command "matlab")
+#+END_SRC
+
 * Python
 
 #+BEGIN_SRC emacs-lisp
