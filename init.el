@@ -10,6 +10,7 @@
 	matlab-mode
 	yaml-mode
 	org
+	org-bullets
 	ob-ipython
 	multi-term
 	magit
