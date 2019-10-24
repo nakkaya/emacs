@@ -9,6 +9,7 @@
 	python-mode
 	matlab-mode
 	yaml-mode
+	markdown-mode
 	org
 	ob-ipython
 	multi-term
