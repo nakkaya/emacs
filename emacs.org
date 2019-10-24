@@ -166,6 +166,8 @@ Will bounce between matching parens just like % in vi
 #+BEGIN_SRC emacs-lisp
   (require 'tramp)
 
+  (setq tramp-default-method "ssh")
+
   (setq na-tramp-ssh-completions
 	'((tramp-parse-sconfig "~/.ssh/config")
 	  ;;(tramp-parse-shosts "~/.ssh/known_hosts")
