@@ -92,13 +92,17 @@ Will bounce between matching parens just like % in vi
   ;; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '(
-     (python . t)
-     (ipython . t)
-     ))
+   '((python . t)
+     (ipython . t)))
 
   ;; Fix an incompatibility between the ob-async and ob-ipython packages
   (setq ob-async-no-async-languages-alist '("ipython"))
+
+  (require 'org-bullets)
+  (setq org-bullets-bullet-list '("◉" "○"))
+  (add-hook 'org-mode-hook
+	    (lambda ()
+	      (org-bullets-mode 1)))
 #+END_SRC
 
 * Clojure
@@ -356,7 +360,7 @@ Will bounce between matching parens just like % in vi
 		      mode-line-process))))
 #+END_SRC
 
-* Keybindings
+* Key Bindings
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-]")  'ibuffer)
@@ -373,6 +377,5 @@ Will bounce between matching parens just like % in vi
   (add-hook 'term-mode-hook
 	    '(lambda ()
 	       (define-key term-raw-map (kbd "C-y")  'term-paste)
-	       (define-key term-raw-map (kbd "C-\\") 'other-window)
-	       (define-key term-raw-map (kbd "C-]")  'ibuffer)))
+	       (define-key term-raw-map (kbd "C-\\") 'other-window)))
 #+END_SRC
