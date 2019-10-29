@@ -12,7 +12,7 @@
 	markdown-mode
 	org
 	org-bullets
-	jupyter
+        ein
 	multi-term
 	magit
 	doom-themes))
