@@ -100,8 +100,8 @@ Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob)
-  (require 'ob-ipython)
   (require 'ob-shell)
+  (require 'ob-jupyter)
 
   (setq org-hide-leading-stars t)
   (setq org-return-follows-link t)
@@ -117,7 +117,7 @@ Will bounce between matching parens just like % in vi
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
-     (ipython . t)))
+     (jupyter . t)))
 
   ;; Fix an incompatibility between the ob-async and ob-ipython packages
   (setq ob-async-no-async-languages-alist '("ipython"))
