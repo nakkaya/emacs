@@ -45,57 +45,6 @@ Will bounce between matching parens just like % in vi
             (t (error "%s" "Not on a paren, brace, or bracket")))))
 #+END_SRC
 
-* Theme
-
-#+BEGIN_SRC emacs-lisp
-  (setq frame-title-format (list "GNU Emacs " emacs-version))
-  (set-frame-font "DejaVu Sans Mono 11" nil t)
-
-  (column-number-mode 1)
-  (blink-cursor-mode 1)
-  (menu-bar-mode -1)
-  (toggle-scroll-bar -1)
-  (tool-bar-mode -1)
-
-  (setq-default mode-line-format
-		'(""
-		  mode-line-modified
-		  (-3 . "%p") ;; position
-		  " - %b - "
-		  mode-name
-		  mode-line-process
-		  minor-mode-alist
-		  "%n" " - "
-		  (line-number-mode "L%l ")
-		  (column-number-mode "C%c ")))
-
-  (if window-system
-      (progn
-	(require 'doom-themes)
-	(load-theme 'doom-one t))
-    (progn
-      (set-face-foreground 'default "color-250")
-      (set-face-background 'default "black")
-      (set-face-foreground 'font-lock-string-face "color-147")
-      (set-face-foreground 'font-lock-keyword-face "color-202")
-      (set-face-foreground 'font-lock-function-name-face "color-178")
-      (set-face-foreground 'font-lock-builtin-face "color-148")
-      (set-face-foreground 'font-lock-comment-face "color-30")
-      (set-face-foreground 'org-block-begin-line "color-236")
-      (set-face-foreground 'org-block-end-line "color-236")
-      (set-face-foreground 'org-todo "color-124")
-      (set-face-background 'secondary-selection "black")
-      (set-face-attribute  'mode-line
-			   nil
-			   :foreground "color-166"
-			   :background "color-235")
-
-      (set-face-attribute  'mode-line-inactive
-			   nil
-			   :foreground "color-240"
-			   :background "color-234")))
-#+END_SRC
-
 * Org-Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -338,7 +287,7 @@ Will bounce between matching parens just like % in vi
 * Ein
 
 #+BEGIN_SRC emacs-lisp
-(setq ein:polymode t)
+  (setq ein:polymode t)
 #+END_SRC
 
 * Multi Term
@@ -409,3 +358,70 @@ Will bounce between matching parens just like % in vi
 	       (define-key term-raw-map (kbd "C-y")  'term-paste)
 	       (define-key term-raw-map (kbd "C-\\") 'other-window)))
 #+END_SRC
+* Theme
+
+#+BEGIN_SRC emacs-lisp
+  (setq frame-title-format (list "GNU Emacs " emacs-version))
+  (set-frame-font "DejaVu Sans Mono 11" nil t)
+
+  (column-number-mode 1)
+  (blink-cursor-mode 1)
+  (menu-bar-mode -1)
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+
+  (setq-default mode-line-format
+		'(""
+		  mode-line-modified
+		  (-3 . "%p") ;; position
+		  " - %b - "
+		  mode-name
+		  mode-line-process
+		  minor-mode-alist
+		  "%n" " - "
+		  (line-number-mode "L%l ")
+		  (column-number-mode "C%c ")))
+
+  (if window-system
+      (progn
+	(require 'doom-themes)
+	(load-theme 'doom-one t))
+    (progn
+      (set-face-foreground 'default "color-250")
+      (set-face-background 'default "black")
+      (set-face-foreground 'font-lock-string-face "color-147")
+      (set-face-foreground 'font-lock-keyword-face "color-202")
+      (set-face-foreground 'font-lock-function-name-face "color-178")
+      (set-face-foreground 'font-lock-builtin-face "color-148")
+      (set-face-foreground 'font-lock-comment-face "color-30")
+      (set-face-foreground 'org-block-begin-line "color-236")
+      (set-face-foreground 'org-block-end-line "color-236")
+      (set-face-foreground 'org-todo "color-124")
+      (set-face-background 'secondary-selection "black")
+      (set-face-attribute  'mode-line
+			   nil
+			   :foreground "color-166"
+			   :background "color-235")
+
+      (set-face-attribute  'mode-line-inactive
+			   nil
+			   :foreground "color-240"
+			   :background "color-234")))
+
+
+  ;; Delete Annoying Faces
+  (set-face-background 'org-block "unspecified")
+  (set-face-background 'org-block-end-line "unspecified")
+  (set-face-background 'org-block-begin-line "unspecified")
+  (set-face-background 'org-level-1 "unspecified")
+
+  (set-face-background 'ein:cell-input-area "unspecified")
+
+  (with-eval-after-load 'magit
+    (set-face-background 'magit-diff-added "unspecified")
+    (set-face-background 'magit-diff-removed "unspecified")
+    (set-face-background 'magit-diff-added-highlight "unspecified")
+    (set-face-background 'magit-diff-removed-highlight "unspecified")
+    (set-face-background 'magit-diff-context-highlight "unspecified"))
+#+END_SRC
+
