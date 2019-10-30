@@ -287,6 +287,9 @@ Will bounce between matching parens just like % in vi
 * Ein
 
 #+BEGIN_SRC emacs-lisp
+  (require 'ein)
+  (require 'ein-notebook)
+  (require 'ein-subpackages)
   (setq ein:polymode t)
 #+END_SRC
 
