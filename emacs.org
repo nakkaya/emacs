@@ -289,8 +289,7 @@ Will bounce between matching parens just like % in vi
   (require 'ein-subpackages)
   (setq ein:polymode t)
 
-  (setq ein:url-or-port '("http://10.0.0.150:9999"
-			  "https://compute.nakkaya.com"))
+  (setq ein:url-or-port '("https://compute.nakkaya.com"))
 #+END_SRC
 
 * Multi Term
