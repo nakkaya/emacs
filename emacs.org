@@ -321,7 +321,7 @@ Will bounce between matching parens just like % in vi
 			      (append buff-list (list (get-buffer "*MATLAB*")))
 			    buff-list))
 	       (buffer-list-len (length buff-list))
-	       (index (position (current-buffer) buff-list)))
+	       (index (cl-position (current-buffer) buff-list)))
 	  (if index
 	      (let ((target-index (mod (+ index 1) buffer-list-len)))
 		(switch-to-buffer (nth target-index buff-list)))
