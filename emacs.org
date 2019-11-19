@@ -431,3 +431,9 @@ Will bounce between matching parens just like % in vi
     (set-face-background 'magit-diff-context-highlight "unspecified"))
 #+END_SRC
 
+* Session
+
+#+BEGIN_SRC emacs-lisp
+  (setq desktop-path '("~/")) 
+  (desktop-save-mode 1)
+#+END_SRC
