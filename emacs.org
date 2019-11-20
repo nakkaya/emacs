@@ -412,32 +412,8 @@ Mouse setup when running in a terminal.
 		  (line-number-mode "L%l ")
 		  (column-number-mode "C%c ")))
 
-  (if window-system
-      (progn
-	(require 'doom-themes)
-	(load-theme 'doom-one t))
-    (progn
-      (set-face-foreground 'default "color-250")
-      (set-face-background 'default "black")
-      (set-face-foreground 'font-lock-string-face "color-147")
-      (set-face-foreground 'font-lock-keyword-face "color-202")
-      (set-face-foreground 'font-lock-function-name-face "color-178")
-      (set-face-foreground 'font-lock-builtin-face "color-148")
-      (set-face-foreground 'font-lock-comment-face "color-30")
-      (set-face-foreground 'org-block-begin-line "color-236")
-      (set-face-foreground 'org-block-end-line "color-236")
-      (set-face-foreground 'org-todo "color-124")
-      (set-face-background 'secondary-selection "black")
-      (set-face-attribute  'mode-line
-			   nil
-			   :foreground "color-166"
-			   :background "color-235")
-
-      (set-face-attribute  'mode-line-inactive
-			   nil
-			   :foreground "color-240"
-			   :background "color-234")))
-
+  (require 'doom-themes)
+  (load-theme 'doom-one t)
 
   ;; Delete Annoying Faces
   (set-face-background 'org-block "unspecified")
