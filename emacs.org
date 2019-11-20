@@ -368,6 +368,16 @@ Will bounce between matching parens just like % in vi
 Mouse setup when running in a terminal.
 
 #+BEGIN_SRC emacs-lisp
+  (defun scroll-window-forward-line ()
+    "Move window forward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-up 1))
+
+  (defun scroll-window-backward-line ()
+    "Move window backward one line leaving cursor at relative position in window."
+    (interactive)
+    (scroll-down 1))
+
   (unless window-system
     (xterm-mouse-mode t)
     (require 'mouse)
