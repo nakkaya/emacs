@@ -364,6 +364,20 @@ Will bounce between matching parens just like % in vi
 	       (define-key term-raw-map (kbd "C-y")  'term-paste)
 	       (define-key term-raw-map (kbd "C-\\") 'other-window)))
 #+END_SRC
+
+Mouse setup when running in a terminal.
+
+#+BEGIN_SRC emacs-lisp
+  (unless window-system
+    (xterm-mouse-mode t)
+    (require 'mouse)
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t)
+
+    (define-key global-map [mouse-4] 'scroll-window-backward-line)
+    (define-key global-map [mouse-5] 'scroll-window-forward-line))
+#+END_SRC
+
 * Theme
 
 #+BEGIN_SRC emacs-lisp
