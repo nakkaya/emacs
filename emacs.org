@@ -415,6 +415,9 @@ Mouse setup when running in a terminal.
   (require 'doom-themes)
   (load-theme 'doom-one t)
 
+  (unless window-system
+    (set-face-background 'default "color-16"))
+
   ;; Delete Annoying Faces
   (set-face-background 'org-block "unspecified")
   (set-face-background 'org-block-end-line "unspecified")
@@ -428,7 +431,8 @@ Mouse setup when running in a terminal.
     (set-face-background 'magit-diff-removed "unspecified")
     (set-face-background 'magit-diff-added-highlight "unspecified")
     (set-face-background 'magit-diff-removed-highlight "unspecified")
-    (set-face-background 'magit-diff-context-highlight "unspecified"))
+    (set-face-background 'magit-diff-context-highlight "unspecified")
+    (set-face-background 'magit-diff-hunk-heading-highlight "unspecified"))
 #+END_SRC
 
 * Session
