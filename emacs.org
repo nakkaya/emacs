@@ -348,12 +348,25 @@ Will bounce between matching parens just like % in vi
 * Key Bindings
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-]")  'ibuffer)
   (global-set-key (kbd "C-\\") 'other-window)
-  (global-set-key (kbd "C-d")  'na-bounce-sexp)
   (global-set-key "\C-xgs"     'magit-status)
   (global-set-key "\C-xrl"     'monroe)
 
+  (global-set-key (kbd "C-d")  'na-bounce-sexp)
+  (add-hook 'c++-mode-hook
+      '(lambda ()
+	 (local-set-key [(control d)] 'na-bounce-sexp)))
+  (add-hook 'c-mode-hook
+      '(lambda ()
+	 (local-set-key [(control d)] 'na-bounce-sexp)))
+  (add-hook 'java-mode-hook
+      '(lambda ()
+	 (local-set-key [(control d)] 'na-bounce-sexp)))
+
+  (global-set-key (kbd "C-]")  'ibuffer)
+  (add-hook 'term-mode-hook
+	    '(lambda ()
+	       (define-key term-raw-map [(control \])] 'ibuffer)))
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
 
@@ -386,6 +399,11 @@ Mouse setup when running in a terminal.
 
     (define-key global-map [mouse-4] 'scroll-window-backward-line)
     (define-key global-map [mouse-5] 'scroll-window-forward-line))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'smart-tab)
+  (global-smart-tab-mode 1)
 #+END_SRC
 
 * Theme

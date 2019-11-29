@@ -15,7 +15,8 @@
         ein
 	multi-term
 	magit
-	doom-themes))
+	doom-themes
+	smart-tab))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
