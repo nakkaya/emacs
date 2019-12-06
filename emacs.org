@@ -59,6 +59,9 @@ Will bounce between matching parens just like % in vi
   (setq org-confirm-babel-evaluate nil)
   (setq org-babel-python-command "python3")
 
+  (when  (eq system-type 'windows-nt)
+    (setq org-babel-python-command "python.exe"))
+
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
   ;; Run/highlight code using babel in org-mode
