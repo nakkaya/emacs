@@ -20,6 +20,8 @@
   (global-font-lock-mode t)
   (show-paren-mode 1)
   (electric-pair-mode 1)
+
+  (setq-default indent-tabs-mode nil)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
