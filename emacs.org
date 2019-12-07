@@ -68,6 +68,7 @@ Will bounce between matching parens just like % in vi
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
+     (ipython . t)
      (matlab . t)))
 
   (setq org-babel-default-header-args:matlab
