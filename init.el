@@ -12,7 +12,6 @@
 	markdown-mode
 	org
 	org-bullets
-        ein
         ob-ipython
 	multi-term
 	magit
