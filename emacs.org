@@ -74,12 +74,6 @@ Will bounce between matching parens just like % in vi
      (ipython . t)
      (matlab . t)))
 
-  (add-to-list 'display-buffer-alist
-               ;;(cons "\\*ob-ipython-out\\*.*" (cons #'display-buffer-no-window nil))
-               (cons (get-buffer-create "*ob-ipython-out*") (cons #'display-buffer-no-window nil))
-             
-               )
-
   (setq org-babel-default-header-args:matlab
         '((:results . "output") (:session . "*MATLAB*")))
 
