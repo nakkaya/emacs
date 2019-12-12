@@ -122,6 +122,111 @@ Will bounce between matching parens just like % in vi
   (setq python-shell-interpreter "python3")
 #+END_SRC
 
+* Skeletons
+
+#+BEGIN_SRC emacs-lisp
+  (setq abbrev-mode t)
+
+  (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+  (add-hook 'clojure-mode-hook 'abbrev-mode)
+  (add-hook 'c++-mode-hook 'abbrev-mode)
+  (add-hook 'c-mode-hook 'abbrev-mode)
+  (add-hook 'org-mode-hook 'abbrev-mode)
+#+END_SRC
+
+Clojure
+
+#+BEGIN_SRC emacs-lisp
+  (define-skeleton skel-clojure-println
+    ""
+    nil
+    "(println "_")")
+
+  (define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
+
+  (define-skeleton skel-clojure-defn
+    ""
+    nil
+    "(defn "_" [])")
+
+  (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
+
+  (define-skeleton skel-clojure-if
+    ""
+    nil
+    "(if ("_"))")
+
+  (define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
+
+  (define-skeleton skel-clojure-let
+    ""
+    nil
+    "(let ["_"] )")
+
+  (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
+
+  (define-skeleton skel-clojure-doseq
+    ""
+    nil
+    "(doseq ["_"] "
+    \n > ")")
+
+  (define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
+
+  (define-skeleton skel-clojure-do
+    ""
+    nil
+    "(do "_" "
+    \n > ")")
+
+  (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
+
+  (define-skeleton skel-clojure-reduce
+    ""
+    nil
+    "(reduce (fn[h v] ) "_" ) ")
+
+  (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
+
+  (define-skeleton skel-clojure-try
+    ""
+    nil
+    "(try "_" (catch Exception e (println e)))")
+
+  (define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
+
+  (define-skeleton skel-clojure-map
+    ""
+    nil
+    "(map #() "_")")
+
+  (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
+#+END_SRC
+
+C++
+
+#+BEGIN_SRC emacs-lisp
+  (define-skeleton skel-cpp-prt
+    ""
+    nil
+    \n >
+    "std::cout << " _ " << std::endl;"
+    \n >)
+
+  (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+#+END_SRC
+
+Java
+
+#+BEGIN_SRC emacs-lisp
+  (define-skeleton skel-java-println
+    "Insert a Java println Statement"
+    nil
+    "System.out.println(" _ " );")
+
+  (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
+#+END_SRC
+
 * Dired
 
 #+BEGIN_SRC emacs-lisp
