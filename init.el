@@ -15,6 +15,7 @@
         ob-ipython
 	multi-term
 	magit
+        transmission
 	doom-themes
 	smart-tab))
 
