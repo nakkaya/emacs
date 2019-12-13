@@ -258,7 +258,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'tramp)
 
-  (setq tramp-default-method "ssh")
+  (setq tramp-default-method "scp")
 
   (setq na-tramp-ssh-completions
 	'((tramp-parse-sconfig "~/.ssh/config")
