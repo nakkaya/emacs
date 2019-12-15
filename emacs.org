@@ -454,16 +454,25 @@ Java
 
 #+BEGIN_SRC emacs-lisp
   (setq eshell-prompt-function
-	(lambda ()
-	  (concat
-	   (propertize "\u21AF " 'face `(:foreground "Grey30"))
-	   (propertize (system-name) 'face `(:foreground "Grey50"))
-	   (propertize " \u2014 " 'face `(:foreground "Grey30"))
-	   (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
-	   (propertize " \u2014 " 'face `(:foreground "Grey30"))
-	   (propertize (concat (eshell/pwd)) 'face `(:foreground "Grey50"))
-	   (propertize "\n" 'face `(:foreground "Grey30"))
-	   (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+        (lambda ()
+          (concat
+           (propertize "\u21AF " 'face `(:foreground "Grey30"))
+           (propertize (system-name) 'face `(:foreground "Grey50"))
+           (propertize " \u2014 " 'face `(:foreground "Grey30"))
+           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
+           (propertize " \u2014 " 'face `(:foreground "Grey30"))
+           (propertize (concat (eshell/pwd)) 'face `(:foreground "Grey50"))
+           (propertize "\n" 'face `(:foreground "Grey30"))
+           (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+
+  (defalias 'ssh "cd /ssh:$1:~")
+
+  (add-to-list 'eshell-visual-commands "htop")
+
+  ;Clear the eshell buffer.
+  (defun eshell/clear ()      
+    (let ((eshell-buffer-maximum-lines 0))
+      (eshell-truncate-buffer)))
 
   (when  (eq system-type 'windows-nt)
     (defun na-new-term()
