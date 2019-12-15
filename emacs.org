@@ -236,21 +236,23 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
 
+  (setq dired-dwim-target t)
   (setq dired-recursive-deletes 'always)
+
   (add-hook 'dired-mode-hook
-	    (lambda ()
-	      (dired-hide-details-mode)))
+            (lambda ()
+              (dired-hide-details-mode)))
 
   (defun na-dired-up-directory-after-kill ()
     "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
     (interactive)
     (let* ((buf (current-buffer))
-	   (kill-curr (if (= (length (get-buffer-window-list buf)) 
-			     1)
-			  t nil)))
+           (kill-curr (if (= (length (get-buffer-window-list buf)) 
+                             1)
+                          t nil)))
       (dired-up-directory)
       (when kill-curr
-	(kill-buffer buf))))
+        (kill-buffer buf))))
 #+END_SRC
 
 * Tramp
