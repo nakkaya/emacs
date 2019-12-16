@@ -468,6 +468,7 @@ Java
            (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
 
   (defalias 'ssh "cd /ssh:$1:~")
+  (defalias 'ls "ls -a")
 
   (add-hook 'eshell-mode-hook
               (lambda ()
