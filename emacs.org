@@ -469,7 +469,9 @@ Java
 
   (defalias 'ssh "cd /ssh:$1:~")
 
-  (add-to-list 'eshell-visual-commands "htop")
+  (add-hook 'eshell-mode-hook
+              (lambda ()
+                (add-to-list 'eshell-visual-commands "htop")))
 
   ;Clear the eshell buffer.
   (defun eshell/clear ()      
