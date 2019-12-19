@@ -493,6 +493,12 @@ Java
 * inf-ipy
 
 #+BEGIN_SRC emacs-lisp
+  (quelpa
+   '(inf-ipy
+     :fetcher github
+     :repo "nakkaya/inf-ipy"
+     :files ("src/emacs/*.el")))
+
   (require 'inf-ipy)
 
   (inf-ipy-configure-kernel python)
