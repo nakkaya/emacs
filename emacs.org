@@ -490,6 +490,15 @@ Java
       (eshell 'N)))
 #+END_SRC
 
+* inf-ipy
+
+#+BEGIN_SRC emacs-lisp
+  (require 'inf-ipy)
+
+  (inf-ipy-configure-kernel python)
+  (inf-ipy-configure-kernel matlab)
+#+END_SRC
+
 * Transmission
 
 #+BEGIN_SRC emacs-lisp

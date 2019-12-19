@@ -17,7 +17,8 @@
 	magit
         transmission
 	doom-themes
-	smart-tab))
+	smart-tab
+        quelpa))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
