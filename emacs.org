@@ -242,7 +242,9 @@ Java
   (add-hook 'dired-mode-hook
             (lambda ()
               (dired-hide-details-mode)))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
   (defun na-dired-up-directory-after-kill ()
     "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
     (interactive)
@@ -253,6 +255,20 @@ Java
       (dired-up-directory)
       (when kill-curr
         (kill-buffer buf))))
+
+  (defun na-dired-down-directory-after-kill ()
+    "Call 'dired-find-alternate-file' after calling '(kill-buffer (current-buffer))'."
+    (interactive)
+    (let ((file (dired-get-filename))) 
+      (if (file-directory-p file) 
+          (let* ((buf (current-buffer))
+                 (kill-curr (if (= (length (get-buffer-window-list buf)) 
+                                   1)
+                                t nil)))
+            (dired-find-file)
+            (when kill-curr
+              (kill-buffer buf)))
+        (dired-advertised-find-file))))
 #+END_SRC
 
 * Tramp
@@ -543,28 +559,29 @@ Java
   (global-set-key (kbd "C-d")  'na-bounce-sexp)
   (add-hook 'c++-mode-hook
       '(lambda ()
-	 (local-set-key [(control d)] 'na-bounce-sexp)))
+         (local-set-key [(control d)] 'na-bounce-sexp)))
   (add-hook 'c-mode-hook
       '(lambda ()
-	 (local-set-key [(control d)] 'na-bounce-sexp)))
+         (local-set-key [(control d)] 'na-bounce-sexp)))
   (add-hook 'java-mode-hook
       '(lambda ()
-	 (local-set-key [(control d)] 'na-bounce-sexp)))
+         (local-set-key [(control d)] 'na-bounce-sexp)))
 
   (global-set-key (kbd "C-]")  'ibuffer)
   (add-hook 'term-mode-hook
-	    '(lambda ()
-	       (define-key term-raw-map [(control \])] 'ibuffer)))
+            '(lambda ()
+               (define-key term-raw-map [(control \])] 'ibuffer)))
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
+  (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
 
   (global-set-key (kbd "C-x t") 'na-new-term)
 
   (global-set-key (kbd "M-\\")  'na-next-term)
   (add-hook 'term-mode-hook
-	    '(lambda ()
-	       (define-key term-raw-map (kbd "C-y")  'term-paste)
-	       (define-key term-raw-map (kbd "C-\\") 'other-window)))
+            '(lambda ()
+               (define-key term-raw-map (kbd "C-y")  'term-paste)
+               (define-key term-raw-map (kbd "C-\\") 'other-window)))
 #+END_SRC
 
 Mouse setup when running in a terminal.
