@@ -582,6 +582,16 @@ Java
             '(lambda ()
                (define-key term-raw-map (kbd "C-y")  'term-paste)
                (define-key term-raw-map (kbd "C-\\") 'other-window)))
+
+  (global-set-key "\M-[1;5C" 'forward-word)
+  (global-set-key "\M-[1;5D" 'backward-word)
+  (global-set-key "\M-[1;5A" 'backward-paragraph)
+  (global-set-key "\M-[1;5B" 'forward-paragraph)
+
+  (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+  (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+  (global-set-key (kbd "C-S-<down>") 'shrink-window)
+  (global-set-key (kbd "C-S-<up>") 'enlarge-window)
 #+END_SRC
 
 Mouse setup when running in a terminal.
