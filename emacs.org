@@ -402,6 +402,26 @@ Java
   (setq magit-hide-diffs t)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defun na-magit-auto-commit-msg ()
+    (concat
+     "Update:\n"
+     (string-join
+      (mapcar
+       (lambda (f)
+         (concat "  " f "\n"))
+       (magit-staged-files)))))
+
+  (defun na-magit-auto-commit ()
+    (interactive)
+    (magit-call-git
+     "commit" "-m" (na-magit-auto-commit-msg))
+    (magit-refresh))
+
+  (transient-append-suffix
+    'magit-commit "a" '("u" "Auto Commit" na-magit-auto-commit))
+#+END_SRC
+
 * Terminal
 
 #+BEGIN_SRC emacs-lisp
