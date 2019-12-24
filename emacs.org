@@ -497,6 +497,31 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (require 'eshell)
+
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
+              (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+
+  ;;Clear the eshell buffer.
+  (defun eshell/clear ()
+    (let ((eshell-buffer-maximum-lines 0))
+      (eshell-truncate-buffer)))
+
+  (defalias 'cls 'eshell/clear)
+
+  (when  (eq system-type 'windows-nt)
+    (defun na-new-term()
+      "Open a new instance of eshell."
+      (interactive)
+      (eshell 'N)))
+
+  (defun eshell/g ()
+    (magit))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun na-shell-git-branch (pwd)
     (interactive)
     (if (and (eshell-search-path "git")
@@ -518,22 +543,6 @@ Java
               (lambda ()
                 (add-to-list 'eshell-visual-commands "htop")
                 (add-to-list 'eshell-visual-commands "ssh")))
-
-  ;Clear the eshell buffer.
-  (defun eshell/clear ()      
-    (let ((eshell-buffer-maximum-lines 0))
-      (eshell-truncate-buffer)))
-
-  (defalias 'cls 'eshell/clear)
-
-  (when  (eq system-type 'windows-nt)
-    (defun na-new-term()
-      "Open a new instance of eshell."
-      (interactive)
-      (eshell 'N)))
-
-  (defun eshell/g ()
-    (magit))
 #+END_SRC
 
 * inf-ipy
