@@ -499,6 +499,13 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'eshell)
 
+  (setq eshell-hist-ignoredups t
+        eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
+        eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
+        eshell-visual-commands '("htop" "ssh")
+        eshell-prompt-regexp (rx bol "\u03BB " space)
+        eshell-banner-message "")
+
   (add-hook 'eshell-mode-hook
             (lambda ()
               (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
@@ -538,11 +545,6 @@ Java
            (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
            (propertize "\n" 'face `(:foreground "Grey30"))
            (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
-
-  (add-hook 'eshell-mode-hook
-              (lambda ()
-                (add-to-list 'eshell-visual-commands "htop")
-                (add-to-list 'eshell-visual-commands "ssh")))
 #+END_SRC
 
 * inf-ipy
