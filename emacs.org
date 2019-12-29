@@ -22,6 +22,8 @@
   (electric-pair-mode 1)
 
   (setq-default indent-tabs-mode nil)
+
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -502,7 +504,7 @@ Java
   (setq eshell-hist-ignoredups t
         eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
         eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-        eshell-visual-commands '("htop" "ssh")
+        eshell-visual-commands '("htop" "ssh" "python")
         eshell-prompt-regexp (rx bol "\u03BB " space)
         eshell-banner-message "")
 
@@ -613,6 +615,11 @@ Java
   (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
   (global-set-key (kbd "C-S-<down>") 'shrink-window)
   (global-set-key (kbd "C-S-<up>") 'enlarge-window)
+
+  (global-set-key (kbd "C-c <right>") 'hs-show-block)
+  (global-set-key (kbd "C-c <left>")  'hs-hide-block)
+  (global-set-key (kbd "C-c <up>")    'hs-hide-all)
+  (global-set-key (kbd "C-c <down>")  'hs-show-all)
 #+END_SRC
 
 Mouse setup when running in a terminal.
