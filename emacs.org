@@ -656,9 +656,10 @@ Mouse setup when running in a terminal.
   (setq frame-title-format (list "GNU Emacs " emacs-version))
 
 
-  (let ((font "DejaVu Sans Mono 11"))
-    (when (x-list-fonts font)
-      (set-frame-font font nil t)))
+  (when window-system
+    (let ((font "DejaVu Sans Mono 11"))
+      (when (x-list-fonts font)
+        (set-frame-font font nil t))))
 
   (column-number-mode 1)
   (blink-cursor-mode 1)
