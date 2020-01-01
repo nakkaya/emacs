@@ -3,6 +3,11 @@
 * Editor
 
 #+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'windows-nt)
+    (setenv "Home" (getenv "UserProfile")))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (setq locale-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
