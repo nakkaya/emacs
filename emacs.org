@@ -450,15 +450,6 @@ Java
 * Terminal
 
 #+BEGIN_SRC emacs-lisp
-  (require 'multi-term)
-  (setq multi-term-program "/bin/bash")
-
-  (defun na-new-term ()
-    (interactive)
-    (multi-term)
-    ;;pass C-c
-    (define-key term-raw-map [?\C-c] 'term-send-raw))
-
   (defun na-next-term ()
     (interactive)
     (let* ((term-buffers (sort (copy-tree multi-term-buffer-list)
@@ -485,6 +476,11 @@ Java
           (let ((target-index (mod (+ index 1) buffer-list-len)))
             (switch-to-buffer (nth target-index buff-list)))
         (switch-to-buffer (car buff-list)))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'multi-term)
+  (setq multi-term-program "/bin/bash")
 
   (defun na-term-toggle-mode ()
     "Toggle between term-char-mode and term-line-mode."
@@ -525,12 +521,6 @@ Java
 
   (defalias 'cls 'eshell/clear)
 
-  (when  (eq system-type 'windows-nt)
-    (defun na-new-term()
-      "Open a new instance of eshell."
-      (interactive)
-      (eshell 'N)))
-
   (defun eshell/g ()
     (magit))
 #+END_SRC
@@ -552,6 +542,18 @@ Java
            (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
            (propertize "\n" 'face `(:foreground "Grey30"))
            (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun na-new-term(term-or-shell)
+    "Open a new instance of eshell."
+    (interactive "P")
+    (if term-or-shell
+        (progn
+          (multi-term)
+          ;;pass C-c
+          (define-key term-raw-map [?\C-c] 'term-send-raw))
+      (eshell 'N)))
 #+END_SRC
 
 * inf-ipy
