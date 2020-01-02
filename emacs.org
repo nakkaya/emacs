@@ -514,6 +514,10 @@ Java
               (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
               (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
 
+  (eshell/alias "df" "df -h")
+  (eshell/alias "ps-grep" "ps ax | grep -i $1")
+  (eshell/alias "conn" "cd /ssh:$1:~")
+
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
     (let ((eshell-buffer-maximum-lines 0))
