@@ -501,6 +501,7 @@ Java
 
 #+BEGIN_SRC emacs-lisp
   (require 'eshell)
+  (require 'em-alias)
 
   (setq eshell-hist-ignoredups t
         eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
