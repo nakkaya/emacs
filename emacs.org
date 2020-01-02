@@ -450,26 +450,28 @@ Java
 * Terminal
 
 #+BEGIN_SRC emacs-lisp
+  (require 'cl)
+
+  (defun filter-buffers-with-prefix (prefix)
+    "Filter buffers whose names start with the given prefix"
+    (interactive "sPrefix to filter: ")
+    (let ((buffers))
+      (loop for buffer in (buffer-list)
+            do (if (string-prefix-p prefix (buffer-name buffer))
+                   (push buffer buffers)))
+      buffers))
+
   (defun na-next-term ()
     (interactive)
     (let* ((term-buffers (sort (copy-tree multi-term-buffer-list)
                                (lambda (x y)
                                  (string< (buffer-name x) (buffer-name y)))))
-           (buff-list (if (get-buffer "*monroe*")
-                          (append term-buffers (list (get-buffer "*monroe*")))
-                        term-buffers))
-           (buff-list (if (get-buffer "*inf-ipy*")
-                          (append buff-list (list (get-buffer "*inf-ipy*")))
-                        buff-list))
-           (buff-list (if (get-buffer "*MATLAB*")
-                          (append buff-list (list (get-buffer "*MATLAB*")))
-                        buff-list))
-           (buff-list (if (get-buffer "*Python*")
-                          (append buff-list (list (get-buffer "*Python*")))
-                        buff-list))
-           (buff-list (if (get-buffer "*eshell*")
-                          (append buff-list (list (get-buffer "*eshell*")))
-                        buff-list))
+           (buff-list (append term-buffers
+                              (filter-buffers-with-prefix "*eshell")
+                              (filter-buffers-with-prefix "*monroe")
+                              (filter-buffers-with-prefix "*inf-ipy")
+                              (filter-buffers-with-prefix "*MATLAB")
+                              (filter-buffers-with-prefix "*Python")))
            (buffer-list-len (length buff-list))
            (index (cl-position (current-buffer) buff-list)))
       (if index
