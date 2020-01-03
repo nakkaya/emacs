@@ -471,7 +471,8 @@ Java
                               (filter-buffers-with-prefix "*monroe")
                               (filter-buffers-with-prefix "*inf-ipy")
                               (filter-buffers-with-prefix "*MATLAB")
-                              (filter-buffers-with-prefix "*Python")))
+                              (filter-buffers-with-prefix "*Python")
+                              (filter-buffers-with-prefix "*ssh")))
            (buffer-list-len (length buff-list))
            (index (cl-position (current-buffer) buff-list)))
       (if index
@@ -510,7 +511,8 @@ Java
         eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
         eshell-visual-commands '("htop" "ssh" "python")
         eshell-prompt-regexp (rx bol "\u03BB " space)
-        eshell-banner-message "")
+        eshell-banner-message ""
+        eshell-cmpl-cycle-completions nil)
 
   (add-hook 'eshell-mode-hook
             (lambda ()
@@ -615,6 +617,7 @@ Java
   (global-set-key (kbd "C-x t") 'na-new-term)
 
   (global-set-key (kbd "M-\\")  'na-next-term)
+  (define-key term-raw-map (kbd "M-\\")  'na-next-term)
   (add-hook 'term-mode-hook
             '(lambda ()
                (define-key term-raw-map (kbd "C-y")  'term-paste)
