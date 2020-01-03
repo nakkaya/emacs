@@ -54,6 +54,11 @@ Will bounce between matching parens just like % in vi
             (t (error "%s" "Not on a paren, brace, or bracket")))))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (setq password-cache t) ; enable password caching
+  (setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
+#+END_SRC
+
 * Org-Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -505,6 +510,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'eshell)
   (require 'em-alias)
+  (require 'em-tramp) ; to load eshell’s sudo
 
   (setq eshell-hist-ignoredups t
         eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
@@ -522,6 +528,7 @@ Java
   (eshell/alias "df" "df -h")
   (eshell/alias "ps-grep" "ps ax | grep -i $1")
   (eshell/alias "conn" "cd /ssh:$1:~")
+  (eshell/alias "sudo" "eshell/sudo $*")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
