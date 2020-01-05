@@ -12,7 +12,6 @@
 	markdown-mode
 	org
 	org-bullets
-        ob-ipython
 	multi-term
 	magit
         transmission
@@ -22,8 +21,7 @@
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
-	("gnu" . "https://elpa.gnu.org/packages/")
-	("marmalade" . "https://marmalade-repo.org/packages/")))
+	("gnu" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 

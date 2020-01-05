@@ -83,7 +83,6 @@ Will bounce between matching parens just like % in vi
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (ipython . t)
      (matlab . t)))
 
   (setq org-babel-default-header-args:matlab
