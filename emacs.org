@@ -448,6 +448,28 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (defun na-magit-fetch-all-repositories ()
+    "Run `magit-fetch-all' in all repositories returned by `magit-list-repos`."
+    (interactive)
+    (dolist (repo (magit-list-repos))
+      (let ((default-directory repo))
+        (magit-fetch-all (magit-fetch-arguments)))))
+
+  (defun na-magit-push-all-repositories ()
+    "Run `magit-push' in all repositories returned by `magit-list-repos`."
+    (interactive)
+    (dolist (repo (magit-list-repos))
+      (let ((default-directory repo))
+        (let ((current-branch (magit-get-current-branch)))
+          (magit-git-push current-branch (concat "origin/" current-branch))))))
+
+  (add-hook 'magit-repolist-mode-hook
+            (lambda ()
+              (define-key magit-repolist-mode-map (kbd "f") #'na-magit-fetch-all-repositories)
+              (define-key magit-repolist-mode-map (kbd "p") #'na-magit-push-all-repositories)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun na-magit-auto-commit-msg ()
     (concat
      "Update:\n"
