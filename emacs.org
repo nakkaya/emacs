@@ -538,6 +538,10 @@ Java
 
   (defun eshell/g ()
     (magit))
+
+  (defun eshell/pshell ()
+    (insert "powershell -Command \"Start-Process powershell -Verb RunAs\"")
+    (eshell-send-input))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
