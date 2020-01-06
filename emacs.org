@@ -461,7 +461,7 @@ Java
     (dolist (repo (magit-list-repos))
       (let ((default-directory repo))
         (let ((current-branch (magit-get-current-branch)))
-          (magit-git-push current-branch (concat "origin/" current-branch))))))
+          (magit-git-push current-branch (concat "origin/" current-branch) (list ))))))
 
   (add-hook 'magit-repolist-mode-hook
             (lambda ()
