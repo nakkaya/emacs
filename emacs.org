@@ -558,6 +558,10 @@ Java
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "mr" "magit-list-repositories")
 
+  ;; net use Z: http://10.9.0.190:1337/
+  (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 1337")
+  (eshell/alias "airdrop-simple" "python3 -m http.server")
+
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
     (let ((eshell-buffer-maximum-lines 0))
