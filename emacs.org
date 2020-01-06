@@ -486,24 +486,12 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (require 'multi-term)
-  (setq multi-term-program "/bin/bash")
+  (setenv "PATH"
+          (concat
+           "~/.bin:"
+           (getenv "PATH")))
 
-  (defun na-term-toggle-mode ()
-    "Toggle between term-char-mode and term-line-mode."
-    (interactive)
-    (if (term-in-line-mode)
-        (progn
-          (term-char-mode)
-          (term-send-raw-string "\C-e"))
-      (term-line-mode)))
-
-  (add-hook 'term-mode-hook
-            (lambda () 
-              (setq mode-line-format
-                    '((-3 . "%p") ;; position
-                      " %b "
-                      mode-line-process))))
+  (setenv "PAGER" "cat")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -517,7 +505,9 @@ Java
         eshell-visual-commands '("htop" "ssh" "python")
         eshell-prompt-regexp (rx bol "\u03BB " space)
         eshell-banner-message ""
-        eshell-cmpl-cycle-completions nil)
+        eshell-cmpl-cycle-completions nil
+        eshell-scroll-to-bottom-on-input 'all
+        eshell-destroy-buffer-when-process-dies t)
 
   (add-hook 'eshell-mode-hook
             (lambda ()
@@ -536,8 +526,11 @@ Java
 
   (defalias 'cls 'eshell/clear)
 
-  (defun eshell/g ()
-    (magit))
+  (defun eshell/gst (&rest args)
+    (magit-status)
+    (eshell/echo))
+
+  (eshell/alias "gd" "magit-diff-unstaged")
 
   (defun eshell/pshell ()
     (insert "powershell -Command \"Start-Process powershell -Verb RunAs\"")
@@ -561,6 +554,27 @@ Java
            (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
            (propertize "\n" 'face `(:foreground "Grey30"))
            (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'multi-term)
+  (setq multi-term-program "/bin/bash")
+
+  (defun na-term-toggle-mode ()
+    "Toggle between term-char-mode and term-line-mode."
+    (interactive)
+    (if (term-in-line-mode)
+        (progn
+          (term-char-mode)
+          (term-send-raw-string "\C-e"))
+      (term-line-mode)))
+
+  (add-hook 'term-mode-hook
+            (lambda () 
+              (setq mode-line-format
+                    '((-3 . "%p") ;; position
+                      " %b "
+                      mode-line-process))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
