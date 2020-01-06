@@ -287,7 +287,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'tramp)
 
-  (setq tramp-default-method "scp")
+  (setq tramp-default-method "ssh")
 
   (setq na-tramp-ssh-completions
 	'((tramp-parse-sconfig "~/.ssh/config")
@@ -533,7 +533,10 @@ Java
   (eshell/alias "gd" "magit-diff-unstaged")
 
   (defun eshell/pshell ()
-    (insert "powershell -Command \"Start-Process powershell -Verb RunAs\"")
+    (insert
+     (concat "powershell.exe -windowstyle hidden -Command"
+             " \"Start-Process powershell  -ArgumentList '-NoExit',"
+             " '-Command cd " default-directory "' -Verb runAs\""))
     (eshell-send-input))
 #+END_SRC
 
