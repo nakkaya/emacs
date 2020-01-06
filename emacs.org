@@ -432,6 +432,19 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (setq magit-repository-directories
+        `(("~/source" . 1)
+          ("~/Documents/GitHub/" . 1)))
+
+  (setq magit-repolist-columns
+        '(("Name"    25 magit-repolist-column-ident                  ())
+          ("D"        1 magit-repolist-column-dirty                  ())
+          ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
+          ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
+          ("Path"    99 magit-repolist-column-path                   ())))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun na-magit-auto-commit-msg ()
     (concat
      "Update:\n"
@@ -518,6 +531,7 @@ Java
   (eshell/alias "ps-grep" "ps ax | grep -i $1")
   (eshell/alias "conn" "cd /ssh:$1:~")
   (eshell/alias "sudo" "eshell/sudo $*")
+  (eshell/alias "mr" "magit-list-repositories")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
