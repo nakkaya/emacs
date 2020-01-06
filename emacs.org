@@ -429,6 +429,9 @@ Java
 
   (setq vc-follow-symlinks t)
   (setq magit-hide-diffs t)
+
+  (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+  (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -748,14 +751,6 @@ Mouse setup when running in a terminal.
   (set-face-background 'org-block-end-line "unspecified")
   (set-face-background 'org-block-begin-line "unspecified")
   (set-face-background 'org-level-1 "unspecified")
-
-  (with-eval-after-load 'magit
-    (set-face-background 'magit-diff-added "unspecified")
-    (set-face-background 'magit-diff-removed "unspecified")
-    (set-face-background 'magit-diff-added-highlight "unspecified")
-    (set-face-background 'magit-diff-removed-highlight "unspecified")
-    (set-face-background 'magit-diff-context-highlight "unspecified")
-    (set-face-background 'magit-diff-hunk-heading-highlight "unspecified"))
 #+END_SRC
 
 * Session
