@@ -637,6 +637,26 @@ Java
       (eshell 'N)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defconst na-sources-dir (expand-file-name "~/source"))
+
+  (defun pcomplete/src ()
+    "Completion for `src'"
+    (pcomplete-here*
+     (seq-filter
+      (lambda (x)
+        (file-directory-p
+         (expand-file-name (concat na-sources-dir "/" x))))
+      (directory-files na-sources-dir
+                       nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)"))))
+
+  (defun src (d)
+    (insert
+     "cd " (expand-file-name
+            (concat na-sources-dir "/" d)))
+    (eshell-send-input))
+#+END_SRC
+
 * inf-ipy
 
 #+BEGIN_SRC emacs-lisp
