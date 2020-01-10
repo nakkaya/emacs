@@ -287,17 +287,16 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'tramp)
 
+  (setq remote-file-name-inhibit-cache nil
+        tramp-verbose 1
+        tramp-completion-reread-directory-timeout nil)
+
   (setq tramp-default-method "ssh")
 
-  (setq na-tramp-ssh-completions
-	'((tramp-parse-sconfig "~/.ssh/config")
-	  ;;(tramp-parse-shosts "~/.ssh/known_hosts")
-	  ))
+  (when (eq system-type 'windows-nt)
+    (setq tramp-default-method "plink"))
 
-  (mapc (lambda (method)
-	  (tramp-set-completion-function 
-	   method na-tramp-ssh-completions))
-	'("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
+  (customize-set-variable 'tramp-syntax 'simplifie)d
 #+END_SRC
 
 * Flyspell
