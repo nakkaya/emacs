@@ -295,8 +295,6 @@ Java
 
   (when (eq system-type 'windows-nt)
     (setq tramp-default-method "plink"))
-
-  (customize-set-variable 'tramp-syntax 'simplified)
 #+END_SRC
 
 * Flyspell
