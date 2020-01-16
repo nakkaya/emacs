@@ -489,11 +489,16 @@ Java
 * Terminal
 
 #+BEGIN_SRC emacs-lisp
-  (setenv "PATH"
-          (concat
-           "$HOME/.bin:"
-           "$HOME/Documents/git-annex.linux:"
-           (getenv "PATH")))
+  (if (eq system-type 'windows-nt)
+      (setenv "PATH"
+              (concat
+               "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+               (getenv "PATH")))
+    (setenv "PATH"
+            (concat
+             "$HOME/.bin:"
+             "$HOME/Documents/git-annex.linux:"
+             (getenv "PATH"))))
 
   (setenv "PAGER" "cat")
 #+END_SRC
