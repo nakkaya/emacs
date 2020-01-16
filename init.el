@@ -11,6 +11,9 @@
 	yaml-mode
 	markdown-mode
 	org
+        docker
+        dockerfile-mode
+        docker-compose-mode
 	org-bullets
 	multi-term
 	magit

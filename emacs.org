@@ -313,109 +313,6 @@ Java
       (flyspell-mode 1)))
 #+END_SRC
 
-* IBuffer
-
-#+BEGIN_SRC emacs-lisp
-  (setq ibuffer-saved-filter-groups
-        (quote (("default"
-                 ("Notes"
-                  (or (name . "^brain.org$")
-                      (name . "^pass.gpg$")
-                      (name . "^brain.org_archive$")
-                      (name . "^bookmarks.org_archive$")))
-                 ("IRC" (mode . erc-mode))
-                 ("Source" (or
-                            (mode . java-mode)
-                            (mode . clojure-mode)
-                            (mode . org-mode)
-                            (mode . bibtex-mode)
-                            (mode . latex-mode)
-                            (mode . xml-mode)
-                            (mode . nxml-mode)
-                            (mode . scheme-mode)
-                            (mode . python-mode)
-                            (mode . ruby-mode)
-                            (mode . shell-script-mode)
-                            (mode . sh-mode)
-                            (mode . c-mode)
-                            (mode . lisp-mode)
-                            (mode . cperl-mode)
-                            (mode . pixie-mode)
-                            (mode . yaml-mode)
-                            (mode . asm-mode)
-                            (mode . emacs-lisp-mode)
-                            (mode . c++-mode)
-                            (mode . makefile-bsdmake-mode)
-                            (mode . makefile-mode)
-                            (mode . makefile-gmake-mode)
-                            (mode . matlab-mode)
-                            (mode . css-mode)))
-                 ("Terminal" (or (mode . term-mode)
-                                 (mode . inferior-lisp-mode)
-                                 (mode . inferior-python-mode)
-                                 (name . "^*inf-ipy.*")
-                                 (name . "^*MATLAB.*")
-                                 (name . "^*monroe.*")
-                                 (name . "^*eshell.*")
-                                 (name . "^\\*offlineimap\\*$")))
-                 ("Dired" (or (mode . dired-mode) 
-                              (mode . sr-mode)))
-                 ("Magit" (or (name . "^\\*magit.*\\*$")
-                              (mode . magit-status-mode)
-                              (mode . magit-diff-mode)
-                              (mode . magit-process-mode)
-                              (mode . magit-stash-mode)
-                              (mode . magit-revision-mode)
-                              (mode . magit-log-mode)))
-                 ("Emacs" (or
-                           (name . "^\\*Process List\\*$")
-                           (name . "^\\*Dired log\\*$")
-                           (name . "^\\*info\\*$")
-                           (name . "^\\*Man.*\\*$")
-                           (name . "^\\*tramp.+\\*$")
-                           (name . "^\\*trace.+SMTP.+\\*$")
-                           (name . "^\\.todo-do")
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*git-status\\*$")
-                           (name . "^\\*git-diff\\*$")
-                           (name . "^\\*git-commit\\*$")
-                           (name . "^\\*Git Command Output\\*$")
-                           (name . "^\\*Org Export/Publishing Help\\*$")
-                           (name . "^\\*Org-Babel Error Output\\*$")
-                           (name . "^\\*Org PDF LaTeX Output\\*$")
-                           (name . "^\\*Org Agenda\\*$")
-                           (name . "^\\*Calendar\\*$")
-                           (name . "^\\*Messages\\*$")
-                           (name . "^\\*Completions\\*$")
-                           (name . "^\\*Warnings\\*$")
-                           (name . "^\\*Org Agenda.*\\*$")
-                           (name . "^\\*Org Help\\*$")
-                           (name . "^\\*Backtrace\\*$")
-                           (name . "^TAGS$")
-                           (name . "^\\*Help\\*$")
-                           (name . "^\\*Shell Command Output\\*$")
-                           (name . "^\\*Calculator\\*$")
-                           (name . "^\\*Calc Trail\\*$")
-                           (name . "^\\*Compile-Log\\*$")))))))
-
-  (setq ibuffer-show-empty-filter-groups nil)
-
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-
-  (setq ibuffer-expert t)
-
-  (setq ibuffer-formats '((mark modified read-only " "
-                                (name 18 18 :left :elide)
-                                " "
-                                (mode 16 16 :left :elide)
-                                " " filename-and-process)
-                          (mark " "
-                                (name 16 -1)
-                                " " filename)))
-#+END_SRC
-
 * Git
 
 #+BEGIN_SRC emacs-lisp
@@ -511,7 +408,7 @@ Java
   (setq eshell-hist-ignoredups t
         eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
         eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-        eshell-visual-commands '("htop" "ssh" "python")
+        eshell-visual-commands '("htop" "ssh")
         eshell-prompt-regexp (rx bol "\u03BB" space)
         eshell-banner-message ""
         eshell-cmpl-cycle-completions nil
@@ -545,7 +442,7 @@ Java
     (eshell/echo))
 
   (eshell/alias "gd" "magit-diff-unstaged")
-  (eshell/alias "ga" "git annex")
+  (eshell/alias "ga" "git annex  $*")
 
   (defun eshell/pshell ()
     (insert
@@ -683,12 +580,126 @@ Java
   (inf-ipy-configure-kernel matlab)
 #+END_SRC
 
+* Docker
+
+#+BEGIN_SRC emacs-lisp
+  (require 'dockerfile-mode)
+  (require 'docker-compose-mode)
+
+  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+#+END_SRC
+
 * Transmission
 
 #+BEGIN_SRC emacs-lisp
   (setq transmission-host "10.0.0.100")
   (setq transmission-rpc-auth
         '(:username "admin" :password "admin"))
+#+END_SRC
+
+* IBuffer
+
+#+BEGIN_SRC emacs-lisp
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("Notes"
+                  (or (name . "^brain.org$")
+                      (name . "^pass.gpg$")
+                      (name . "^brain.org_archive$")
+                      (name . "^bookmarks.org_archive$")))
+                 ("IRC" (mode . erc-mode))
+                 ("Source" (or
+                            (mode . java-mode)
+                            (mode . clojure-mode)
+                            (mode . org-mode)
+                            (mode . bibtex-mode)
+                            (mode . latex-mode)
+                            (mode . xml-mode)
+                            (mode . nxml-mode)
+                            (mode . scheme-mode)
+                            (mode . python-mode)
+                            (mode . ruby-mode)
+                            (mode . shell-script-mode)
+                            (mode . sh-mode)
+                            (mode . c-mode)
+                            (mode . lisp-mode)
+                            (mode . cperl-mode)
+                            (mode . pixie-mode)
+                            (mode . yaml-mode)
+                            (mode . asm-mode)
+                            (mode . emacs-lisp-mode)
+                            (mode . c++-mode)
+                            (mode . makefile-bsdmake-mode)
+                            (mode . makefile-mode)
+                            (mode . makefile-gmake-mode)
+                            (mode . matlab-mode)
+                            (mode . css-mode)
+                            (mode . dockerfile-mode)
+                            (mode . docker-compose-mode)))
+                 ("Terminal" (or (mode . term-mode)
+                                 (mode . inferior-lisp-mode)
+                                 (mode . inferior-python-mode)
+                                 (name . "^*inf-ipy.*")
+                                 (name . "^*MATLAB.*")
+                                 (name . "^*monroe.*")
+                                 (name . "^*eshell.*")
+                                 (name . "^\\*offlineimap\\*$")))
+                 ("Dired" (or (mode . dired-mode) 
+                              (mode . sr-mode)))
+                 ("Magit" (or (name . "^\\*magit.*\\*$")
+                              (mode . magit-status-mode)
+                              (mode . magit-diff-mode)
+                              (mode . magit-process-mode)
+                              (mode . magit-stash-mode)
+                              (mode . magit-revision-mode)
+                              (mode . magit-log-mode)))
+                 ("Emacs" (or
+                           (name . "^\\*Process List\\*$")
+                           (name . "^\\*Dired log\\*$")
+                           (name . "^\\*info\\*$")
+                           (name . "^\\*Man.*\\*$")
+                           (name . "^\\*tramp.+\\*$")
+                           (name . "^\\*trace.+SMTP.+\\*$")
+                           (name . "^\\.todo-do")
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*git-status\\*$")
+                           (name . "^\\*git-diff\\*$")
+                           (name . "^\\*git-commit\\*$")
+                           (name . "^\\*Git Command Output\\*$")
+                           (name . "^\\*Org Export/Publishing Help\\*$")
+                           (name . "^\\*Org-Babel Error Output\\*$")
+                           (name . "^\\*Org PDF LaTeX Output\\*$")
+                           (name . "^\\*Org Agenda\\*$")
+                           (name . "^\\*Calendar\\*$")
+                           (name . "^\\*Messages\\*$")
+                           (name . "^\\*Completions\\*$")
+                           (name . "^\\*Warnings\\*$")
+                           (name . "^\\*Org Agenda.*\\*$")
+                           (name . "^\\*Org Help\\*$")
+                           (name . "^\\*Backtrace\\*$")
+                           (name . "^TAGS$")
+                           (name . "^\\*Help\\*$")
+                           (name . "^\\*Shell Command Output\\*$")
+                           (name . "^\\*Calculator\\*$")
+                           (name . "^\\*Calc Trail\\*$")
+                           (name . "^\\*Compile-Log\\*$")))))))
+
+  (setq ibuffer-show-empty-filter-groups nil)
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
+
+  (setq ibuffer-expert t)
+
+  (setq ibuffer-formats '((mark modified read-only " "
+                                (name 18 18 :left :elide)
+                                " "
+                                (mode 16 16 :left :elide)
+                                " " filename-and-process)
+                          (mark " "
+                                (name 16 -1)
+                                " " filename)))
 #+END_SRC
 
 * Key Bindings
