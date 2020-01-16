@@ -390,6 +390,7 @@ Java
       (setenv "PATH"
               (concat
                "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+               "C:\\Program Files\\Arduino;"
                (getenv "PATH")))
     (setenv "PATH"
             (concat
