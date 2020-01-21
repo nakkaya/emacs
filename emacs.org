@@ -544,7 +544,9 @@ Java
       (loop for buffer in (buffer-list)
             do (if (string-prefix-p prefix (buffer-name buffer))
                    (push buffer buffers)))
-      buffers))
+      (sort buffers
+            (lambda (a b)
+              (string< (buffer-name a) (buffer-name b))))))
 
   (defun na-next-term ()
     (interactive)
@@ -553,7 +555,7 @@ Java
                                  (string< (buffer-name x) (buffer-name y)))))
            (buff-list (append term-buffers
                               (filter-buffers-with-prefix "*eshell")
-                              (filter-buffers-with-prefix "*monroe")
+                              (filter-buffers-with-prefix "*monroe*")
                               (filter-buffers-with-prefix "*inf-ipy")
                               (filter-buffers-with-prefix "*MATLAB")
                               (filter-buffers-with-prefix "*Python")
