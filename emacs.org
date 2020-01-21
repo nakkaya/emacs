@@ -102,6 +102,8 @@ Will bounce between matching parens just like % in vi
   (require 'monroe)
   (require 'clojure-mode-extra-font-locking)
   (add-hook 'clojure-mode-hook 'clojure-enable-monroe)
+
+  (define-key clojure-mode-map (kbd "C-x C-e") 'monroe-eval-expression-at-point)
 #+END_SRC
 
 * C/C++
