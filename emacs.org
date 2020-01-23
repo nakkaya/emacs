@@ -797,6 +797,9 @@ Mouse setup when running in a terminal.
       (when (x-list-fonts font)
         (set-frame-font font nil t))))
 
+  (when (eq system-type 'darwin)
+    (set-face-attribute 'default nil :height 140))
+
   (column-number-mode 1)
   (blink-cursor-mode 1)
   (menu-bar-mode -1)
