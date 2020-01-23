@@ -231,6 +231,18 @@ C++
     \n >)
 
   (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+  (define-skeleton skel-cpp-fsm
+    ""
+    "Class Name: " \n >
+    "class " str " {" \n >
+    "void boot() { state = &" str "::shutdown; }" \n >
+    "void shutdown() { }" \n >
+    "void (" str "::* state)();" \n >
+    "public:" \n >
+    str "() : state(&" str "::boot) {}" \n >
+    "void operator()() {(this->*state)();}" \n >
+    "};"\n >)
 #+END_SRC
 
 Java
