@@ -795,6 +795,8 @@ Mouse setup when running in a terminal.
 #+BEGIN_SRC emacs-lisp
   (setq frame-title-format (list "GNU Emacs " emacs-version))
 
+  (require 'doom-themes)
+  (load-theme 'doom-one t)
 
   (when window-system
     (let ((font "DejaVu Sans Mono 11"))
@@ -821,18 +823,6 @@ Mouse setup when running in a terminal.
                   "%n" " - "
                   (line-number-mode "L%l ")
                   (column-number-mode "C%c ")))
-
-  (require 'doom-themes)
-  (load-theme 'doom-one t)
-
-  (unless window-system
-    (set-face-background 'default "color-16"))
-
-  ;; Delete Annoying Faces
-  (set-face-background 'org-block "unspecified")
-  (set-face-background 'org-block-end-line "unspecified")
-  (set-face-background 'org-block-begin-line "unspecified")
-  (set-face-background 'org-level-1 "unspecified")
 #+END_SRC
 
 * Session
