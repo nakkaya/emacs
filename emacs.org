@@ -410,6 +410,7 @@ Java
             (concat
              "/usr/local/bin:"
              "$HOME/.bin:"
+             "$HOME/.local/bin:"
              "$HOME/Documents/git-annex.linux:"
              (getenv "PATH"))))
 
