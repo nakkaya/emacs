@@ -20,6 +20,8 @@
         transmission
 	doom-themes
 	smart-tab
+        helm
+        evil
         quelpa))
 
 (setq package-archives

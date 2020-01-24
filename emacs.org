@@ -586,6 +586,15 @@ Java
         (switch-to-buffer (car buff-list)))))
 #+END_SRC
 
+* helm
+
+#+BEGIN_SRC emacs-lisp
+  (require 'helm)
+
+  (setq-default helm-M-x-fuzzy-match t)
+  (global-set-key (kbd "M-x") #'helm-M-x)
+#+END_SRC
+
 * inf-ipy
 
 #+BEGIN_SRC emacs-lisp
