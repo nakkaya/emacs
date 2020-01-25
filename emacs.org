@@ -411,7 +411,8 @@ Java
              "/usr/local/bin:"
              "$HOME/.bin:"
              "$HOME/.local/bin:"
-             "$HOME/Documents/git-annex.linux:"
+             "$HOME/.git-annex.linux:"
+             "$HOME/.rclone:"
              (getenv "PATH"))))
 
   (when (eq system-type 'darwin)
