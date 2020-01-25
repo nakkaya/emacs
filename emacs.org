@@ -555,6 +555,16 @@ Java
     (eshell/cd
      (expand-file-name
       (concat "/media/nakkaya/" d))))
+
+  (defun pcomplete/cdb ()
+    "Completion for `cdb'"
+    (pcomplete-here* (mapcar (function buffer-name) (buffer-list))))
+
+  (defun cdb (b)
+    (eshell/cd
+     (expand-file-name
+      (with-current-buffer (get-buffer b)
+        default-directory))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
