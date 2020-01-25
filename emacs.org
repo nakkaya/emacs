@@ -525,7 +525,10 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defconst na-sources-dir (expand-file-name "~/source"))
+  (defconst na-sources-dir
+    (if (eq system-type 'windows-nt)
+        (expand-file-name "~/Documents/GitHub/")
+      (expand-file-name "~/source")))
 
   (defun na-list-directories (f)
     (seq-filter
@@ -538,10 +541,11 @@ Java
     "Completion for `src'"
     (pcomplete-here* (na-list-directories na-sources-dir)))
 
-  (defun src (d)
-    (eshell/cd
-     (expand-file-name
-      (concat na-sources-dir "/" d))))
+  (defun src (&optional d)
+    (let ((dir (if d
+                   (concat na-sources-dir "/" d)
+                 na-sources-dir)))
+      (eshell/cd (expand-file-name dir))))
 
   (defun pcomplete/usb ()
     "Completion for `usb'"
