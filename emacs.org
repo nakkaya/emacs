@@ -135,6 +135,24 @@ Will bounce between matching parens just like % in vi
   (setq python-shell-interpreter "python3")
 #+END_SRC
 
+* Latex
+
+#+BEGIN_SRC emacs-lisp
+  (setq latex-run-command "pdflatex")
+
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  (defun tex-compile-without-changing-windows ()
+    (interactive)
+    (save-buffer)
+    (save-window-excursion
+      (tex-compile
+       default-directory
+       (concat latex-run-command " " buffer-file-name))))
+#+END_SRC
+
+
 * Skeletons
 
 #+BEGIN_SRC emacs-lisp
