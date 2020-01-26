@@ -529,10 +529,13 @@ Java
              " '-Command cd " default-directory "' -Verb runAs\""))
     (eshell-send-input))
 
-    (eshell/alias "rclone-mount" "mkdir $2 && rclone mount $1:$2/ $2/ &")
-    (eshell/alias "rclone-umount" "fusermount -u $1 && rm -rf $1")
-    (eshell/alias "rclone-sync" "rclone -v sync $2/ $1:$2/")
-    (eshell/alias "rclone-pull" "rclone copy -u -v $1:$2/ $2/")
+  (eshell/alias "rclone-mount" "mkdir $2 && rclone mount $1:$2/ $2/ &")
+  (eshell/alias "rclone-umount" "fusermount -u $1 && rm -rf $1")
+  (eshell/alias "rclone-sync" "rclone -v sync $2/ $1:$2/")
+  (eshell/alias "rclone-pull" "rclone copy -u -v $1:$2/ $2/")
+  (eshell/alias
+   "rclone-two-way"
+   (concat "rclone copy -u -v $1:$2/ $2/" "&&" "rclone -v sync $2/ $1:$2/"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
