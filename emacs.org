@@ -95,6 +95,45 @@ Will bounce between matching parens just like % in vi
               (org-bullets-mode 1)))
 #+END_SRC
 
+Agenda Management
+
+#+BEGIN_SRC emacs-lisp
+  (let ((file "~/org/brain.org"))
+    (when (file-exists-p file)
+      (setq org-agenda-files (list file))))
+
+  (setq org-agenda-custom-commands
+        '(("h" "Agenda and Todo"
+           ((agenda "" ((org-agenda-span 7)
+                        (org-agenda-start-on-weekday nil)))
+            (todo "TODO")
+            (todo "READ")))))
+
+  (setq org-agenda-window-setup 'current-window)
+  (setq org-agenda-restore-windows-after-quit t)
+  (setq org-agenda-show-all-dates t)
+  (setq org-deadline-warning-days 150)
+  (org-toggle-sticky-agenda)
+
+  (let ((window-configuration))
+    (defun jump-to-org-agenda ()
+      (interactive)
+      (setq window-configuration (current-window-configuration))
+      (delete-other-windows)
+      (org-agenda nil "h")
+      (org-agenda-redo)
+      (local-set-key [f1] '(lambda () 
+                             (interactive)
+                             (kill-this-buffer)
+                             (set-window-configuration window-configuration)))))
+
+  (global-set-key [f1] 'jump-to-org-agenda)
+
+  (let ((file "~/org/brain.org"))
+    (when (file-exists-p file)
+      (run-with-idle-timer 600 nil #'jump-to-org-agenda)))
+#+END_SRC
+
 * Clojure
 
 #+BEGIN_SRC emacs-lisp
