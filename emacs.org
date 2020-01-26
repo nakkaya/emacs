@@ -152,7 +152,6 @@ Will bounce between matching parens just like % in vi
        (concat latex-run-command " " buffer-file-name))))
 #+END_SRC
 
-
 * Skeletons
 
 #+BEGIN_SRC emacs-lisp
@@ -421,6 +420,7 @@ Java
   (if (eq system-type 'windows-nt)
       (setenv "PATH"
               (concat
+               "$HOME\\.rclone/;"
                "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
                "C:\\Program Files\\Arduino;"
                (getenv "PATH")))
