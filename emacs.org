@@ -112,7 +112,6 @@ Agenda Management
            ((agenda "" ((org-agenda-span 7)
                         (org-agenda-start-on-weekday nil)))
             (todo "TODO")
-            (todo "READ")
             (todo "WAIT")))))
 
   (setq org-agenda-window-setup 'current-window)
