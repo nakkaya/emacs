@@ -98,9 +98,14 @@ Will bounce between matching parens just like % in vi
 Agenda Management
 
 #+BEGIN_SRC emacs-lisp
-  (let ((file "~/org/brain.org"))
-    (when (file-exists-p file)
-      (setq org-agenda-files (list file))))
+  (setq na-agenda-folder "~/org/"
+        na-agenda-files '("core.org" "inbox.org" "shopping.org"))
+
+  (when (file-exists-p na-agenda-folder)
+    (setq org-agenda-files
+          (mapcar (lambda (f)
+                    (concat na-agenda-folder f))
+                  na-agenda-files)))
 
   (setq org-agenda-custom-commands
         '(("h" "Agenda and Todo"
@@ -129,9 +134,8 @@ Agenda Management
 
   (global-set-key [f1] 'jump-to-org-agenda)
 
-  (let ((file "~/org/brain.org"))
-    (when (file-exists-p file)
-      (run-with-idle-timer 600 nil #'jump-to-org-agenda)))
+  (when (file-exists-p na-agenda-folder)
+    (run-with-idle-timer 600 nil #'jump-to-org-agenda))
 #+END_SRC
 
 * Clojure
