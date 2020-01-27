@@ -138,6 +138,26 @@ Agenda Management
     (run-with-idle-timer 600 nil #'jump-to-org-agenda))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defun org-sync-cmd (cmd)
+    (let ((stdout "*org-sync*")
+          (default-directory "~/"))
+      (pop-to-buffer-same-window
+       (get-buffer-create stdout))
+      (with-current-buffer (get-buffer-create stdout)
+        (local-set-key "q" 'bury-buffer)
+        (eshell-command cmd t)
+        (goto-char (point-max)))))
+
+  (defun org-pull ()
+    (interactive)
+    (org-sync-cmd "rclone copy -u -v dropbox:org/ ~/org/"))
+
+  (defun org-push ()
+    (interactive)
+    (org-sync-cmd "rclone sync -v ~/org/ dropbox:org/"))
+#+END_SRC
+
 * Clojure
 
 #+BEGIN_SRC emacs-lisp
