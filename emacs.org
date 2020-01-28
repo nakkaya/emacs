@@ -737,12 +737,6 @@ Java
 #+BEGIN_SRC emacs-lisp
   (setq ibuffer-saved-filter-groups
         (quote (("default"
-                 ("Notes"
-                  (or (name . "^brain.org$")
-                      (name . "^pass.gpg$")
-                      (name . "^brain.org_archive$")
-                      (name . "^bookmarks.org_archive$")))
-                 ("IRC" (mode . erc-mode))
                  ("Source" (or
                             (mode . java-mode)
                             (mode . clojure-mode)
@@ -817,7 +811,10 @@ Java
                            (name . "^\\*Shell Command Output\\*$")
                            (name . "^\\*Calculator\\*$")
                            (name . "^\\*Calc Trail\\*$")
-                           (name . "^\\*Compile-Log\\*$")))))))
+                           (name . "^\\*Compile-Log\\*$")
+                           (name . "^\\*org-sync\\*$")
+                           (name . "^\\*quelpa-build-checkout\\*$")
+                           (name . "^\\*helm M-x\\*$")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
