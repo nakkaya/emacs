@@ -99,7 +99,7 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (setq na-agenda-folder "~/org/"
-        na-agenda-files '("core.org" "inbox.org" "bookmarks.org" "shopping.org"))
+        na-agenda-files '("notes.org" "inbox.org" "bookmarks.org" "shopping.org"))
 
   (when (file-exists-p na-agenda-folder)
     (setq org-agenda-files
@@ -111,8 +111,10 @@ Agenda Management
         '(("h" "Agenda and Todo"
            ((agenda "" ((org-agenda-span 7)
                         (org-agenda-start-on-weekday nil)))
-            (todo "TODO")
-            (todo "WAIT")))))
+            (tags-todo "personal/TODO")
+            (tags-todo "work/TODO")
+            (tags-todo "personal/WAIT")
+            (tags-todo "work/WAIT")))))
 
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-restore-windows-after-quit t)
@@ -737,6 +739,15 @@ Java
 #+BEGIN_SRC emacs-lisp
   (setq ibuffer-saved-filter-groups
         (quote (("default"
+                 ("Notes"
+                  (or 
+                   (name . "^passwd.org$")
+                   (name . "^notes.org$")
+                   (name . "^notes.org_archive$")
+                   (name . "^bookmarks.org$")
+                   (name . "^bookmarks.org_archive$")
+                   (name . "^inbox.org$")
+                   (name . "^inbox.org_archive$")))
                  ("Source" (or
                             (mode . java-mode)
                             (mode . clojure-mode)
@@ -814,7 +825,8 @@ Java
                            (name . "^\\*Compile-Log\\*$")
                            (name . "^\\*org-sync\\*$")
                            (name . "^\\*quelpa-build-checkout\\*$")
-                           (name . "^\\*helm M-x\\*$")))))))
+                           (name . "^\\*helm M-x\\*$")
+                           (name . "^\\*transmission\\*$")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
