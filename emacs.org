@@ -437,7 +437,8 @@ Java
 
 #+BEGIN_SRC emacs-lisp
   (setq magit-repository-directories
-        `(("~/source" . 1)
+        `(("~/org" . 0)
+          ("~/source" . 1)
           ("~/Documents/GitHub/" . 1)))
 
   (setq magit-repolist-columns
