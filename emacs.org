@@ -529,6 +529,7 @@ Java
   (eshell/alias "conn" "cd /ssh:$1:~")
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "mr" "magit-list-repositories")
+  (eshell/alias "tmux-ssh" "ssh $1 -t \"tmux attach\"")
 
   ;; net use Z: http://10.9.0.190:1337/
   (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 1337")
