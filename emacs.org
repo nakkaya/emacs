@@ -107,6 +107,9 @@ Agenda Management
                     (concat na-agenda-folder f))
                   na-agenda-files)))
 
+  (setq org-default-notes-file 
+    (concat na-agenda-folder (car na-agenda-files)))
+
   (setq org-agenda-custom-commands
         '(("h" "Agenda and Todo"
            ((agenda "" ((org-agenda-span 7)
@@ -115,6 +118,14 @@ Agenda Management
             (tags-todo "work/TODO")
             (tags-todo "personal/WAIT")
             (tags-todo "work/WAIT")))))
+
+  (setq org-capture-templates
+        '(("p" "Personal TODO" entry (file+headline "~/org/notes.org" "Personal")
+           "* TODO %?\n")
+          ("r" "Robotics Lab TODO" entry (file+headline "~/org/notes.org" "Robotics Lab")
+           "* TODO %?\n")
+          ("a" "Akademik TODO" entry (file+headline "~/org/notes.org" "Akademik")
+           "* TODO %?\n")))
 
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-restore-windows-after-quit t)
@@ -747,6 +758,8 @@ Java
                    (name . "^notes.org_archive$")
                    (name . "^bookmarks.org$")
                    (name . "^bookmarks.org_archive$")
+                   (name . "^shopping.org$")
+                   (name . "^shopping.org_archive$")
                    (name . "^inbox.org$")
                    (name . "^inbox.org_archive$")))
                  ("Source" (or
