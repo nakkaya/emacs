@@ -467,10 +467,21 @@ Java
         (let ((current-branch (magit-get-current-branch)))
           (magit-git-push current-branch (concat "origin/" current-branch) (list ))))))
 
+  (defun na-magit-auto-commit-multi-repo (&optional _button)
+    "Show the status for the repository at point."
+    (interactive)
+    (--if-let (tabulated-list-get-id)
+        (let* ((file (expand-file-name it))
+               (default-directory (file-name-directory file)))
+          (magit-stage-modified)
+          (na-magit-auto-commit))
+      (user-error "There is no repository at point")))
+
   (add-hook 'magit-repolist-mode-hook
             (lambda ()
               (define-key magit-repolist-mode-map (kbd "f") #'na-magit-fetch-all-repositories)
-              (define-key magit-repolist-mode-map (kbd "p") #'na-magit-push-all-repositories)))
+              (define-key magit-repolist-mode-map (kbd "p") #'na-magit-push-all-repositories)
+              (define-key magit-repolist-mode-map (kbd "c") #'na-magit-auto-commit-multi-repo)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
