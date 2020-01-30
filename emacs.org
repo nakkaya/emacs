@@ -125,7 +125,9 @@ Agenda Management
           ("r" "Robotics Lab TODO" entry (file+headline "~/org/notes.org" "Robotics Lab")
            "* TODO %?\n")
           ("a" "Akademik TODO" entry (file+headline "~/org/notes.org" "Akademik")
-           "* TODO %?\n")))
+           "* TODO %?\n")
+          ("b" "Read Later" entry (file+headline "~/org/bookmarks.org" "Read Later")
+           "* %?\n" :prepend t)))
 
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-restore-windows-after-quit t)
@@ -168,7 +170,7 @@ Agenda Management
 
   (defun org-push ()
     (interactive)
-    (org-sync-cmd "rclone sync -v ~/org/ dropbox:org/"))
+    (org-sync-cmd "rclone --exclude .git/ sync -v ~/org/ dropbox:org/"))
 #+END_SRC
 
 * Clojure
@@ -864,6 +866,7 @@ Java
 * Key Bindings
 
 #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-\\") 'other-window)
   (global-set-key "\C-xgs"     'magit-status)
   (global-set-key "\C-xrl"     'monroe)
