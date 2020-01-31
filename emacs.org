@@ -406,6 +406,22 @@ Java
     (setq tramp-default-method "plink"))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defun na-ssh-completions ()
+    (mapcar
+     (lambda (x)
+       (car (cdr x)))
+     (seq-filter
+      (lambda (x)
+        (car (cdr x)))
+      (tramp-parse-sconfig "~/.ssh/config"))))
+
+  (mapc (lambda (method)
+          (tramp-set-completion-function 
+           method '((tramp-parse-sconfig "~/.ssh/config"))))
+        '("rsync" "scp" "sftp" "ssh"))
+#+END_SRC
+
 * Flyspell
 
 #+BEGIN_SRC emacs-lisp
