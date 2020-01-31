@@ -992,6 +992,12 @@ Mouse setup when running in a terminal.
 * Session
 
 #+BEGIN_SRC emacs-lisp
-  (setq desktop-path '("~/")) 
-  (desktop-save-mode 1)
+  (unless (server-running-p)
+    (server-start))
+
+  (require 'desktop)
+
+  (unless (file-exists-p
+           (concat user-emacs-directory desktop-base-file-name ".lock"))
+      (desktop-save-mode 1))
 #+END_SRC
