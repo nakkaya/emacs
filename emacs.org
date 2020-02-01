@@ -585,8 +585,11 @@ Java
     (magit-status)
     (eshell/echo))
 
+  (eshell/alias "ggc" "git repack -ad; git gc")
   (eshell/alias "gd" "magit-diff-unstaged")
   (eshell/alias "ga" "git annex  $*")
+  (eshell/alias "gas" "git annex sync")
+  (eshell/alias "gag" "git annex get . --not --in here")
 
   (defun eshell/pshell ()
     (insert
