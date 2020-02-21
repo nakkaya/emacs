@@ -13,12 +13,12 @@ case "$1" in
     start)
         echo "Starting Emacs Daemon"
         emacs --daemon=$EMACS_SERVER -l ../../init.el > $LOG_FILE 2>&1 &
-        ./gotty -w /usr/bin/emacsclient --tty -s emacsd > $LOG_FILE 2>&1 &
+        ./gotty -w emacsclient --tty -s emacsd > $LOG_FILE 2>&1 &
         echo $! > $PID_FILE
         ;;
     stop)
         echo "Shutting Emacs Daemon"
-        /usr/bin/emacsclient -s $EMACS_SERVER --eval '(let (kill-emacs-hook) (kill-emacs))'
+        emacsclient -s $EMACS_SERVER --eval '(let (kill-emacs-hook) (kill-emacs))'
         kill -9 `cat $PID_FILE`
         rm $PID_FILE
         ;;
