@@ -11,12 +11,22 @@ EMACS_SERVER="emacsd"
 
 case "$1" in
     start)
+        if [ -f "$PID_FILE" ]; then
+            echo "Already Running"
+            exit
+        fi
+
         echo "Starting Emacs Daemon"
-        emacs --daemon=$EMACS_SERVER -l ../../init.el > $LOG_FILE 2>&1 &
-        ./gotty -w emacsclient --tty -s emacsd > $LOG_FILE 2>&1 &
+        emacs -nw --daemon=$EMACS_SERVER -l ../../init.el > $LOG_FILE 2>&1
+        ./gotty --config gotty.config -w emacsclient --tty -s emacsd > $LOG_FILE 2>&1 &
         echo $! > $PID_FILE
         ;;
     stop)
+        if [ ! -f "$PID_FILE" ]; then
+            echo "Not Running"
+            exit
+        fi
+
         echo "Shutting Emacs Daemon"
         emacsclient -s $EMACS_SERVER --eval '(let (kill-emacs-hook) (kill-emacs))'
         kill -9 `cat $PID_FILE`
@@ -32,7 +42,6 @@ case "$1" in
         else 
             echo "Stopped"
         fi
-
         ;;
     *)
         ## If no parameters are given, print which are avaiable.

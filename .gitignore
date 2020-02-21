@@ -3,3 +3,4 @@ emacs-26.3-x86_64*
 .emacs.desktop
 devops/emacsd/gotty
 devops/emacsd/daemon.log
+devops/emacsd/daemon.pid

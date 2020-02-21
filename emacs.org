@@ -989,6 +989,11 @@ Mouse setup when running in a terminal.
   (require 'doom-themes)
   (load-theme 'doom-one t)
 
+  (unless window-system
+    (set-face-background 'org-block "unspecified")
+    (set-face-background 'org-block-begin-line "unspecified")
+    (set-face-background 'org-block-end-line "unspecified"))
+
   (when window-system
     (let ((font "DejaVu Sans Mono 11"))
       (when (x-list-fonts font)
