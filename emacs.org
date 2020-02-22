@@ -65,7 +65,6 @@ Will bounce between matching parens just like % in vi
   (require 'ob)
   (require 'ob-shell)
 
-  (setq org-hide-leading-stars t)
   (setq org-return-follows-link t)
   (setq org-startup-with-inline-images t)
   (setq org-src-window-setup 'current-window)
@@ -88,11 +87,7 @@ Will bounce between matching parens just like % in vi
   (setq org-babel-default-header-args:matlab
         '((:results . "output") (:session . "*MATLAB*")))
 
-  (require 'org-bullets)
-  (setq org-bullets-bullet-list '("◉" "○"))
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (org-bullets-mode 1)))
+  (setq org-hide-leading-stars t)
 #+END_SRC
 
 Agenda Management
@@ -992,6 +987,9 @@ Mouse setup when running in a terminal.
   (set-face-background 'org-block "unspecified")
   (set-face-background 'org-block-begin-line "unspecified")
   (set-face-background 'org-block-end-line "unspecified")
+
+  (unless window-system
+    (set-face-foreground 'org-hide "black"))
 
   (when window-system
     (let ((font "DejaVu Sans Mono 11"))

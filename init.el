@@ -14,7 +14,6 @@
         docker
         dockerfile-mode
         docker-compose-mode
-	org-bullets
 	multi-term
 	magit
         transmission
