@@ -3,8 +3,8 @@ Description=emacs_webapp
 
 [Service]
 Environment=TERM=xterm-256color
-WorkingDirectory=/var/emacsd/devops/emacsd/
-ExecStart=/var/emacsd/devops/emacsd/gotty --config gotty.config -w emacsclient --tty -s emacsd
+WorkingDirectory=/var/emacsd/
+ExecStart=/var/emacsd/gotty --config gotty.config -w emacsclient --tty -s emacsd
 Restart=always
 RestartSec=3
 User= {{ emacsd_user }}
