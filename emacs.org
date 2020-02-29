@@ -149,15 +149,21 @@ Agenda Management
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (defvar org-sync-lock (make-mutex "org-sync-lock"))
+
   (defun org-sync-cmd (cmd)
-    (let ((stdout "*org-sync*")
-          (default-directory "~/"))
-      (pop-to-buffer-same-window
-       (get-buffer-create stdout))
-      (with-current-buffer (get-buffer-create stdout)
-        (local-set-key "q" 'bury-buffer)
-        (eshell-command cmd t)
-        (goto-char (point-max)))))
+    (with-mutex org-sync-lock
+      (let ((stdout "*org-sync*")
+            (default-directory "~/"))
+
+        (pop-to-buffer-same-window
+         (get-buffer-create stdout))
+
+        (with-current-buffer (get-buffer-create stdout)
+          (local-set-key "q" 'bury-buffer)
+          (eshell-command cmd t)
+          (goto-char (point-max))
+          (bury-buffer)))))
 
   (defun org-pull ()
     (interactive)
@@ -166,6 +172,11 @@ Agenda Management
   (defun org-push ()
     (interactive)
     (org-sync-cmd "rclone --exclude .git/ sync -v ~/org/ dropbox:org/"))
+
+  (defun org-sync ()
+    (interactive)
+    (org-pull)
+    (org-push))
 #+END_SRC
 
 * Clojure
