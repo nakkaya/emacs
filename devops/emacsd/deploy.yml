@@ -60,3 +60,8 @@
        enabled: yes
        state: restarted
        daemon_reload: yes
+
+   - name: gnome desktop
+     template:
+       src: emacsd.desktop
+       dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
