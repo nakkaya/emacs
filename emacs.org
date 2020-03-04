@@ -1034,10 +1034,4 @@ Mouse setup when running in a terminal.
 #+BEGIN_SRC emacs-lisp
   (unless (server-running-p)
     (server-start))
-
-  (require 'desktop)
-
-  (unless (file-exists-p
-           (concat user-emacs-directory desktop-base-file-name ".lock"))
-      (desktop-save-mode 1))
 #+END_SRC
