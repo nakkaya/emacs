@@ -85,7 +85,19 @@ Will bounce between matching parens just like % in vi
      (matlab . t)))
 
   (setq org-babel-default-header-args:matlab
-        '((:results . "output") (:session . "*MATLAB*")))
+        '((:results . "output raw drawer") (:session . "*MATLAB*")))
+
+  (defun org-babel-execute:matlab (body params)
+    "Execute a block of matlab code with Babel."
+    (with-temp-buffer
+      (insert (org-babel-execute:octave body params 'matlab))
+      (beginning-of-buffer)
+      (re-search-forward org-babel-octave-eoe-indicator nil t)
+      (beginning-of-line)
+      (let ((beg (point)))
+        (end-of-buffer)
+        (delete-region beg (point)))
+      (buffer-string)))
 
   (setq org-hide-leading-stars t)
 #+END_SRC
