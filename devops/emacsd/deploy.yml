@@ -7,7 +7,7 @@
 
  vars:
 
-   emacsd_user: nakkaya
+   emacsd_user: tolga
    emacsd_port: 1337
    
  tasks:
@@ -72,6 +72,12 @@
        enabled: yes
        state: restarted
        daemon_reload: yes
+
+   - name: bin
+     template:
+       src: emacsd
+       dest: /usr/bin/emacsd
+       mode: 0777
 
    - name: gnome desktop
      template:
