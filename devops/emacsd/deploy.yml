@@ -1,4 +1,4 @@
-# ansible-playbook deploy.yml -i 'bizdik,' -u nakkaya -K
+# ansible-playbook deploy.yml -i '127.0.0.1,' -u nakkaya -K
 ---
 -
  
@@ -7,7 +7,7 @@
 
  vars:
 
-   emacsd_user: tolga
+   emacsd_user: nakkaya
    emacsd_port: 1337
    
  tasks:

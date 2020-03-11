@@ -5,6 +5,8 @@
 #+BEGIN_SRC emacs-lisp
   (when (eq system-type 'windows-nt)
     (setenv "Home" (getenv "UserProfile")))
+
+  (setq default-directory "~/")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
