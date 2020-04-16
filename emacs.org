@@ -411,6 +411,55 @@ Java
         (dired-advertised-find-file))))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (setq na-external-open-files-types 
+        '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" 
+          "jpg" "png" "m4v" "mpg" "mpeg" "ts" "m3u"))
+
+  (setq na-file-assocs (make-hash-table :test 'equal))
+
+  (if (eq system-type 'gnu/linux)
+      (progn 
+        (puthash "avi" "vlc" na-file-assocs)
+        (puthash "mp4" "vlc" na-file-assocs)
+        (puthash "flv" "vlc" na-file-assocs)
+        (puthash "wmv" "vlc" na-file-assocs)
+        (puthash "mov" "vlc" na-file-assocs)
+        (puthash "mkv" "vlc" na-file-assocs)
+        (puthash "m4v" "vlc" na-file-assocs)
+        (puthash "mpg" "vlc" na-file-assocs)
+        (puthash "ts" "vlc" na-file-assocs)
+        (puthash "mpeg" "vlc" na-file-assocs)
+        (puthash "jpg" "gpicview" na-file-assocs)
+        (puthash "png" "gpicview" na-file-assocs)))
+
+  (if (eq system-type 'gnu/linux)
+      (setq na-dired-external-viewer "xdg-open"))
+
+  (defun na-dired-display-external (extension)
+    "Open file at point in an external application."
+    (interactive)
+    (let ((file (dired-get-filename))
+          (ext-viewer (gethash extension na-file-assocs))
+          (process-connection-type nil))
+      (if ext-viewer
+          (start-process "" nil ext-viewer file)
+        (start-process "" nil na-dired-external-viewer file))))
+
+  (defun na-dired-open ()
+    "Open file at point in an external application."
+    (interactive)
+    (let ((file-extension (file-name-extension 
+                           (dired-get-filename))))
+      (if file-extension
+          (if (member (downcase file-extension) na-external-open-files-types)
+              (na-dired-display-external (downcase file-extension))
+            (na-dired-down-directory-after-kill))
+        (na-dired-down-directory-after-kill))))
+
+  (define-key dired-mode-map [return] 'na-dired-open)
+#+END_SRC
+
 * Tramp
 
 #+BEGIN_SRC emacs-lisp
