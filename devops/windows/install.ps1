@@ -4,21 +4,21 @@ Invoke-WebRequest -Uri "https://ftp.gnu.org/gnu/emacs/windows/emacs-26/$version.
 
 Expand-Archive ".\$version.zip" -DestinationPath ".\$version\"
 
-$dotEmacs = Resolve-Path -Path ".\init.el"
+$dotEmacs = Resolve-Path -Path ".\..\..\init.el"
 $dotEmacs = "$dotEmacs".Replace("\", "/")
 
 $loadFile = "(load-file `"$dotEmacs`")"
 $loadFile | Set-Content "C:/Users/$env:UserName/AppData/Roaming/.emacs"
 
-$bin = Resolve-Path -Path ".\$version\bin\"
+$bin = Resolve-Path -Path ".\$version\bin"
 $linkPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\"
 
 $objShell = New-Object -ComObject ("WScript.Shell")
 $objShortCut = $objShell.CreateShortcut($linkPath + "\Emacs.lnk")
-$objShortCut.TargetPath="$bin/runemacs.exe"
+$objShortCut.TargetPath="$bin\runemacs.exe"
 $objShortCut.Save()
 
-$emacsClient = "$bin/emacsclientw.exe"
+<# $emacsClient = "$bin\emacsclientw.exe"
 
 cmd /c assoc .ps1=powershellfile
 cmd /c ftype powershellfile=$emacsClient "%1"
@@ -31,4 +31,4 @@ cmd /c ftype pyfile=$emacsClient "%1"
 cmd /c assoc .clj=cljfile
 cmd /c ftype cljfile=$emacsClient "%1"
 cmd /c assoc .el=elfile
-cmd /c ftype elfile=$emacsClient "%1"
+cmd /c ftype elfile=$emacsClient "%1" #>
