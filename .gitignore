@@ -6,3 +6,4 @@ devops/emacsd/daemon.log
 devops/emacsd/daemon.pid
 gotty
 gotty.config
+devops/windows/matlabShell/matlabShell.exe
