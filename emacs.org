@@ -610,10 +610,10 @@ Java
     (setenv "PATH"
             (concat
              "/usr/local/bin:"
-             "$HOME/.bin:"
-             "$HOME/.local/bin:"
-             "$HOME/.git-annex.linux:"
-             "$HOME/.rclone:"
+             (concat (getenv "HOME") "/.bin:")
+             (concat (getenv "HOME") "/.local/bin:")
+             (concat (getenv "HOME") "/.git-annex.linux:")
+             (concat (getenv "HOME") "/.rclone:")
              (getenv "PATH"))))
 
   (when (eq system-type 'darwin)
