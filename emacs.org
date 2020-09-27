@@ -601,12 +601,17 @@ Java
 
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'windows-nt)
-      (setenv "PATH"
-              (concat
-               "$HOME\\.rclone/;"
-               "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
-               "C:\\Program Files\\Arduino;"
-               (getenv "PATH")))
+      (progn
+        (setenv "PATH"
+                (concat
+                 "C:\\Program Files\\CMake\\bin;"
+                 "C:\\MinGW\\bin;"
+                 "$HOME\\.rclone/;"
+                 "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+                 "C:\\Program Files\\Arduino;"
+                 (getenv "PATH")))
+        (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
+        (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
     (setenv "PATH"
             (concat
              "/usr/local/bin:"
