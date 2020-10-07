@@ -91,10 +91,15 @@ Will bounce between matching parens just like % in vi
 
   (defun org-babel-execute:matlab (body params)
     "Execute a block of matlab code with Babel."
-    (with-temp-buffer
-    (insert body)
-    (matlab-shell-run-region (point-min) (point-max))
-    "OK"))
+    (let* ((fname (make-temp-file "ob_m"))
+           (buffer (find-file-noselect fname)))
+      (with-current-buffer buffer
+        (insert body)
+        (matlab-shell-run-cell))
+      (kill-buffer buffer)
+      ;;(delete-file fname)
+      )
+    :OK)
 
   (setq org-hide-leading-stars t)
 #+END_SRC
