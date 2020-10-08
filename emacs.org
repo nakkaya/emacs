@@ -126,7 +126,8 @@ Will bounce between matching parens just like % in vi
            (buffer (find-file-noselect fname)))
       (with-current-buffer buffer
         (insert body)
-        (matlab-shell-run-cell))
+        (let ((matlab-shell-run-region-function 'matlab-shell-region->internal))
+          (matlab-shell-run-cell)))
       (kill-buffer buffer)
       (ob-matlab-output-comint-que nil nil)
       (ob-matlab-output-comint-que (buffer-file-name) fname))
