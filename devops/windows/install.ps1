@@ -1,6 +1,6 @@
-$version = "emacs-26.3-x86_64"
+$version = "emacs-27.1-x86_64"
 
-Invoke-WebRequest -Uri "https://ftp.gnu.org/gnu/emacs/windows/emacs-26/$version.zip" -OutFile ".\$version.zip" 
+Invoke-WebRequest -Uri "https://ftp.gnu.org/gnu/emacs/windows/emacs-27/$version.zip" -OutFile ".\$version.zip" 
 
 Expand-Archive ".\$version.zip" -DestinationPath ".\$version\"
 
