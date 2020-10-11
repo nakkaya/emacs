@@ -1112,9 +1112,14 @@ Mouse setup when running in a terminal.
     (set-face-foreground 'org-hide "black"))
 
   (when window-system
-    (let ((font "DejaVu Sans Mono 11"))
-      (when (x-list-fonts font)
-        (set-frame-font font nil t))))
+    (let ((font-dejavu "DejaVu Sans Mono 11")
+          (font-monaco "Monaco 10"))
+
+      (when (x-list-fonts font-dejavu)
+        (set-frame-font font-dejavu nil t))
+    
+      (when (x-list-fonts font-monaco)
+        (set-frame-font font-monaco nil t))))
 
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :height 140))
