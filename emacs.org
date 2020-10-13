@@ -126,7 +126,10 @@ Will bounce between matching parens just like % in vi
            (buffer (find-file-noselect fname)))
       (with-current-buffer buffer
         (insert body)
-        (let ((matlab-shell-run-region-function 'matlab-shell-region->internal))
+        (let ((matlab-shell-run-region-function
+               (if (eq system-type 'windows-nt)
+                   'auto
+                 'matlab-shell-region->internal)))
           (matlab-shell-run-cell)))
       (save-excursion
         (set-buffer buffer)
