@@ -84,7 +84,8 @@ Will bounce between matching parens just like % in vi
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (matlab . t)))
+     (matlab . t)
+     (eshell . t)))
 
   (setq org-babel-default-header-args:matlab
         '((:results . "silent") (:session . "*MATLAB*")))
@@ -645,6 +646,7 @@ Java
                  "C:\\Program Files\\CMake\\bin;"
                  "C:\\MinGW\\bin;"
                  "$HOME\\.rclone/;"
+                 (concat (getenv "HOME") "\\Documents\\;")
                  "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
                  "C:\\Program Files\\Arduino;"
                  (getenv "PATH")))
