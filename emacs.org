@@ -84,7 +84,8 @@ Will bounce between matching parens just like % in vi
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (matlab . t)))
+     (matlab . t)
+     (eshell . t)))
 
   (setq org-babel-default-header-args:matlab
         '((:results . "silent") (:session . "*MATLAB*")))
@@ -647,6 +648,7 @@ Java
                  "$HOME\\.rclone/;"
                  (concat (getenv "HOME")
                          "\\AppData\\Roaming\\Python\\Python39\\Scripts\\;")
+                 (concat (getenv "HOME") "\\Documents\\;")
                  "C:\\Program Files\\Arduino;"
                  (getenv "PATH")))
         (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
@@ -1113,6 +1115,9 @@ Mouse setup when running in a terminal.
   (set-face-background 'org-block-end-line "unspecified")
 
   (unless window-system
+    (set-face-background 'mode-line          "color-60")
+    (set-face-foreground 'mode-line          "color-232")
+    (set-face-background 'mode-line-inactive "color-235")
     (set-face-foreground 'org-hide "black"))
 
   (when window-system
@@ -1121,7 +1126,7 @@ Mouse setup when running in a terminal.
 
       (when (x-list-fonts font-dejavu)
         (set-frame-font font-dejavu nil t))
-    
+
       (when (x-list-fonts font-monaco)
         (set-frame-font font-monaco nil t))))
 

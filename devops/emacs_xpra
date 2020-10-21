@@ -1,0 +1,16 @@
+#!/bin/bash
+
+case $1 in
+    --start)
+        xpra start :42 --bind-tcp=0.0.0.0:10000 --start=emacs
+        ;;
+    --stop)
+        xpra stop :42
+        ;;
+    # --connect)
+    #     xpra attach ssh:10.1.0.100:42
+    #     ;;
+    *)
+        echo "--start/--stop"
+        ;;
+esac
