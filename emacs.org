@@ -645,7 +645,8 @@ Java
                  "C:\\Program Files\\CMake\\bin;"
                  "C:\\MinGW\\bin;"
                  "$HOME\\.rclone/;"
-                 "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+                 (concat (getenv "HOME")
+                         "\\AppData\\Roaming\\Python\\Python39\\Scripts\\;")
                  "C:\\Program Files\\Arduino;"
                  (getenv "PATH")))
         (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
