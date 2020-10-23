@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export XDG_RUNTIME_DIR="/tmp/emacs_xpra/"
+
 case $1 in
     --start)
         xpra start :42 --bind-tcp=0.0.0.0:10000 --start=emacs
