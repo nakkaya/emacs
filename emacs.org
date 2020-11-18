@@ -648,6 +648,7 @@ Java
                  "$HOME\\.rclone/;"
                  (concat (getenv "HOME") "\\Documents\\;")
                  "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+                 "$HOME\\AppData\\Roaming\\Python\\Python39\\Scripts/;"
                  "C:\\Program Files\\Arduino;"
                  (getenv "PATH")))
         (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
