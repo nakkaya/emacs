@@ -950,6 +950,7 @@ Java
                             (mode . makefile-gmake-mode)
                             (mode . matlab-mode)
                             (mode . css-mode)
+                            (mode . js-mode)
                             (mode . dockerfile-mode)
                             (mode . docker-compose-mode)))
                  ("Terminal" (or (mode . term-mode)
