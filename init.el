@@ -21,7 +21,8 @@
 	smart-tab
         helm
         evil
-        quelpa))
+        quelpa
+        ein))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
