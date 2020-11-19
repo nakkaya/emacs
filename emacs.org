@@ -61,6 +61,18 @@ Will bounce between matching parens just like % in vi
   (setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (defun na-zoom-in ()
+    (interactive)
+    (set-face-attribute 'default nil :height 
+                        (+ (face-attribute 'default :height) 10)))
+
+  (defun na-zoom-out ()
+    (interactive)
+    (set-face-attribute 'default nil :height 
+                        (- (face-attribute 'default :height) 10)))
+#+END_SRC
+
 * Org-Mode
 
 #+BEGIN_SRC emacs-lisp
