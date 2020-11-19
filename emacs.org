@@ -937,6 +937,7 @@ Java
                             (mode . js-mode)
                             (mode . dockerfile-mode)
                             (mode . docker-compose-mode)))
+                 ("Jupyter" (or (name . "^\\*ein:.*")))
                  ("Terminal" (or (mode . term-mode)
                                  (mode . inferior-lisp-mode)
                                  (mode . inferior-python-mode)
@@ -1134,6 +1135,33 @@ Mouse setup when running in a terminal.
                   "%n" " - "
                   (line-number-mode "L%l ")
                   (column-number-mode "C%c ")))
+#+END_SRC
+
+* Ein
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ein
+    :defer t
+    :init
+    (progn
+      (require 'ein-notebook)
+      (setq ein:url-or-port '("http://10.1.0.100:4242"))
+      (let ((bg (face-attribute 'default :background)))
+        (eval-after-load "ein-cell"
+          '(progn
+             (set-face-attribute 'ein:cell-input-area nil :background bg)
+             (set-face-attribute 
+               'ein:cell-input-prompt nil :foreground
+               (face-attribute 'ido-indicator :foreground))
+             
+             (set-face-attribute 'ein:cell-output-area nil :background bg)
+             (set-face-attribute 
+               'ein:cell-output-prompt nil :foreground
+               (face-attribute 'ido-only-match :foreground))
+             (set-face-attribute 'ein:cell-output-prompt nil :background bg))))
+      (with-eval-after-load 'ein-notebooklist
+        (define-key ein:notebook-mode-map (kbd "C-c C-c")
+          'ein:worksheet-execute-cell))))
 #+END_SRC
 
 * Session
