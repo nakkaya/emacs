@@ -855,7 +855,6 @@ Java
            (buff-list (append term-buffers
                               (filter-buffers-with-prefix "*eshell")
                               (filter-buffers-with-prefix "*monroe*")
-                              (filter-buffers-with-prefix "*inf-ipy")
                               (filter-buffers-with-prefix "*MATLAB")
                               (filter-buffers-with-prefix "*Python")
                               (filter-buffers-with-prefix "*ssh")))
@@ -874,21 +873,6 @@ Java
 
   (setq-default helm-M-x-fuzzy-match t)
   (global-set-key (kbd "M-x") #'helm-M-x)
-#+END_SRC
-
-* inf-ipy
-
-#+BEGIN_SRC emacs-lisp
-  (quelpa
-   '(inf-ipy
-     :fetcher github
-     :repo "nakkaya/inf-ipy"
-     :files ("src/emacs/*.el")))
-
-  (require 'inf-ipy)
-
-  (inf-ipy-configure-kernel python)
-  (inf-ipy-configure-kernel matlab)
 #+END_SRC
 
 * Docker
@@ -956,7 +940,6 @@ Java
                  ("Terminal" (or (mode . term-mode)
                                  (mode . inferior-lisp-mode)
                                  (mode . inferior-python-mode)
-                                 (name . "^*inf-ipy.*")
                                  (name . "^*MATLAB.*")
                                  (name . "^*monroe.*")
                                  (name . "^*eshell.*")
