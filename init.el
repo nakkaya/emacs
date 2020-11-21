@@ -3,7 +3,8 @@
        (or load-file-name (buffer-file-name))))
 
 (setq package-list
-      '(clojure-mode
+      '(use-package
+        clojure-mode
 	clojure-mode-extra-font-locking
 	monroe
 	python-mode
@@ -21,7 +22,8 @@
 	smart-tab
         helm
         evil
-        quelpa))
+        quelpa
+        ein))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
