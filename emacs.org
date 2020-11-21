@@ -1158,6 +1158,7 @@ Mouse setup when running in a terminal.
     (progn
       (require 'ein-notebook)
       (setq ein:url-or-port '("http://10.1.0.100:4242"))
+      (setq ein:output-area-inlined-images t)
       (let ((bg (face-attribute 'default :background)))
         (eval-after-load "ein-cell"
           '(progn
