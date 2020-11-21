@@ -1157,7 +1157,7 @@ Mouse setup when running in a terminal.
     :init
     (progn
       (require 'ein-notebook)
-      (setq ein:url-or-port '("http://10.1.0.100:4242"))
+      (setq ein:url-or-port '("https://compute.nakkaya.com"))
       (let ((bg (face-attribute 'default :background)))
         (eval-after-load "ein-cell"
           '(progn
