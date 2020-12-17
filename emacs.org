@@ -1024,7 +1024,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-\\") 'other-window)
-  (global-set-key "\C-xgs"     'magit-status)
+  ;;(global-set-key "\C-xgs"     'magit-status)
   (global-set-key "\C-xrl"     'monroe)
 
   (global-set-key (kbd "C-d")  'na-bounce-sexp)
