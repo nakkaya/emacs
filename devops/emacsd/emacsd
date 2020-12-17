@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+/usr/bin/emacsclient --socket-name=/tmp/emacs1000/emacsd -c
