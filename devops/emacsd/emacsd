@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-/usr/bin/emacsclient -s emacsd -c
+export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
+
+/usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
