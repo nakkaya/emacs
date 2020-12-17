@@ -15,6 +15,9 @@
    
  tasks:
 
+   - name: Add repositories
+     apt_repository: repo='ppa:kelleyk/emacs' state=present
+
    - name: install the gpg key for nodejs LTS
      apt_key:
        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
@@ -37,6 +40,7 @@
      with_items:
       - sshpass
       - nodejs
+      - emacs27
 
    - name: clone emacsd
      git:
