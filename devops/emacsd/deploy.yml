@@ -11,14 +11,32 @@
    wetty_port: 1337
    wetty_title: "emacs @ 2080"
    wetty_base: "/emacs/2080"
+   nodejs_version: "14"
    
  tasks:
 
+   - name: install the gpg key for nodejs LTS
+     apt_key:
+       url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+       state: present
+
+   - name: install the nodejs LTS repos
+     apt_repository:
+       repo: "deb https://deb.nodesource.com/node_{{ nodejs_version }}.x {{ ansible_distribution_release }} main"
+       state: present
+       update_cache: yes
+   
    - name: system upgrade
      apt:
        upgrade: yes
        update_cache: yes
        cache_valid_time: 86400 #One day
+
+   - name: install requirements
+     action: apt name={{ item }} state=present
+     with_items:
+      - sshpass
+      - nodejs
 
    - name: clone emacsd
      git:
@@ -26,11 +44,6 @@
        dest: /var/emacsd
        clone: yes
        update: yes
-
-   - name: install requirements
-     action: apt name={{ item }} state=present
-     with_items:
-      - sshpass
        
    - name: set emacsd owner
      file:
