@@ -8,7 +8,9 @@
  vars:
 
    emacsd_user: nakkaya
-   emacsd_port: 1337
+   wetty_port: 1337
+   wetty_title: "emacs @ 2080"
+   wetty_base: "/emacs/2080"
    
  tasks:
 
