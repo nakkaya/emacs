@@ -1179,9 +1179,3 @@ Mouse setup when running in a terminal.
           'ein:worksheet-execute-cell))))
 #+END_SRC
 
-* Session
-
-#+BEGIN_SRC emacs-lisp
-  (unless (server-running-p)
-    (server-start))
-#+END_SRC
