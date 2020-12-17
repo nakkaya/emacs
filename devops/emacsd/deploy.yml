@@ -9,8 +9,8 @@
 
    emacsd_user: nakkaya
    wetty_port: 1337
-   wetty_title: "emacs @ 2080"
-   wetty_base: "/emacs/2080"
+   wetty_title: "emacs @ local"
+   wetty_base: "/emacs/local"
    nodejs_version: "14"
    
  tasks:
@@ -41,6 +41,12 @@
       - sshpass
       - nodejs
       - emacs27
+
+   - name: install yarn
+     shell: npm install --global yarn
+
+   - name: install wetty
+     shell: yarn global add wetty
 
    - name: clone emacsd
      git:
@@ -96,6 +102,9 @@
        src: emacsd
        dest: /usr/bin/emacsd
        mode: 0777
+
+   - name: assure .desktop folder exists
+     file: path=/home/{{ emacsd_user }}/.local/share/applications/ state=directory
 
    - name: gnome desktop
      template:
