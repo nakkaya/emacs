@@ -2,6 +2,13 @@
 
 export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
+# xpra attach ssh:10.1.0.100:42
+# "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
+
+XPRA="xpra --socket-dir=/tmp/emacsd/"
+DISPLAY=42
+ADDR=0.0.0.0:4242
+
 cd /var/emacsd
 
 case $1 in
@@ -16,6 +23,24 @@ case $1 in
         ;;
     stop-web)
         kill `cat wetty.pid`
+        ;;
+    start-x)
+        $XPRA start :$DISPLAY \
+              --bind-tcp=$ADDR \
+              --html=on \
+              --microphone=no \
+              --pulseaudio=no \
+              --speaker=no \
+              --webcam=no \
+              --xsettings=no \
+              --clipboard=yes \
+              --file-transfer=on \
+              --mdns=no \
+              --printing=no \
+              --start="/usr/bin/emacsclient -s ${EMACS_SERVER_SOCKET} -c"
+        ;;
+    stop-x)
+        $XPRA stop :$DISPLAY
         ;;
     *)
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
