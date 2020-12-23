@@ -11,6 +11,12 @@ case $1 in
     stop)
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET --eval "(let (kill-emacs-hook) (kill-emacs))"
         ;;
+    start-web)
+        /usr/bin/nohup /usr/local/bin/wetty --conf ./wetty.conf > /dev/null 2>&1 & echo $! > wetty.pid
+        ;;
+    stop-web)
+        kill `cat wetty.pid`
+        ;;
     *)
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
         ;;
