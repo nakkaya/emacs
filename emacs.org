@@ -678,6 +678,7 @@ Java
     (setq exec-path (split-string (getenv "PATH") ":")))
 
   (setenv "PAGER" "cat")
+  (setenv "DISPLAY" ":0")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
