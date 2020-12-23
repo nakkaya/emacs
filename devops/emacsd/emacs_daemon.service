@@ -4,8 +4,8 @@ Description=emacs_daemon
 [Service]
 Type=forking
 WorkingDirectory=/var/emacsd/
-ExecStart=/usr/bin/emacs -q --daemon=emacsd -l init.el
-ExecStop=/usr/bin/emacsclient -s emacsd --eval "(let (kill-emacs-hook) (kill-emacs))"
+ExecStart=/usr/bin/emacsd start
+ExecStop=/usr/bin/emacsd stop
 Restart=always
 RestartSec=60
 User= {{ emacsd_user }}

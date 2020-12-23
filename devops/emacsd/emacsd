@@ -2,4 +2,16 @@
 
 export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
-/usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
+cd /var/emacsd
+
+case $1 in
+    start)
+        /usr/bin/emacs -q --daemon=$EMACS_SERVER_SOCKET -l init.el
+        ;;
+    stop)
+        /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET --eval "(let (kill-emacs-hook) (kill-emacs))"
+        ;;
+    *)
+        /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
+        ;;
+esac

@@ -36,14 +36,15 @@
        cache_valid_time: 86400 #One day
 
    - name: install requirements
-     action: apt name={{ item }} state=present
-     with_items:
-      - sshpass
-      - nodejs
-      - emacs27
+     apt:
+       pkg:
+         - sshpass
+         - nodejs
+         - emacs27
+       state: present
 
    - name: install yarn
-     shell: npm install --global yarn
+     shell: yarn --version || npm install --global yarn
 
    - name: install wetty
      shell: yarn global add wetty
@@ -83,20 +84,6 @@
        src: wetty.conf
        dest: /var/emacsd/wetty.conf
 
-   - name: run emacs_daemon
-     systemd:
-       name: emacs_daemon
-       enabled: yes
-       state: restarted
-       daemon_reload: yes
-
-   - name: run emacs_webapp
-     systemd:
-       name: emacs_webapp
-       enabled: yes
-       state: restarted
-       daemon_reload: yes
-
    - name: bin
      template:
        src: emacsd
@@ -110,3 +97,17 @@
      template:
        src: emacsd.desktop
        dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
+
+   - name: run emacs_daemon
+     systemd:
+       name: emacs_daemon
+       enabled: yes
+       state: restarted
+       daemon_reload: yes
+
+   - name: run emacs_webapp
+     systemd:
+       name: emacs_webapp
+       enabled: yes
+       state: restarted
+       daemon_reload: yes
