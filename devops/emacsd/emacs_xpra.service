@@ -3,6 +3,7 @@ Description=emacs_xpra
 After=emacs_daemon.service
 
 [Service]
+Environment=EMACSD_SYSTEMD=1
 WorkingDirectory=/var/emacsd/
 ExecStart=/usr/bin/emacsd start-x
 ExecStop=/usr/bin/emacsd stop-x

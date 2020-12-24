@@ -2,13 +2,6 @@
 
 export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
-# xpra attach ssh:10.1.0.100:42
-# "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
-
-XPRA="xpra --socket-dir=/tmp/emacsd/"
-DISPLAY=42
-ADDR=0.0.0.0:4242
-
 cd /var/emacsd
 
 case $1 in
@@ -19,13 +12,29 @@ case $1 in
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET --eval "(let (kill-emacs-hook) (kill-emacs))"
         ;;
     start-web)
-        /usr/bin/nohup /usr/local/bin/wetty --conf ./wetty.conf > /dev/null 2>&1 & echo $! > wetty.pid
+        if [[ -v EMACSD_SYSTEMD ]]; then
+            /usr/local/bin/wetty --conf /var/emacsd/wetty.conf
+        else
+            /usr/bin/nohup /usr/local/bin/wetty --conf ./wetty.conf > /dev/null 2>&1 & echo $! > wetty.pid
+        fi
         ;;
     stop-web)
         kill `cat wetty.pid`
         ;;
     start-x)
-        $XPRA --no-daemon start :$DISPLAY \
+        # xpra attach ssh:10.1.0.100:42
+        # "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
+
+        if [[ -v EMACSD_SYSTEMD ]]; then
+            XPRA="xpra --socket-dir=/tmp/emacsd/ --no-daemon"
+        else
+            XPRA="xpra --socket-dir=/tmp/emacsd/"
+        fi
+        
+        DISPLAY=42
+        ADDR=0.0.0.0:4242
+
+        $XPRA start :$DISPLAY \
               --bind-tcp=$ADDR \
               --html=on \
               --microphone=no \
