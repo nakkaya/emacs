@@ -6,11 +6,13 @@
  become: yes
 
  vars:
+   systemd_enb: true
+   xpra_enb: true
 
    emacsd_user: nakkaya
    wetty_port: 1337
-   wetty_title: "emacs @ local"
-   wetty_base: "/emacs/local"
+   wetty_title: "emacs @ 2080"
+   wetty_base: "/emacs/2080"
    nodejs_version: "14"
    
  tasks:
@@ -64,21 +66,6 @@
        owner: "{{ emacsd_user }}"
        group: "{{ emacsd_user }}"
 
-   - name: create systemd folder
-     file:
-       path: /etc/systemd/system/
-       state: directory
-
-   - name: emacs_daemon.service
-     template:
-       src: emacs_daemon.service
-       dest: /etc/systemd/system/emacs_daemon.service
-
-   - name: emacs_webapp.service
-     template:
-       src: emacs_webapp.service
-       dest: /etc/systemd/system/emacs_webapp.service
-
    - name: wetty conf
      template:
        src: wetty.conf
@@ -98,12 +85,37 @@
        src: emacsd.desktop
        dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
 
+   - name: create systemd folder
+     file:
+       path: /etc/systemd/system/
+       state: directory
+     when: systemd_enb
+
+   - name: emacs_daemon.service
+     template:
+       src: emacs_daemon.service
+       dest: /etc/systemd/system/emacs_daemon.service
+     when: systemd_enb
+
+   - name: emacs_webapp.service
+     template:
+       src: emacs_webapp.service
+       dest: /etc/systemd/system/emacs_webapp.service
+     when: systemd_enb
+
+   - name: emacs_xpra.service
+     template:
+       src: emacs_xpra.service
+       dest: /etc/systemd/system/emacs_xpra.service
+     when: systemd_enb and xpra_enb
+
    - name: run emacs_daemon
      systemd:
        name: emacs_daemon
        enabled: yes
        state: restarted
        daemon_reload: yes
+     when: systemd_enb
 
    - name: run emacs_webapp
      systemd:
@@ -111,3 +123,12 @@
        enabled: yes
        state: restarted
        daemon_reload: yes
+     when: systemd_enb
+
+   - name: run emacs_xpra
+     systemd:
+       name: emacs_xpra
+       enabled: yes
+       state: restarted
+       daemon_reload: yes
+     when: systemd_enb and xpra_enb

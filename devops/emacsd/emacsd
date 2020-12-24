@@ -25,7 +25,7 @@ case $1 in
         kill `cat wetty.pid`
         ;;
     start-x)
-        $XPRA start :$DISPLAY \
+        $XPRA --no-daemon start :$DISPLAY \
               --bind-tcp=$ADDR \
               --html=on \
               --microphone=no \

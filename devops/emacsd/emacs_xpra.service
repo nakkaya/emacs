@@ -1,0 +1,14 @@
+[Unit]
+Description=emacs_xpra
+After=emacs_daemon.service
+
+[Service]
+WorkingDirectory=/var/emacsd/
+ExecStart=/usr/bin/emacsd start-x
+ExecStop=/usr/bin/emacsd stop-x
+Restart=always
+RestartSec=3
+User= {{ emacsd_user }}
+
+[Install]
+WantedBy=multi-user.target
