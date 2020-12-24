@@ -30,7 +30,18 @@
        repo: "deb https://deb.nodesource.com/node_{{ nodejs_version }}.x {{ ansible_distribution_release }} main"
        state: present
        update_cache: yes
-   
+
+   - name: install the gpg key for xpra
+     apt_key:
+       url: "https://xpra.org/gpg.asc"
+       state: present
+
+   - name: install the xpra repos
+     apt_repository:
+       repo: "deb https://xpra.org/ {{ ansible_distribution_release }} main"
+       state: present
+       update_cache: yes
+
    - name: system upgrade
      apt:
        upgrade: yes
@@ -43,6 +54,7 @@
          - sshpass
          - nodejs
          - emacs27
+         - xpra
        state: present
 
    - name: install yarn
