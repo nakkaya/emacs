@@ -35,6 +35,7 @@ case $1 in
         ADDR=0.0.0.0:4242
 
         $XPRA start :$DISPLAY \
+              --tcp-auth=pam \
               --bind-tcp=$ADDR \
               --html=on \
               --microphone=no \
