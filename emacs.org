@@ -245,8 +245,10 @@ Agenda Management
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq org-latex-pdf-process
-      '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+  (setq org-latex-prefer-user-labels t)
+
+  (setq org-latex-pdf-process
+        '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
 #+END_SRC
 
 * Clojure
