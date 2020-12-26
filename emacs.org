@@ -244,6 +244,11 @@ Agenda Management
     (org-push))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(setq org-latex-pdf-process
+      '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+#+END_SRC
+
 * Clojure
 
 #+BEGIN_SRC emacs-lisp
