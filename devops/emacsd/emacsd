@@ -18,7 +18,7 @@ ADDR=0.0.0.0:4242
 case $1 in
     start)
         if [ $EXWM_ENB ]; then
-            EMACS_LOAD="-l vm.el -f exwm-enable"
+            EMACS_LOAD="-l wm.el -f exwm-enable"
         else
             EMACS_LOAD="-l init.el"
         fi
