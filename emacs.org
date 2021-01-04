@@ -81,6 +81,7 @@ Will bounce between matching parens just like % in vi
 
   (setq org-return-follows-link t)
   (setq org-startup-with-inline-images t)
+  (setq org-image-actual-width nil)
   (setq org-src-window-setup 'current-window)
   (setq org-src-fontify-natively t)
   (setq org-confirm-babel-evaluate nil)
