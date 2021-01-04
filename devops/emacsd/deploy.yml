@@ -7,7 +7,7 @@
 
  vars:
    systemd_enb: true
-   xpra_enb: false
+   xpra_enb: true
    exvm_enb: "true"
 
    emacsd_user: nakkaya
