@@ -1,3 +1,5 @@
+(load-file "init.el")
+
 (setq package-list
       '(use-package
          exwm))
@@ -10,6 +12,3 @@
   :config 
   (use-package exwm-config
     :config (exwm-config-default)))
-
-;;-f exwm-enable
-;;--eval \"(exwm-init)\""

@@ -8,11 +8,12 @@
  vars:
    systemd_enb: true
    xpra_enb: false
+   exvm_enb: "true"
 
    emacsd_user: nakkaya
    wetty_port: 1337
-   wetty_title: "emacs @ local"
-   wetty_base: "/emacs/local"
+   wetty_title: "emacs @ 2080"
+   wetty_base: "/emacs/2080"
    nodejs_version: "14"
    
  tasks:

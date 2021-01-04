@@ -4,9 +4,26 @@ export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
 cd /var/emacsd
 
+EXWM_ENB={{ exvm_enb }} 
+
+if [[ -v EMACSD_SYSTEMD ]]; then
+    XPRA="xpra --socket-dir=/tmp/emacsd/ --no-daemon"
+else
+    XPRA="xpra --socket-dir=/tmp/emacsd/"
+fi
+
+DISPLAY=42
+ADDR=0.0.0.0:4242
+
 case $1 in
     start)
-        /usr/bin/emacs -q --daemon=$EMACS_SERVER_SOCKET -l init.el
+        if [ $EXWM_ENB ]; then
+            EMACS_LOAD="-l vm.el -f exwm-enable"
+        else
+            EMACS_LOAD="-l init.el"
+        fi
+        
+        /usr/bin/emacs -q --daemon=$EMACS_SERVER_SOCKET $EMACS_LOAD
         ;;
     stop)
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET --eval "(let (kill-emacs-hook) (kill-emacs))"
@@ -25,16 +42,19 @@ case $1 in
         # xpra attach ssh:10.1.0.100:42
         # "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
 
-        if [[ -v EMACSD_SYSTEMD ]]; then
-            XPRA="xpra --socket-dir=/tmp/emacsd/ --no-daemon"
+        if [ $EXWM_ENB ]; then
+            XPRA_MODE="start-desktop"
         else
-            XPRA="xpra --socket-dir=/tmp/emacsd/"
+            XPRA_MODE="start"
         fi
-        
-        DISPLAY=42
-        ADDR=0.0.0.0:4242
 
-        $XPRA start :$DISPLAY \
+        if [ $EXWM_ENB ]; then
+            XPRA_START_ARGS="--eval \"(exwm-init)\""
+        else
+            XPRA_START_ARGS=""
+        fi
+
+        $XPRA $XPRA_MODE :$DISPLAY \
               --tcp-auth=pam \
               --bind-tcp=$ADDR \
               --html=on \
@@ -47,7 +67,7 @@ case $1 in
               --file-transfer=on \
               --mdns=no \
               --printing=no \
-              --start="/usr/bin/emacsclient -s ${EMACS_SERVER_SOCKET} -c"
+              --start="/usr/bin/emacsclient -s ${EMACS_SERVER_SOCKET} -c ${XPRA_START_ARGS}"
         ;;
     stop-x)
         $XPRA stop :$DISPLAY
