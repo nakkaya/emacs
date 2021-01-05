@@ -17,7 +17,7 @@ ADDR=0.0.0.0:4242
 
 case $1 in
     start)
-        if [ $EXWM_ENB ]; then
+        if [ "$EXWM_ENB" = true ]; then
             EMACS_LOAD="-l wm.el -f exwm-enable"
         else
             EMACS_LOAD="-l init.el"
@@ -42,13 +42,13 @@ case $1 in
         # xpra attach ssh:10.1.0.100:42
         # "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
 
-        if [ $EXWM_ENB ]; then
+        if [ "$EXWM_ENB" = true ]; then
             XPRA_MODE="start-desktop"
         else
             XPRA_MODE="start"
         fi
 
-        if [ $EXWM_ENB ]; then
+        if [ "$EXWM_ENB" = true ]; then
             XPRA_START_ARGS="--eval \"(exwm-init)\""
         else
             XPRA_START_ARGS=""
