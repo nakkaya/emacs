@@ -24,7 +24,7 @@
 (exwm-input-set-key (kbd "C-x \\") #'other-window)
 
 (exwm-input-set-key
- (kbd "C-x t")
+ (kbd "C-x f")
  (lambda () (interactive)
    (start-process "browser" "*Messages*" "firefox")))
 
