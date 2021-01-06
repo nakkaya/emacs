@@ -16,6 +16,7 @@
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
 
+  (setq visible-bell t)
   (setq fill-column 80)
   (delete-selection-mode)
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
