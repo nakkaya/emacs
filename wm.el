@@ -21,7 +21,9 @@
 
 (push ?\C-x exwm-input-prefix-keys)
 (exwm-input-set-key (kbd "C-x ]") #'ibuffer)
+(exwm-input-set-key (kbd "C-x C-]") #'ibuffer)
 (exwm-input-set-key (kbd "C-x \\") #'other-window)
+(exwm-input-set-key (kbd "C-x C-\\") #'other-window)
 
 (exwm-input-set-key
  (kbd "C-x f")

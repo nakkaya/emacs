@@ -959,6 +959,7 @@ Java
                             (mode . dockerfile-mode)
                             (mode . docker-compose-mode)))
                  ("Jupyter" (or (name . "^\\*ein:.*")))
+                 ("EXWM" (or (mode . exwm-mode)))
                  ("Terminal" (or (mode . term-mode)
                                  (mode . inferior-lisp-mode)
                                  (mode . inferior-python-mode)
