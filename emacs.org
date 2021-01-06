@@ -1120,6 +1120,12 @@ Mouse setup when running in a terminal.
   (set-face-background 'org-block-begin-line "unspecified")
   (set-face-background 'org-block-end-line "unspecified")
 
+  (when window-system
+    (set-face-background 'mode-line          "SteelBlue4")
+    (set-face-background 'mode-line-inactive "SlateGray4")
+    (set-face-foreground 'mode-line          "gray5")
+    (set-face-foreground 'mode-line-inactive "gray15"))
+
   (unless window-system
     (set-face-background 'mode-line          "color-60")
     (set-face-foreground 'mode-line          "color-232")
