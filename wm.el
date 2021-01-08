@@ -25,6 +25,24 @@
 (exwm-input-set-key (kbd "C-c \\") #'other-window)
 (exwm-input-set-key (kbd "C-c C-\\") #'other-window)
 
+(setq exwm-input-simulation-keys
+      `(([?\C-b] . [left])
+	([?\C-f] . [right])
+	([?\C-p] . [up])
+	([?\C-n] . [down])
+	([?\C-a] . [home])
+	([?\C-e] . [end])
+	([?\M-v] . [prior])
+	([?\C-v] . [next])
+	([?\C-d] . [delete])
+	([?\C-k] . [S-end delete])
+        ;; search
+        ([?\C-s] . (?\C-f))
+        ;; cut/paste.
+        ([?\C-w] . (?\C-x))
+        ([?\C-y] . (?\C-v))
+        ([?\M-w] . (?\C-c))))
+
 (exwm-input-set-key
  (kbd "C-c f")
  (lambda () (interactive)
