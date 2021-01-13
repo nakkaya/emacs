@@ -98,8 +98,11 @@
        src: emacsd.desktop
        dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
 
-   - name: copy logo
+   - name: copy xpra logo
      copy: src=logo.png dest=/usr/share/xpra/icons/linux.png
+
+   - name: copy wetty logo
+     copy: src=logo.ico dest=/usr/local/share/.config/yarn/global/node_modules/wetty/build/assets/favicon.ico
 
    - name: create systemd folder
      file:
