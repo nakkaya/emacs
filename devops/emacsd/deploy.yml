@@ -98,6 +98,9 @@
        src: emacsd.desktop
        dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
 
+   - name: copy logo
+     copy: src=logo.png dest=/usr/share/xpra/icons/linux.png
+
    - name: create systemd folder
      file:
        path: /etc/systemd/system/
