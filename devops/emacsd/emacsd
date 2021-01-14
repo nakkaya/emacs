@@ -28,17 +28,17 @@ case $1 in
     stop)
         /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET --eval "(let (kill-emacs-hook) (kill-emacs))"
         ;;
-    start-web)
+    start-cli)
         if [[ -v EMACSD_SYSTEMD ]]; then
             /usr/local/bin/wetty --conf /var/emacsd/wetty.conf
         else
             /usr/bin/nohup /usr/local/bin/wetty --conf ./wetty.conf > /dev/null 2>&1 & echo $! > wetty.pid
         fi
         ;;
-    stop-web)
+    stop-cli)
         kill `cat wetty.pid`
         ;;
-    start-x)
+    start-gui)
         # xpra attach ssh:10.1.0.100:42
         # "C:\Program Files\Xpra\Xpra.exe" --window-close=disconnect attach tcp://10.1.0.100:1337
 
@@ -69,7 +69,7 @@ case $1 in
               --printing=no \
               --start="/usr/bin/emacsclient -s ${EMACS_SERVER_SOCKET} -c ${XPRA_START_ARGS}"
         ;;
-    stop-x)
+    stop-gui)
         $XPRA stop :$DISPLAY
         ;;
     *)

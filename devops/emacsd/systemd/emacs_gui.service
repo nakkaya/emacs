@@ -1,12 +1,12 @@
 [Unit]
-Description=emacs_webapp
+Description=emacs_gui
 After=emacs_daemon.service
 
 [Service]
-Environment=TERM=xterm-256color
 Environment=EMACSD_SYSTEMD=1
 WorkingDirectory=/var/emacsd/
-ExecStart=/usr/bin/emacsd start-web
+ExecStart=/usr/bin/emacsd start-gui
+ExecStop=/usr/bin/emacsd stop-gui
 Restart=always
 RestartSec=3
 User= {{ emacsd_user }}

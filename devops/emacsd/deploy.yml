@@ -7,8 +7,8 @@
 
  vars:
    systemd_enb: true
-   xpra_enb: false
-   exvm_enb: "false"
+   xpra_enb: true
+   exvm_enb: "true"
 
    emacsd_user: nakkaya
    wetty_port: 1337
@@ -36,12 +36,14 @@
      apt_key:
        url: "https://xpra.org/gpg.asc"
        state: present
+     when: xpra_enb
 
    - name: install the xpra repos
      apt_repository:
        repo: "deb https://xpra.org/ {{ ansible_distribution_release }} main"
        state: present
        update_cache: yes
+     when: xpra_enb
 
    - name: system upgrade
      apt:
@@ -55,14 +57,20 @@
          - sshpass
          - nodejs
          - emacs27
+       state: present
+
+   - name: install requirements
+     apt:
+       pkg:
          - xpra
        state: present
+     when: xpra_enb
 
    - name: install yarn
      shell: yarn --version || npm install --global yarn
 
    - name: install wetty
-     shell: yarn global add wetty
+     shell: yarn global add wetty@2.0.2
 
    - name: clone emacsd
      git:
@@ -95,14 +103,15 @@
 
    - name: gnome desktop
      template:
-       src: emacsd.desktop
+       src: resources/emacsd.desktop
        dest: /home/{{ emacsd_user }}/.local/share/applications/emacsd.desktop
 
    - name: copy xpra logo
-     copy: src=logo.png dest=/usr/share/xpra/icons/linux.png
+     copy: src=resources/logo.png dest=/usr/share/xpra/icons/linux.png
+     when: xpra_enb
 
    - name: copy wetty logo
-     copy: src=logo.ico dest=/usr/local/share/.config/yarn/global/node_modules/wetty/build/assets/favicon.ico
+     copy: src=resources/logo.ico dest=/usr/local/share/.config/yarn/global/node_modules/wetty/build/assets/favicon.ico
 
    - name: create systemd folder
      file:
@@ -112,20 +121,20 @@
 
    - name: emacs_daemon.service
      template:
-       src: emacs_daemon.service
+       src: systemd/emacs_daemon.service
        dest: /etc/systemd/system/emacs_daemon.service
      when: systemd_enb
 
-   - name: emacs_webapp.service
+   - name: emacs_cli.service
      template:
-       src: emacs_webapp.service
-       dest: /etc/systemd/system/emacs_webapp.service
+       src: systemd/emacs_cli.service
+       dest: /etc/systemd/system/emacs_cli.service
      when: systemd_enb
 
-   - name: emacs_xpra.service
+   - name: emacs_gui.service
      template:
-       src: emacs_xpra.service
-       dest: /etc/systemd/system/emacs_xpra.service
+       src: systemd/emacs_gui.service
+       dest: /etc/systemd/system/emacs_gui.service
      when: systemd_enb and xpra_enb
 
    - name: run emacs_daemon
@@ -136,17 +145,17 @@
        daemon_reload: yes
      when: systemd_enb
 
-   - name: run emacs_webapp
+   - name: run emacs_cli
      systemd:
-       name: emacs_webapp
+       name: emacs_cli
        enabled: yes
        state: restarted
        daemon_reload: yes
      when: systemd_enb
 
-   - name: run emacs_xpra
+   - name: run emacs_gui
      systemd:
-       name: emacs_xpra
+       name: emacs_gui
        enabled: yes
        state: restarted
        daemon_reload: yes
