@@ -73,6 +73,6 @@ case $1 in
         $XPRA stop :$DISPLAY
         ;;
     *)
-        /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c
+        /usr/bin/emacsclient -s $EMACS_SERVER_SOCKET -c "$@"
         ;;
 esac
