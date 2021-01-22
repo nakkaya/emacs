@@ -290,6 +290,9 @@ Agenda Management
           (concat dotfiles-dir "devops/windows/matlabShell/matlabShell.exe"))
     (setq matlab-shell-command-switches '("10000" "20000"))
     (setenv "PATH" (concat "C:/PROGRA~1/MATLAB/R2020a/bin/win64;" (getenv "PATH"))))
+
+  (eval-after-load 'matlab-mode 
+    '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
 #+END_SRC
 
 * Python
