@@ -110,6 +110,15 @@
      copy: src=resources/logo.png dest=/usr/share/xpra/icons/linux.png
      when: xpra_enb
 
+   - name: change xpra title
+     shell: sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1{{ wetty_title }}\2/g' /usr/share/xpra/www/index.html
+
+   - name: clean xpra cache
+     shell: rm -rf /usr/share/xpra/www/*.gz
+
+   - name: clean xpra cache
+     shell: rm -rf /usr/share/xpra/www/*.br
+
    - name: copy wetty logo
      copy: src=resources/logo.ico dest=/usr/local/share/.config/yarn/global/node_modules/wetty/build/assets/favicon.ico
 
