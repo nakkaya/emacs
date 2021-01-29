@@ -1184,6 +1184,21 @@ Mouse setup when running in a terminal.
       (setq ein:url-or-port '("https://compute.nakkaya.com"))
       (setq ein:output-area-inlined-images t)
 
+      (defun na/restart-and-execute-all ()
+        (interactive)
+        (aif (ein:get-notebook)
+            (lexical-let ((ws (ein:worksheet--get-ws-or-error)))
+              (ein:kernel-delete-session
+               (lambda (kernel)
+                 (ein:events-trigger (ein:$kernel-events kernel) 'status_restarting.Kernel)
+                 (ein:kernel-retrieve-session kernel 0
+                                              (lambda (kernel)
+                                                (ein:events-trigger (ein:$kernel-events kernel)
+                                                                    'status_restarted.Kernel)
+                                                (ein:worksheet-execute-all-cells ws))))
+               :kernel (ein:$notebook-kernel it)))
+          (message "Not in notebook buffer!")))
+
       (let ((bg (face-attribute 'default :background)))
         (eval-after-load "ein-cell"
           '(progn
@@ -1191,7 +1206,7 @@ Mouse setup when running in a terminal.
              (set-face-attribute 
                'ein:cell-input-prompt nil :foreground
                (face-attribute 'ido-indicator :foreground))
-             
+
              (set-face-attribute 'ein:cell-output-area nil :background bg)
              (set-face-attribute 
                'ein:cell-output-prompt nil :foreground
