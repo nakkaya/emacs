@@ -178,8 +178,10 @@ Agenda Management
                         (org-agenda-start-on-weekday nil)))
             (tags-todo "personal/TODO")
             (tags-todo "work/TODO")
+            (tags-todo "home/TODO")
             (tags-todo "personal/WAIT")
-            (tags-todo "work/WAIT")))))
+            (tags-todo "work/WAIT")
+            (tags-todo "home/WAIT")))))
 
   (setq org-capture-templates
         '(("p" "Personal TODO" entry (file+headline "~/org/notes.org" "Personal")
