@@ -195,6 +195,7 @@ Agenda Management
   (setq org-agenda-restore-windows-after-quit t)
   (setq org-agenda-show-all-dates t)
   (setq org-deadline-warning-days 150)
+  (setq org-archive-subtree-save-file-p t)
   (org-toggle-sticky-agenda)
 
   (let ((window-configuration))
