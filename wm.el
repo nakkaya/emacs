@@ -48,3 +48,8 @@
  (lambda () (interactive)
    (start-process "browser" "*Messages*" "firefox")))
 
+(exwm-input-set-key
+ (kbd "C-c d")
+ (lambda () (interactive)
+   (start-process "files" "*Messages*" "xdg-open" ".")))
+
