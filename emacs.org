@@ -1188,6 +1188,7 @@ Mouse setup when running in a terminal.
 
       (setq ein:url-or-port '("https://compute.nakkaya.com"))
       (setq ein:output-area-inlined-images t)
+      (setq ein:worksheet-enable-undo t)
 
       (defun na/restart-and-execute-all ()
         (interactive)
