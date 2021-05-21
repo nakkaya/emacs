@@ -83,7 +83,6 @@ Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob)
-  (require 'ob-shell)
 
   (setq org-return-follows-link t)
   (setq org-startup-with-inline-images t)
@@ -103,8 +102,7 @@ Will bounce between matching parens just like % in vi
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (matlab . t)
-     (eshell . t)))
+     (matlab . t)))
 
   (setq org-babel-default-header-args:matlab
         '((:results . "silent") (:session . "*MATLAB*")))
