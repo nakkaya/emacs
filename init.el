@@ -18,7 +18,7 @@
 	multi-term
 	magit
         transmission
-	afternoon-theme
+        cyberpunk-theme
 	smart-tab
         helm
         evil
