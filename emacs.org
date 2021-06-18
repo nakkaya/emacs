@@ -1125,7 +1125,7 @@ Mouse setup when running in a terminal.
   (setq frame-title-format (list "GNU Emacs " emacs-version))
 
   (load-theme 'afternoon t)
-
+  (set-face-background 'default "unspecified-bg" (selected-frame))
   (set-face-background 'org-block "unspecified")
   (set-face-background 'org-block-begin-line "unspecified")
   (set-face-background 'org-block-end-line "unspecified")
