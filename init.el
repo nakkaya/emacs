@@ -18,7 +18,7 @@
 	multi-term
 	magit
         transmission
-	doom-themes
+	afternoon-theme
 	smart-tab
         helm
         evil
