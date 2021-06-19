@@ -1168,11 +1168,6 @@ Mouse setup when running in a terminal.
         (set-face-foreground 'org-todo "color-124")
         (set-face-background 'secondary-selection theme-background)
 
-        (set-face-attribute  'widget-button
-                             nil
-                             :foreground "color-160"
-                             :background theme-background)
-
         (eval-after-load "magit"
           '(progn
              (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
