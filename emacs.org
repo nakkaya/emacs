@@ -1217,12 +1217,7 @@ Mouse setup when running in a terminal.
                       (line-number-mode "L%l ")
                       (column-number-mode "C%c ")))))
 
-  ;; For the case that the init file runs after the frame has been created
-  ;; Call of emacs without --daemon option.
   (na-load-theme)
-  ;; For the case that the init file runs before the frame is created.
-  ;; Call of emacs with --daemon option.
-  (add-hook 'after-make-frame-functions #'na-load-theme t)
 #+END_SRC
 
 * Ein
