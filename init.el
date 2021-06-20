@@ -17,7 +17,6 @@
         docker-compose-mode
 	multi-term
 	magit
-        transmission
         doom-themes
 	smart-tab
         helm

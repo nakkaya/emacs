@@ -849,14 +849,6 @@ Java
   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 #+END_SRC
 
-* Transmission
-
-#+BEGIN_SRC emacs-lisp
-  (setq transmission-host "10.0.0.100")
-  (setq transmission-rpc-auth
-        '(:username "admin" :password "admin"))
-#+END_SRC
-
 * IBuffer
 
 #+BEGIN_SRC emacs-lisp
