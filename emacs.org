@@ -219,6 +219,22 @@ Agenda Management
   (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
 #+END_SRC
 
+* Matlab
+
+#+BEGIN_SRC emacs-lisp
+  (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
+
+  (add-to-list
+   'auto-mode-alist
+   '("\\.m$" . matlab-mode))
+
+  (setq matlab-indent-function t)
+  (setq matlab-shell-command "matlab")
+
+  (eval-after-load 'matlab-mode 
+    '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
+#+END_SRC
+
 * Python
 
 #+BEGIN_SRC emacs-lisp
