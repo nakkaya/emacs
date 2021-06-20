@@ -11,6 +11,8 @@
 	matlab-mode
 	yaml-mode
 	markdown-mode
+        lsp-mode
+        lsp-java
 	org
         docker
         dockerfile-mode

@@ -259,6 +259,15 @@ Agenda Management
        (concat latex-run-command " " buffer-file-name))))
 #+END_SRC
 
+* LSP
+
+#+BEGIN_SRC emacs-lisp
+(require 'lsp-mode)
+(require 'lsp-java)
+
+(add-hook 'java-mode-hook #'lsp-deferred)
+#+END_SRC
+
 * Skeletons
 
 #+BEGIN_SRC emacs-lisp
