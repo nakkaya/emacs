@@ -86,6 +86,7 @@ Will bounce between matching parens just like % in vi
   (setq org-src-fontify-natively t)
   (setq org-confirm-babel-evaluate nil)
   (setq org-babel-python-command "python3")
+  (setq org-hide-leading-stars t)
 
   (when  (eq system-type 'windows-nt)
     (setq org-babel-python-command "python.exe"))
@@ -96,63 +97,7 @@ Will bounce between matching parens just like % in vi
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
-     (python . t)
-     (matlab . t)))
-
-  (setq org-babel-default-header-args:matlab
-        '((:results . "silent") (:session . "*MATLAB*")))
-
-  (setq ob-matlab-attached nil)
-  (setq ob-matlab-que '())
-
-  (defun ob-matlab-output-comint-que (buffer fname)
-    (setq ob-matlab-que (append ob-matlab-que (list (list fname buffer)))))
-
-  (defun ob-matlab-output-comint-deque ()
-    (let* ((next   (car ob-matlab-que))
-           (fname   (car next))
-           (buffer (car (cdr next))))
-      (setq ob-matlab-que  (cdr ob-matlab-que))
-      (list fname buffer)))
-
-  (defun ob-matlab-output-comint-filter (str)
-    (let* ((next   (ob-matlab-output-comint-deque))
-           (fname   (car next))
-           (buffer (car (cdr next))))
-      (when fname
-        (delete-file fname))))
-
-  (defun matlab-comint-attach-filter ()
-    (if (and (not ob-matlab-attached)
-             (matlab-shell-active-p))
-        (progn
-          (setq ob-matlab-attached t)
-          (with-current-buffer
-              (matlab-shell-active-p)
-            (add-hook 'comint-output-filter-functions 'ob-matlab-output-comint-filter)))))
-
-  (defun org-babel-execute:matlab (body params)
-    "Execute a block of matlab code with Babel."
-    (matlab-comint-attach-filter)
-    (let* ((temporary-file-directory ".")
-           (fname (make-nearby-temp-file "ob_m"))
-           (buffer (find-file-noselect fname)))
-      (with-current-buffer buffer
-        (insert body)
-        (let ((matlab-shell-run-region-function
-               (if (eq system-type 'windows-nt)
-                   'auto
-                 'matlab-shell-region->internal)))
-          (matlab-shell-run-cell)))
-      (save-excursion
-        (set-buffer buffer)
-        (save-buffer)
-        (kill-buffer))
-      (ob-matlab-output-comint-que nil nil)
-      (ob-matlab-output-comint-que (buffer-file-name) fname))
-    :OK)
-
-  (setq org-hide-leading-stars t)
+     (python . t)))
 #+END_SRC
 
 Agenda Management
