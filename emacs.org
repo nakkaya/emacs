@@ -35,11 +35,6 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (ido-mode 1)
-  (setq ido-separator "\n")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
   (defun yes-or-no-p (arg)
     "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
     (y-or-n-p arg))
