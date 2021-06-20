@@ -219,28 +219,6 @@ Agenda Management
   (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
 #+END_SRC
 
-* Matlab
-
-#+BEGIN_SRC emacs-lisp
-  (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
-
-  (add-to-list
-   'auto-mode-alist
-   '("\\.m$" . matlab-mode))
-
-  (setq matlab-indent-function t)
-  (setq matlab-shell-command "matlab")
-
-  (when (eq system-type 'windows-nt)
-    (setq matlab-shell-command
-          (concat dotfiles-dir "devops/windows/matlabShell/matlabShell.exe"))
-    (setq matlab-shell-command-switches '("10000" "20000"))
-    (setenv "PATH" (concat "C:/PROGRA~1/MATLAB/R2020a/bin/win64;" (getenv "PATH"))))
-
-  (eval-after-load 'matlab-mode 
-    '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
-#+END_SRC
-
 * Python
 
 #+BEGIN_SRC emacs-lisp
