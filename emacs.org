@@ -256,13 +256,19 @@ Agenda Management
        (concat latex-run-command " " buffer-file-name))))
 #+END_SRC
 
-* LSP
+* Company & LSP
 
 #+BEGIN_SRC emacs-lisp
-(require 'lsp-mode)
-(require 'lsp-java)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+#+END_SRC
 
-(add-hook 'java-mode-hook #'lsp-deferred)
+#+BEGIN_SRC emacs-lisp
+  (require 'lsp-mode)
+  (require 'lsp-java)
+
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (add-hook 'java-mode-hook #'lsp-deferred)
 #+END_SRC
 
 * Skeletons
@@ -1044,11 +1050,6 @@ Mouse setup when running in a terminal.
 
     (define-key global-map [mouse-4] 'scroll-window-backward-line)
     (define-key global-map [mouse-5] 'scroll-window-forward-line))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (require 'smart-tab)
-  (global-smart-tab-mode 1)
 #+END_SRC
 
 * Theme

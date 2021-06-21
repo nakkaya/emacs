@@ -20,7 +20,7 @@
 	multi-term
 	magit
         doom-themes
-	smart-tab
+	company
         helm
         evil
         quelpa
