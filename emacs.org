@@ -259,6 +259,7 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-minimum-prefix-length 1)
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+END_SRC
 
@@ -267,7 +268,9 @@ Agenda Management
   (require 'lsp-java)
 
   (setq lsp-headerline-breadcrumb-enable nil)
+
   (add-hook 'java-mode-hook #'lsp-deferred)
+  (add-hook 'clojure-mode-hook #'lsp-deferred)
 #+END_SRC
 
 * Skeletons
