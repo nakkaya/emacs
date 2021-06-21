@@ -6,7 +6,7 @@
       '(use-package
         clojure-mode
 	clojure-mode-extra-font-locking
-	monroe
+	cider
 	python-mode
 	matlab-mode
 	yaml-mode

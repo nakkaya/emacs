@@ -203,11 +203,8 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (require 'clojure-mode)
-  (require 'monroe)
   (require 'clojure-mode-extra-font-locking)
-  (add-hook 'clojure-mode-hook 'clojure-enable-monroe)
-
-  (define-key clojure-mode-map (kbd "C-x C-e") 'monroe-eval-expression-at-point)
+  (require 'cider)
 #+END_SRC
 
 * C/C++
