@@ -1099,7 +1099,10 @@ Mouse setup when running in a terminal.
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
         (set-face-background 'secondary-selection theme-background)
-        (set-face-foreground 'eshell-ls-directory "color-24")
+
+        (add-hook 'eshell-mode-hook
+                  (lambda ()
+                    (set-face-foreground 'eshell-ls-directory "color-24")))
 
         (eval-after-load "magit"
           '(progn
