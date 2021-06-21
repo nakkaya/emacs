@@ -204,7 +204,6 @@ Agenda Management
 #+BEGIN_SRC emacs-lisp
   (require 'clojure-mode)
   (require 'clojure-mode-extra-font-locking)
-  (require 'cider)
 #+END_SRC
 
 * C/C++
@@ -1002,7 +1001,7 @@ Java
                (define-key term-raw-map [(control \])] 'ibuffer)))
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
-  (define-key dired-mode-map [return] 'na-dired-down-directory-after-kill)
+  (define-key dired-mode-map (kbd "RET") 'na-dired-down-directory-after-kill)
 
   (global-set-key (kbd "C-x t") 'na-new-term)
 
@@ -1100,6 +1099,7 @@ Mouse setup when running in a terminal.
         (set-face-foreground 'org-block-end-line "color-236")
         (set-face-foreground 'org-todo "color-124")
         (set-face-background 'secondary-selection theme-background)
+        (set-face-foreground 'eshell-ls-directory "color-24")
 
         (eval-after-load "magit"
           '(progn
