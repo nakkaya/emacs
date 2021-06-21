@@ -269,6 +269,11 @@ Agenda Management
 
   (setq lsp-headerline-breadcrumb-enable nil)
 
+  (dolist (dir '(
+                 "[/\\\\]matlab_runtime"
+                 ))
+    (push dir lsp-file-watch-ignored))
+
   (add-hook 'java-mode-hook #'lsp-deferred)
   (add-hook 'clojure-mode-hook #'lsp-deferred)
 #+END_SRC
