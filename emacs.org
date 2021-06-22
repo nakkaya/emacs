@@ -26,12 +26,16 @@
   (global-auto-revert-mode 1)
 
   (global-font-lock-mode t)
-  (show-paren-mode 1)
   (electric-pair-mode 1)
 
   (setq-default indent-tabs-mode nil)
 
   (add-hook 'prog-mode-hook #'hs-minor-mode)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1142,6 +1146,9 @@ Mouse setup when running in a terminal.
                              nil
                              :foreground "color-240"
                              :background "color-234"))
+
+      (set-face-background 'show-paren-match (face-background 'default))
+      (set-face-attribute 'show-paren-match nil :foreground "red")
 
       (column-number-mode 1)
       (blink-cursor-mode 1)
