@@ -197,11 +197,11 @@ Agenda Management
 
   (defun org-pull ()
     (interactive)
-    (org-sync-cmd (concat "rclone copy -u -v dropbox:org/ " na-agenda-folder))
+    (org-sync-cmd (concat "rclone copy -u -v dropbox:org/ " na-agenda-folder)))
 
   (defun org-push ()
     (interactive)
-    (org-sync-cmd (concat "rclone --exclude .git/ sync -v " na-agenda-folder " dropbox:org/"))
+    (org-sync-cmd (concat "rclone --exclude .git/ sync -v " na-agenda-folder " dropbox:org/")))
 
   (defun org-sync ()
     (interactive)
