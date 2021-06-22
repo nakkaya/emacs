@@ -1075,7 +1075,8 @@ Mouse setup when running in a terminal.
 
         (let ((font-dejavu "DejaVu Sans Mono 11")
               (font-monaco "Monaco 10")
-              (font-jetbrains "Jet Brains Mono 11"))
+              (font-jetbrains "Jet Brains Mono 11")
+              (font-jetbrains-w32 "JetBrains Mono-11"))
 
           (when (x-list-fonts font-dejavu)
             (set-frame-font font-dejavu nil t))
@@ -1084,7 +1085,10 @@ Mouse setup when running in a terminal.
             (set-frame-font font-monaco nil t))
 
           (when (x-list-fonts font-jetbrains)
-            (set-frame-font font-jetbrains nil t)))
+            (set-frame-font font-jetbrains nil t))
+
+          (when (x-list-fonts font-jetbrains-w32)
+            (set-frame-font font-jetbrains-w32 nil t)))
 
         (when (eq system-type 'darwin)
           (set-face-attribute 'default nil :height 140))
