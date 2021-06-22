@@ -6,9 +6,12 @@
   (when (eq system-type 'windows-nt)
     (setenv "Home" (getenv "UserProfile")))
 
-  (if (getenv "EMACS_HOME_DIR")
-      (setq default-directory (getenv "EMACS_HOME_DIR"))
-    (setq default-directory "~/"))
+  (cond ((getenv "EMACS_HOME_DIR")
+         (setq default-directory (getenv "EMACS_HOME_DIR")))
+        ((eq system-type 'windows-nt)
+         (setq default-directory (concat (getenv "UserProfile") "\\")))
+        (t
+         (setq default-directory "~/")))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
