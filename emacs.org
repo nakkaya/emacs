@@ -112,8 +112,16 @@ Will bounce between matching parens just like % in vi
 Agenda Management
 
 #+BEGIN_SRC emacs-lisp
-  (setq na-agenda-folder "~/org/"
-        na-agenda-files '("notes.org" "inbox.org" "bookmarks.org" "shopping.org"))
+  (cond ((file-exists-p "~/org/")
+         (setq na-agenda-folder "~/org/"))
+        ((file-exists-p "/storage/org/")
+         (setq na-agenda-folder "/storage/org/"))
+        ((file-exists-p "~/source/org/")
+         (setq na-agenda-folder "~/source/org/"))
+        (t
+         (setq na-agenda-folder "~/org/")))
+
+  (setq na-agenda-files '("notes.org" "inbox.org" "bookmarks.org" "shopping.org"))
 
   (when (file-exists-p na-agenda-folder)
     (setq org-agenda-files
@@ -136,13 +144,13 @@ Agenda Management
             (tags-todo "home/WAIT")))))
 
   (setq org-capture-templates
-        '(("p" "Personal TODO" entry (file+headline "~/org/notes.org" "Personal")
+        '(("p" "Personal TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Personal")
            "* TODO %?\n")
-          ("r" "Robotics Lab TODO" entry (file+headline "~/org/notes.org" "Robotics Lab")
+          ("r" "Robotics Lab TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Robotics Lab")
            "* TODO %?\n")
-          ("a" "Akademik TODO" entry (file+headline "~/org/notes.org" "Akademik")
+          ("a" "Akademik TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Akademik")
            "* TODO %?\n")
-          ("b" "Read Later" entry (file+headline "~/org/bookmarks.org" "Read Later")
+          ("b" "Read Later" entry (file+headline (concat na-agenda-folder "bookmarks.org") "Read Later")
            "* %?\n" :prepend t)))
 
   (setq org-agenda-window-setup 'current-window)
@@ -167,7 +175,7 @@ Agenda Management
   (global-set-key [f1] 'jump-to-org-agenda)
 
   (when (file-exists-p na-agenda-folder)
-    (run-with-idle-timer 600 nil #'jump-to-org-agenda))
+    (run-with-idle-timer 600 t #'jump-to-org-agenda))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -189,11 +197,11 @@ Agenda Management
 
   (defun org-pull ()
     (interactive)
-    (org-sync-cmd "rclone copy -u -v dropbox:org/ ~/org/"))
+    (org-sync-cmd (concat "rclone copy -u -v dropbox:org/ " na-agenda-folder))
 
   (defun org-push ()
     (interactive)
-    (org-sync-cmd "rclone --exclude .git/ sync -v ~/org/ dropbox:org/"))
+    (org-sync-cmd (concat "rclone --exclude .git/ sync -v " na-agenda-folder " dropbox:org/"))
 
   (defun org-sync ()
     (interactive)
