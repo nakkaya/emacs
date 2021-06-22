@@ -1074,13 +1074,17 @@ Mouse setup when running in a terminal.
         (setq frame-title-format (list "GNU Emacs " emacs-version))
 
         (let ((font-dejavu "DejaVu Sans Mono 11")
-              (font-monaco "Monaco 10"))
+              (font-monaco "Monaco 10")
+              (font-jetbrains "Jet Brains Mono 11"))
 
           (when (x-list-fonts font-dejavu)
             (set-frame-font font-dejavu nil t))
 
           (when (x-list-fonts font-monaco)
-            (set-frame-font font-monaco nil t)))
+            (set-frame-font font-monaco nil t))
+
+          (when (x-list-fonts font-jetbrains)
+            (set-frame-font font-jetbrains nil t)))
 
         (when (eq system-type 'darwin)
           (set-face-attribute 'default nil :height 140))
