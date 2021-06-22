@@ -855,7 +855,7 @@ Java
                                  (string< (buffer-name x) (buffer-name y)))))
            (buff-list (append term-buffers
                               (filter-buffers-with-prefix "*eshell")
-                              (filter-buffers-with-prefix "*monroe*")
+                              (filter-buffers-with-prefix "*cider-repl")
                               (filter-buffers-with-prefix "*MATLAB")
                               (filter-buffers-with-prefix "*Python")
                               (filter-buffers-with-prefix "*ssh")))
