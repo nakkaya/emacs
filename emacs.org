@@ -284,6 +284,7 @@ Agenda Management
   (require 'lsp-mode)
   (require 'lsp-java)
 
+  (setq lsp-keymap-prefix "C-c l")
   (setq lsp-headerline-breadcrumb-enable nil)
 
   (dolist (dir '(
