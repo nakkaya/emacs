@@ -187,14 +187,10 @@ Agenda Management
       (let ((stdout "*org-sync*")
             (default-directory "~/"))
 
-        (pop-to-buffer-same-window
-         (get-buffer-create stdout))
-
         (with-current-buffer (get-buffer-create stdout)
           (local-set-key "q" 'bury-buffer)
           (eshell-command cmd t)
-          (goto-char (point-max))
-          (bury-buffer)))))
+          (goto-char (point-max))))))
 
   (defun org-pull ()
     (interactive)
@@ -217,7 +213,7 @@ Agenda Management
            (current-branch (magit-get-current-branch)))
 
       (org-save-all-org-buffers)
-    
+
       (unless (zerop (car (os-run "git" "diff" "--exit-code")))
         (magit-stage-modified)
         (na-magit-auto-commit)
