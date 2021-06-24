@@ -163,6 +163,7 @@ Agenda Management
   (let ((window-configuration))
     (defun jump-to-org-agenda ()
       (interactive)
+      (org-sync)
       (setq window-configuration (current-window-configuration))
       (delete-other-windows)
       (org-agenda nil "h")
@@ -203,9 +204,24 @@ Agenda Management
     (interactive)
     (org-sync-cmd (concat "rclone --exclude .git/ sync -v " na-agenda-folder " dropbox:org/")))
 
+  (defun os-run (program &rest args)
+    "Run PROGRAM with ARGS and return the exit code and output in a list."
+    (with-temp-buffer 
+      (list (apply 'call-process program nil (current-buffer) nil args)
+            (buffer-string))))
+
+
   (defun org-sync ()
     (interactive)
-    (org-save-all-org-buffers)
+    (let* ((default-directory na-agenda-folder)
+           (current-branch (magit-get-current-branch)))
+
+      (org-save-all-org-buffers)
+    
+      (unless (zerop (car (os-run "git" "diff" "--exit-code")))
+        (magit-stage-modified)
+        (na-magit-auto-commit)
+        (magit-git-push current-branch (concat "origin/" current-branch) (list ))))
     (org-pull)
     (org-push))
 #+END_SRC
