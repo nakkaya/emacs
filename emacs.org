@@ -87,6 +87,7 @@ Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob)
+  (require 'ob-ipython)
 
   (setq org-return-follows-link t)
   (setq org-startup-with-inline-images t)
@@ -106,7 +107,11 @@ Will bounce between matching parens just like % in vi
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
-     (python . t)))
+     (python . t)
+     (ipython . t)
+     (shell . t)))
+
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 #+END_SRC
 
 Agenda Management

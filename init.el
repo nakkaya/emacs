@@ -14,6 +14,7 @@
         lsp-mode
         lsp-java
 	org
+        ob-ipython
         docker
         dockerfile-mode
         docker-compose-mode
