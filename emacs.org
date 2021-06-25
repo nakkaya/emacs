@@ -440,6 +440,12 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
 
+  (quelpa '(emacs-async
+            :fetcher github :repo "jwiegley/emacs-async"))
+
+  (autoload 'dired-async-mode "dired-async.el" nil t)
+  (dired-async-mode 1)
+
   (setq dired-dwim-target t)
   (setq dired-recursive-deletes 'always)
 
