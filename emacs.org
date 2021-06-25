@@ -1007,7 +1007,11 @@ Java
                            (name . "^\\*org-sync\\*$")
                            (name . "^\\*quelpa-build-checkout\\*$")
                            (name . "^\\*helm M-x\\*$")
-                           (name . "^\\*transmission\\*$")))))))
+                           (name . "^\\*transmission\\*$")
+                           (name . "^\\*ob-ipython.*")
+                           (name . "^\\*lsp-.*")
+                           (name . "^\\*jdtls.*")
+                           (name . "^\\*Flymake.*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
