@@ -1005,7 +1005,10 @@ Java
                            (name . "^\\*ob-ipython.*")
                            (name . "^\\*lsp-.*")
                            (name . "^\\*jdtls.*")
-                           (name . "^\\*Flymake.*")))))))
+                           (name . "^\\*Flymake.*")
+                           (name . "^\\*Native-.*")
+                           (name . "^\\*Async-native-.*")
+                           (name . "^\\*emacs\\*$")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
