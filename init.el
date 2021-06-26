@@ -1,3 +1,7 @@
+(custom-set-variables
+ '(warning-suppress-log-types '((comp)))
+ '(warning-suppress-types '((comp))))
+
 (setq dotfiles-dir
       (file-name-directory
        (or load-file-name (buffer-file-name))))
