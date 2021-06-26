@@ -5,6 +5,4 @@ emacs-26.3-x86_64*
 devops/emacsd/gotty
 devops/emacsd/daemon.log
 devops/emacsd/daemon.pid
-gotty
-gotty.config
 devops/windows/matlabShell/matlabShell.exe

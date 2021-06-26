@@ -1,0 +1,11 @@
+title_format = "emacsd"
+term = "hterm"
+ 
+preferences {
+    background_color = "rgb(0, 0, 0)"
+
+    font_size = 16
+    font_smoothing = "antialiased"
+    font_family = "'JetBrains Mono', Consolas, 'Courier New', monospace"
+    user_css = "https://s3.amazonaws.com/dropbox.nakkaya.com/JetBrainsMono.css"
+}
