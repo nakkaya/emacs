@@ -27,14 +27,7 @@ jobs:
 
       - name: Install Invoke
         run: pip install invoke
-
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-      - name: Build Image
-        run: ls
           
       - name: Build Image
-        run: cd $GITHUB_WORKSPACE/devops/docker/ && invoke build
+        run: invoke build
+        working-directory: devops/docker/
