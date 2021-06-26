@@ -11,7 +11,8 @@ RUN apt-get clean && apt-get autoclean
 # Build Emacs
 #
 WORKDIR "/opt/"
-RUN git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git
+# --branch emacs-27
+RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git
 WORKDIR "/opt/emacs"
 RUN ./autogen.sh
 RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 ./configure --with-modules --with-native-compilation --with-json --with-x-toolkit=no --with-xpm=no --with-jpeg=no --with-png=no --with-gif=no --with-tiff=no
