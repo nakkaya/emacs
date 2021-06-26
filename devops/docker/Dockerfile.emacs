@@ -29,7 +29,7 @@ ADD resources/favicon.ico /opt/gotty/resources/favicon.ico
 RUN make gotty
 WORKDIR "/"
 RUN ln -s /opt/gotty/gotty /usr/bin/gotty
-COPY resources/gotty /home/$USER/.gotty
+ADD resources/gotty /home/$USER/.gotty
 
 # Copy Settings
 #

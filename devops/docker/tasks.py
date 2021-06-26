@@ -22,6 +22,7 @@ def build(ctx):
 @task
 def push(ctx):
     run("docker push nakkaya/emacs:latest")
+    run("docker push nakkaya/emacs:" + version)
 
 @task
 def pull(ctx):
