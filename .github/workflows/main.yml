@@ -27,7 +27,10 @@ jobs:
 
       - name: Install Invoke
         run: pip install invoke
-          
+
+      - name: Docker Hub Login
+        run: docker login --username nakkaya --password ${{ secrets.DOCKERHUB_PASSWORD }}
+        
       - name: Build Image
         run: invoke build
         working-directory: devops/docker/
