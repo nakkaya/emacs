@@ -37,7 +37,8 @@ ADD resources/gotty /home/$USER/.gotty
 COPY resources/exec.sh /usr/bin/
 RUN chmod 755 /usr/bin/exec.sh
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/emacs
-RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" > /home/$USER/.emacs
+RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
+RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" >> /home/$USER/.emacs
 
 # Init ENV
 #
