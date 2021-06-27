@@ -728,9 +728,7 @@ Java
               (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
 
   (defun eshell-mode-setup-function () 
-    (when (and (fboundp 'company-mode)
-               (file-remote-p default-directory))
-      (company-mode -1)))
+    (company-mode -1))
 
   (add-hook 'eshell-mode-hook 'eshell-mode-setup-function)
 
@@ -739,8 +737,8 @@ Java
   (eshell/alias "sudo" "eshell/sudo $*")
 
   ;; net use Z: http://10.9.0.190:1337/
-  (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 1337")
-  (eshell/alias "airdrop-simple" "python3 -m http.server")
+  (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 5000")
+  (eshell/alias "airdrop-simple" "python3 -m http.server 5000")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()

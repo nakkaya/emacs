@@ -34,10 +34,11 @@ ADD resources/gotty /home/$USER/.gotty
 
 # Copy Settings
 #
-COPY resources/emacsd.sh /opt/emacsd/
-RUN chmod 755 /opt/emacsd/emacsd.sh
+COPY resources/exec.sh /usr/bin/
+RUN chmod 755 /usr/bin/exec.sh
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/emacs
-RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" > /home/$USER/.emacs
+RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
+RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" >> /home/$USER/.emacs
 
 # Init ENV
 #
@@ -47,4 +48,4 @@ RUN chown -R $USER:$USER /home/$USER
 USER $USER
 RUN emacs --batch --eval '(load "/opt/emacsd/emacs/init.el")'
 WORKDIR "/storage"
-CMD ["/opt/emacsd/emacsd.sh"]
+CMD ["exec.sh"]
