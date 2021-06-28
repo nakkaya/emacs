@@ -126,7 +126,11 @@ Agenda Management
         (t
          (setq na-agenda-folder "~/org/")))
 
-  (setq na-agenda-files '("notes.org" "inbox.org" "bookmarks.org" "shopping.org"))
+  (setq na-agenda-files '("notes.org"
+                          "inbox.org"
+                          "bookmarks.org"
+                          "shopping.org"
+                          "devops.org"))
 
   (when (file-exists-p na-agenda-folder)
     (setq org-agenda-files
@@ -314,6 +318,14 @@ Agenda Management
   (add-hook 'clojure-mode-hook #'lsp-deferred)
 #+END_SRC
 
+* Projectile
+
+#+BEGIN_SRC emacs-lisp
+  (require 'projectile)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
+  
 * Skeletons
 
 #+BEGIN_SRC emacs-lisp

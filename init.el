@@ -26,6 +26,7 @@
 	magit
         doom-themes
 	company
+        projectile
         helm
         evil
         quelpa
