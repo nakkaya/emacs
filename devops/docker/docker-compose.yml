@@ -3,17 +3,20 @@ version: "3.7"
 services:
   emacs:
     image: nakkaya/emacs:latest
+    privileged: true
     hostname: emacs
+    restart: always
+    #pull_policy: always
     volumes:
       - storage:/storage
       - mvn_db:/home/nakkaya/.m2
       - lein_db:/home/nakkaya/.lein
     ports:
-      - "1010:8080"
+      - "127.0.0.1:8080:8080"
     environment:
       - EMACS_HOME_DIR=/storage/
       - TERM=xterm-256color
-      - GOTTY_CREDENTIAL=user:pass
+      #- GOTTY_CREDENTIAL=user:pass
 
 volumes:
   storage:
