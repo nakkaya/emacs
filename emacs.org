@@ -172,7 +172,6 @@ Agenda Management
   (let ((window-configuration))
     (defun jump-to-org-agenda ()
       (interactive)
-      (org-sync)
       (setq window-configuration (current-window-configuration))
       (delete-other-windows)
       (org-agenda nil "h")
@@ -186,49 +185,6 @@ Agenda Management
 
   (when (file-exists-p na-agenda-folder)
     (run-with-idle-timer 600 t #'jump-to-org-agenda))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defvar org-sync-lock (make-mutex "org-sync-lock"))
-
-  (defun org-sync-cmd (cmd)
-    (with-mutex org-sync-lock
-      (let ((stdout "*org-sync*")
-            (default-directory "~/"))
-
-        (with-current-buffer (get-buffer-create stdout)
-          (local-set-key "q" 'bury-buffer)
-          (eshell-command cmd t)
-          (goto-char (point-max))))))
-
-  (defun org-pull ()
-    (interactive)
-    (org-sync-cmd (concat "rclone copy -u -v dropbox:org/ " na-agenda-folder)))
-
-  (defun org-push ()
-    (interactive)
-    (org-sync-cmd (concat "rclone --exclude .git/ sync -v " na-agenda-folder " dropbox:org/")))
-
-  (defun os-run (program &rest args)
-    "Run PROGRAM with ARGS and return the exit code and output in a list."
-    (with-temp-buffer 
-      (list (apply 'call-process program nil (current-buffer) nil args)
-            (buffer-string))))
-
-
-  (defun org-sync ()
-    (interactive)
-    (let* ((default-directory na-agenda-folder)
-           (current-branch (magit-get-current-branch)))
-
-      (org-save-all-org-buffers)
-
-      (unless (zerop (car (os-run "git" "diff" "--exit-code")))
-        (magit-stage-modified)
-        (na-magit-auto-commit)
-        (magit-git-push current-branch (concat "origin/" current-branch) (list ))))
-    (org-pull)
-    (org-push))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1023,7 +979,6 @@ Java
                            (name . "^\\*Calculator\\*$")
                            (name . "^\\*Calc Trail\\*$")
                            (name . "^\\*Compile-Log\\*$")
-                           (name . "^\\*org-sync\\*$")
                            (name . "^\\*quelpa-build-checkout\\*$")
                            (name . "^\\*helm M-x\\*$")
                            (name . "^\\*transmission\\*$")
