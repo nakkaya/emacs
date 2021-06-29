@@ -21,6 +21,9 @@
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
 
+  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq read-process-output-max (* 1024 1024))
+
   (setq visible-bell t)
   (setq fill-column 80)
   (delete-selection-mode)
@@ -273,6 +276,7 @@ Agenda Management
 
   (add-hook 'java-mode-hook #'lsp-deferred)
   (add-hook 'clojure-mode-hook #'lsp-deferred)
+  (add-hook 'c++-mode-hook #'lsp-deferred)
 #+END_SRC
 
 * Projectile
@@ -986,6 +990,7 @@ Java
                            (name . "^\\*ob-ipython.*")
                            (name . "^\\*lsp-.*")
                            (name . "^\\*jdtls.*")
+                           (name . "^\\*clangd.*")
                            (name . "^\\*Flymake.*")
                            (name . "^\\*Native-.*")
                            (name . "^\\*Async-native-.*")
