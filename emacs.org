@@ -89,6 +89,7 @@ Will bounce between matching parens just like % in vi
   (require 'ob)
   (require 'ob-ipython)
 
+  (setq org-startup-folded t)
   (setq org-return-follows-link t)
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
