@@ -174,16 +174,20 @@ Agenda Management
   (org-toggle-sticky-agenda)
 
   (let ((window-configuration))
+    (defun kill-org-agenda ()
+      (interactive)
+      (kill-this-buffer)
+      (set-window-configuration window-configuration))
+  
     (defun jump-to-org-agenda ()
       (interactive)
-      (setq window-configuration (current-window-configuration))
-      (delete-other-windows)
-      (org-agenda nil "h")
-      (org-agenda-redo)
-      (local-set-key [f1] '(lambda () 
-                             (interactive)
-                             (kill-this-buffer)
-                             (set-window-configuration window-configuration)))))
+      (unless (get-buffer "*Org Agenda(h)*")
+        (setq window-configuration (current-window-configuration))
+        (delete-other-windows)
+        (org-agenda nil "h")
+        (org-agenda-redo)
+        (local-set-key [f1] #'kill-org-agenda)
+        (local-set-key "q" #'kill-org-agenda))))
 
   (global-set-key [f1] 'jump-to-org-agenda)
 
