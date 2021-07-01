@@ -15,7 +15,7 @@ docker run --net=host \
        --env="DISPLAY" \
        --volume=$HOME:/storage \
        --volume=$HOME/.Xauthority:/home/nakkaya/.Xauthority:rw \
-       -it nakkaya/emacs:latest emacs
+       -d nakkaya/emacs:latest emacs
 ```
 
 There is also a sample `docker-compose.yml` file that will setup a
