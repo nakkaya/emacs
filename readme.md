@@ -18,6 +18,10 @@ docker run --net=host \
        -d nakkaya/emacs:latest emacs
 ```
 
+On Windows install `VcXsrv` the run,
+
+    docker run -e DISPLAY=<IP>:0.0 -d nakkaya/emacs:latest emacs
+
 There is also a sample `docker-compose.yml` file that will setup a
 web based interface that can be used on remote machines in
 `devops/docker/`. After `docker-compose up -d` Emacs can be accessed
