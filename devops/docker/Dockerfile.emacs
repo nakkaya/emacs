@@ -8,6 +8,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get build-dep emacs-nox -y
 RUN apt-get install gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson-dev -y
 RUN apt-get clean && apt-get autoclean
 
+ADD resources/JetBrainsMono.ttf /usr/local/share/fonts
+
 # Build Emacs
 #
 WORKDIR "/opt/"
