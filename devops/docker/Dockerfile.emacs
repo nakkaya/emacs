@@ -15,7 +15,16 @@ WORKDIR "/opt/"
 RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git
 WORKDIR "/opt/emacs"
 RUN ./autogen.sh
-RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 ./configure --with-modules --with-native-compilation --with-json --with-x-toolkit=no --with-xpm=no --with-jpeg=no --with-png=no --with-gif=no --with-tiff=no
+RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 ./configure \
+    --with-native-compilation \
+    --with-modules \
+    --with-json \
+    --with-x-toolkit=no \
+    --with-xpm=no \
+    --with-jpeg=no \
+    --with-png=no \
+    --with-gif=no \
+    --with-tiff=no
 RUN make -j$(nproc)
 RUN make install
 
