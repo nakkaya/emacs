@@ -15,16 +15,15 @@ WORKDIR "/opt/"
 RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git
 WORKDIR "/opt/emacs"
 RUN ./autogen.sh
-RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 ./configure \
+# Check system-configuration-options for options
+RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
     --with-native-compilation \
     --with-modules \
     --with-json \
-    --with-x-toolkit=no \
-    --with-xpm=no \
-    --with-jpeg=no \
-    --with-png=no \
-    --with-gif=no \
-    --with-tiff=no
+    --with-mailutils \
+    --with-x=yes \
+    --with-x-toolkit=gtk3 \
+    --with-png=yes
 RUN make -j$(nproc)
 RUN make install
 
