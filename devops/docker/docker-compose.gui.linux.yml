@@ -10,3 +10,4 @@ services:
       - DISPLAY=$DISPLAY
     volumes:
       - $HOME/.Xauthority:/home/nakkaya/.Xauthority:rw
+      - $HOME:/storage
