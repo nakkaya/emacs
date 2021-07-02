@@ -42,6 +42,21 @@ WORKDIR "/"
 RUN ln -s /opt/gotty/gotty /usr/bin/gotty
 ADD resources/gotty /home/$USER/.gotty
 
+# Install XPRA
+#
+ENV DISTRO=focal
+#install https support for apt (which may be installed already):
+RUN apt-get update
+RUN apt-get install apt-transport-https
+# add Xpra GPG key
+RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add -
+# add Xpra repository
+RUN add-apt-repository "deb https://xpra.org/ $DISTRO main"
+# install Xpra package
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install xpra xpra-html5 -y --no-install-recommends
+RUN apt-get clean && apt-get autoclean
+
 # Copy Settings
 #
 COPY resources/exec.sh /usr/bin/

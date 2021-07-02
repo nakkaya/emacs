@@ -4,7 +4,7 @@ services:
   emacs:
     image: nakkaya/emacs:latest
     privileged: true
-    hostname: emacs
+    hostname: lambda
     restart: always
     volumes:
       - storage:/storage
@@ -12,8 +12,10 @@ services:
       - lein_db:/home/nakkaya/.lein
     ports:
       - "127.0.0.1:8080:8080"
-    #environment:
-      #- GOTTY_CREDENTIAL=user:pass
+      - "127.0.0.1:9090:9090"
+    environment:
+      - XPRA_PASSWORD=pass
+      - GOTTY_CREDENTIAL=user:pass
 
 volumes:
   storage:
