@@ -6,27 +6,17 @@
 
 There is a Docker image built from this repository that contains Emacs
 28 with all packages AOT compiled. Image runs as user `nakkaya` replace
-the your username as required.
+your username as required.
 
-Run with display forwarded,
-
-```
-docker run --net=host \
-       --env="DISPLAY" \
-       --volume=$HOME:/storage \
-       --volume=$HOME/.Xauthority:/home/nakkaya/.Xauthority:rw \
-       -d nakkaya/emacs:latest emacs
-```
-
-On Windows install `VcXsrv` the run,
-
-    docker run -e DISPLAY=<IP>:0.0 -d nakkaya/emacs:latest emacs
-
-There is also a sample `docker-compose.yml` file that will setup a
-web based interface that can be used on remote machines in
-`devops/docker/`. After `docker-compose up -d` Emacs can be accessed
-at `127.0.0.1:8080`.
-
+There are sample `docker-compose.yml` files in `devops/docker/`. That
+will launch a web based interface that can be used on remote machines
+and another that will launch Emacs in GUI mode with X forwarded If you
+have `python` `invoke` installed these can be launched using,
+    
+    # For Web Interface (At 127.0.0.1:8080)
+    invoke up
+    # For GUI Interface
+    invoke gui
 
 ### Semi Automated Setup
 

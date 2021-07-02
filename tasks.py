@@ -38,3 +38,8 @@ def up(ctx):
 @task
 def down(ctx):
     run("docker-compose down", "devops/docker/")
+
+@task
+def gui(ctx):
+    files = "-f docker-compose.yml -f docker-compose.gui.linux.yml"
+    run("docker-compose " + files + " up -d", "devops/docker/")
