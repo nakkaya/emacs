@@ -17,3 +17,13 @@
  (setq pdf-annot-activate-created-annotations t)
  ;; use normal isearch
  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+
+(use-package org-noter
+  :after (:any org pdf-tools)
+  :config
+  (setq
+   org-noter-always-create-frame nil
+   org-noter-hide-other t
+   org-noter-notes-search-path na-agenda-folder
+   org-noter-auto-save-last-location t)
+  :ensure t)

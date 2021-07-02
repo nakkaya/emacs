@@ -460,7 +460,7 @@ Java
 
 #+BEGIN_SRC emacs-lisp
   (setq na-external-open-files-types 
-        '("pdf" "avi" "mp4" "flv" "wmv" "mov" "mkv" 
+        '("avi" "mp4" "flv" "wmv" "mov" "mkv" 
           "jpg" "png" "m4v" "mpg" "mpeg" "ts" "m3u"))
 
   (setq na-file-assocs (make-hash-table :test 'equal))
