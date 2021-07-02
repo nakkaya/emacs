@@ -74,6 +74,6 @@ ENV EMACS_HOME_DIR=/storage/ \
     TERM=xterm-256color
 
 USER $USER
-RUN emacs --batch --eval '(load "/opt/emacsd/emacs/init.el")'
+RUN emacs --batch -l /opt/emacsd/emacs/init.el
 WORKDIR "/storage"
 CMD ["exec.sh"]
