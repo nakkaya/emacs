@@ -13,9 +13,9 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
       - "127.0.0.1:9090:9090"
-    environment:
-      - XPRA_PASSWORD=pass
-      - GOTTY_CREDENTIAL=user:pass
+    #environment:
+      #- XPRA_PASSWORD=pass
+      #- GOTTY_CREDENTIAL=user:pass
 
 volumes:
   storage:
