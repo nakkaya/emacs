@@ -56,6 +56,7 @@ RUN add-apt-repository "deb https://xpra.org/ $DISTRO main"
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install xpra xpra-html5 -y --no-install-recommends
 RUN apt-get clean && apt-get autoclean
+RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html
 
 # Copy Settings
 #
