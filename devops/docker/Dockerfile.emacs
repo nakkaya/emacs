@@ -75,6 +75,19 @@ ENV EMACS_HOME_DIR=/storage/ \
     TERM=xterm-256color
 
 USER $USER
-RUN emacs --batch -l /opt/emacsd/emacs/init.el
+
+# Install epdfinfo
+#
+WORKDIR /home/$USER/
+RUN curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python3
+ENV PATH="/home/$USER/.cask/bin:$PATH"
+RUN git clone https://github.com/politza/pdf-tools.git
+WORKDIR "pdf-tools"
+RUN make -s
+RUN sudo mv server/epdfinfo /usr/bin/
+RUN rm -rf pdf-tools
+
+RUN emacs --batch -l /home/$USER/.emacs
+
 WORKDIR "/storage"
 CMD ["exec.sh"]
