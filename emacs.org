@@ -911,6 +911,7 @@ Java
                    (name . "^devops.org_archive$")
                    (name . "^shopping.org$")
                    (name . "^shopping.org_archive$")))
+                 ("Documents" (mode . pdf-view-mode))
                  ("Source" (or
                             (mode . java-mode)
                             (mode . clojure-mode)
