@@ -998,7 +998,8 @@ Java
                            (name . "^\\*Flymake.*")
                            (name . "^\\*Native-.*")
                            (name . "^\\*Async-native-.*")
-                           (name . "^\\*emacs\\*$")))))))
+                           (name . "^\\*emacs\\*$")
+                           (name . "^\\*compilation\\*$")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
