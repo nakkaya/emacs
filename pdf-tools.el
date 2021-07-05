@@ -9,14 +9,12 @@
 
 (use-package pdf-tools
   :config
-  ;; initialise
   (pdf-tools-install :no-query)
-  ;; open pdfs scaled to fit page
   (setq-default pdf-view-display-size 'fit-page)
-  ;; automatically annotate highlights
   (setq pdf-annot-activate-created-annotations t)
-  ;; use normal isearch
-  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+  (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
+  (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))))
 
 (use-package org-noter
   :after (:any org pdf-tools)
