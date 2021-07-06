@@ -12,10 +12,8 @@ ADD resources/JetBrainsMono.ttf /usr/local/share/fonts
 
 # Build Emacs
 #
-WORKDIR "/opt/"
-# --branch emacs-27
-RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git
-WORKDIR "/opt/emacs"
+RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src
+WORKDIR /opt/emacsd/src
 RUN ./autogen.sh
 # Check system-configuration-options for options
 RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
@@ -60,10 +58,10 @@ RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www
 
 # Copy Settings
 #
-RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/emacs
+RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf
 RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
-RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" >> /home/$USER/.emacs
-RUN echo "(load-file \"/opt/emacsd/emacs/pdf-tools.el\")" >> /home/$USER/.emacs
+RUN echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
+RUN echo "(load-file \"/opt/emacsd/conf/pdf-tools.el\")" >> /home/$USER/.emacs
 
 # Init ENV
 #
