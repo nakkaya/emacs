@@ -11,19 +11,18 @@ gotty \
     --reconnect \
     emacsclient -s ${EMACS_SERVER_SOCKET} --tty &> /opt/emacsd/gotty.log &
 
-DISPLAY=42
-ADDR=0.0.0.0:9090
+XPRA_DISPLAY=42
 
 if [[ -v XPRA_PASSWORD ]]; then
-    XPRA_AUTH=",auth=env"
+    XPRA_ADDR="0.0.0.0:9090,auth=env"
 else
-    XPRA_AUTH=""
+    XPRA_ADDR="0.0.0.0:9090"
 fi
 
 xpra \
     --socket-dir=/tmp/xprad/ \
-    start :$DISPLAY \
-    --bind-tcp=$ADDR$XPRA_AUTH \
+    start :$XPRA_DISPLAY \
+    --bind-tcp=$XPRA_ADDR \
     --html=on \
     --microphone=no \
     --pulseaudio=no \
