@@ -60,8 +60,6 @@ RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www
 
 # Copy Settings
 #
-COPY resources/exec.sh /usr/bin/
-RUN chmod 755 /usr/bin/exec.sh
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/emacs
 RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
 RUN echo "(load-file \"/opt/emacsd/emacs/init.el\")" >> /home/$USER/.emacs
@@ -89,5 +87,8 @@ RUN rm -rf pdf-tools
 
 RUN emacs --batch -l /home/$USER/.emacs
 
+COPY resources/exec.sh /opt/emacsd/
+RUN sudo chmod +x /opt/emacsd/exec.sh
+
 WORKDIR "/storage"
-CMD ["exec.sh"]
+CMD /opt/emacsd/exec.sh
