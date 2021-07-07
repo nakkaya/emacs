@@ -5,7 +5,7 @@ WORKDIR "/"
 
 # Get Emacs Build Deps
 #
-RUN DEBIAN_FRONTEND=noninteractive apt-get build-dep emacs-nox -y
+RUN apt-get build-dep emacs-nox -y
 RUN apt-get install gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson-dev -y
 RUN apt-get clean && apt-get autoclean
 
@@ -27,6 +27,7 @@ RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./c
     --with-png=yes
 RUN make -j$(nproc)
 RUN make install
+run rm -rf /opt/emacsd/src
 
 # Build GoTTY
 #
@@ -42,17 +43,10 @@ ADD resources/gotty /home/$USER/.gotty
 
 # Install XPRA
 #
-ENV DISTRO=focal
-#install https support for apt (which may be installed already):
-RUN apt-get update
-RUN apt-get install apt-transport-https
-# add Xpra GPG key
 RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add -
-# add Xpra repository
 RUN add-apt-repository "deb https://xpra.org/ $DISTRO main"
-# install Xpra package
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install \
+RUN apt-get install \
     xpra xpra-html5 \
     -y --no-install-recommends
 RUN apt-get clean && apt-get autoclean
@@ -91,8 +85,12 @@ RUN make -s
 RUN sudo mv server/epdfinfo /usr/bin/
 RUN rm -rf pdf-tools
 
+# AOT Compile Emacs Packages
+#
 RUN emacs --batch -l /home/$USER/.emacs
 
+# Run
+#
 COPY resources/exec.sh /opt/emacsd/
 RUN sudo chmod +x /opt/emacsd/exec.sh
 
