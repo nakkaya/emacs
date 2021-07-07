@@ -1133,35 +1133,35 @@ Mouse setup when running in a terminal.
         (set-face-foreground 'mode-line-inactive "gray15"))
 
       (unless window-system
-        (defvar theme-background "color-232")
-        (defvar theme-text-color "color-250")
+        (defvar theme-background "Grey3")
+        (defvar theme-text-color "Grey74")
 
         (set-face-foreground 'default theme-text-color)
         (set-face-background 'default theme-background)
         (set-face-background 'match theme-background)
         (set-face-background 'italic theme-background)
-        (set-face-foreground 'font-lock-string-face "color-147")
-        (set-face-foreground 'font-lock-keyword-face "color-202")
-        (set-face-foreground 'font-lock-function-name-face "color-178")
-        (set-face-foreground 'font-lock-builtin-face "color-148")
-        (set-face-foreground 'font-lock-comment-face "color-30")
-        (set-face-foreground 'org-block-begin-line "color-236")
-        (set-face-foreground 'org-block-end-line "color-236")
-        (set-face-foreground 'org-todo "color-124")
+        (set-face-foreground 'font-lock-string-face "LightSteelBlue")
+        (set-face-foreground 'font-lock-keyword-face "OrangeRed1")
+        (set-face-foreground 'font-lock-function-name-face "Gold3")
+        (set-face-foreground 'font-lock-builtin-face "Yellow3")
+        (set-face-foreground 'font-lock-comment-face "Turquoise4")
+        (set-face-foreground 'org-block-begin-line "Grey19")
+        (set-face-foreground 'org-block-end-line "Grey19")
+        (set-face-foreground 'org-todo "Red3")
         (set-face-background 'secondary-selection theme-background)
 
-        (set-face-foreground 'org-level-1 "color-147")
-        (set-face-foreground 'org-level-2 "color-147")
-        (set-face-foreground 'org-level-3 "color-147")
-        (set-face-foreground 'org-level-4 "color-147")
-        (set-face-foreground 'org-level-5 "color-147")
-        (set-face-foreground 'org-level-6 "color-147")
-        (set-face-foreground 'org-level-7 "color-147")
-        (set-face-foreground 'org-level-8 "color-147")
+        (set-face-foreground 'org-level-1 "LightSteelBlue")
+        (set-face-foreground 'org-level-2 "LightSteelBlue")
+        (set-face-foreground 'org-level-3 "LightSteelBlue")
+        (set-face-foreground 'org-level-4 "LightSteelBlue")
+        (set-face-foreground 'org-level-5 "LightSteelBlue")
+        (set-face-foreground 'org-level-6 "LightSteelBlue")
+        (set-face-foreground 'org-level-7 "LightSteelBlue")
+        (set-face-foreground 'org-level-8 "LightSteelBlue")
 
         (add-hook 'eshell-mode-hook
                   (lambda ()
-                    (set-face-foreground 'eshell-ls-directory "color-24")))
+                    (set-face-foreground 'eshell-ls-directory "DeepSkyBlue4")))
 
         (eval-after-load "magit"
           '(progn
@@ -1175,24 +1175,24 @@ Mouse setup when running in a terminal.
              (set-face-background 'magit-diff-removed theme-background)
              (set-face-foreground 'magit-diff-removed "brightred")
              (set-face-background 'magit-diff-hunk-heading theme-background)
-             (set-face-foreground 'magit-diff-hunk-heading "color-27")))
+             (set-face-foreground 'magit-diff-hunk-heading "DodgerBlue2")))
 
         (eval-after-load "diff-mode"
           '(progn
              (set-face-foreground 'diff-added "brightgreen")
              (set-face-foreground 'diff-removed "brightred")
-             (set-face-foreground 'diff-header "color-27")
-             (set-face-background 'diff-header "color-233")
-             (set-face-background 'diff-file-header "color-233")))
+             (set-face-foreground 'diff-header "DodgerBlue2")
+             (set-face-background 'diff-header "Grey7")
+             (set-face-background 'diff-file-header "Grey7")))
 
         (set-face-attribute  'mode-line
                              nil
-                             :foreground "color-166"
-                             :background "color-235")
+                             :foreground "DarkOrange3"
+                             :background "Grey15")
         (set-face-attribute  'mode-line-inactive
                              nil
-                             :foreground "color-240"
-                             :background "color-234"))
+                             :foreground "Grey35"
+                             :background "Grey11"))
 
       (set-face-background 'show-paren-match (face-background 'default))
       (set-face-attribute 'show-paren-match nil :foreground "red")
