@@ -1,4 +1,5 @@
 FROM nakkaya/env:latest
+ARG UID=1000
 ARG USER="nakkaya"
 WORKDIR "/"
 
@@ -29,15 +30,14 @@ RUN make install
 
 # Build GoTTY
 #
-WORKDIR "/"
 RUN git clone https://github.com/sorenisanerd/gotty.git /opt/gotty
 WORKDIR "/opt/gotty"
 ADD resources/icon.svg /opt/gotty/resources/icon.svg
 ADD resources/icon_192.png /opt/gotty/resources/icon_192.png
 ADD resources/favicon.ico /opt/gotty/resources/favicon.ico
 RUN make gotty
-WORKDIR "/"
-RUN ln -s /opt/gotty/gotty /usr/bin/gotty
+RUN mv /opt/gotty/gotty /usr/bin/gotty
+RUN rm -rf /opt/gotty/
 ADD resources/gotty /home/$USER/.gotty
 
 # Install XPRA
@@ -52,9 +52,17 @@ RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add -
 RUN add-apt-repository "deb https://xpra.org/ $DISTRO main"
 # install Xpra package
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install xpra xpra-html5 -y --no-install-recommends
+RUN DEBIAN_FRONTEND=noninteractive apt-get install \
+    xpra xpra-html5 \
+    -y --no-install-recommends
 RUN apt-get clean && apt-get autoclean
 RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html
+RUN pip3 install pyinotify pyxdg paramiko
+RUN mkdir /run/user/$UID
+RUN mkdir /run/xpra
+RUN chmod 775 /run/xpra
+RUN chown -R $USER:$USER /run/xpra
+RUN chown -R $USER:$USER /run/user/$UID
 
 # Copy Settings
 #

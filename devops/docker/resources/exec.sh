@@ -1,15 +1,17 @@
 #!/bin/bash
 set -e
+
 cd /opt/emacsd
+mkdir logs
 
 export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
-emacs --daemon=$EMACS_SERVER_SOCKET &> /opt/emacsd/emacsd.log &
+emacs --daemon=$EMACS_SERVER_SOCKET &> /opt/emacsd/logs/emacsd.log &
 
 gotty \
     --permit-write \
     --reconnect \
-    emacsclient -s ${EMACS_SERVER_SOCKET} --tty &> /opt/emacsd/gotty.log &
+    emacsclient -s ${EMACS_SERVER_SOCKET} --tty &> /opt/emacsd/logs/gotty.log &
 
 XPRA_DISPLAY=42
 
@@ -34,4 +36,6 @@ xpra \
     --mdns=no \
     --printing=no \
     --no-daemon \
-    --start="emacs"
+    --start="emacs" &> /opt/emacsd/logs/xpra.log &
+
+wait
