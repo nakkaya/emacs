@@ -28,9 +28,7 @@
 	company
         projectile
         helm
-        evil
-        quelpa
-        ein))
+        quelpa))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")

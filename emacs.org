@@ -941,8 +941,6 @@ Java
                             (mode . js-mode)
                             (mode . dockerfile-mode)
                             (mode . docker-compose-mode)))
-                 ("Jupyter" (or (name . "^\\*ein:.*")))
-                 ("EXWM" (or (mode . exwm-mode)))
                  ("Terminal" (or (mode . term-mode)
                                  (mode . inferior-lisp-mode)
                                  (mode . inferior-python-mode)
@@ -1219,60 +1217,3 @@ Mouse setup when running in a terminal.
 
   (na-load-theme)
 #+END_SRC
-
-* Ein
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ein
-    :defer t
-    :init
-    (progn
-      (require 'ein-notebook)
-
-      (setq ein:url-or-port '("https://compute.nakkaya.com"))
-      (setq ein:output-area-inlined-images t)
-      (setq ein:worksheet-enable-undo t)
-
-      (defun na/restart-and-execute-all ()
-        (interactive)
-        (aif (ein:get-notebook)
-            (lexical-let ((ws (ein:worksheet--get-ws-or-error)))
-              (ein:kernel-delete-session
-               (lambda (kernel)
-                 (ein:events-trigger (ein:$kernel-events kernel) 'status_restarting.Kernel)
-                 (ein:kernel-retrieve-session kernel 0
-                                              (lambda (kernel)
-                                                (ein:events-trigger (ein:$kernel-events kernel)
-                                                                    'status_restarted.Kernel)
-                                                (ein:worksheet-execute-all-cells ws))))
-               :kernel (ein:$notebook-kernel it)))
-          (message "Not in notebook buffer!")))
-
-      (let ((bg (face-attribute 'default :background)))
-        (eval-after-load "ein-cell"
-          '(progn
-             (set-face-attribute 'ein:cell-input-area nil :background bg)
-             (set-face-attribute 
-              'ein:cell-input-prompt nil :foreground
-              (face-attribute 'ido-indicator :foreground))
-
-             (set-face-attribute 'ein:cell-output-area nil :background bg)
-             (set-face-attribute 
-              'ein:cell-output-prompt nil :foreground
-              (face-attribute 'ido-only-match :foreground))
-             (set-face-attribute 'ein:cell-output-prompt nil :background bg))))
-
-      (with-eval-after-load 'ein-notebooklist
-        (define-key ein:notebook-mode-map (kbd "C-c C-c")
-          'ein:worksheet-execute-cell))
-
-      (with-eval-after-load 'ein-notebook
-        (add-function :filter-args (symbol-function 'ein:notebook-open)
-                      (lambda (args)
-                        (let ((olen (length args))
-                              (nlen 6))
-                          (setcdr (last args) (make-list (max 0 (- nlen olen)) nil))
-                          (setcar (nthcdr (1- nlen) args) t)
-                          args))))))
-#+END_SRC
-
