@@ -8,6 +8,8 @@ export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
 
 emacs --daemon=$EMACS_SERVER_SOCKET &> /opt/emacsd/logs/emacsd.log &
 
+while [ ! -e $EMACS_SERVER_SOCKET ]; do sleep 1; done
+
 gotty \
     --permit-write \
     --reconnect \
@@ -36,6 +38,6 @@ xpra \
     --mdns=no \
     --printing=no \
     --no-daemon \
-    --start="emacs" &> /opt/emacsd/logs/xpra.log &
+    --start="emacsclient -s ${EMACS_SERVER_SOCKET} -c" &> /opt/emacsd/logs/xpra.log &
 
 wait
