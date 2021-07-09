@@ -89,6 +89,7 @@ RUN git clone https://github.com/politza/pdf-tools.git
 WORKDIR "pdf-tools"
 RUN make -s
 RUN sudo mv server/epdfinfo /usr/bin/
+WORKDIR /home/$USER/
 RUN rm -rf pdf-tools
 
 # AOT Compile Emacs Packages
