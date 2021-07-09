@@ -3,17 +3,13 @@ set -e
 
 cd /opt/emacsd
 mkdir logs
+mkdir server
 
-export EMACS_SERVER_SOCKET=${TMPDIR:-/tmp}/emacs$(id -u)/emacsd
-
-emacs --daemon=$EMACS_SERVER_SOCKET &> /opt/emacsd/logs/emacsd.log &
-
-while [ ! -e $EMACS_SERVER_SOCKET ]; do sleep 1; done
-
-gotty \
-    --permit-write \
-    --reconnect \
-    emacsclient -s ${EMACS_SERVER_SOCKET} --tty &> /opt/emacsd/logs/gotty.log &
+echo "(set-face-background 'default \"black\")" >> ~/.emacs 
+echo "(setq server-socket-dir \"/opt/emacsd/server\")" >> ~/.emacs
+echo "(setq server-name \"emacsd\")" >> ~/.emacs
+echo "(defun server-ensure-safe-dir (dir) \"Noop\" t)" >> ~/.emacs
+echo "(server-start)" >> ~/.emacs
 
 XPRA_DISPLAY=42
 
@@ -38,6 +34,13 @@ xpra \
     --mdns=no \
     --printing=no \
     --no-daemon \
-    --start="emacsclient -s ${EMACS_SERVER_SOCKET} -c" &> /opt/emacsd/logs/xpra.log &
+    --start="emacs" &> /opt/emacsd/logs/xpra.log &
+
+#while [ ! -e /opt/emacsd/server/emacsd ]; do sleep 1; done
+
+gotty \
+    --permit-write \
+    --reconnect \
+    emacsclient -s /opt/emacsd/server/emacsd --tty &> /opt/emacsd/logs/gotty.log &
 
 wait
