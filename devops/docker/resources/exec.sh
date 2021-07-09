@@ -34,6 +34,7 @@ xpra \
     --mdns=no \
     --printing=no \
     --no-daemon \
+    --start-after-connect=no \
     --start="emacs" &> /opt/emacsd/logs/xpra.log &
 
 #while [ ! -e /opt/emacsd/server/emacsd ]; do sleep 1; done

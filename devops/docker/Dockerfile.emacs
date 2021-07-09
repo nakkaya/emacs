@@ -50,7 +50,13 @@ RUN apt-get install \
     xpra xpra-html5 \
     -y --no-install-recommends
 RUN apt-get clean && apt-get autoclean
+
 RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html
+RUN rm -rf /usr/share/xpra/www/default-settings.txt*
+RUN touch /usr/share/xpra/www/default-settings.txt
+RUN echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt
+RUN echo 'floating_menu = false' >> /usr/share/xpra/www/default-settings.txt
+
 RUN pip3 install pyinotify pyxdg paramiko
 RUN mkdir /run/user/$UID
 RUN mkdir /run/xpra
