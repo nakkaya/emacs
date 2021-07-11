@@ -114,6 +114,23 @@ Will bounce between matching parens just like % in vi
      (shell . t)))
 
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+  (defun org-babel-kill-session ()
+    "Kill session for current code block."
+    (interactive)
+    (unless (org-in-src-block-p)
+      (error "You must be in a src-block to run this command"))
+    (save-window-excursion
+      (org-babel-switch-to-session)
+      (kill-buffer)))
+
+  (defun org-babel-remove-result-buffer ()
+    "Remove results from every code block in buffer."
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward org-babel-src-block-regexp nil t)
+        (org-babel-remove-result))))
 #+END_SRC
 
 Agenda Management
@@ -237,6 +254,7 @@ Agenda Management
 #+BEGIN_SRC emacs-lisp
   (require 'python)
   (setq python-shell-interpreter "python3")
+  (setq python-indent-guess-indent-offset-verbose nil)
 #+END_SRC
 
 * Latex
