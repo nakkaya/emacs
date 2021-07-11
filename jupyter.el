@@ -15,4 +15,5 @@
          '((jupyter . t))))
 
 (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
-                                                     (:session . "py")))
+                                                     (:session . "py")
+                                                     (:results . "raw drawer")))
