@@ -108,6 +108,8 @@ Will bounce between matching parens just like % in vi
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
 
+  (pm-around-advice #'org-ctrl-c-ctrl-c #'polymode-with-current-base-buffer)
+
   ;; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
