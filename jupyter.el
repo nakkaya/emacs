@@ -13,3 +13,6 @@
  'org-babel-load-languages
  (append org-babel-load-languages
          '((jupyter . t))))
+
+(setq org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                     (:session . "py")))
