@@ -70,6 +70,7 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf
 RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
 RUN echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
 RUN echo "(load-file \"/opt/emacsd/conf/pdf-tools.el\")" >> /home/$USER/.emacs
+RUN echo "(load-file \"/opt/emacsd/conf/jupyter.el\")" >> /home/$USER/.emacs
 
 # Init ENV
 #

@@ -90,7 +90,6 @@ Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob)
-  (require 'ob-ipython)
 
   (setq org-startup-folded t)
   (setq org-return-follows-link t)
@@ -112,7 +111,6 @@ Will bounce between matching parens just like % in vi
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (ipython . t)
      (shell . t)))
 
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
@@ -990,7 +988,6 @@ Java
                            (name . "^\\*quelpa-build-checkout\\*$")
                            (name . "^\\*helm M-x\\*$")
                            (name . "^\\*transmission\\*$")
-                           (name . "^\\*ob-ipython.*")
                            (name . "^\\*lsp-.*")
                            (name . "^\\*jdtls.*")
                            (name . "^\\*clangd.*")
