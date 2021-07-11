@@ -18,6 +18,7 @@
         lsp-mode
         lsp-java
 	org
+        poly-org
         docker
         dockerfile-mode
         docker-compose-mode
