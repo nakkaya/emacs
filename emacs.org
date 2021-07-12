@@ -1019,6 +1019,7 @@ Java
                            (name . "^\\*Native-.*")
                            (name . "^\\*Async-native-.*")
                            (name . "^\\*emacs\\*$")
+                           (name . "^\\*GNU Emacs\\*$")
                            (name . "^\\*compilation\\*$")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
