@@ -452,6 +452,9 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
 
+  (setq ls-lisp-use-insert-directory-program nil)
+  (setq ls-lisp-dirs-first t)
+  
   (quelpa '(emacs-async
             :fetcher github :repo "jwiegley/emacs-async"))
 
