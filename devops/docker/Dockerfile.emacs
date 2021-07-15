@@ -76,9 +76,6 @@ RUN echo "(load-file \"/opt/emacsd/conf/jupyter.el\")" >> /home/$USER/.emacs
 #
 RUN chown -R $USER:$USER /opt/emacsd
 RUN chown -R $USER:$USER /home/$USER
-ENV EMACS_HOME_DIR=/storage/ \
-    TERM=xterm-256color
-
 USER $USER
 
 # Install epdfinfo

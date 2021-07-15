@@ -5,6 +5,9 @@ cd /opt/emacsd
 mkdir logs
 mkdir server
 
+export EMACS_HOME_DIR=/storage/
+export TERM=xterm-256color
+
 echo "(set-face-background 'default \"black\")" >> ~/.emacs 
 echo "(setq server-socket-dir \"/opt/emacsd/server\")" >> ~/.emacs
 echo "(setq server-name \"emacsd\")" >> ~/.emacs
