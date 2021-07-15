@@ -15,8 +15,14 @@ have `python` `invoke` installed these can be launched using,
     
     # For Web Interface (At 127.0.0.1:8080)
     invoke up
-    # For GUI Interface
+
+    # For GUI Interface (By attaching to a running X Server)
     invoke gui
+
+    # For GUI Interface (By attaching using xpra)
+    invoke up
+    # then
+    xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
 
 ### Semi Automated Setup
 
