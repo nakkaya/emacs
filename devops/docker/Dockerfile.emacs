@@ -1,7 +1,4 @@
 FROM nakkaya/env:latest
-ARG UID=1000
-ARG USER="nakkaya"
-WORKDIR "/"
 
 # Get Emacs Build Deps
 #

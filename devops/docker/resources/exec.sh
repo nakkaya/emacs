@@ -16,7 +16,10 @@ echo "(server-start)" >> ~/.emacs
 
 XPRA_DISPLAY=42
 
-if [[ -v XPRA_PASSWORD ]]; then
+if [[ -v PASSWD ]]; then
+    export XPRA_PASSWORD="${PASSWD}"
+    export GOTTY_CREDENTIAL="${USER}:${PASSWD}"
+
     XPRA_ADDR="0.0.0.0:9090,auth=env"
 else
     XPRA_ADDR="0.0.0.0:9090"
