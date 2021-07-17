@@ -11,7 +11,11 @@ services:
       - mvn_db:/home/nakkaya/.m2
       - lein_db:/home/nakkaya/.lein
     ports:
+      # Webdav
+      - "127.0.0.1:1010:1010"
+      # CLI
       - "127.0.0.1:8080:8080"
+      # GUI
       - "127.0.0.1:9090:9090"
     #environment:
       #- PASSWD=pass

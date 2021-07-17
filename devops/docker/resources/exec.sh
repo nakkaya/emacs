@@ -20,10 +20,20 @@ if [[ -v PASSWD ]]; then
     export XPRA_PASSWORD="${PASSWD}"
     export GOTTY_CREDENTIAL="${USER}:${PASSWD}"
 
+    htpasswd -bc /opt/emacsd/server/htpasswd $USER $PASSWD
+    export RCLONE_PASSWORD="--htpasswd /opt/emacsd/server/htpasswd"
+
     XPRA_ADDR="0.0.0.0:9090,auth=env"
 else
     XPRA_ADDR="0.0.0.0:9090"
+
+    export RCLONE_PASSWORD=""
 fi
+
+rclone serve \
+       --addr :1010 \
+       $RCLONE_PASSWORD \
+       webdav /storage &> /opt/emacsd/logs/webdav.log &
 
 xpra \
     --socket-dir=/tmp/xprad/ \

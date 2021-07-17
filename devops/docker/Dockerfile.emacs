@@ -29,13 +29,14 @@ run rm -rf /opt/emacsd/src
 # Build GoTTY
 #
 RUN git clone https://github.com/sorenisanerd/gotty.git /opt/gotty
-WORKDIR "/opt/gotty"
+WORKDIR /opt/gotty
 ADD resources/icon.svg /opt/gotty/resources/icon.svg
 ADD resources/icon_192.png /opt/gotty/resources/icon_192.png
 ADD resources/favicon.ico /opt/gotty/resources/favicon.ico
 RUN make gotty
 RUN mv /opt/gotty/gotty /usr/bin/gotty
-RUN rm -rf /opt/gotty/
+WORKDIR /
+RUN rm -rf /opt/gotty
 ADD resources/gotty /home/$USER/.gotty
 
 # Install XPRA
