@@ -1194,6 +1194,18 @@ Mouse setup when running in a terminal.
         (set-face-foreground 'mode-line          "gray5")
         (set-face-foreground 'mode-line-inactive "gray15"))
 
+      (eval-after-load "magit"
+        '(progn
+           (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+           (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+           (set-face-background 'magit-diff-context "unspecified")
+           (set-face-background 'magit-diff-added-highlight "unspecified")
+           (set-face-background 'magit-diff-context-highlight "unspecified")
+           (set-face-background 'magit-diff-added "unspecified")
+           (set-face-background 'magit-diff-removed "unspecified")
+           (set-face-background 'magit-diff-hunk-heading "unspecified")
+           (set-face-background 'magit-diff-removed-highlight "unspecified")))
+
       (unless window-system
         (defvar theme-background "Grey3")
         (defvar theme-text-color "Grey74")
@@ -1227,16 +1239,8 @@ Mouse setup when running in a terminal.
 
         (eval-after-load "magit"
           '(progn
-             (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-             (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-             (set-face-background 'magit-diff-removed-highlight theme-background)
-             (set-face-background 'magit-diff-added-highlight theme-background)
-             (set-face-background 'magit-diff-context-highlight theme-background)
-             (set-face-background 'magit-diff-added theme-background)
              (set-face-foreground 'magit-diff-added "brightgreen")
-             (set-face-background 'magit-diff-removed theme-background)
              (set-face-foreground 'magit-diff-removed "brightred")
-             (set-face-background 'magit-diff-hunk-heading theme-background)
              (set-face-foreground 'magit-diff-hunk-heading "DodgerBlue2")))
 
         (eval-after-load "diff-mode"
