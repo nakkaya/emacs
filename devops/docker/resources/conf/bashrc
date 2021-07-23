@@ -15,7 +15,7 @@ then
     source /etc/bash_completion.d/git-prompt
 fi
 
-COLOR_GIT_CLEAN='\[\033[1;30m\]'
+COLOR_GIT_CLEAN='\[\033[1;32m\]'
 COLOR_GIT_MODIFIED='\[\033[0;33m\]'
 COLOR_GIT_STAGED='\[\033[0;36m\]'
 COLOR_RESET='\[\033[0m\]'
@@ -41,7 +41,9 @@ function git_prompt() {
 }
 
 function prompt() {
-  PS1="\u@\h [ \w $(git_prompt)] \$ "
+  PS1="[ \[\033[0;34m\]\w\[\033[0;37m\] $(git_prompt)\[\033[0;37m\]] \$ "
 }
 
 PROMPT_COMMAND=prompt
+
+alias ls='ls --color=auto'
