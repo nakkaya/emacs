@@ -28,7 +28,7 @@ run rm -rf /opt/emacsd/src
 
 # Build GoTTY
 #
-RUN git clone https://github.com/sorenisanerd/gotty.git /opt/gotty
+RUN git clone --depth 1 https://github.com/sorenisanerd/gotty.git /opt/gotty
 WORKDIR /opt/gotty
 ADD resources/media/icon.svg /opt/gotty/resources/icon.svg
 ADD resources/media/icon_192.png /opt/gotty/resources/icon_192.png
