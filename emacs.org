@@ -1283,5 +1283,5 @@ Mouse setup when running in a terminal.
                       (column-number-mode "C%c ")))))
 
   (na-load-theme)
-  ;;(na-reset-window-size)
+  (na-reset-window-size)
 #+END_SRC
