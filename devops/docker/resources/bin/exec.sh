@@ -34,7 +34,7 @@ fi
 rclone serve \
        --addr :1010 \
        $RCLONE_PASSWORD \
-       --dir-cache-time 0s \
+       --dir-cache-time 5s \
        --dir-perms 0755 \
        --file-perms 0644 \
        webdav /storage &> /opt/emacsd/logs/webdav.log &
