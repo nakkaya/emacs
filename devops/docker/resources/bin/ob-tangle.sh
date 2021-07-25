@@ -1,10 +1,10 @@
 #!/usr/local/bin/emacs --script
 
+(setq tramp-verbose 0
+      org-id-locations-file nil)
+
 (require 'org)
 (require 'ob-tangle)
 
-
-;; Tangle all files given.
 (dolist (file command-line-args-left)
-  (princ file)
   (org-babel-tangle-file file))
