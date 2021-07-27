@@ -14,6 +14,7 @@ echo "(setq server-name \"emacsd\")" >> ~/.emacs
 echo "(defun server-ensure-safe-dir (dir) \"Noop\" t)" >> ~/.emacs
 echo "(server-start)" >> ~/.emacs
 echo "(set-face-attribute 'default nil :height 125)" >> ~/.emacs
+echo "(blink-cursor-mode)" >> ~/.emacs
 
 XPRA_DISPLAY=42
 
