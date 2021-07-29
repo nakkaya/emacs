@@ -777,6 +777,7 @@ Java
   (eshell/alias "ga" "git annex  $*")
   (eshell/alias "gas" "git annex sync")
   (eshell/alias "gag" "git annex get . --not --in here")
+  (eshell/alias "gac" "git annex add . && git annex sync --content")
 
   (defun eshell/pshell ()
     (insert
