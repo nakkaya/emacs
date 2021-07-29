@@ -1,5 +1,3 @@
-TERM=xterm-256color
-
 export HISTFILE="/storage/.bash_history"
 export HISTSIZE=100000 SAVEHIST=100000
 # avoid duplicates..
