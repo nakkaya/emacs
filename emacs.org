@@ -1188,6 +1188,7 @@ Mouse setup when running in a terminal.
         (set-face-background 'org-block "unspecified")
         (set-face-background 'org-block-begin-line "unspecified")
         (set-face-background 'org-block-end-line "unspecified")
+        (setq poly-lock-allow-background-adjustment nil)
 
         (set-face-background 'mode-line          "SteelBlue4")
         (set-face-background 'mode-line-inactive "SlateGray4")
