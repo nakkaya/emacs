@@ -8,12 +8,12 @@ mkdir server
 export EMACS_HOME_DIR=/storage/
 export TERM=xterm-256color
 
-echo "(set-face-background 'default \"black\")" >> ~/.emacs 
 echo "(setq server-socket-dir \"/opt/emacsd/server\")" >> ~/.emacs
 echo "(setq server-name \"emacsd\")" >> ~/.emacs
 echo "(defun server-ensure-safe-dir (dir) \"Noop\" t)" >> ~/.emacs
 echo "(server-start)" >> ~/.emacs
 echo "(set-face-attribute 'default nil :height 125)" >> ~/.emacs
+echo "(blink-cursor-mode)" >> ~/.emacs
 
 XPRA_DISPLAY=42
 
@@ -34,7 +34,7 @@ fi
 rclone serve \
        --addr :1010 \
        $RCLONE_PASSWORD \
-       --dir-cache-time 0s \
+       --dir-cache-time 5s \
        --dir-perms 0755 \
        --file-perms 0644 \
        webdav /storage &> /opt/emacsd/logs/webdav.log &

@@ -90,13 +90,13 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 #+BEGIN_SRC emacs-lisp
   (defun my-terminal-config (&optional frame)
-  "Establish settings for the current terminal."
-  (if (not frame) ;; The initial call.
-      (xterm-mouse-mode 1)
-    ;; Otherwise called via after-make-frame-functions.
-    (if xterm-mouse-mode
-        ;; Re-initialise the mode in case of a new terminal.
-        (xterm-mouse-mode 1))))
+    "Establish settings for the current terminal."
+    (if (not frame) ;; The initial call.
+        (xterm-mouse-mode 1)
+      ;; Otherwise called via after-make-frame-functions.
+      (if xterm-mouse-mode
+          ;; Re-initialise the mode in case of a new terminal.
+          (xterm-mouse-mode 1))))
 
   ;; Evaluate both now (for non-daemon emacs) and upon frame creation
   ;; (for new terminals via emacsclient).
@@ -777,6 +777,7 @@ Java
   (eshell/alias "ga" "git annex  $*")
   (eshell/alias "gas" "git annex sync")
   (eshell/alias "gag" "git annex get . --not --in here")
+  (eshell/alias "gac" "git annex add . && git annex sync --content")
 
   (defun eshell/pshell ()
     (insert

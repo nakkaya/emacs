@@ -6,7 +6,7 @@ RUN apt-get build-dep emacs-nox -y
 RUN apt-get install gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson-dev -y
 RUN apt-get clean && apt-get autoclean
 
-ADD resources/JetBrainsMono.ttf /usr/local/share/fonts
+ADD resources/media/JetBrainsMono.ttf /usr/local/share/fonts
 
 # Build Emacs
 #
@@ -28,16 +28,16 @@ run rm -rf /opt/emacsd/src
 
 # Build GoTTY
 #
-RUN git clone https://github.com/sorenisanerd/gotty.git /opt/gotty
+RUN git clone --depth 1 https://github.com/sorenisanerd/gotty.git /opt/gotty
 WORKDIR /opt/gotty
-ADD resources/icon.svg /opt/gotty/resources/icon.svg
-ADD resources/icon_192.png /opt/gotty/resources/icon_192.png
-ADD resources/favicon.ico /opt/gotty/resources/favicon.ico
+ADD resources/media/icon.svg /opt/gotty/resources/icon.svg
+ADD resources/media/icon_192.png /opt/gotty/resources/icon_192.png
+ADD resources/media/favicon.ico /opt/gotty/resources/favicon.ico
 RUN make gotty
 RUN mv /opt/gotty/gotty /usr/bin/gotty
 WORKDIR /
 RUN rm -rf /opt/gotty
-ADD resources/gotty /home/$USER/.gotty
+ADD resources/conf/gotty /home/$USER/.gotty
 
 # Install XPRA
 #
@@ -94,7 +94,10 @@ RUN emacs --batch -l /home/$USER/.emacs
 
 # Run
 #
-COPY resources/exec.sh /opt/emacsd/
+COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
+RUN sudo chmod +x /usr/bin/ob-tangle
+
+COPY resources/bin/exec.sh /opt/emacsd/
 RUN sudo chmod +x /opt/emacsd/exec.sh
 
 WORKDIR "/storage"
