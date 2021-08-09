@@ -230,7 +230,7 @@ Agenda Management
   (global-set-key [f1] 'jump-to-org-agenda)
 
   (when (file-exists-p na-agenda-folder)
-    (run-with-idle-timer 600 t #'jump-to-org-agenda))
+    (run-with-idle-timer (* 30 60) t #'jump-to-org-agenda))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1056,7 +1056,8 @@ Java
                            (name . "^\\*Async-native-.*")
                            (name . "^\\*emacs\\*$")
                            (name . "^\\*GNU Emacs\\*$")
-                           (name . "^\\*compilation\\*$")))))))
+                           (name . "^\\*compilation\\*$")
+                           (name . "^\\*elfeed-.*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 

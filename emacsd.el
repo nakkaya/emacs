@@ -48,7 +48,12 @@
 
 ;; elfeed
 
-(setq elfeed-db-directory "/storage/.elfeed")
+(require 'elfeed)
+
+(setq elfeed-db-directory "/storage/.elfeed"
+      elfeed-sort-order   'ascending)
+
+(run-with-idle-timer (* 2 60 60) t #'elfeed-update)
 
 (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
 (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
@@ -61,16 +66,13 @@
         "https://www.reddit.com/r/cpp/.rss"
         "https://www.reddit.com/r/MachineLearning/.rss"
         "https://www.reddit.com/r/emacs/.rss"
-        "http://planet.emacsen.org/atom.xml"
         "https://www.reddit.com/r/Clojure/.rss"
         "https://www.reddit.com/r/artificial/.rss"
         "http://www.scheme.dk/planet/atom.xml"
         "http://feeds.feedburner.com/clojure"
         "http://lambda-the-ultimate.org/rss.xml"
-        "http://feeds.aigamedev.com/AiGameDev"
         "https://www.reddit.com/r/scheme/.rss"
         "http://www.masteringemacs.org/feed/"
-        "http://jeapostrophe.github.com/atom.xml"
         "http://lisp-univ-etc.blogspot.com/feeds/posts/default/-/en"
         "https://www.reddit.com/r/Racket/.xml"
         ;;robotics
@@ -81,7 +83,6 @@
         "http://feeds.feedburner.com/ieeespectrum/automaton"
         "http://www.raspberrypi.org/feed"
         "http://feeds2.feedburner.com/hackaday/LgoM"
-        "http://diydrones.com/profiles/blog/feed?xn_auth=no"
         "https://www.schneier.com/blog/atom.xml"
         "http://git-annex.branchable.com/design/assistant/blog/index.rss"
         "http://feeds.feedburner.com/ServerPorn"
@@ -90,12 +91,11 @@
         "http://tromey.com/blog/?feed=rss2"
         "http://scanlime.org/feed/"
         "http://hooverphonic-bootlegs.blogspot.com/feeds/posts/default"
-        "http://www.warp1337.com/rss.xml"
         "http://www.hilarymason.com/feed/"
-        "http://yudkowsky.net/feeds/essays.atom"
         "http://xkcd.com/atom.xml"
         "http://www.boston.com/bigpicture/index.xml"
-        "http://feeds.feedburner.com/theatlantic/infocus"))
+        "http://feeds.feedburner.com/theatlantic/infocus"
+        "https://www.reddit.com/r/selfhosted/.rss"))
 
 ;; Init
 ;;
