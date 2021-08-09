@@ -71,6 +71,8 @@ RUN echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs
 
 # Init ENV
 #
+RUN mkdir /opt/emacsd/logs
+RUN mkdir /opt/emacsd/server
 RUN chown -R $USER:$USER /opt/emacsd
 RUN chown -R $USER:$USER /home/$USER
 USER $USER

@@ -2,8 +2,6 @@
 set -e
 
 cd /opt/emacsd
-mkdir logs
-mkdir server
 
 export EMACS_HOME_DIR=/storage/
 export TERM=xterm-256color
