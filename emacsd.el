@@ -1,8 +1,9 @@
 (setq package-list
       '(use-package
+           elfeed
            jupyter
-         pdf-tools
-         org-noter))
+           pdf-tools
+           org-noter))
 
 (dolist (package package-list)
   (when (not (package-installed-p package))
@@ -44,6 +45,14 @@
    org-noter-notes-search-path na-agenda-folder
    org-noter-auto-save-last-location t)
   :ensure t)
+
+;; elfeed
+
+(setq elfeed-db-directory "/storage/.elfeed")
+
+(setq elfeed-feeds
+      '("https://news.ycombinator.com/rss"
+        "https://www.reddit.com/r/lisp/.rss"))
 
 ;; Init
 ;;
