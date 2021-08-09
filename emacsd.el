@@ -50,6 +50,9 @@
 
 (setq elfeed-db-directory "/storage/.elfeed")
 
+(define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
+(define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
+
 (setq elfeed-feeds
       '("https://news.ycombinator.com/rss"
         "https://www.reddit.com/r/lisp/.rss"
