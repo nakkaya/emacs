@@ -95,7 +95,12 @@
         "http://xkcd.com/atom.xml"
         "http://www.boston.com/bigpicture/index.xml"
         "http://feeds.feedburner.com/theatlantic/infocus"
-        "https://www.reddit.com/r/selfhosted/.rss"))
+        "https://www.reddit.com/r/selfhosted/.rss"
+        "https://www.reddit.com/r/KerasML/.rss"
+        "https://www.reddit.com/r/tensorflow/.rss"
+        "https://www.reddit.com/r/PostgreSQL/.rss"
+        "https://www.reddit.com/r/aws/.rss"
+        "https://www.reddit.com/r/terraform/.rss"))
 
 ;; Init
 ;;
