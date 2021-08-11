@@ -28,7 +28,8 @@
 	company
         projectile
         helm
-        quelpa))
+        quelpa
+        transmission))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
