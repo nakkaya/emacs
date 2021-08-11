@@ -195,13 +195,17 @@ Agenda Management
             (tags-todo "home/WAIT")))))
 
   (setq org-capture-templates
-        '(("p" "Personal TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Personal")
-           "* TODO %?\n")
-          ("r" "Robotics Lab TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Robotics Lab")
-           "* TODO %?\n")
-          ("a" "Akademik TODO" entry (file+headline (concat na-agenda-folder "notes.org") "Akademik")
-           "* TODO %?\n")
-          ("b" "Read Later" entry (file+headline (concat na-agenda-folder "bookmarks.org") "Read Later")
+        '(("p" "Personal TODO" entry
+           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
+           "* TODO %?\n" :prepend t)
+          ("r" "Robotics Lab TODO" entry
+           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Robotics Lab")
+           "* TODO %?\n" :prepend t)
+          ("a" "Akademik TODO" entry
+           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
+           "* TODO %?\n" :prepend t)
+          ("b" "Read Later" entry
+           (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
            "* %?\n" :prepend t)))
 
   (setq org-agenda-window-setup 'current-window)
