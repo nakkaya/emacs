@@ -58,50 +58,10 @@
 (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
 (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
 
-(setq elfeed-feeds
-      '("https://news.ycombinator.com/rss"
-        "https://www.reddit.com/r/lisp/.rss"
-        "http://lisptips.com/rss"
-        "http://planet.lisp.org/rss20.xml"
-        "https://www.reddit.com/r/cpp/.rss"
-        "https://www.reddit.com/r/MachineLearning/.rss"
-        "https://www.reddit.com/r/emacs/.rss"
-        "https://www.reddit.com/r/Clojure/.rss"
-        "https://www.reddit.com/r/artificial/.rss"
-        "http://www.scheme.dk/planet/atom.xml"
-        "http://feeds.feedburner.com/clojure"
-        "http://lambda-the-ultimate.org/rss.xml"
-        "https://www.reddit.com/r/scheme/.rss"
-        "http://www.masteringemacs.org/feed/"
-        "http://lisp-univ-etc.blogspot.com/feeds/posts/default/-/en"
-        "https://www.reddit.com/r/Racket/.xml"
-        ;;robotics
-        "https://www.reddit.com/r/ControlTheory/.rss"
-        "http://feeds.hizook.com/Hizook"
-        "https://www.reddit.com/r/robotics/.rss"
-        "http://feeds2.feedburner.com/IeeeSpectrum"
-        "http://feeds.feedburner.com/ieeespectrum/automaton"
-        "http://www.raspberrypi.org/feed"
-        "http://feeds2.feedburner.com/hackaday/LgoM"
-        "https://www.schneier.com/blog/atom.xml"
-        "http://git-annex.branchable.com/design/assistant/blog/index.rss"
-        "http://feeds.feedburner.com/ServerPorn"
-        "http://blog.jgc.org/feeds/posts/default?alt=rss"
-        "http://hannahfry.co.uk/feed/"
-        "http://tromey.com/blog/?feed=rss2"
-        "http://scanlime.org/feed/"
-        "http://hooverphonic-bootlegs.blogspot.com/feeds/posts/default"
-        "http://www.hilarymason.com/feed/"
-        "http://xkcd.com/atom.xml"
-        "http://www.boston.com/bigpicture/index.xml"
-        "http://feeds.feedburner.com/theatlantic/infocus"
-        "https://www.reddit.com/r/selfhosted/.rss"
-        "https://nullprogram.com/feed/"
-        "https://www.reddit.com/r/KerasML/.rss"
-        "https://www.reddit.com/r/tensorflow/.rss"
-        "https://www.reddit.com/r/PostgreSQL/.rss"
-        "https://www.reddit.com/r/aws/.rss"
-        "https://www.reddit.com/r/terraform/.rss"))
+;; Load Private Config
+;;
+
+(load "~/.netrc.el" t)
 
 ;; Init
 ;;
