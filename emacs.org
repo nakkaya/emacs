@@ -652,7 +652,7 @@ Java
     (interactive)
     (dolist (repo (magit-list-repos))
       (let ((default-directory repo))
-        (magit-fetch-all (magit-fetch-arguments)))))
+        (magit-call-git "fetch" "--all"))))
 
   (defun na-magit-push-all-repositories ()
     "Run `magit-push' in all repositories returned by `magit-list-repos`."
@@ -660,7 +660,7 @@ Java
     (dolist (repo (magit-list-repos))
       (let ((default-directory repo))
         (let ((current-branch (magit-get-current-branch)))
-          (magit-git-push current-branch (concat "origin/" current-branch) (list ))))))
+          (magit-call-git "push" "origin" current-branch)))))
 
   (defun na-magit-auto-commit-multi-repo (&optional _button)
     "Show the status for the repository at point."
@@ -668,8 +668,8 @@ Java
     (--if-let (tabulated-list-get-id)
         (let* ((file (expand-file-name it))
                (default-directory (file-name-directory file)))
-          (magit-stage-modified)
-          (na-magit-auto-commit))
+          (magit-call-git "add" "-A")
+          (magit-call-git "commit" "-m" (na-magit-auto-commit-msg)))
       (user-error "There is no repository at point")))
 
   (add-hook 'magit-repolist-mode-hook
