@@ -10,7 +10,6 @@ XPRA_DISPLAY=42
 
 if [[ -v PASSWD ]]; then
     export XPRA_PASSWORD="${PASSWD}"
-    export GOTTY_CREDENTIAL="${USER}:${PASSWD}"
 
     htpasswd -bc /opt/emacsd/server/htpasswd $USER $PASSWD
     export RCLONE_PASSWORD="--htpasswd /opt/emacsd/server/htpasswd"
@@ -47,12 +46,5 @@ xpra \
     --no-daemon \
     --start-after-connect=no \
     --start="emacs" &> /opt/emacsd/logs/xpra.log &
-
-#while [ ! -e /opt/emacsd/server/emacsd ]; do sleep 1; done
-
-gotty \
-    --permit-write \
-    --reconnect \
-    emacsclient -s /opt/emacsd/server/emacsd --tty &> /opt/emacsd/logs/gotty.log &
 
 wait

@@ -24,18 +24,16 @@ RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/s
     cd /opt/emacsd/ && \
     rm -rf src
 
-# Build GoTTY
+# Install epdfinfo (pdf-tools)
 #
-RUN git clone --depth 1 https://github.com/sorenisanerd/gotty.git /opt/gotty
-WORKDIR /opt/gotty
-ADD resources/media/icon.svg /opt/gotty/resources/icon.svg
-ADD resources/media/icon_192.png /opt/gotty/resources/icon_192.png
-ADD resources/media/favicon.ico /opt/gotty/resources/favicon.ico
-RUN make gotty
-RUN mv /opt/gotty/gotty /usr/bin/gotty
-WORKDIR /
-RUN rm -rf /opt/gotty
-ADD resources/conf/gotty /home/$USER/.gotty
+ENV PATH="/opt/cask/bin:$PATH"
+RUN git clone https://github.com/cask/cask /opt/cask && \
+    git clone https://github.com/politza/pdf-tools.git && \
+    cd pdf-tools && \
+    make -s && \
+    sudo mv server/epdfinfo /usr/bin/ && \
+    cd /home/$USER/ && \
+    rm -rf pdf-tools
 
 # Install XPRA
 #
@@ -69,19 +67,8 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     mkdir /opt/emacsd/server && \
     chown -R $USER:$USER /opt/emacsd && \
     chown -R $USER:$USER /home/$USER
-USER $USER
 
-# Install epdfinfo
-#
-WORKDIR /home/$USER/
-RUN curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python3
-ENV PATH="/home/$USER/.cask/bin:$PATH"
-RUN git clone https://github.com/politza/pdf-tools.git
-WORKDIR "pdf-tools"
-RUN make -s
-RUN sudo mv server/epdfinfo /usr/bin/
-WORKDIR /home/$USER/
-RUN rm -rf pdf-tools
+USER $USER
 
 # AOT Compile Emacs Packages
 #
@@ -91,6 +78,7 @@ RUN emacs --batch -l /home/$USER/.emacs
 #
 COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
+
 COPY resources/bin/edit.sh /usr/bin/edit
 RUN sudo chmod +x /usr/bin/edit
 

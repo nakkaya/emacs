@@ -12,17 +12,16 @@ There are sample `docker-compose.yml` files in `devops/docker/`. That
 will launch a web based interface that can be used on remote machines
 and another that will launch Emacs in GUI mode with X forwarded If you
 have `python` `invoke` installed these can be launched using,
-    
-    # For Web Interface (At 127.0.0.1:8080)
-    invoke up
 
     # For GUI Interface (By attaching to a running X Server)
     invoke gui
 
-    # For GUI Interface (By attaching using xpra)
+    # For Web & GUI Interface (By attaching using xpra)
     invoke up
     # then
     xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
+    # or
+    chrome http://127.0.0.1:9090
 
 ### Semi Automated Setup
 
