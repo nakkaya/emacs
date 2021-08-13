@@ -1065,7 +1065,8 @@ Java
                            (name . "^\\*emacs\\*$")
                            (name . "^\\*GNU Emacs\\*$")
                            (name . "^\\*compilation\\*$")
-                           (name . "^\\*elfeed-.*")))))))
+                           (name . "^\\*elfeed-.*")
+                           (name . "^\\*pylsp.*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
