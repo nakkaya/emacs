@@ -632,6 +632,26 @@ Java
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (defun na-magit-auto-commit-msg ()
+    (concat
+     "Update:\n"
+     (string-join
+      (mapcar
+       (lambda (f)
+         (concat "  " f "\n"))
+       (magit-staged-files)))))
+
+  (defun na-magit-auto-commit ()
+    (interactive)
+    (magit-call-git
+     "commit" "-m" (na-magit-auto-commit-msg))
+    (magit-refresh))
+
+  (transient-append-suffix
+    'magit-commit "a" '("u" "Auto Commit" na-magit-auto-commit))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (setq magit-repository-directories
         `(("~/org" . 0)
           ("~/source" . 1)
@@ -652,7 +672,8 @@ Java
     (interactive)
     (dolist (repo (magit-list-repos))
       (let ((default-directory repo))
-        (magit-fetch-all (magit-fetch-arguments)))))
+        (magit-call-git "fetch" "--all")))
+    (revert-buffer))
 
   (defun na-magit-push-all-repositories ()
     "Run `magit-push' in all repositories returned by `magit-list-repos`."
@@ -660,7 +681,8 @@ Java
     (dolist (repo (magit-list-repos))
       (let ((default-directory repo))
         (let ((current-branch (magit-get-current-branch)))
-          (magit-git-push current-branch (concat "origin/" current-branch) (list ))))))
+          (magit-call-git "push" "origin" current-branch))))
+    (revert-buffer))
 
   (defun na-magit-auto-commit-multi-repo (&optional _button)
     "Show the status for the repository at point."
@@ -668,35 +690,16 @@ Java
     (--if-let (tabulated-list-get-id)
         (let* ((file (expand-file-name it))
                (default-directory (file-name-directory file)))
-          (magit-stage-modified)
-          (na-magit-auto-commit))
-      (user-error "There is no repository at point")))
+          (magit-call-git "add" "-A")
+          (magit-call-git "commit" "-m" (na-magit-auto-commit-msg)))
+      (user-error "There is no repository at point"))
+    (revert-buffer))
 
   (add-hook 'magit-repolist-mode-hook
             (lambda ()
               (define-key magit-repolist-mode-map (kbd "f") #'na-magit-fetch-all-repositories)
               (define-key magit-repolist-mode-map (kbd "p") #'na-magit-push-all-repositories)
               (define-key magit-repolist-mode-map (kbd "c") #'na-magit-auto-commit-multi-repo)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun na-magit-auto-commit-msg ()
-    (concat
-     "Update:\n"
-     (string-join
-      (mapcar
-       (lambda (f)
-         (concat "  " f "\n"))
-       (magit-staged-files)))))
-
-  (defun na-magit-auto-commit ()
-    (interactive)
-    (magit-call-git
-     "commit" "-m" (na-magit-auto-commit-msg))
-    (magit-refresh))
-
-  (transient-append-suffix
-    'magit-commit "a" '("u" "Auto Commit" na-magit-auto-commit))
 #+END_SRC
 
 * Terminal
