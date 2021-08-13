@@ -2,29 +2,27 @@ FROM nakkaya/env:latest
 
 # Get Emacs Build Deps
 #
-RUN apt-get build-dep emacs-nox -y
-RUN apt-get install gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson-dev -y
-RUN apt-get clean && apt-get autoclean
-
-ADD resources/media/JetBrainsMono.ttf /usr/local/share/fonts
+RUN apt-get build-dep emacs -y && \
+    apt-get clean && \
+    apt-get autoclean
 
 # Build Emacs
 #
-RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src
-WORKDIR /opt/emacsd/src
-RUN ./autogen.sh
-# Check system-configuration-options for options
-RUN CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
+RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src && \
+    cd /opt/emacsd/src && \
+    ./autogen.sh && \
+    CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
     --with-native-compilation \
     --with-modules \
     --with-json \
     --with-mailutils \
     --with-x=yes \
     --with-x-toolkit=gtk3 \
-    --with-png=yes
-RUN make -j$(nproc)
-RUN make install
-run rm -rf /opt/emacsd/src
+    --with-png=yes && \
+    make -j$(nproc) && \
+    make install && \
+    cd /opt/emacsd/ && \
+    rm -rf src
 
 # Build GoTTY
 #
@@ -41,40 +39,36 @@ ADD resources/conf/gotty /home/$USER/.gotty
 
 # Install XPRA
 #
-RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add -
-RUN add-apt-repository "deb https://xpra.org/ $DISTRO main"
-RUN apt-get update
-RUN apt-get install \
-    xpra xpra-html5 \
-    -y --no-install-recommends
-RUN apt-get clean && apt-get autoclean
+RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add - && \
+    add-apt-repository "deb https://xpra.org/ $DISTRO main" && \
+    apt-get update && \
+    apt-get install xpra xpra-html5 -y --no-install-recommends && \
+    apt-get clean && apt-get autoclean
 
-RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html
-RUN rm -rf /usr/share/xpra/www/default-settings.txt*
-RUN touch /usr/share/xpra/www/default-settings.txt
-RUN echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt
-RUN echo 'floating_menu = false' >> /usr/share/xpra/www/default-settings.txt
+RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html && \
+    rm -rf /usr/share/xpra/www/default-settings.txt* && \
+    touch /usr/share/xpra/www/default-settings.txt && \
+    echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt && \
+    echo 'floating_menu = false' >> /usr/share/xpra/www/default-settings.txt && \
+    #
+    pip3 install pyinotify pyxdg paramiko && \
+    mkdir /run/user/$UID && \
+    mkdir /run/xpra && \
+    chmod 775 /run/xpra && \
+    chown -R $USER:$USER /run/xpra && \
+    chown -R $USER:$USER /run/user/$UID
 
-RUN pip3 install pyinotify pyxdg paramiko
-RUN mkdir /run/user/$UID
-RUN mkdir /run/xpra
-RUN chmod 775 /run/xpra
-RUN chown -R $USER:$USER /run/xpra
-RUN chown -R $USER:$USER /run/user/$UID
-
-# Copy Settings
+# Setup Emacs
 #
-RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf
-RUN echo "(setq package-native-compile t)" > /home/$USER/.emacs
-RUN echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
-RUN echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs
-
-# Init ENV
-#
-RUN mkdir /opt/emacsd/logs
-RUN mkdir /opt/emacsd/server
-RUN chown -R $USER:$USER /opt/emacsd
-RUN chown -R $USER:$USER /home/$USER
+RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
+    echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
+    echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
+    echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs && \
+    # Init ENV
+    mkdir /opt/emacsd/logs && \
+    mkdir /opt/emacsd/server && \
+    chown -R $USER:$USER /opt/emacsd && \
+    chown -R $USER:$USER /home/$USER
 USER $USER
 
 # Install epdfinfo
