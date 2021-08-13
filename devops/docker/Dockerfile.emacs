@@ -32,7 +32,7 @@ RUN git clone https://github.com/cask/cask /opt/cask && \
     cd pdf-tools && \
     make -s && \
     sudo mv server/epdfinfo /usr/bin/ && \
-    cd /home/$USER/ && \
+    cd ../ && \
     rm -rf pdf-tools
 
 # Install XPRA
@@ -64,10 +64,11 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs && \
     # Init ENV
     mkdir /opt/emacsd/logs && \
-    mkdir /opt/emacsd/server && \
-    chown -R $USER:$USER /opt/emacsd && \
-    chown -R $USER:$USER /home/$USER
+    mkdir /opt/emacsd/server
 
+RUN chown -R $USER:$USER /opt/emacsd && \
+    chown -R $USER:$USER /home/$USER && \
+    chown -R $USER:$USER /storage
 USER $USER
 
 # AOT Compile Emacs Packages
