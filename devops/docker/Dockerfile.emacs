@@ -49,7 +49,6 @@ RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www
     echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt && \
     echo 'floating_menu = false' >> /usr/share/xpra/www/default-settings.txt && \
     #
-    pip3 install pyinotify pyxdg paramiko && \
     mkdir /run/user/$UID && \
     mkdir /run/xpra && \
     chmod 775 /run/xpra && \
