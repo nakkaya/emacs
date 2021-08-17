@@ -154,6 +154,15 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
       (goto-char (point-min))
       (while (re-search-forward org-babel-src-block-regexp nil t)
         (org-babel-remove-result))))
+
+  (defun org-in-tangle-dir (sub-path)
+    "Expand the SUB-PATH into the directory given by the tangle-dir
+property if that property exists, else use the
+`default-directory'."
+    (expand-file-name sub-path
+                      (or
+                       (org-entry-get (point) "tangle-dir" 'inherit)
+                       default-directory)))
 #+END_SRC
 
 Agenda Management
