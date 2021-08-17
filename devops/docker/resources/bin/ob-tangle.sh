@@ -36,7 +36,7 @@
   (setq tangle-host host))
 
 (defun tangle-to-host (host)
-  (while (re-search-forward ":tangle\s-*?\\(.*?\\)\s-*?" nil t)
+  (while (re-search-forward ":tangle\s-*?\\(.*?\\)\\($\\|\s-*?\\)" nil t)
     (replace-match
      (concat "/ssh:" host ":" (match-string 1)) nil nil nil 1)))
 
