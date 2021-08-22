@@ -15,6 +15,7 @@
 	matlab-mode
 	yaml-mode
 	markdown-mode
+        terraform-mode
         lsp-mode
         lsp-java
 	org
