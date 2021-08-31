@@ -334,6 +334,13 @@ Agenda Management
   (add-hook 'clojure-mode-hook #'lsp-deferred)
   (add-hook 'c++-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook #'lsp-deferred)
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
+                    :major-modes '(terraform-mode)
+                    :server-id 'terraform-ls))
+
+  (add-hook 'terraform-mode-hook #'lsp-deferred)
 #+END_SRC
 
 * Projectile
@@ -1013,6 +1020,7 @@ Java
                             (mode . matlab-mode)
                             (mode . css-mode)
                             (mode . js-mode)
+                            (mode . terraform-mode)
                             (mode . dockerfile-mode)
                             (mode . docker-compose-mode)
                             (name . "^\\*jupyter-.*")))
