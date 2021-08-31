@@ -44,6 +44,7 @@ RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add - && \
     apt-get clean && apt-get autoclean
 
 RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html && \
+    sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/connect.html && \
     rm -rf /usr/share/xpra/www/default-settings.txt* && \
     touch /usr/share/xpra/www/default-settings.txt && \
     echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt && \
