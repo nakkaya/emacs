@@ -122,6 +122,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (setq org-hide-leading-stars t)
 
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (setq org-superstar-headline-bullets-list '("◉" "◉" "◉" "◉" "◉"))
 
   (when  (eq system-type 'windows-nt)
     (setq org-babel-python-command "python.exe"))

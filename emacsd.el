@@ -42,7 +42,7 @@
   (setq
    org-noter-always-create-frame nil
    org-noter-hide-other t
-   org-noter-notes-search-path na-agenda-folder
+   org-noter-notes-search-path (list na-agenda-folder)
    org-noter-auto-save-last-location t)
   :ensure t)
 
