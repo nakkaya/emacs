@@ -20,6 +20,7 @@
         lsp-java
 	org
         poly-org
+        org-superstar
         docker
         dockerfile-mode
         docker-compose-mode
