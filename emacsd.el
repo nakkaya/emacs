@@ -3,6 +3,7 @@
            elfeed
            jupyter
            pdf-tools
+           saveplace-pdf-view
            org-noter))
 
 (dolist (package package-list)
@@ -35,6 +36,8 @@
   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
   (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
   (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))))
+
+(require 'saveplace-pdf-view)
 
 (use-package org-noter
   :after (:any org pdf-tools)

@@ -57,6 +57,14 @@
 (setq mouse-wheel-progressive-speed nil)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (require 'saveplace)
+  (save-place-mode 1)
+
+  (when (getenv "EMACS_HOME_DIR")
+    (setq save-place-file "/storage/.emacs-places"))
+#+END_SRC
+
 Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
