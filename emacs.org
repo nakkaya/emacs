@@ -151,6 +151,17 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
+  (add-to-list 'org-structure-template-alist ')
+
+  (setq org-structure-template-alist
+        '(("el" . "src emacs-lisp\n")
+          ("cl" . "src clojure\n")
+          ("sh" . "src sh\n")
+          ("jp" . "src jupyter-python\n")
+          ("s" . "src")
+          ("l" . "export latex")
+          ("e" . "example")))
+
   (defun org-babel-kill-session ()
     "Kill session for current code block."
     (interactive)
@@ -384,14 +395,12 @@ Agenda Management
 org-mode
 
 #+BEGIN_SRC emacs-lisp
-  (define-skeleton skel-org-babel-src-jupyter-py
+  (define-skeleton skel-org-babel-notebook-header
     ""
     nil
-    > "#+BEGIN_SRC jupyter-python"\n
-    _ \n
-    -2 "#+END_SRC")
-
-  (define-abbrev org-mode-abbrev-table "srcpy" "" 'skel-org-babel-src-jupyter-py)
+    "#+title: Notebook" \n
+    "#+PROPERTY: header-args:jupyter-python :session /ssh:lab:python :kernel python" \n
+    "#+STARTUP: hidestars\n\n")
 #+END_SRC
 
 Clojure
