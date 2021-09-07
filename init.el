@@ -27,6 +27,7 @@
 	multi-term
 	magit
         doom-themes
+        doom-modeline
 	company
         projectile
         helm

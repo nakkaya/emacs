@@ -1242,7 +1242,13 @@ Mouse setup when running in a terminal.
         (set-face-background 'mode-line          "SteelBlue4")
         (set-face-background 'mode-line-inactive "SlateGray4")
         (set-face-foreground 'mode-line          "gray5")
-        (set-face-foreground 'mode-line-inactive "gray15"))
+        (set-face-foreground 'mode-line-inactive "gray15")
+
+        (unless (member "all-the-icons" (font-family-list))
+          (all-the-icons-install-fonts t))
+
+        (require 'doom-modeline)
+        (doom-modeline-mode 1))
 
       (eval-after-load "magit"
         '(progn
