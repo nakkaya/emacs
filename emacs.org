@@ -1248,7 +1248,7 @@ Mouse setup when running in a terminal.
           (all-the-icons-install-fonts t))
 
         (require 'doom-modeline)
-        (doom-modeline-mode 1))
+        (add-hook 'after-init-hook #'doom-modeline-mode))
 
       (eval-after-load "magit"
         '(progn
