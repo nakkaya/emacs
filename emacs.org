@@ -151,8 +151,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
-  (add-to-list 'org-structure-template-alist ')
-
   (setq org-structure-template-alist
         '(("el" . "src emacs-lisp\n")
           ("cl" . "src clojure\n")
