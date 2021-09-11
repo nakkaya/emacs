@@ -1,7 +1,6 @@
 FROM nvidia/cuda:11.2.0-cudnn8-runtime-ubuntu20.04
 
-ENV USER=nakkaya \
-    PASS=pass
+ENV USER=nakkaya
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
