@@ -1,7 +1,7 @@
 FROM nvidia/cuda:11.2.0-cudnn8-runtime-ubuntu20.04
 
-ENV USER=core \
-    PASS=core
+ENV USER=nakkaya \
+    PASS=pass
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
@@ -16,7 +16,18 @@ RUN apt-get install \
 
 RUN pip install \
     tensorflow-gpu \
-    jupyterlab
+    jupyterlab \
+    scikit-learn \
+    scikit-image \
+    numpy \
+    matplotlib \
+    neptune-client psutil \
+    nibabel \
+    scipy \
+    mplfinance \
+    pandas \
+    python-binance
+
     
 
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 $USER
