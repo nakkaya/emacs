@@ -1,0 +1,32 @@
+FROM nvidia/cuda:11.2.0-cudnn8-runtime-ubuntu20.04
+
+ENV USER=core \
+    PASS=core
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install \
+    openssh-server sudo \
+    python3 python3-pip -y
+
+RUN pip install \
+    tensorflow-gpu \
+    jupyterlab
+    
+
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 $USER
+
+RUN usermod -aG sudo $USER
+
+RUN service ssh start
+
+RUN echo $USER:$USER | chpasswd
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd","-D"]

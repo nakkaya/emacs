@@ -31,6 +31,7 @@ def build(ctx):
 
     run(cmd + "-f Dockerfile.env -t nakkaya/env:latest .", "devops/docker/")
     run(cmd + "-f Dockerfile.emacs " + tag("emacs") + " .", "devops/docker/")
+    run(cmd + "-f Dockerfile.gpu -t nakkaya/gpu:latest .", "devops/docker/")
 
 
 @task
@@ -38,6 +39,7 @@ def push(ctx):
     """Push Images to DockerHub."""
     run("docker push nakkaya/emacs:latest")
     run("docker push nakkaya/emacs:" + version)
+    run("docker push nakkaya/gpu:latest")
 
 
 @task
