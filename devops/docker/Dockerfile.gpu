@@ -18,25 +18,31 @@ RUN pip install \
     jupyterlab \
     scikit-learn \
     scikit-image \
+    boto3 \
+    pillow \
+    opencv-python \
     numpy \
     matplotlib \
     neptune-client psutil \
     nibabel \
+    pydicom \
     scipy \
     mplfinance \
     pandas \
-    python-binance
+    python-binance \
+    click
 
-    
 
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 $USER
-
+RUN useradd -rm -d /home/$USER -s /bin/bash -G sudo -u 1000 $USER
 RUN usermod -aG sudo $USER
+RUN echo $USER:$USER | chpasswd
+RUN mkdir /storage && \
+    chown -R $USER:$USER /storage && \
+    mkdir /dataset && \
+    chown -R $USER:$USER /dataset && \
+    mkdir /home/$USER/sandbox && \
+    chown -R $USER:$USER /home/$USER/sandbox
 
 RUN service ssh start
-
-RUN echo $USER:$USER | chpasswd
-
 EXPOSE 22
-
 CMD ["/usr/sbin/sshd","-D"]
