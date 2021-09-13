@@ -397,7 +397,7 @@ org-mode
     ""
     nil
     "#+title: Notebook" \n
-    "#+PROPERTY: header-args:jupyter-python :session /ssh:lab:python :kernel python" \n
+    "#+PROPERTY: header-args:jupyter-python :session /ssh:gpu:python :kernel python" \n
     "#+STARTUP: hidestars\n\n")
 #+END_SRC
 
