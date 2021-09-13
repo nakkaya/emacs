@@ -511,6 +511,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
 
+  (setq large-file-warning-threshold nil)
   (setq ls-lisp-use-insert-directory-program nil)
   (setq ls-lisp-dirs-first t)
   
@@ -558,7 +559,7 @@ Java
 #+BEGIN_SRC emacs-lisp
   (setq na-external-open-files-types 
         '("avi" "mp4" "flv" "wmv" "mov" "mkv" 
-          "jpg" "png" "m4v" "mpg" "mpeg" "ts" "m3u"))
+          "m4v" "mpg" "mpeg" "ts" "m3u"))
 
   (setq na-file-assocs (make-hash-table :test 'equal))
 
@@ -573,9 +574,7 @@ Java
         (puthash "m4v" "vlc" na-file-assocs)
         (puthash "mpg" "vlc" na-file-assocs)
         (puthash "ts" "vlc" na-file-assocs)
-        (puthash "mpeg" "vlc" na-file-assocs)
-        (puthash "jpg" "gpicview" na-file-assocs)
-        (puthash "png" "gpicview" na-file-assocs)))
+        (puthash "mpeg" "vlc" na-file-assocs)))
 
   (if (eq system-type 'gnu/linux)
       (setq na-dired-external-viewer "xdg-open"))
