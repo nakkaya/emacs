@@ -28,7 +28,7 @@ jobs:
         run: invoke push
 
       - name: Docker GHCR Login
-        run: docker login ghcr.io -u nakkaya --password '${{ secrets.GHCR_PASS }}'
+        run: docker login ghcr.io -u nakkaya --password '${{ secrets.GHCR_PASSWORD }}'
 
       - name: Push Build
         run: invoke push_ghcr
