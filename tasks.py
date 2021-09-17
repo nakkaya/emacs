@@ -12,7 +12,7 @@ version = version.strip().decode('UTF-8')
 
 def tag(n):
     """Create tag command."""
-    return "-t nakkaya/" + n + ":latest -t nakkaya/" + n + ":" + version
+    return "-t nakkaya/" + n + ":latest -t ghcr.io/nakkaya/" + n + ":latest -t nakkaya/" + n + ":" + version
 
 
 def run(cmd, dir="."):
@@ -31,7 +31,7 @@ def build(ctx):
 
     run(cmd + "-f Dockerfile.env -t nakkaya/env:latest .", "devops/docker/")
     run(cmd + "-f Dockerfile.emacs " + tag("emacs") + " .", "devops/docker/")
-    run(cmd + "-f Dockerfile.gpu -t nakkaya/gpu:latest .", "devops/docker/")
+    run(cmd + "-f Dockerfile.gpu " + tag("gpu") + " .", "devops/docker/")
 
 
 @task
@@ -40,6 +40,7 @@ def push(ctx):
     run("docker push nakkaya/emacs:latest")
     run("docker push nakkaya/emacs:" + version)
     run("docker push nakkaya/gpu:latest")
+    run("docker push nakkaya/gpu:" + version)
 
 @task
 def push_ghcr(ctx):
