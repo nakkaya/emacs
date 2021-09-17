@@ -41,6 +41,11 @@ def push(ctx):
     run("docker push nakkaya/emacs:" + version)
     run("docker push nakkaya/gpu:latest")
 
+@task
+def push_ghcr(ctx):
+    """Push Images to GHCR"""
+    run("docker push ghcr.io/nakkaya/emacs:latest")
+    run("docker push ghcr.io/nakkaya/gpu:latest")
 
 @task
 def pull(ctx):
