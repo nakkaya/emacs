@@ -163,8 +163,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (defun org-babel-kill-session ()
     "Kill session for current code block."
     (interactive)
-    (unless (org-in-src-block-p)
-      (error "You must be in a src-block to run this command"))
+    ;; (unless (org-in-src-block-p)
+    ;;   (error "You must be in a src-block to run this command"))
     (save-window-excursion
       (org-babel-switch-to-session)
       (kill-buffer)))
