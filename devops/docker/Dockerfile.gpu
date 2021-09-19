@@ -5,7 +5,8 @@ ENV USER=core
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    TF_CPP_MIN_LOG_LEVEL=2
 
 RUN apt-get update && \
     apt-get upgrade -y && \
