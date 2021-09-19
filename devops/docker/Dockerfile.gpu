@@ -5,8 +5,7 @@ ENV USER=core
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive \
-    TF_CPP_MIN_LOG_LEVEL=2
+    DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -37,7 +36,8 @@ RUN pip install \
 RUN useradd -rm -d /home/$USER -s /bin/bash -G sudo -u 1000 $USER
 RUN usermod -aG sudo $USER
 RUN echo $USER:$USER | chpasswd
-RUN mkdir /storage && \
+RUN echo 'export TF_CPP_MIN_LOG_LEVEL=2' > /home/$USER/.bashrc && \
+    mkdir /storage && \
     chown -R $USER:$USER /storage && \
     mkdir /dataset && \
     chown -R $USER:$USER /dataset && \
