@@ -962,18 +962,20 @@ Java
     (let* ((term-buffers (sort (copy-tree multi-term-buffer-list)
                                (lambda (x y)
                                  (string< (buffer-name x) (buffer-name y)))))
-           (buff-list (append term-buffers
-                              (filter-buffers-with-prefix "*eshell")
+           (buff-list (append (filter-buffers-with-prefix "*eshell")
+                              term-buffers
                               (filter-buffers-with-prefix "*cider-repl")
                               (filter-buffers-with-prefix "*MATLAB")
                               (filter-buffers-with-prefix "*Python")
                               (filter-buffers-with-prefix "*ssh")))
            (buffer-list-len (length buff-list))
            (index (cl-position (current-buffer) buff-list)))
-      (if index
-          (let ((target-index (mod (+ index 1) buffer-list-len)))
-            (switch-to-buffer (nth target-index buff-list)))
-        (switch-to-buffer (car buff-list)))))
+      (if (not buff-list)
+          (eshell 'N)
+        (if index
+            (let ((target-index (mod (+ index 1) buffer-list-len)))
+              (switch-to-buffer (nth target-index buff-list)))
+          (switch-to-buffer (car buff-list))))))
 #+END_SRC
 
 * helm
