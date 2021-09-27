@@ -47,4 +47,4 @@ xpra \
     --start-after-connect=no \
     --start="emacs" &> /opt/emacsd/logs/xpra.log &
 
-/usr/sbin/sshd -D
+sudo /usr/sbin/sshd -D
