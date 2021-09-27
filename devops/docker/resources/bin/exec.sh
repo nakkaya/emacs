@@ -7,6 +7,8 @@ export TERM=xterm-256color
 XPRA_DISPLAY=42
 
 if [[ -v PASSWD ]]; then
+    echo $USER:$PASSWD | chpasswd
+
     export XPRA_PASSWORD="${PASSWD}"
 
     htpasswd -bc /opt/emacsd/server/htpasswd $USER $PASSWD
@@ -45,4 +47,4 @@ xpra \
     --start-after-connect=no \
     --start="emacs" &> /opt/emacsd/logs/xpra.log &
 
-wait
+/usr/sbin/sshd -D
