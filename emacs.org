@@ -1344,4 +1344,22 @@ Mouse setup when running in a terminal.
 
   (na-load-theme)
   (na-reset-window-size)
+
+  (defun set-background-for-terminal (&optional frame)
+    (or frame (setq frame (selected-frame)))
+    "unsets the background color in terminal mode"
+    (unless (display-graphic-p frame)
+      (set-face-background 'default "unspecified-bg" frame)))
+  
+  (add-hook 'after-make-frame-functions 'set-background-for-terminal)
+  (add-hook 'window-setup-hook 'set-background-for-terminal)
 #+END_SRC
+* Server
+
+#+begin_src emacs-lisp
+  (when (getenv "EMACS_HOME_DIR")
+    (setq server-socket-dir "/opt/emacsd/server")
+    (setq server-name "emacsd")
+    (defun server-ensure-safe-dir (dir) "Noop" t))
+  (server-start)
+#+end_src

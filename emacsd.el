@@ -70,9 +70,5 @@
 ;;
 
 (setenv "EDITOR" "edit")
-(setq server-socket-dir "/opt/emacsd/server")
-(setq server-name "emacsd")
-(defun server-ensure-safe-dir (dir) "Noop" t)
-(server-start)
 (set-face-attribute 'default nil :height 125)
 (blink-cursor-mode)
