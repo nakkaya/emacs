@@ -21,29 +21,26 @@
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
 
-  (setq gc-cons-threshold (* 100 1024 1024))
-  (setq read-process-output-max (* 1024 1024))
+  (setq gc-cons-threshold (* 100 1024 1024)
+        read-process-output-max (* 1024 1024))
 
-  (setq visible-bell t)
-  (setq fill-column 80)
+  (setq visible-bell t
+        fill-column 80
+        make-backup-files nil
+        query-replace-highlight t
+        search-highlight t
+        inhibit-splash-screen t
+        indent-tabs-mode nil
+        show-paren-delay 0)
+
   (delete-selection-mode)
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (setq make-backup-files nil)
-  (setq query-replace-highlight t)
-  (setq search-highlight t)
   (global-auto-revert-mode 1)
-
   (global-font-lock-mode t)
   (electric-pair-mode 1)
-
-  (setq-default indent-tabs-mode nil)
+  (show-paren-mode 1)
 
   (add-hook 'prog-mode-hook #'hs-minor-mode)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq show-paren-delay 0)
-  (show-paren-mode 1)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1203,157 +1200,86 @@ Mouse setup when running in a terminal.
 * Theme
 
 #+BEGIN_SRC emacs-lisp
+  (setq frame-title-format (list "Emacs " emacs-version))
+
+  (when window-system
+    (let ((font-dejavu "DejaVu Sans Mono 11")
+          (font-monaco "Monaco 10")
+          (font-jetbrains "Jet Brains Mono 11")
+          (font-jetbrains-w32 "JetBrains Mono-11"))
+
+      (cond ((x-list-fonts font-jetbrains)
+             (set-frame-font font-jetbrains nil t))
+            ((x-list-fonts font-monaco)
+             (set-frame-font font-monaco nil t))
+            ((x-list-fonts font-dejavu)
+             (set-frame-font font-dejavu nil t))
+            ((x-list-fonts font-jetbrains-w32)
+             (set-frame-font font-jetbrains-w32 nil t)))))  
+
+  (when (eq system-type 'darwin)
+    (set-face-attribute 'default nil :height 140))
+
+  (unless (member "all-the-icons" (font-family-list))
+    (all-the-icons-install-fonts t))
+
+  (load-theme 'doom-one t)
+
+  (set-face-background 'org-block "unspecified")
+  (set-face-background 'org-block-begin-line "unspecified")
+  (set-face-background 'org-block-end-line "unspecified")
+  (setq poly-lock-allow-background-adjustment nil)
+
+  (set-face-background 'mode-line          "SteelBlue4")
+  (set-face-background 'mode-line-inactive "SlateGray4")
+  (set-face-foreground 'mode-line          "gray5")
+  (set-face-foreground 'mode-line-inactive "gray15")
+
+  (require 'doom-modeline)
+  (add-hook 'after-init-hook #'doom-modeline-mode)
+  (setq doom-modeline-major-mode-icon nil)
+  (setq doom-modeline-buffer-state-icon nil)
+  (setq doom-modeline-buffer-encoding nil)
+
+  (eval-after-load "magit"
+    '(progn
+       (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+       (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+       (set-face-background 'magit-diff-context "unspecified")
+       (set-face-background 'magit-diff-added-highlight "unspecified")
+       (set-face-background 'magit-diff-context-highlight "unspecified")
+       (set-face-background 'magit-diff-added "unspecified")
+       (set-face-background 'magit-diff-removed "unspecified")
+       (set-face-background 'magit-diff-hunk-heading "unspecified")
+       (set-face-background 'magit-diff-removed-highlight "unspecified")))
+
+  (set-face-background 'show-paren-match (face-background 'default))
+  (set-face-attribute 'show-paren-match nil :foreground "red")
+  (set-face-background 'show-paren-match "unspecified")
+
+  (column-number-mode 1)
+  (blink-cursor-mode 1)
+  (menu-bar-mode -1)
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+
   (defun na-reset-window-size ()
     (interactive)
     (when window-system
-      (set-frame-size (selected-frame) 170 48)))
+      (set-frame-size (selected-frame) 80 25)))
 
-  (defun na-load-theme ()
-    (progn
-      (when window-system
-        (setq frame-title-format (list "Emacs " emacs-version))
+  (add-hook 'window-setup-hook 'na-reset-window-size)
 
-        (let ((font-dejavu "DejaVu Sans Mono 11")
-              (font-monaco "Monaco 10")
-              (font-jetbrains "Jet Brains Mono 11")
-              (font-jetbrains-w32 "JetBrains Mono-11"))
-
-          (when (x-list-fonts font-dejavu)
-            (set-frame-font font-dejavu nil t))
-
-          (when (x-list-fonts font-monaco)
-            (set-frame-font font-monaco nil t))
-
-          (when (x-list-fonts font-jetbrains)
-            (set-frame-font font-jetbrains nil t))
-
-          (when (x-list-fonts font-jetbrains-w32)
-            (set-frame-font font-jetbrains-w32 nil t)))
-
-        (when (eq system-type 'darwin)
-          (set-face-attribute 'default nil :height 140))
-
-        (load-theme 'doom-one t)
-
-        (set-face-background 'org-block "unspecified")
-        (set-face-background 'org-block-begin-line "unspecified")
-        (set-face-background 'org-block-end-line "unspecified")
-        (setq poly-lock-allow-background-adjustment nil)
-
-        (set-face-background 'mode-line          "SteelBlue4")
-        (set-face-background 'mode-line-inactive "SlateGray4")
-        (set-face-foreground 'mode-line          "gray5")
-        (set-face-foreground 'mode-line-inactive "gray15")
-
-        (unless (member "all-the-icons" (font-family-list))
-          (all-the-icons-install-fonts t))
-
-        (require 'doom-modeline)
-        (add-hook 'after-init-hook #'doom-modeline-mode)
-        (setq doom-modeline-major-mode-icon nil)
-        (setq doom-modeline-buffer-state-icon nil)
-        (setq doom-modeline-buffer-encoding nil))
-
-      (eval-after-load "magit"
-        '(progn
-           (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-           (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-           (set-face-background 'magit-diff-context "unspecified")
-           (set-face-background 'magit-diff-added-highlight "unspecified")
-           (set-face-background 'magit-diff-context-highlight "unspecified")
-           (set-face-background 'magit-diff-added "unspecified")
-           (set-face-background 'magit-diff-removed "unspecified")
-           (set-face-background 'magit-diff-hunk-heading "unspecified")
-           (set-face-background 'magit-diff-removed-highlight "unspecified")))
-
-      (unless window-system
-        (defvar theme-background "Grey3")
-        (defvar theme-text-color "Grey74")
-
-        (set-face-foreground 'default theme-text-color)
-        (set-face-background 'default theme-background)
-        (set-face-background 'match theme-background)
-        (set-face-background 'italic theme-background)
-        (set-face-foreground 'font-lock-string-face "LightSteelBlue")
-        (set-face-foreground 'font-lock-keyword-face "OrangeRed1")
-        (set-face-foreground 'font-lock-function-name-face "Gold3")
-        (set-face-foreground 'font-lock-builtin-face "Yellow3")
-        (set-face-foreground 'font-lock-comment-face "Turquoise4")
-        (set-face-foreground 'org-block-begin-line "Grey19")
-        (set-face-foreground 'org-block-end-line "Grey19")
-        (set-face-foreground 'org-todo "Red3")
-        (set-face-background 'secondary-selection theme-background)
-
-        (set-face-foreground 'org-level-1 "LightSteelBlue")
-        (set-face-foreground 'org-level-2 "LightSteelBlue")
-        (set-face-foreground 'org-level-3 "LightSteelBlue")
-        (set-face-foreground 'org-level-4 "LightSteelBlue")
-        (set-face-foreground 'org-level-5 "LightSteelBlue")
-        (set-face-foreground 'org-level-6 "LightSteelBlue")
-        (set-face-foreground 'org-level-7 "LightSteelBlue")
-        (set-face-foreground 'org-level-8 "LightSteelBlue")
-
-        (add-hook 'eshell-mode-hook
-                  (lambda ()
-                    (set-face-foreground 'eshell-ls-directory "DeepSkyBlue4")))
-
-        (eval-after-load "magit"
-          '(progn
-             (set-face-foreground 'magit-diff-added "brightgreen")
-             (set-face-foreground 'magit-diff-removed "brightred")
-             (set-face-foreground 'magit-diff-hunk-heading "DodgerBlue2")))
-
-        (eval-after-load "diff-mode"
-          '(progn
-             (set-face-foreground 'diff-added "brightgreen")
-             (set-face-foreground 'diff-removed "brightred")
-             (set-face-foreground 'diff-header "DodgerBlue2")
-             (set-face-background 'diff-header "Grey7")
-             (set-face-background 'diff-file-header "Grey7")))
-
-        (set-face-attribute  'mode-line
-                             nil
-                             :foreground "DarkOrange3"
-                             :background "Grey15")
-        (set-face-attribute  'mode-line-inactive
-                             nil
-                             :foreground "Grey35"
-                             :background "Grey11"))
-
-      (set-face-background 'show-paren-match (face-background 'default))
-      (set-face-attribute 'show-paren-match nil :foreground "red")
-      (set-face-background 'show-paren-match "unspecified")
-
-      (column-number-mode 1)
-      (blink-cursor-mode 1)
-      (menu-bar-mode -1)
-      (toggle-scroll-bar -1)
-      (tool-bar-mode -1)
-
-      (setq-default mode-line-format
-                    '(""
-                      mode-line-modified
-                      (-3 . "%p") ;; position
-                      " - %b - "
-                      mode-name
-                      mode-line-process
-                      minor-mode-alist
-                      "%n" " - "
-                      (line-number-mode "L%l ")
-                      (column-number-mode "C%c ")))))
-
-  (na-load-theme)
-  (na-reset-window-size)
-
-  (defun set-background-for-terminal (&optional frame)
+  (defun fix-theme-in-tty (&optional frame)
     (or frame (setq frame (selected-frame)))
     "unsets the background color in terminal mode"
     (unless (display-graphic-p frame)
       (set-face-background 'default "unspecified-bg" frame)))
-  
-  (add-hook 'after-make-frame-functions 'set-background-for-terminal)
-  (add-hook 'window-setup-hook 'set-background-for-terminal)
+
+  (add-hook 'after-make-frame-functions 'fix-theme-in-tty)
+  (add-hook 'window-setup-hook 'fix-theme-in-tty)
 #+END_SRC
+
 * Server
 
 #+begin_src emacs-lisp
@@ -1361,5 +1287,7 @@ Mouse setup when running in a terminal.
     (setq server-socket-dir "/opt/emacsd/server")
     (setq server-name "emacsd")
     (defun server-ensure-safe-dir (dir) "Noop" t))
-  (server-start)
+
+  (unless (server-running-p)
+    (server-start))
 #+end_src
