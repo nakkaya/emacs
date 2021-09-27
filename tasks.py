@@ -29,7 +29,6 @@ def build(ctx):
     cmd = "docker build "
 #    cmd = "docker build --no-cache "
 
-    run(cmd + "-f Dockerfile.env -t nakkaya/env:latest .", "devops/docker/")
     run(cmd + "-f Dockerfile.emacs " + tag("emacs") + " .", "devops/docker/")
     run(cmd + "-f Dockerfile.gpu " + tag("gpu") + " .", "devops/docker/")
 
