@@ -7,7 +7,7 @@ export TERM=xterm-256color
 XPRA_DISPLAY=42
 
 if [[ -v PASSWD ]]; then
-    echo $USER:$PASSWD | chpasswd
+    echo $USER:$PASSWD | sudo chpasswd
 
     export XPRA_PASSWORD="${PASSWD}"
 
