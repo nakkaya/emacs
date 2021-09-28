@@ -12,9 +12,9 @@ version = version.strip().decode('UTF-8')
 
 def tag(n):
     """Create tag command."""
-    return "--tag nakkaya/" + n + ":latest " +
-           "--tag ghcr.io/nakkaya/" + n + ":latest " +
-           "--tag nakkaya/" + n + ":" + version + " "
+    return ("--tag nakkaya/" + n + ":latest " +
+            "--tag ghcr.io/nakkaya/" + n + ":latest " +
+            "--tag nakkaya/" + n + ":" + version + " ")
 
 
 def run(cmd, dir="."):
