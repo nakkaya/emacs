@@ -44,8 +44,9 @@ def buildx(ctx):
         "devops/docker/")
 
     run(cmd +
-        "-f Dockerfile.gpu " + tag("gpu") + " ." +
-        " . --platform linux/amd64", "devops/docker/")
+        "-f Dockerfile.gpu " + tag("gpu") +
+        " . --platform linux/amd64",
+        "devops/docker/")
 
 @task
 def push(ctx):
