@@ -27,17 +27,17 @@ jobs:
       - name: Install Invoke
         run: pip install invoke
 
-      - name: Build Image
-        run: invoke buildx
+      - name: Docker GHCR Login
+        run: docker login ghcr.io -u nakkaya --password '${{ secrets.GHCR_PASSWORD }}'
 
       - name: Docker Hub Login
         run: docker login --username nakkaya --password '${{ secrets.DOCKER_PASSWORD }}'
 
-      - name: Push Build
-        run: invoke push
+      - name: Build Image
+        run: invoke buildx
 
-      - name: Docker GHCR Login
-        run: docker login ghcr.io -u nakkaya --password '${{ secrets.GHCR_PASSWORD }}'
+      # - name: Push Build
+      #   run: invoke push
 
-      - name: Push Build
-        run: invoke push-ghcr
+      # - name: Push Build
+      #   run: invoke push-ghcr

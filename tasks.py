@@ -12,7 +12,9 @@ version = version.strip().decode('UTF-8')
 
 def tag(n):
     """Create tag command."""
-    return "-t nakkaya/" + n + ":latest -t ghcr.io/nakkaya/" + n + ":latest -t nakkaya/" + n + ":" + version
+    return "--tag nakkaya/" + n + ":latest " +
+           "--tag ghcr.io/nakkaya/" + n + ":latest " +
+           "--tag nakkaya/" + n + ":" + version + " "
 
 
 def run(cmd, dir="."):
@@ -35,17 +37,16 @@ def build(ctx):
 @task
 def buildx(ctx):
     """Build Multi Arch Images."""
-    cmd = "docker buildx build "
+    cmd = "docker buildx build --push "
 
     run(cmd +
         "-f Dockerfile.emacs " + tag("emacs") +
-        #" . --platform linux/amd64,linux/arm64",
-        " . --platform linux/amd64",
+        " --platform linux/amd64 .",
         "devops/docker/")
 
     run(cmd +
         "-f Dockerfile.gpu " + tag("gpu") +
-        " . --platform linux/amd64",
+        " --platform linux/amd64 .",
         "devops/docker/")
 
 @task
