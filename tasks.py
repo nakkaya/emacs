@@ -32,6 +32,19 @@ def build(ctx):
     run(cmd + "-f Dockerfile.emacs " + tag("emacs") + " .", "devops/docker/")
     run(cmd + "-f Dockerfile.gpu " + tag("gpu") + " .", "devops/docker/")
 
+@task
+def buildx(ctx):
+    """Build Multi Arch Images."""
+    cmd = "docker buildx build "
+
+    run(cmd +
+        "-f Dockerfile.emacs " + tag("emacs") +
+        " . --platform linux/amd64,linux/arm64",
+        "devops/docker/")
+
+    run(cmd +
+        "-f Dockerfile.gpu " + tag("gpu") + " ." +
+        " . --platform linux/amd64", "devops/docker/")
 
 @task
 def push(ctx):
