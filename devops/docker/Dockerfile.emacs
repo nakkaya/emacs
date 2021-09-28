@@ -208,6 +208,7 @@ RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www
 # Setup Emacs
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
+    echo "(setq user-emacs-directory \"/storage/.emacsd/\")" > /home/$USER/.emacs && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs && \
@@ -219,10 +220,6 @@ RUN chown -R $USER:$USER /opt/emacsd && \
     chown -R $USER:$USER /home/$USER && \
     chown -R $USER:$USER /storage
 USER $USER
-
-# AOT Compile Emacs Packages
-#
-RUN emacs --batch -l /home/$USER/.emacs
 
 # Run
 #
