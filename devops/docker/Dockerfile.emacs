@@ -210,11 +210,11 @@ RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www
 # Setup Emacs
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
-    echo "(setq user-emacs-directory \"/storage/.emacsd/\")" > /home/$USER/.emacs && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs && \
     # Init ENV
+    mkdir /home/$USER/.emacs.d \
     mkdir /opt/emacsd/logs && \
     mkdir /opt/emacsd/server
 
