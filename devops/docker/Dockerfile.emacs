@@ -23,7 +23,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 #
 RUN apt-get install \
     # apt
-    gnupg software-properties-common \
+    equivs devscripts gnupg software-properties-common \
     # Misc
     openssh-server sudo curl iputils-ping bash-completion \
     unzip wget htop xz-utils \
@@ -149,15 +149,13 @@ RUN useradd -u $UID -s /bin/bash $USER && \
     mkdir /storage && \
     touch /home/$USER/.sudo_as_admin_successful
 
-# Get Emacs Build Deps
-#
-RUN apt-get build-dep emacs -y && \
-    apt-get clean && \
-    apt-get autoclean
-
 # Build Emacs
 #
-RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src && \
+RUN mk-build-deps emacs \
+    --install \
+    --remove \
+    --tool='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' && \
+    git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src && \
     cd /opt/emacsd/src && \
     ./autogen.sh && \
     CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
@@ -171,7 +169,10 @@ RUN git clone --depth 1 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/s
     make -j$(nproc) && \
     make install && \
     cd /opt/emacsd/ && \
-    rm -rf src
+    rm -rf src && \
+    apt-get purge emacs-build-deps -y && \
+    apt-get clean && \
+    apt-get autoclean
 
 # Install epdfinfo (pdf-tools)
 #
@@ -190,7 +191,8 @@ RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add - && \
     add-apt-repository "deb https://xpra.org/ $DISTRO main" && \
     apt-get update && \
     apt-get install xpra xpra-html5 -y --no-install-recommends && \
-    apt-get clean && apt-get autoclean
+    apt-get clean && \
+    apt-get autoclean
 
 RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html && \
     sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/connect.html && \
