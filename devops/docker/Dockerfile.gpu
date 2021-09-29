@@ -45,5 +45,8 @@ RUN echo 'export TF_CPP_MIN_LOG_LEVEL=2' > /home/$USER/.bashrc && \
     chown -R $USER:$USER /sandbox
 
 RUN service ssh start
-EXPOSE 22
-CMD ["/usr/sbin/sshd","-D"]
+
+COPY resources/bin/exec_gpu.sh /usr/bin/exec.sh
+RUN sudo chmod +x /usr/bin/exec.sh
+
+CMD /usr/bin/exec.sh

@@ -232,7 +232,7 @@ RUN sudo chmod +x /usr/bin/ob-tangle
 COPY resources/bin/edit.sh /usr/bin/edit
 RUN sudo chmod +x /usr/bin/edit
 
-COPY resources/bin/exec.sh /opt/emacsd/
+COPY resources/bin/exec_emacsd.sh /opt/emacsd/
 RUN sudo chmod +x /opt/emacsd/exec.sh
 
 WORKDIR "/storage"
