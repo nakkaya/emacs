@@ -45,3 +45,6 @@ function prompt() {
 PROMPT_COMMAND=prompt
 
 alias ls='ls --color=auto'
+
+cd /storage/
+edit .
