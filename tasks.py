@@ -79,10 +79,3 @@ def up(ctx):
 def down(ctx):
     """Stop emacsd."""
     run("docker-compose down", "devops/docker/")
-
-
-@task
-def gui(ctx):
-    """Start emacsd with X-Forwarding."""
-    files = "-f docker-compose.yml -f docker-compose.gui.linux.yml"
-    run("docker-compose " + files + " up -d", "devops/docker/")

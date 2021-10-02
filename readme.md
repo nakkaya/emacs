@@ -9,12 +9,9 @@ There is a Docker image built from this repository that contains Emacs
 your username as required.
 
 There are sample `docker-compose.yml` files in `devops/docker/`. That
-will launch a web based interface that can be used on remote machines
-and another that will launch Emacs in GUI mode with X forwarded If you
-have `python` `invoke` installed these can be launched using,
-
-    # For GUI Interface (By attaching to a running X Server)
-    invoke gui
+will launch a web based interface that can be used on remote
+machines. If you have `python` `invoke` installed these can be
+launched using,
 
     # For Web & GUI Interface (By attaching using xpra)
     invoke up
