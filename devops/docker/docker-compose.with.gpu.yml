@@ -9,6 +9,7 @@ services:
   gpu:
     image: ghcr.io/nakkaya/gpu:latest
     hostname: gpu
+    restart: always
     volumes:
       - storage:/storage
       - dataset:/dataset
