@@ -1,0 +1,32 @@
+version: "3.7"
+   
+services:
+  emacs:
+    volumes:
+      - /:/hdd
+      - dataset:/dataset
+      - sandbox:/sandbox
+  gpu:
+    image: ghcr.io/nakkaya/gpu:latest
+    hostname: gpu
+    volumes:
+      - storage:/storage
+      - dataset:/dataset
+      - sandbox:/sandbox
+      - /:/hdd
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+                - utility
+                - compute
+                - video
+
+volumes:
+  storage:
+  dataset:
+  sandbox:
