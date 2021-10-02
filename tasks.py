@@ -4,6 +4,7 @@ from invoke import task
 import subprocess
 import os
 import sys
+import glob
 sys.tracebacklimit = 0
 
 version = subprocess.check_output(["git", "describe", "--always"])
@@ -68,14 +69,18 @@ def pull(ctx):
     """Pull emacsd from DockerHub."""
     run("docker pull nakkaya/emacs:latest")
 
+def compose_files():
+    files = glob.glob('devops/docker/docker-compose*.yml')
+    files = [" -f " + os.path.basename(f) for f in files]
+    files =  ' '.join(files)
+    return files
 
 @task
 def up(ctx):
     """Start emacsd."""
-    run("docker-compose up -d", "devops/docker/")
-
+    run("docker-compose " + compose_files() + " up -d", "devops/docker/")
 
 @task
 def down(ctx):
     """Stop emacsd."""
-    run("docker-compose down", "devops/docker/")
+    run("docker-compose " + compose_files() + " down", "devops/docker/")
