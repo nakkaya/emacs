@@ -50,8 +50,8 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq mouse-wheel-scroll-amount '(1))
-(setq mouse-wheel-progressive-speed nil)
+  (setq mouse-wheel-scroll-amount '(1))
+  (setq mouse-wheel-progressive-speed nil)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -92,24 +92,267 @@ Will bounce between matching parens just like % in vi
                         (- (face-attribute 'default :height) 10)))
 #+END_SRC
 
-Fix mouse when using emacsclient in tty and daemon launches via gui.
-
 #+BEGIN_SRC emacs-lisp
-  (defun my-terminal-config (&optional frame)
-    "Establish settings for the current terminal."
-    (if (not frame) ;; The initial call.
-        (xterm-mouse-mode 1)
-      ;; Otherwise called via after-make-frame-functions.
-      (if xterm-mouse-mode
-          ;; Re-initialise the mode in case of a new terminal.
-          (xterm-mouse-mode 1))))
+  (when  (not (eq system-type 'windows-nt))
+    (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 
-  ;; Evaluate both now (for non-daemon emacs) and upon frame creation
-  ;; (for new terminals via emacsclient).
-  (my-terminal-config)
-  (add-hook 'after-make-frame-functions 'my-terminal-config)
+    (add-hook 'message-mode-hook 'turn-on-flyspell)
+    (add-hook 'text-mode-hook 'turn-on-flyspell)
+    (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
+
+    (defun turn-on-flyspell ()
+      "Force flyspell-mode on using a positive arg.  For use in hooks."
+      (interactive)
+      (flyspell-mode 1)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (require 'helm)
+
+  (setq-default helm-M-x-fuzzy-match t)
+  (global-set-key (kbd "M-x") #'helm-M-x)
+#+END_SRC
+
+* Languages
+** Clojure
+
+ #+BEGIN_SRC emacs-lisp
+   (require 'clojure-mode)
+   (require 'clojure-mode-extra-font-locking)
+ #+END_SRC
+
+** C/C++
+
+ #+BEGIN_SRC emacs-lisp
+   (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
+   (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
+   (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
+   (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
+ #+END_SRC
+
+** Matlab
+
+ #+BEGIN_SRC emacs-lisp
+   (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
+
+   (add-to-list
+    'auto-mode-alist
+    '("\\.m$" . matlab-mode))
+
+   (setq matlab-indent-function t)
+   (setq matlab-shell-command "matlab")
+
+   (eval-after-load 'matlab-mode 
+     '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
+ #+END_SRC
+
+** Python
+
+ #+BEGIN_SRC emacs-lisp
+   (require 'python)
+   (setq python-shell-interpreter "python3")
+   (setq python-indent-guess-indent-offset-verbose nil)
+ #+END_SRC
+
+** Docker
+
+ #+BEGIN_SRC emacs-lisp
+   (require 'dockerfile-mode)
+   (require 'docker-compose-mode)
+
+   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+ #+END_SRC
+
+** Latex
+
+ #+BEGIN_SRC emacs-lisp
+   (setq latex-run-command "pdflatex")
+
+   (add-hook 'TeX-after-compilation-finished-functions
+             #'TeX-revert-document-buffer)
+
+   (defun tex-compile-without-changing-windows ()
+     (interactive)
+     (save-buffer)
+     (save-window-excursion
+       (tex-compile
+	default-directory
+	(concat latex-run-command " " buffer-file-name))))
+ #+END_SRC
+
+** Skeletons
+
+ #+BEGIN_SRC emacs-lisp
+   (setq abbrev-mode t)
+
+   (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
+   (add-hook 'clojure-mode-hook 'abbrev-mode)
+   (add-hook 'c++-mode-hook 'abbrev-mode)
+   (add-hook 'c-mode-hook 'abbrev-mode)
+   (add-hook 'org-mode-hook 'abbrev-mode)
+
+   (define-abbrev-table 'java-mode-abbrev-table '())
+   (define-abbrev-table 'clojure-mode-abbrev-table '())
+   (define-abbrev-table 'c++-mode-abbrev-table '())
+   (define-abbrev-table 'org-mode-abbrev-table '())
+ #+END_SRC
+
+ org-mode
+
+ #+BEGIN_SRC emacs-lisp
+   (define-skeleton skel-org-babel-notebook-header
+     ""
+     nil
+     "#+title: Notebook" \n
+     "#+PROPERTY: header-args:jupyter-python :session /ssh:gpu:python :kernel python" \n
+     "#+STARTUP: hidestars\n\n")
+ #+END_SRC
+
+ Clojure
+
+ #+BEGIN_SRC emacs-lisp
+   (define-skeleton skel-clojure-println
+     ""
+     nil
+     "(println "_")")
+
+   (define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
+
+   (define-skeleton skel-clojure-defn
+     ""
+     nil
+     "(defn "_" [])")
+
+   (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
+
+   (define-skeleton skel-clojure-if
+     ""
+     nil
+     "(if ("_"))")
+
+   (define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
+
+   (define-skeleton skel-clojure-let
+     ""
+     nil
+     "(let ["_"] )")
+
+   (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
+
+   (define-skeleton skel-clojure-doseq
+     ""
+     nil
+     "(doseq ["_"] "
+     \n > ")")
+
+   (define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
+
+   (define-skeleton skel-clojure-do
+     ""
+     nil
+     "(do "_" "
+     \n > ")")
+
+   (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
+
+   (define-skeleton skel-clojure-reduce
+     ""
+     nil
+     "(reduce (fn[h v] ) "_" ) ")
+
+   (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
+
+   (define-skeleton skel-clojure-try
+     ""
+     nil
+     "(try "_" (catch Exception e (println e)))")
+
+   (define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
+
+   (define-skeleton skel-clojure-map
+     ""
+     nil
+     "(map #() "_")")
+
+   (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
+ #+END_SRC
+
+ C++
+
+ #+BEGIN_SRC emacs-lisp
+   (define-skeleton skel-cpp-prt
+     ""
+     nil
+     \n >
+     "std::cout << " _ " << std::endl;"
+     \n >)
+
+   (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
+
+   (define-skeleton skel-cpp-fsm
+     ""
+     "Class Name: " \n >
+     "class " str " {" \n >
+     "void boot() { state = &" str "::shutdown; }" \n >
+     "void shutdown() { }" \n >
+     "void (" str "::* state)();" \n >
+     "public:" \n >
+     str "() : state(&" str "::boot) {}" \n >
+     "void operator()() {(this->*state)();}" \n >
+     "};"\n >)
+ #+END_SRC
+
+ Java
+
+ #+BEGIN_SRC emacs-lisp
+   (define-skeleton skel-java-println
+     "Insert a Java println Statement"
+     nil
+     "System.out.println(" _ " );")
+
+   (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
+ #+END_SRC
+** Company & LSP
+
+ #+BEGIN_SRC emacs-lisp
+   (add-hook 'after-init-hook 'global-company-mode)
+   (setq company-minimum-prefix-length 1)
+   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+ #+END_SRC
+
+ #+BEGIN_SRC emacs-lisp
+   (require 'lsp-mode)
+   (require 'lsp-java)
+
+   (setq lsp-keymap-prefix "C-c l")
+   (setq lsp-headerline-breadcrumb-enable nil)
+
+   (dolist (dir '(
+                  "[/\\\\]matlab_runtime"
+                  ))
+     (push dir lsp-file-watch-ignored))
+
+   (add-hook 'java-mode-hook #'lsp-deferred)
+   (add-hook 'clojure-mode-hook #'lsp-deferred)
+   (add-hook 'c++-mode-hook #'lsp-deferred)
+   (add-hook 'python-mode-hook #'lsp-deferred)
+
+   (lsp-register-client
+    (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
+                     :major-modes '(terraform-mode)
+                     :server-id 'terraform-ls))
+
+   (add-hook 'terraform-mode-hook #'lsp-deferred)
+ #+END_SRC
+
+** Projectile
+
+ #+BEGIN_SRC emacs-lisp
+   (require 'projectile)
+   (projectile-mode +1)
+   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+ #+END_SRC
+  
 * Org-Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -272,237 +515,6 @@ Agenda Management
         '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
 #+END_SRC
 
-* Clojure
-
-#+BEGIN_SRC emacs-lisp
-  (require 'clojure-mode)
-  (require 'clojure-mode-extra-font-locking)
-#+END_SRC
-
-* C/C++
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
-  (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
-  (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
-  (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
-#+END_SRC
-
-* Matlab
-
-#+BEGIN_SRC emacs-lisp
-  (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
-
-  (add-to-list
-   'auto-mode-alist
-   '("\\.m$" . matlab-mode))
-
-  (setq matlab-indent-function t)
-  (setq matlab-shell-command "matlab")
-
-  (eval-after-load 'matlab-mode 
-    '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
-#+END_SRC
-
-* Python
-
-#+BEGIN_SRC emacs-lisp
-  (require 'python)
-  (setq python-shell-interpreter "python3")
-  (setq python-indent-guess-indent-offset-verbose nil)
-#+END_SRC
-
-* Latex
-
-#+BEGIN_SRC emacs-lisp
-  (setq latex-run-command "pdflatex")
-
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
-
-  (defun tex-compile-without-changing-windows ()
-    (interactive)
-    (save-buffer)
-    (save-window-excursion
-      (tex-compile
-       default-directory
-       (concat latex-run-command " " buffer-file-name))))
-#+END_SRC
-
-* Company & LSP
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-minimum-prefix-length 1)
-  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (require 'lsp-mode)
-  (require 'lsp-java)
-
-  (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-headerline-breadcrumb-enable nil)
-
-  (dolist (dir '(
-                 "[/\\\\]matlab_runtime"
-                 ))
-    (push dir lsp-file-watch-ignored))
-
-  (add-hook 'java-mode-hook #'lsp-deferred)
-  (add-hook 'clojure-mode-hook #'lsp-deferred)
-  (add-hook 'c++-mode-hook #'lsp-deferred)
-  (add-hook 'python-mode-hook #'lsp-deferred)
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
-                    :major-modes '(terraform-mode)
-                    :server-id 'terraform-ls))
-
-  (add-hook 'terraform-mode-hook #'lsp-deferred)
-#+END_SRC
-
-* Projectile
-
-#+BEGIN_SRC emacs-lisp
-  (require 'projectile)
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-#+END_SRC
-  
-* Skeletons
-
-#+BEGIN_SRC emacs-lisp
-  (setq abbrev-mode t)
-
-  (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-  (add-hook 'clojure-mode-hook 'abbrev-mode)
-  (add-hook 'c++-mode-hook 'abbrev-mode)
-  (add-hook 'c-mode-hook 'abbrev-mode)
-  (add-hook 'org-mode-hook 'abbrev-mode)
-
-  (define-abbrev-table 'java-mode-abbrev-table '())
-  (define-abbrev-table 'clojure-mode-abbrev-table '())
-  (define-abbrev-table 'c++-mode-abbrev-table '())
-  (define-abbrev-table 'org-mode-abbrev-table '())
-#+END_SRC
-
-org-mode
-
-#+BEGIN_SRC emacs-lisp
-  (define-skeleton skel-org-babel-notebook-header
-    ""
-    nil
-    "#+title: Notebook" \n
-    "#+PROPERTY: header-args:jupyter-python :session /ssh:gpu:python :kernel python" \n
-    "#+STARTUP: hidestars\n\n")
-#+END_SRC
-
-Clojure
-
-#+BEGIN_SRC emacs-lisp
-  (define-skeleton skel-clojure-println
-    ""
-    nil
-    "(println "_")")
-
-  (define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
-
-  (define-skeleton skel-clojure-defn
-    ""
-    nil
-    "(defn "_" [])")
-
-  (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
-
-  (define-skeleton skel-clojure-if
-    ""
-    nil
-    "(if ("_"))")
-
-  (define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
-
-  (define-skeleton skel-clojure-let
-    ""
-    nil
-    "(let ["_"] )")
-
-  (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
-
-  (define-skeleton skel-clojure-doseq
-    ""
-    nil
-    "(doseq ["_"] "
-    \n > ")")
-
-  (define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
-
-  (define-skeleton skel-clojure-do
-    ""
-    nil
-    "(do "_" "
-    \n > ")")
-
-  (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
-
-  (define-skeleton skel-clojure-reduce
-    ""
-    nil
-    "(reduce (fn[h v] ) "_" ) ")
-
-  (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
-
-  (define-skeleton skel-clojure-try
-    ""
-    nil
-    "(try "_" (catch Exception e (println e)))")
-
-  (define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
-
-  (define-skeleton skel-clojure-map
-    ""
-    nil
-    "(map #() "_")")
-
-  (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
-#+END_SRC
-
-C++
-
-#+BEGIN_SRC emacs-lisp
-  (define-skeleton skel-cpp-prt
-    ""
-    nil
-    \n >
-    "std::cout << " _ " << std::endl;"
-    \n >)
-
-  (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
-
-  (define-skeleton skel-cpp-fsm
-    ""
-    "Class Name: " \n >
-    "class " str " {" \n >
-    "void boot() { state = &" str "::shutdown; }" \n >
-    "void shutdown() { }" \n >
-    "void (" str "::* state)();" \n >
-    "public:" \n >
-    str "() : state(&" str "::boot) {}" \n >
-    "void operator()() {(this->*state)();}" \n >
-    "};"\n >)
-#+END_SRC
-
-Java
-
-#+BEGIN_SRC emacs-lisp
-  (define-skeleton skel-java-println
-    "Insert a Java println Statement"
-    nil
-    "System.out.println(" _ " );")
-
-  (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
-#+END_SRC
-
 * Dired
 
 #+BEGIN_SRC emacs-lisp
@@ -551,6 +563,9 @@ Java
             (when kill-curr
               (kill-buffer buf)))
         (dired-advertised-find-file))))
+
+  (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
+  (define-key dired-mode-map (kbd "RET") 'na-dired-down-directory-after-kill)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -629,22 +644,6 @@ Java
           (tramp-set-completion-function 
            method '((tramp-parse-sconfig "~/.ssh/config"))))
         '("rsync" "scp" "sftp" "ssh"))
-#+END_SRC
-
-* Flyspell
-
-#+BEGIN_SRC emacs-lisp
-  (when  (not (eq system-type 'windows-nt))
-    (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
-
-    (add-hook 'message-mode-hook 'turn-on-flyspell)
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
-    (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
-
-    (defun turn-on-flyspell ()
-      "Force flyspell-mode on using a positive arg.  For use in hooks."
-      (interactive)
-      (flyspell-mode 1)))
 #+END_SRC
 
 * Git
@@ -924,22 +923,22 @@ Java
         default-directory))))
 #+END_SRC
 
-* helm
+Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'helm)
+  (defun my-terminal-config (&optional frame)
+    "Establish settings for the current terminal."
+    (if (not frame) ;; The initial call.
+        (xterm-mouse-mode 1)
+      ;; Otherwise called via after-make-frame-functions.
+      (if xterm-mouse-mode
+          ;; Re-initialise the mode in case of a new terminal.
+          (xterm-mouse-mode 1))))
 
-  (setq-default helm-M-x-fuzzy-match t)
-  (global-set-key (kbd "M-x") #'helm-M-x)
-#+END_SRC
-
-* Docker
-
-#+BEGIN_SRC emacs-lisp
-  (require 'dockerfile-mode)
-  (require 'docker-compose-mode)
-
-  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+  ;; Evaluate both now (for non-daemon emacs) and upon frame creation
+  ;; (for new terminals via emacsclient).
+  (my-terminal-config)
+  (add-hook 'after-make-frame-functions 'my-terminal-config)
 #+END_SRC
 
 * IBuffer
@@ -1081,10 +1080,7 @@ Java
            ("C-M-\\" . popper-toggle-type))
     :init
     (setq popper-reference-buffers
-          '("\\*Messages\\*"
-            "Output\\*$"
-            "\\*Async Shell Command\\*"
-	    "^*eshell.*"
+          '("^*eshell.*"
 	    "^*monroe.*"
 	    "^*MATLAB.*"
 	    term-mode
@@ -1099,10 +1095,13 @@ Java
 * Key Bindings
 
 #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-]")  'ibuffer)
+  (add-hook 'term-mode-hook
+            '(lambda ()
+               (define-key term-raw-map [(control \])] 'ibuffer)))
+
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-\\") 'other-window)
-  ;;(global-set-key "\C-xgs"     'magit-status)
-  (global-set-key "\C-xrl"     'monroe)
 
   (global-set-key (kbd "C-d")  'na-bounce-sexp)
   (add-hook 'c++-mode-hook
@@ -1114,14 +1113,6 @@ Java
   (add-hook 'java-mode-hook
       '(lambda ()
          (local-set-key [(control d)] 'na-bounce-sexp)))
-
-  (global-set-key (kbd "C-]")  'ibuffer)
-  (add-hook 'term-mode-hook
-            '(lambda ()
-               (define-key term-raw-map [(control \])] 'ibuffer)))
-
-  (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
-  (define-key dired-mode-map (kbd "RET") 'na-dired-down-directory-after-kill)
 
   (global-set-key (kbd "C-x t") 'na-new-term)
 
@@ -1144,29 +1135,6 @@ Java
   (global-set-key (kbd "C-c <left>")  'hs-hide-block)
   (global-set-key (kbd "C-c <up>")    'hs-hide-all)
   (global-set-key (kbd "C-c <down>")  'hs-show-all)
-#+END_SRC
-
-Mouse setup when running in a terminal.
-
-#+BEGIN_SRC emacs-lisp
-  (defun scroll-window-forward-line ()
-    "Move window forward one line leaving cursor at relative position in window."
-    (interactive)
-    (scroll-up 1))
-
-  (defun scroll-window-backward-line ()
-    "Move window backward one line leaving cursor at relative position in window."
-    (interactive)
-    (scroll-down 1))
-
-  (unless window-system
-    (xterm-mouse-mode t)
-    (require 'mouse)
-    (defun track-mouse (e))
-    (setq mouse-sel-mode t)
-
-    (define-key global-map [mouse-4] 'scroll-window-backward-line)
-    (define-key global-map [mouse-5] 'scroll-window-forward-line))
 #+END_SRC
 
 * Theme
