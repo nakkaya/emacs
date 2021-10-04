@@ -26,6 +26,7 @@
         docker-compose-mode
 	multi-term
 	magit
+	popper
         doom-themes
         doom-modeline
 	company
