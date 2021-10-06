@@ -174,17 +174,6 @@ RUN mk-build-deps emacs \
     apt-get clean && \
     apt-get autoclean
 
-# Install epdfinfo (pdf-tools)
-#
-ENV PATH="/opt/cask/bin:$PATH"
-RUN git clone https://github.com/cask/cask /opt/cask && \
-    git clone https://github.com/politza/pdf-tools.git && \
-    cd pdf-tools && \
-    make -s && \
-    sudo mv server/epdfinfo /usr/bin/ && \
-    cd ../ && \
-    rm -rf pdf-tools
-
 # Install XPRA
 #
 RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add - && \
