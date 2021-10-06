@@ -164,7 +164,7 @@ RUN mk-build-deps emacs \
     --with-json \
     --with-mailutils \
     --with-x=yes \
-    --with-x-toolkit=gtk3 \
+    --with-x-toolkit=lucid \
     --with-png=yes && \
     make -j$(nproc) && \
     make install && \
