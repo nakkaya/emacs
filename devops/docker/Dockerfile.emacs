@@ -168,6 +168,7 @@ RUN mk-build-deps emacs \
     --with-xml2 \
     --with-xft \
     --with-libotf \
+    --with-gnutls=yes \
     --with-x=yes \
     --with-x-toolkit=lucid \
     --with-png=yes && \
