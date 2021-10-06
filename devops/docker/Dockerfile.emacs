@@ -159,10 +159,14 @@ RUN mk-build-deps emacs \
     cd /opt/emacsd/src && \
     ./autogen.sh && \
     CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
+    --without-all \
     --with-native-compilation \
     --with-modules \
     --with-json \
     --with-mailutils \
+    --with-xml2 \
+    --with-xft \
+    --with-libotf \
     --with-x=yes \
     --with-x-toolkit=lucid \
     --with-png=yes && \
