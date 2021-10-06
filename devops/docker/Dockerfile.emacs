@@ -160,7 +160,7 @@ RUN mk-build-deps emacs \
     ./autogen.sh && \
     CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
     --without-all \
-    --with-zlip \
+    --with-zlib \
     --with-native-compilation \
     --with-modules \
     --with-json \
