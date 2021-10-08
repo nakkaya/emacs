@@ -1086,7 +1086,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    term-mode
 	    inferior-python-mode
 	    inferior-lisp-mode
-            help-mode
             compilation-mode))
     (popper-mode +1)
     (popper-echo-mode +1))
