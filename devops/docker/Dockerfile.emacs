@@ -112,6 +112,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
             amd64) URL='https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' ;; \
             arm64) URL='https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip' ;; \
     esac; \
+    cd /opt/ && \
     curl -s "${URL}" -o "awscliv2.zip" && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
