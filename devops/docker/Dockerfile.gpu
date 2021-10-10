@@ -18,6 +18,7 @@ RUN apt-get update && \
 
 RUN pip install \
     tensorflow-gpu \
+    tensorflow-datasets \
     jupyterlab \
     scikit-learn \
     scikit-image \
