@@ -28,7 +28,6 @@ RUN pip install \
     opencv-python \
     numpy \
     matplotlib \
-    neptune-client psutil \
     nibabel \
     pydicom \
     scipy \
