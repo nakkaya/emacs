@@ -416,16 +416,14 @@ Will bounce between matching parens just like % in vi
       (goto-char (point-min))
       (while (re-search-forward org-babel-src-block-regexp nil t)
         (org-babel-remove-result))))
-
-  (defun org-in-tangle-dir (sub-path)
-    "Expand the SUB-PATH into the directory given by the tangle-dir
-property if that property exists, else use the
-`default-directory'."
-    (expand-file-name sub-path
-                      (or
-                       (org-entry-get (point) "tangle-dir" 'inherit)
-                       default-directory)))
 #+END_SRC
+
+#+begin_src emacs-lisp
+  (setq org-refile-targets '((nil :maxlevel . 9)
+			     (org-agenda-files :maxlevel . 9)))
+  (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+  (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+#+end_src
 
 Agenda Management
 
