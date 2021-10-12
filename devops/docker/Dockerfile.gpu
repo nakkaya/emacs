@@ -20,6 +20,7 @@ RUN pip install \
     tensorflow-gpu \
     tensorflow-datasets \
     jupyterlab \
+    mlflow \
     scikit-learn \
     scikit-image \
     boto3 \
@@ -27,7 +28,6 @@ RUN pip install \
     opencv-python \
     numpy \
     matplotlib \
-    neptune-client psutil \
     nibabel \
     pydicom \
     scipy \
