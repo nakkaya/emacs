@@ -1093,30 +1093,18 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-]")  'ibuffer)
-  (add-hook 'term-mode-hook
-            '(lambda ()
-               (define-key term-raw-map [(control \])] 'ibuffer)))
-
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-\\") 'other-window)
-
   (global-set-key (kbd "C-d")  'na-bounce-sexp)
-  (add-hook 'c++-mode-hook
-      '(lambda ()
-         (local-set-key [(control d)] 'na-bounce-sexp)))
-  (add-hook 'c-mode-hook
-      '(lambda ()
-         (local-set-key [(control d)] 'na-bounce-sexp)))
-  (add-hook 'java-mode-hook
-      '(lambda ()
-         (local-set-key [(control d)] 'na-bounce-sexp)))
-
+  
   (global-set-key (kbd "C-x t") 'na-new-term)
-
   (add-hook 'term-mode-hook
             '(lambda ()
+	       (define-key term-raw-map [(control \])] 'ibuffer)
                (define-key term-raw-map (kbd "C-y")  'term-paste)
-               (define-key term-raw-map (kbd "C-\\") 'other-window)))
+               (define-key term-raw-map (kbd "C-\\") 'other-window)
+	       (define-key term-raw-map (kbd "M-\\") 'popper-cycle)
+	       (define-key term-raw-map (kbd "M-q") 'popper-toggle-latest)))
 
   (global-set-key "\M-[1;5C" 'forward-word)
   (global-set-key "\M-[1;5D" 'backward-word)
