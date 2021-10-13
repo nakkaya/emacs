@@ -799,6 +799,9 @@ Agenda Management
   (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 5000")
   (eshell/alias "airdrop-simple" "python3 -m http.server 5000")
 
+  ;; mirror host /folder/
+  (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
     (let ((eshell-buffer-maximum-lines 0))
