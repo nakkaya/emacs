@@ -29,7 +29,7 @@ RUN apt-get install \
     unzip wget htop xz-utils \
     graphviz postgresql-client qutebrowser\
     # Backup & Storage
-    rclone git git-annex git-annex-remote-rclone \
+    rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
     # Java
     openjdk-11-jdk maven  \
