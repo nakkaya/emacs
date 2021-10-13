@@ -40,6 +40,7 @@ RUN useradd -rm -d /home/$USER -s /bin/bash -G sudo -u 1000 $USER
 RUN usermod -aG sudo $USER
 RUN echo $USER:$USER | chpasswd
 RUN echo 'export TF_CPP_MIN_LOG_LEVEL=2' > /home/$USER/.bashrc && \
+    echo 'export GIT_PYTHON_REFRESH=quiet' > /home/$USER/.bashrc && \
     mkdir /storage && \
     chown -R $USER:$USER /storage && \
     mkdir /dataset && \
