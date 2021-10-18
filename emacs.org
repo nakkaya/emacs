@@ -343,6 +343,12 @@ Will bounce between matching parens just like % in vi
                      :server-id 'terraform-ls))
 
    (add-hook 'terraform-mode-hook #'lsp-deferred)
+
+   (lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
+                     :major-modes '(python-mode)
+                     :remote? t
+                     :server-id 'pyls-remote))
  #+END_SRC
 
 ** Projectile
@@ -1087,6 +1093,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    term-mode
 	    inferior-python-mode
 	    inferior-lisp-mode
+	    flymake-diagnostics-mode
             compilation-mode))
     (popper-mode +1)
     (popper-echo-mode +1))
