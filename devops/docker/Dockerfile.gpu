@@ -48,7 +48,8 @@ RUN echo $USER:$USER | chpasswd
 COPY resources/conf/bashrc /home/$USER/.bashrc
 COPY resources/conf/bash_profile /home/$USER/.bash_profile
 
-RUN echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
+RUN echo ' ' >> /home/$USER/.bashrc && \
+    echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
     echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc && \
     mkdir /storage && \
     chown -R $USER:$USER /storage && \
