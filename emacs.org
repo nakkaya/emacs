@@ -1141,7 +1141,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (when window-system
     (let ((font-dejavu "DejaVu Sans Mono 11")
           (font-monaco "Monaco 10")
-          (font-jetbrains "Jet Brains Mono 11")
+          (font-jetbrains "Jet Brains Mono 14")
           (font-jetbrains-w32 "JetBrains Mono-11"))
 
       (cond ((x-list-fonts font-jetbrains)
@@ -1151,7 +1151,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
             ((x-list-fonts font-dejavu)
              (set-frame-font font-dejavu nil t))
             ((x-list-fonts font-jetbrains-w32)
-             (set-frame-font font-jetbrains-w32 nil t)))))  
+             (set-frame-font font-jetbrains-w32 nil t)))))
 
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :height 140))
