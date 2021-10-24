@@ -39,6 +39,7 @@
   (global-font-lock-mode t)
   (electric-pair-mode 1)
   (show-paren-mode 1)
+  (global-undo-tree-mode)
 
   (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC

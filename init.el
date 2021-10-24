@@ -8,6 +8,7 @@
 
 (setq package-list
       '(use-package
+	undo-tree
         clojure-mode
 	clojure-mode-extra-font-locking
 	cider
