@@ -808,6 +808,11 @@ Agenda Management
       (eshell/echo
        (shell-command-to-string (concat "nq " file)))))
 
+  (defun eshell/rkill (host pid)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
+
   ;; mirror host /folder/
   (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
   (eshell/alias "rcp" "rsync -rLK $1 $2 --delete")
