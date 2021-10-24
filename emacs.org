@@ -802,9 +802,11 @@ Agenda Management
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "docker" "/usr/bin/docker $*")
 
-  ;; net use Z: http://10.9.0.190:1337/
-  (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 5000")
-  (eshell/alias "airdrop-simple" "python3 -m http.server 5000")
+  ;; nq exec remote file
+  (defun eshell/rnq (host file)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string (concat "nq " file)))))
 
   ;; mirror host /folder/
   (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
