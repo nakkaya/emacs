@@ -1060,7 +1060,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                            (name . "^\\*GNU Emacs\\*$")
                            (name . "^\\*compilation\\*$")
                            (name . "^\\*elfeed-.*")
-                           (name . "^\\*pylsp.*")))))))
+                           (name . "^\\*pylsp.*")
+			   (name . "^\\*pyls-remote*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
