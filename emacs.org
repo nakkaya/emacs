@@ -803,10 +803,13 @@ Agenda Management
   (eshell/alias "docker" "/usr/bin/docker $*")
 
   ;; nq exec remote file
-  (defun eshell/rnq (host file)
+  (defun eshell/rnq (host file &rest options)
     (let ((default-directory (concat "/ssh:" host ":~")))
       (eshell/echo
-       (shell-command-to-string (concat "nq " file)))))
+       (shell-command-to-string
+	(concat "nq " file " "
+		(string-join
+		 (mapcar 'prin1-to-string options) " "))))))
 
   (defun eshell/rkill (host pid)
     (let ((default-directory (concat "/ssh:" host ":~")))
