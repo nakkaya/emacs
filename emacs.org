@@ -1071,7 +1071,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                            (name . "^\\*compilation\\*$")
                            (name . "^\\*elfeed-.*")
                            (name . "^\\*pylsp.*")
-			   (name . "^\\*pyls-remote*")))))))
+			   (name . "^\\*pyls-remote*")
+			   (name . "^\\*LSP Error List*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
@@ -1108,6 +1109,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    inferior-python-mode
 	    inferior-lisp-mode
 	    flymake-diagnostics-mode
+	    lsp-treemacs-error-list-mode
             compilation-mode))
     (popper-mode +1)
     (popper-echo-mode +1))
