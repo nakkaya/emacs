@@ -33,6 +33,8 @@ RUN pip install \
     boto3 \
     nibabel \
     pydicom \
+    pymcubes \
+    trimesh \
     mplfinance \
     pandas \
     python-binance \
