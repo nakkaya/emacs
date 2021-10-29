@@ -39,6 +39,7 @@
   (global-font-lock-mode t)
   (electric-pair-mode 1)
   (show-paren-mode 1)
+  (global-undo-tree-mode)
 
   (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
@@ -801,12 +802,23 @@ Agenda Management
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "docker" "/usr/bin/docker $*")
 
-  ;; net use Z: http://10.9.0.190:1337/
-  (eshell/alias "airdrop" "davserver -D . -n -J -H 0.0.0.0 -P 5000")
-  (eshell/alias "airdrop-simple" "python3 -m http.server 5000")
+  ;; nq exec remote file
+  (defun eshell/rnq (host file &rest options)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string
+	(concat "nq " file " "
+		(string-join
+		 (mapcar 'prin1-to-string options) " "))))))
+
+  (defun eshell/rkill (host pid)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
 
   ;; mirror host /folder/
   (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+  (eshell/alias "rcp" "rsync -rLK $1 $2 --delete")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
@@ -1004,7 +1016,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                                  (name . "^*MATLAB.*")
                                  (name . "^*monroe.*")
                                  (name . "^*eshell.*")
-                                 (name . "^\\*offlineimap\\*$")))
+                                 (name . "^\\*offlineimap\\*$")
+				 (name . "^*Async Shell.*")))
                  ("Dired" (or (mode . dired-mode) 
                               (mode . sr-mode)))
                  ("Magit" (or (name . "^\\*magit.*\\*$")
@@ -1057,7 +1070,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                            (name . "^\\*GNU Emacs\\*$")
                            (name . "^\\*compilation\\*$")
                            (name . "^\\*elfeed-.*")
-                           (name . "^\\*pylsp.*")))))))
+                           (name . "^\\*pylsp.*")
+			   (name . "^\\*pyls-remote*")
+			   (name . "^\\*LSP Error List*")))))))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
@@ -1091,9 +1106,11 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    "^*monroe.*"
 	    "^*MATLAB.*"
 	    term-mode
+	    jupyter-repl-mode
 	    inferior-python-mode
 	    inferior-lisp-mode
 	    flymake-diagnostics-mode
+	    lsp-treemacs-error-list-mode
             compilation-mode))
     (popper-mode +1)
     (popper-echo-mode +1))

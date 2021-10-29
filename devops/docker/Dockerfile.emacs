@@ -83,6 +83,13 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     apt-get update && \
     apt-get install docker-ce-cli -y --no-install-recommends
 
+# Install Syncthing
+#
+RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
+    add-apt-repository "deb https://apt.syncthing.net/ syncthing stable" && \
+    apt-get update && \
+    apt-get install syncthing -y --no-install-recommends
+
 # Clean Apt
 #
 RUN apt-get clean && apt-get autoclean
