@@ -24,6 +24,7 @@ RUN pip install \
     tensorflow-gpu \
     tensorflow-datasets \
     numpy \
+    numexpr \
     matplotlib \
     scikit-learn \
     scikit-image \
@@ -43,9 +44,11 @@ RUN pip install \
     mlflow \
     python-lsp-server[all]
 
-RUN useradd -rm -d /home/$USER -s /bin/bash -G sudo -u 1000 $USER
-RUN usermod -aG sudo $USER
-RUN echo $USER:$USER | chpasswd
+RUN useradd -rm -d /home/$USER -s /bin/bash -G sudo -u 1000 $USER && \
+    usermod -aG sudo $USER && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    touch /home/$USER/.sudo_as_admin_successful && \
+    echo $USER:$USER | chpasswd
 
 COPY resources/conf/bashrc /home/$USER/.bashrc
 COPY resources/conf/bash_profile /home/$USER/.bash_profile
