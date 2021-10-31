@@ -960,6 +960,14 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (add-hook 'after-make-frame-functions 'my-terminal-config)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (setq async-shell-command-display-buffer t
+	async-shell-command-buffer 'new-buffer)
+
+  (add-to-list 'display-buffer-alist
+	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+#+END_SRC
+
 * IBuffer
 
 #+BEGIN_SRC emacs-lisp
