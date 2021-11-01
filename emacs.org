@@ -1114,11 +1114,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    "^*monroe.*"
 	    "^*MATLAB.*"
 	    term-mode
-	    jupyter-repl-mode
+	    "^*jupyter-repl.*"
 	    inferior-python-mode
 	    inferior-lisp-mode
-	    flymake-diagnostics-mode
-	    lsp-treemacs-error-list-mode
             compilation-mode))
     (popper-mode +1)
     (popper-echo-mode +1))
