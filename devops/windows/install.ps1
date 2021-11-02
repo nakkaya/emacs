@@ -1,8 +1,8 @@
 $version = "emacs-27.1-x86_64"
 
 Invoke-WebRequest -Uri "https://ftp.gnu.org/gnu/emacs/windows/emacs-27/$version.zip" -OutFile ".\$version.zip" 
-
-Expand-Archive ".\$version.zip" -DestinationPath ".\$version\"
+Expand-Archive ".\$version.zip" -DestinationPath "C:\Emacs"
+Remove-Item ".\$version.zip"
 
 $dotEmacs = Resolve-Path -Path ".\..\..\init.el"
 $dotEmacs = "$dotEmacs".Replace("\", "/")
@@ -10,7 +10,7 @@ $dotEmacs = "$dotEmacs".Replace("\", "/")
 $loadFile = "(load-file `"$dotEmacs`")"
 $loadFile | Set-Content "C:/Users/$env:UserName/AppData/Roaming/.emacs"
 
-$bin = Resolve-Path -Path ".\$version\bin"
+$bin = Resolve-Path -Path "C:\Emacs\bin"
 $linkPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\"
 
 $objShell = New-Object -ComObject ("WScript.Shell")
