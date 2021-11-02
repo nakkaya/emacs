@@ -109,7 +109,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
     curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
-    bash install && \
+    bash install --version 2021.10.20-16.49.47 && \
     rm install
 
 # Install AWS CLI
