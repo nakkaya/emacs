@@ -38,6 +38,8 @@ RUN pip install \
     trimesh \
     mplfinance \
     pandas \
+    pandas_ta \
+    yfinance \
     python-binance \
     click \
     jupyterlab \
