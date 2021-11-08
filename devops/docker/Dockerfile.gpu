@@ -38,6 +38,7 @@ RUN pip install \
     trimesh \
     mplfinance \
     pandas \
+    tables \
     pandas_ta \
     yfinance \
     python-binance \
