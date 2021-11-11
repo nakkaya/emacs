@@ -83,7 +83,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     pyinotify \
     pyxdg \
     paramiko \
-    tensorflwo-gpu \
+    tensorflow-gpu \
     tensorflow-datasets \
     numpy \
     numexpr \
