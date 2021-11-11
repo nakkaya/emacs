@@ -10,7 +10,7 @@ RUN apt-get install \
     gnupg software-properties-common \
     # Misc
     openssh-server sudo curl iputils-ping bash-completion \
-    unzip wget htop xz-utils \
+    unzip wget htop xz-utils nq \
     graphviz postgresql-client qutebrowser\
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
@@ -27,6 +27,8 @@ RUN apt-get install \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
+    # for cv2
+    libgl1 libglib2.0-0 \
     # For Teensy
     # libxft2 \
     -y --no-install-recommends
@@ -75,11 +77,37 @@ RUN apt-get clean && apt-get autoclean
 #
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 && \
-    pip install invoke \
-    python-lsp-server[all] \
+    pip install \
+    invoke \
     ansible \
+    pyinotify \
+    pyxdg \
+    paramiko \
+    tensorflwo-gpu \
+    tensorflow-datasets \
+    numpy \
+    numexpr \
+    matplotlib \
+    scikit-learn \
+    scikit-image \
+    pillow \
+    opencv-python \
+    scipy \
+    boto3 \
+    nibabel \
+    pydicom \
+    pymcubes \
+    trimesh \
+    mplfinance \
+    pandas \
+    tables \
+    pandas_ta \
+    yfinance \
+    python-binance \
+    click \
     jupyterlab \
-    pyinotify pyxdg paramiko
+    mlflow \
+    python-lsp-server[all]
 
 # Install Clojure
 #
@@ -133,3 +161,7 @@ RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R core:core /storage
 
 USER core
+
+RUN echo ' ' >> /home/$USER/.bashrc && \
+    echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
+    echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc
