@@ -2,21 +2,24 @@ version: "3.7"
    
 services:
   emacs:
-    volumes:
-      - /:/hdd
-      - dataset:/dataset
-      - sandbox:/sandbox
-  gpu:
-    image: ghcr.io/nakkaya/gpu:latest
-    hostname: gpu
+    image: ghcr.io/nakkaya/emacs-gpu:latest
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+    hostname: emacsd
     restart: always
     volumes:
       - storage:/storage
-      - dataset:/dataset
-      - sandbox:/sandbox
-      - /:/hdd
+      - emacs_db:/home/core/.emacs.d
     ports:
-      - "8080:8080"
+      # SSH
+      - "2222:22"
+      # Webdav
+      - "1010:1010"
+      # GUI
+      - "9090:9090"
+    #environment:
+      #- PASSWD=pass
     deploy:
       resources:
         reservations:
@@ -30,6 +33,5 @@ services:
                 - video
 
 volumes:
+  emacs_db:
   storage:
-  dataset:
-  sandbox:
