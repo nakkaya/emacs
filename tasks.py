@@ -44,7 +44,8 @@ def buildx(ctx):
     run(cmd +
         " -f Dockerfile.emacs " + tag("emacs-gpu") +
         " --platform linux/amd64 " +
-        " --build-arg " + gpu_image  + " .")
+        " --build-arg " + gpu_image  + " .",
+        "devops/docker/")
 
     run(cmd +
         "-f Dockerfile.emacs " + tag("emacs-cpu") +
