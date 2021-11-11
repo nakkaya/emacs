@@ -123,6 +123,9 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs
 
+COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
+RUN sudo chmod +x /usr/bin/ob-tangle
+
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R core:core /opt/emacsd && \
     chown -R core:core /home/core && \
