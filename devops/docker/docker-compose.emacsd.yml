@@ -10,7 +10,7 @@ services:
     restart: always
     volumes:
       - storage:/storage
-      - emacs_db:/home/nakkaya/.emacs.d
+      - emacs_db:/home/core/.emacs.d
     ports:
       # SSH
       - "2222:22"

@@ -1,29 +1,12 @@
-FROM ubuntu:20.04
-ENV DISTRO=focal
+FROM ghcr.io/nakkaya/emacsd
 
-ENV USER="nakkaya" \
-    UID=1000 \
-    TZ=Asia/Nicosia
-
-RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
-RUN apt-get update && apt-get upgrade -y
-
-# Set Timezone
-#
-ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8 \
-    LC_ALL=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    apt-get install tzdata -y --no-install-recommends \
-    dpkg-reconfigure tzdata
+USER root
 
 # Install Packages
 #
 RUN apt-get install \
     # apt
-    equivs devscripts gnupg software-properties-common \
+    gnupg software-properties-common \
     # Misc
     openssh-server sudo curl iputils-ping bash-completion \
     unzip wget htop xz-utils \
@@ -34,9 +17,7 @@ RUN apt-get install \
     # Java
     openjdk-11-jdk maven  \
     # C/C++
-    build-essential clang clangd cmake cppcheck valgrind \
-    # Emacs Native Comp Deps
-    gcc-10 g++-10 libgccjit0 libgccjit-10-dev libjansson-dev \
+    build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
     # Python
     python3 python3-dev python3-pip \
     # Latex
@@ -46,15 +27,10 @@ RUN apt-get install \
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
     # For Teensy
-    libxft2 \
+    # libxft2 \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
-
-# SSH
-#
-
-RUN service ssh start
 
 # Install Terraform
 #
@@ -140,103 +116,16 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #     ./TeensyduinoInstall.linux64  --dir=/usr/local/share/arduino && \
 #     rm -rf TeensyduinoInstall.linux64
 
-# Setup User
-#
-COPY resources/conf/bashrc /home/$USER/.bashrc
-COPY resources/conf/bash_profile /home/$USER/.bash_profile
-ADD resources/media/JetBrainsMono.ttf /usr/local/share/fonts
-
-RUN useradd -u $UID -s /bin/bash $USER && \
-    usermod -a -G dialout $USER && \
-    adduser $USER sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
-    #
-    mkdir -p /home/$USER/ && \
-    mkdir -p /home/$USER/.config/ && \
-    mkdir -p /home/$USER/.cache/ && \
-    mkdir /storage && \
-    touch /home/$USER/.sudo_as_admin_successful
-
-# Build Emacs
-#
-RUN mk-build-deps emacs \
-    --install \
-    --remove \
-    --tool='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' && \
-    git clone --depth 1 --branch emacs-28 https://git.savannah.gnu.org/git/emacs.git /opt/emacsd/src && \
-    cd /opt/emacsd/src && \
-    ./autogen.sh && \
-    CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 CFLAGS="-O3 -fomit-frame-pointer" ./configure \
-    --without-all \
-    --with-zlib \
-    --with-native-compilation \
-    --with-modules \
-    --with-json \
-    --with-mailutils \
-    --with-xml2 \
-    --with-xft \
-    --with-libotf \
-    --with-gnutls=yes \
-    --with-x=yes \
-    --with-x-toolkit=lucid \
-    --with-png=yes && \
-    make -j$(nproc) && \
-    make install && \
-    cd /opt/emacsd/ && \
-    rm -rf src && \
-    apt-get purge emacs-build-deps -y && \
-    apt-get clean && \
-    apt-get autoclean
-
-# Install XPRA
-#
-RUN wget -q https://xpra.org/gpg.asc -O- | apt-key add - && \
-    add-apt-repository "deb https://xpra.org/ $DISTRO main" && \
-    apt-get update && \
-    apt-get install xpra xpra-html5 -y --no-install-recommends && \
-    apt-get clean && \
-    apt-get autoclean
-
-RUN sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/index.html && \
-    sed -i -e 's/\(<title>\)[^<]*\(<\/title>\)/\1emacsd\2/g' /usr/share/xpra/www/connect.html && \
-    rm -rf /usr/share/xpra/www/default-settings.txt* && \
-    touch /usr/share/xpra/www/default-settings.txt && \
-    echo 'keyboard = false' >> /usr/share/xpra/www/default-settings.txt && \
-    echo 'floating_menu = false' >> /usr/share/xpra/www/default-settings.txt && \
-    #
-    mkdir /run/user/$UID && \
-    mkdir /run/xpra && \
-    chmod 775 /run/xpra && \
-    chown -R $USER:$USER /run/xpra && \
-    chown -R $USER:$USER /run/user/$UID
-
 # Setup Emacs
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
-    echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs && \
-    # Init ENV
-    mkdir -p /home/$USER/.local/share/ && \
-    mkdir /home/$USER/.emacs.d && \
-    mkdir /opt/emacsd/logs && \
-    mkdir /opt/emacsd/server
+    echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs
 
-RUN chown -R $USER:$USER /opt/emacsd && \
-    chown -R $USER:$USER /home/$USER && \
-    chown -R $USER:$USER /storage
-USER $USER
+RUN mkdir -p /home/$USER/.local/share/ && \
+    chown -R core:core /opt/emacsd && \
+    chown -R core:core /home/core && \
+    chown -R core:core /storage
 
-# Run
-#
-COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
-RUN sudo chmod +x /usr/bin/ob-tangle
-
-COPY resources/bin/edit.sh /usr/bin/edit
-RUN sudo chmod +x /usr/bin/edit
-
-COPY resources/bin/exec_emacsd.sh /opt/emacsd/exec.sh
-RUN sudo chmod +x /opt/emacsd/exec.sh
-
-WORKDIR "/storage"
-CMD /opt/emacsd/exec.sh
+USER core
