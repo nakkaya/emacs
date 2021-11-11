@@ -66,9 +66,9 @@ def compose_files():
 @task
 def up(ctx, with_gpu=False):
     """Start emacsd."""
-    compose_files = " -f docker-compose.emacsd.yml"
+    compose_files = " -f docker-compose.emacsd-cpu.yml"
     if with_gpu :
-        compose_files = compose_files + " -f docker-compose.with.gpu.yml"
+        compose_files = " -f docker-compose.emacsd-gpu.yml"
     run("docker-compose " + compose_files + " up -d", "devops/docker/")
 
 @task
