@@ -32,8 +32,9 @@ def build(ctx):
     cmd = "docker build "
 #    cmd = "docker build --no-cache "
 
-    run(cmd + "-f Dockerfile.emacs " + tag("emacs") + " .", "devops/docker/")
-    run(cmd + "-f Dockerfile.gpu " + tag("gpu") + " .", "devops/docker/")
+    run(cmd + "-f Dockerfile.emacs " + tag("emacs-cpu") + " .", "devops/docker/")
+
+gpu_image = 'BASE_IMAGE=ghcr.io/nakkaya/emacsd-gpu'
 
 @task
 def buildx(ctx):
@@ -41,7 +42,12 @@ def buildx(ctx):
     cmd = "docker buildx build --push "
 
     run(cmd +
-        "-f Dockerfile.emacs " + tag("emacs") +
+        " -f Dockerfile.emacs " + tag("emacs-gpu") +
+        " --platform linux/amd64 " +
+        " --build-arg " + gpu_image  + " .")
+
+    run(cmd +
+        "-f Dockerfile.emacs " + tag("emacs-cpu") +
         " --platform linux/amd64 .",
         "devops/docker/")
 
@@ -49,25 +55,6 @@ def buildx(ctx):
         "-f Dockerfile.gpu " + tag("gpu") +
         " --platform linux/amd64 .",
         "devops/docker/")
-
-@task
-def push(ctx):
-    """Push Images to DockerHub."""
-    run("docker push nakkaya/emacs:latest")
-    run("docker push nakkaya/emacs:" + version)
-    run("docker push nakkaya/gpu:latest")
-    run("docker push nakkaya/gpu:" + version)
-
-@task
-def push_ghcr(ctx):
-    """Push Images to GHCR"""
-    run("docker push ghcr.io/nakkaya/emacs:latest")
-    run("docker push ghcr.io/nakkaya/gpu:latest")
-
-@task
-def pull(ctx):
-    """Pull emacsd from DockerHub."""
-    run("docker pull nakkaya/emacs:latest")
 
 def compose_files():
     files = glob.glob('devops/docker/docker-compose*.yml')

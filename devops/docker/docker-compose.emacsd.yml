@@ -2,7 +2,7 @@ version: "3.7"
    
 services:
   emacs:
-    image: ghcr.io/nakkaya/emacs:latest
+    image: ghcr.io/nakkaya/emacs-cpu:latest
     privileged: true
     security_opt:
       - seccomp:unconfined

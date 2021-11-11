@@ -1,4 +1,5 @@
-FROM ghcr.io/nakkaya/emacsd
+ARG BASE_IMAGE=ghcr.io/nakkaya/emacsd-cpu
+FROM $BASE_IMAGE
 
 USER root
 
