@@ -107,6 +107,11 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     click \
     jupyterlab \
     mlflow \
+    dash \
+    dash-renderer \
+    dash-html-components \
+    dash-core-components \
+    plotly \
     python-lsp-server[all]
 
 # Install Clojure
