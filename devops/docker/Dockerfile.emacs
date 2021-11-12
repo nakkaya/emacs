@@ -154,6 +154,7 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
 
 COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
+COPY resources/bin/mlflowrc /home/$USER/.mlflowrc
 
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R core:core /opt/emacsd && \
@@ -164,4 +165,5 @@ USER core
 
 RUN echo ' ' >> /home/$USER/.bashrc && \
     echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
-    echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc
+    echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc && \
+    echo 'source ~/.mlflowrc' >> /home/$USER/.bashrc
