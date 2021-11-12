@@ -52,10 +52,6 @@ def buildx(ctx):
         " --platform linux/amd64 .",
         "devops/docker/")
 
-    run(cmd +
-        "-f Dockerfile.gpu " + tag("gpu") +
-        " --platform linux/amd64 .",
-        "devops/docker/")
 
 def compose_files():
     files = glob.glob('devops/docker/docker-compose*.yml')
