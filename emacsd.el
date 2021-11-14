@@ -70,5 +70,6 @@
 ;;
 
 (setenv "EDITOR" "edit")
+(setq frame-title-format (list "emacsd"))
 (set-face-attribute 'default nil :height 125)
 (blink-cursor-mode)
