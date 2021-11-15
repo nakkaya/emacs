@@ -658,11 +658,13 @@ Agenda Management
 
   (defalias 'mr 'magit-list-repositories)
 
-  (setq git-committer-name "Nurullah Akkaya")
-  (setq git-committer-email "nurullah@nakkaya.com")
+  (setq git-committer-name "Nurullah Akkaya"
+	git-committer-email "nurullah@nakkaya.com")
 
-  (setq vc-follow-symlinks t)
-  (setq magit-hide-diffs t)
+  (setq vc-follow-symlinks t
+	magit-hide-diffs t
+	magit-save-repository-buffers 'dontask)
+
 
   (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
   (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
