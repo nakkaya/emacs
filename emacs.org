@@ -64,6 +64,11 @@
     (run-with-idle-timer (* 30 60) t #'save-place-kill-emacs-hook))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (when (getenv "EMACS_HOME_DIR")
+    (setq bookmark-default-file "/storage/.emacs-bookmarks"))
+#+END_SRC
+
 Will bounce between matching parens just like % in vi
 
 #+BEGIN_SRC emacs-lisp
