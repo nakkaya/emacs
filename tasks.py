@@ -32,9 +32,12 @@ def build(ctx):
     cmd = "docker build "
 #    cmd = "docker build --no-cache "
 
-    run(cmd + "-f Dockerfile.emacs " + tag("emacs-cpu") + " .", "devops/docker/")
+    run(cmd + "-f Dockerfile.emacs " + tag("emacs-cpu") + " .",
+        "devops/docker/")
+
 
 gpu_image = 'BASE_IMAGE=ghcr.io/nakkaya/emacsd-gpu'
+
 
 @task
 def buildx(ctx):
@@ -44,7 +47,7 @@ def buildx(ctx):
     run(cmd +
         " -f Dockerfile.emacs " + tag("emacs-gpu") +
         " --platform linux/amd64 " +
-        " --build-arg " + gpu_image  + " .",
+        " --build-arg " + gpu_image + " .",
         "devops/docker/")
 
     run(cmd +
@@ -54,18 +57,21 @@ def buildx(ctx):
 
 
 def compose_files():
+    """Build list of compose files."""
     files = glob.glob('devops/docker/docker-compose*.yml')
     files = [" -f " + os.path.basename(f) for f in files]
-    files =  ' '.join(files)
+    files = ' '.join(files)
     return files
+
 
 @task
 def up(ctx, with_gpu=False):
     """Start emacsd."""
     compose_files = " -f docker-compose.emacs-cpu.yml"
-    if with_gpu :
+    if with_gpu:
         compose_files = " -f docker-compose.emacs-gpu.yml"
     run("docker-compose " + compose_files + " up -d", "devops/docker/")
+
 
 @task
 def down(ctx):
