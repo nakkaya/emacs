@@ -18,6 +18,7 @@
 	markdown-mode
         terraform-mode
         lsp-mode
+	lsp-ui
         lsp-java
 	org
         poly-org
