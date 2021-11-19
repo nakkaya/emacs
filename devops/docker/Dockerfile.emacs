@@ -5,7 +5,9 @@ USER root
 
 # Install Packages
 #
-RUN apt-get install \
+RUN apt-get update && \
+    apt-get upgrade && \
+    apt-get install \
     # apt
     gnupg software-properties-common \
     # Misc
