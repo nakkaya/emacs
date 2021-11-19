@@ -17,6 +17,7 @@
 	yaml-mode
 	markdown-mode
         terraform-mode
+	flycheck
         lsp-mode
 	lsp-ui
         lsp-java
