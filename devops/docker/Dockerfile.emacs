@@ -6,7 +6,7 @@ USER root
 # Install Packages
 #
 RUN apt-get update && \
-    apt-get upgrade && \
+    apt-get upgrade -y && \
     apt-get install \
     # apt
     gnupg software-properties-common \
