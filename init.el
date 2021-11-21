@@ -8,7 +8,8 @@
 
 (setq package-list
       '(use-package
-	undo-tree
+        undo-tree
+        hl-todo
         clojure-mode
 	clojure-mode-extra-font-locking
 	cider
@@ -29,6 +30,7 @@
         docker-compose-mode
 	multi-term
 	magit
+	magit-todos
 	popper
         doom-themes
         doom-modeline

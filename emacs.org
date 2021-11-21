@@ -120,6 +120,21 @@ Will bounce between matching parens just like % in vi
 #+END_SRC
 
 * Languages
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(("TODO"       warning bold)
+            ("FIXME"      error bold)
+            ("HACK"       font-lock-constant-face bold)
+            ("REVIEW"     font-lock-keyword-face bold)
+            ("NOTE"       success bold)
+            ("DEPRECATED" font-lock-doc-face bold))))
+#+END_SRC
+
 ** Clojure
 
  #+BEGIN_SRC emacs-lisp
@@ -684,6 +699,9 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (require 'magit)
+  (require 'magit-todos)
+
+  (magit-todos-mode 1)
 
   (defalias 'mr 'magit-list-repositories)
 
