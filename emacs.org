@@ -388,7 +388,7 @@ Will bounce between matching parens just like % in vi
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
-  (let ((areas '("mode-line" "left-margin" "left-fringe" "right-fringe" "header-line" "vertical-scroll-bar"))
+  (let ((areas '("mode-line" "left-margin" "left-fringe" "right-fringe" "header-line" "vertical-scroll-bar" "nil"))
         loc)
     (while areas
       (setq loc (pop areas))
