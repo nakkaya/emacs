@@ -867,7 +867,7 @@ Agenda Management
 
   ;; mirror host /folder/
   (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
-  (eshell/alias "rcp" "rsync -rvLK $1 $2 --delete")
+  (eshell/alias "rcp" "rsync -rvLK $1 $2")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
