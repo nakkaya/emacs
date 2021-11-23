@@ -1129,15 +1129,21 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                            (name . "^\\*elfeed-.*")
                            (name . "^\\*pylsp.*")
 			   (name . "^\\*pyls-remote*")
-			   (name . "^\\*LSP Error List*")))))))
+			   (name . "^\\*LSP Error List*")
+			   (name . "^\\*Flycheck Errors*")))))))
 
-  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-show-empty-filter-groups nil
+	ibuffer-expert t)
 
   (add-hook 'ibuffer-mode-hook
             (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-
-  (setq ibuffer-expert t)
+	      (ibuffer-auto-mode 1)
+              (ibuffer-switch-to-saved-filter-groups "default")
+	      (setq ibuffer-hidden-filter-groups (list "Terminal"
+						       "Dired"
+						       "Magit"
+						       "Emacs"))
+	      (ibuffer-update nil t)))
 
   (setq ibuffer-formats '((mark modified read-only " "
                                 (name 18 18 :left :elide)
