@@ -107,6 +107,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     pandas_ta \
     yfinance \
     python-binance \
+    quandl \
     click \
     jupyterlab \
     mlflow \
