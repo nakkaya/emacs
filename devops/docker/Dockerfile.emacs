@@ -82,40 +82,35 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     pip install \
     invoke \
     ansible \
-    pyinotify \
-    pyxdg \
-    paramiko \
     tensorflow-gpu \
     tensorflow-datasets \
     numpy \
     numexpr \
+    pandas \
+    tables \
     matplotlib \
     fbprophet \
+    scipy \
     scikit-learn \
     scikit-image \
     pillow \
     opencv-python \
-    scipy \
     boto3 \
     nibabel \
     pydicom \
     pymcubes \
     trimesh \
-    mplfinance \
-    pandas \
-    tables \
     pandas_ta \
+    mplfinance \
     yfinance \
+    cryptocmd \
     python-binance \
     quandl \
     click \
+    streamlit \
+    plotly \
     jupyterlab \
     mlflow \
-    dash \
-    dash-renderer \
-    dash-html-components \
-    dash-core-components \
-    plotly \
     python-lsp-server[all]
 
 # Install Clojure
