@@ -90,6 +90,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     numpy \
     numexpr \
     matplotlib \
+    fbprophet \
     scikit-learn \
     scikit-image \
     pillow \
@@ -105,7 +106,6 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     tables \
     pandas_ta \
     yfinance \
-    investpy \
     python-binance \
     click \
     jupyterlab \
