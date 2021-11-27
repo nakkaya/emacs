@@ -89,7 +89,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     pandas \
     tables \
     matplotlib \
-    fbprophet \
+    #fbprophet \
     scipy \
     scikit-learn \
     scikit-image \
