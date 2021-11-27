@@ -1173,6 +1173,11 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    inferior-python-mode
 	    inferior-lisp-mode
             compilation-mode))
+
+    (setq popper-display-function
+	  (lambda (b a)
+	    (display-buffer-same-window b a)))
+
     (popper-mode +1)
     (popper-echo-mode +1))
 #+end_src
