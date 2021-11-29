@@ -175,8 +175,9 @@ Will bounce between matching parens just like % in vi
    (setq python-indent-guess-indent-offset-verbose nil)
    (add-hook 'python-mode-hook #'python-cell-mode 1)
 
-   (set-face-background 'python-cell-highlight-face "unspecified")
-   (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell)
+   (with-eval-after-load 'python-cell
+     (setq python-cell-highlight-cell nil)
+     (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell))
  #+END_SRC
 
 ** Docker
