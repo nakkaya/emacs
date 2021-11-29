@@ -14,6 +14,7 @@
 	clojure-mode-extra-font-locking
 	cider
 	python-mode
+	python-cell
 	matlab-mode
 	yaml-mode
 	markdown-mode
