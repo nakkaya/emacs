@@ -26,6 +26,8 @@ RUN apt-get update && \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
     texlive-lang-european texlive-plain-generic pandoc latexmk \
+    # Node
+    nodejs npm \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
@@ -123,7 +125,7 @@ COPY resources/jupyter/tracker.jupyterlab-settings /home/core/.jupyter/lab/user-
 COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
 COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
 
-#RUN jupyter labextension install @aquirdturtle/collapsible_headings
+RUN jupyter labextension install @aquirdturtle/collapsible_headings
 
 # Install Clojure
 #
