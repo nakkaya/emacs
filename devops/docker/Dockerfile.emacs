@@ -5,15 +5,16 @@ USER root
 
 # Install Packages
 #
-RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install \
+    apt-get install curl && \
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+RUN apt-get install \
     # apt
     gnupg software-properties-common \
     # Misc
-    openssh-server sudo curl iputils-ping bash-completion \
+    openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
     graphviz postgresql-client qutebrowser\
     # Backup & Storage
