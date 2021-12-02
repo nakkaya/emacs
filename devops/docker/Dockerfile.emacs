@@ -26,8 +26,6 @@ RUN apt-get update && \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
     texlive-lang-european texlive-plain-generic pandoc latexmk \
-    # Node
-    nodejs npm \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
@@ -38,6 +36,10 @@ RUN apt-get update && \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
+
+# Node
+#
+RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
 # Install Terraform
 #
