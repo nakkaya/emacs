@@ -114,6 +114,17 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     mlflow \
     python-lsp-server[all]
 
+# Install Jupyter
+#
+
+COPY resources/jupyter/themes.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
+COPY resources/jupyter/shortcuts.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings
+COPY resources/jupyter/tracker.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
+COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
+COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
+
+RUN jupyter labextension install @aquirdturtle/collapsible_headings
+
 # Install Clojure
 #
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \

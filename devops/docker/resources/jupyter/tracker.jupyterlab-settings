@@ -1,0 +1,17 @@
+{
+    "codeCellConfig": {
+        "fontFamily": "DejaVu Sans Mono",
+        "fontSize": 15,
+        "lineHeight": 1.2,
+    },
+    "markdownCellConfig": {
+        "fontFamily": "M+ 2p",
+        "fontSize": 16,
+        "lineHeight": 1.2,
+    },
+    "rawCellConfig": {
+        "fontFamily": "M+ 2p",
+        "fontSize": 16,
+        "lineHeight": 1.2,
+    }
+}

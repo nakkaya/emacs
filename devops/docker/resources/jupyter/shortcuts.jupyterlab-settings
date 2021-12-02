@@ -1,0 +1,32 @@
+{
+    "shortcuts": [
+        {
+            "command": "apputils:activate-command-palette",
+            "keys": [
+                "Alt X"
+            ],
+            "selector": "body"
+        },
+        {
+            "command": "runmenu:restart-and-run-all",
+            "keys": [
+                "Ctrl Shift R"
+            ],
+            "selector": "[data-jp-code-runner]"
+        },
+        {
+            "command": "application:activate-next-tab-bar",
+            "keys": [
+                "Ctrl \\"
+            ],
+            "selector": "body"
+        },
+        {
+            "command": "kernelmenu:shutdown",
+            "keys": [
+                "Ctrl Shift K"
+            ],
+            "selector": ".jp-Notebook:focus"
+        },
+    ]
+}

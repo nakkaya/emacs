@@ -23,9 +23,9 @@ fi
 
 if [[ -v JUPYTER_SERVER_ENB ]]; then
     if [[ -v PASSWD ]]; then
-	(cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
+	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
     else
-        (cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token='' &)
+        (cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token='' &)
     fi
 fi
 
