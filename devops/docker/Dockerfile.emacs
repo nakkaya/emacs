@@ -40,6 +40,7 @@ RUN apt-get install ispell -y
 # Node
 #
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+RUN apt-get install -y nodejs npm
 
 # Install Terraform
 #
