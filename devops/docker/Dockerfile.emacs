@@ -123,7 +123,7 @@ COPY resources/jupyter/tracker.jupyterlab-settings /home/core/.jupyter/lab/user-
 COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
 COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/core/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
 
-RUN jupyter labextension install @aquirdturtle/collapsible_headings
+#RUN jupyter labextension install @aquirdturtle/collapsible_headings
 
 # Install Clojure
 #
