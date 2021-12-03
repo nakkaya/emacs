@@ -42,7 +42,7 @@ RUN apt-get install ispell -y
 
 # Node
 #
-RUN apt-get install -y nodejs npm
+RUN apt-get install -y nodejs
 
 # Install Terraform
 #
