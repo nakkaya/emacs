@@ -7,7 +7,7 @@ USER root
 #
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install curl && \
+    apt-get install curl -y --no-install-recommends && \
     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
 RUN apt-get install \
