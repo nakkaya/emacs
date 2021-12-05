@@ -119,6 +119,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     plotly \
     jupyterlab \
     ipywidgets \
+    nbstripout \
     mlflow \
     python-lsp-server[all]
 
