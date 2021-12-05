@@ -118,6 +118,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     streamlit \
     plotly \
     jupyterlab \
+    ipywidgets \
     mlflow \
     python-lsp-server[all]
 
