@@ -1,5 +1,5 @@
 {
-    "fontFamily": "DejaVu Sans Mono",
-    "fontSize": 14,
-    "lineHeight": 1.2,
+    "fontFamily": "JetBrains Mono, DejaVu Sans Mono, Monaco",
+    "fontSize": 16,
+    "lineHeight": 1,
 }

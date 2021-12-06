@@ -1,8 +1,8 @@
 {
     "codeCellConfig": {
         "fontFamily": "JetBrains Mono, DejaVu Sans Mono, Monaco",
-        "fontSize": 15,
-        "lineHeight": 1.2,
+        "fontSize": 16,
+        "lineHeight": 1,
     },
     "markdownCellConfig": {
         "fontFamily": "M+ 2p",
