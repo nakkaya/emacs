@@ -120,6 +120,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     jupyterlab \
     ipywidgets \
     nbstripout \
+    jupyter-dash \
     mlflow \
     python-lsp-server[all]
 
@@ -133,6 +134,7 @@ COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/$USER/.jupyter/
 COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
 
 RUN jupyter labextension install @aquirdturtle/collapsible_headings
+RUN jupyter lab build --name='Notebook'
 
 # Install Clojure
 #
