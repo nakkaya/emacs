@@ -1,6 +1,6 @@
 {
     "codeCellConfig": {
-        "fontFamily": "DejaVu Sans Mono",
+        "fontFamily": "JetBrains Mono, DejaVu Sans Mono, Monaco",
         "fontSize": 15,
         "lineHeight": 1.2,
     },
