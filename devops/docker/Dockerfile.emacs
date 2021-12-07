@@ -121,7 +121,6 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     ipywidgets \
     nbstripout \
     jupyter-dash \
-    jupyterlab-system-monitor \
     jupyterlab-lsp \
     lckr-jupyterlab-variableinspector \
     mlflow \
