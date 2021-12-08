@@ -706,6 +706,7 @@ Agenda Management
   (require 'magit)
   (require 'magit-todos)
 
+  (setq magit-todos-exclude-globs '("*.ipynb"))
   (magit-todos-mode 1)
 
   (defalias 'mr 'magit-list-repositories)
