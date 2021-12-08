@@ -855,6 +855,7 @@ Agenda Management
   (eshell/alias "ps-grep" "ps ax | grep -i $1")
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "docker" "/usr/bin/docker $*")
+  (eshell/alias "chmod" "/usr/bin/chmod $*")
 
   ;; nq exec remote file
   (defun eshell/rnq (host file &rest options)
