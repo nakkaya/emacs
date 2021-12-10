@@ -28,7 +28,8 @@ RUN apt-get install \
     python3 python3-dev python3-pip \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
-    texlive-lang-european texlive-plain-generic pandoc latexmk \
+    texlive-lang-european texlive-plain-generic texlive-fonts-recommended \
+    pandoc latexmk \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
