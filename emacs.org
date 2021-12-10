@@ -119,6 +119,11 @@ Will bounce between matching parens just like % in vi
   (global-set-key (kbd "M-x") #'helm-M-x)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (setq display-buffer-alist
+	'(("magit:.*" (display-buffer-same-window))))
+#+END_SRC
+
 * Languages
 
 #+BEGIN_SRC emacs-lisp
