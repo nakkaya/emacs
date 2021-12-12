@@ -3,6 +3,8 @@
 sudo apt-get update
 sudo apt-get install emacs
 
+sudo pip3 install jupyterlab
+
 rm -f ~/.emacs
 echo "(load-file \"`pwd`/../../init.el\")" > ~/.emacs
 
