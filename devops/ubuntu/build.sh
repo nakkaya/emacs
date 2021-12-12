@@ -31,6 +31,8 @@ sudo apt-get install \
      $EMACS_BUILD_DEPS \
      -y --no-install-recommends
 
+git clone --depth 1 --branch emacs-28 https://git.savannah.gnu.org/git/emacs.git emacs
+
 cd emacs
 
 export CC=/usr/bin/gcc-10
