@@ -461,8 +461,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
           ("l" . "export latex")
           ("e" . "example")))
 
-  (when (or (eq system-type 'gnu/linux)
-	    (eq system-type 'darwin))
+  (when (and (or (eq system-type 'gnu/linux)
+		 (eq system-type 'darwin))
+	     module-file-suffix)
     (require 'jupyter)
     (require 'ob-jupyter)
 
