@@ -55,3 +55,12 @@ export CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
     --with-x-toolkit=lucid \
     --with-png=yes && \
     make -j$(nproc)
+
+echo "#!/usr/bin/env xdg-open" > ~/.local/share/applications/emacs28.desktop
+echo "[Desktop Entry]" >> ~/.local/share/applications/emacs28.desktop
+echo "Name=Emacs 28" >> ~/.local/share/applications/emacs28.desktop
+echo "Icon=/usr/share/icons/hicolor/scalable/apps/emacs.svg" >> ~/.local/share/applications/emacs28.desktop
+echo "Exec=`pwd`/emacs/src/emacs" >> ~/.local/share/applications/emacs28.desktop
+echo "Type=Application" >> ~/.local/share/applications/emacs28.desktop
+echo "Terminal=false" >> ~/.local/share/applications/emacs28.desktop
+echo "StartupNotify=true" >> ~/.local/share/applications/emacs28.desktop
