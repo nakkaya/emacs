@@ -24,6 +24,7 @@
 	lsp-ui
         lsp-java
 	org
+	jupyter
         poly-org
         org-superstar
 	pdf-tools

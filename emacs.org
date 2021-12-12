@@ -461,6 +461,21 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
           ("l" . "export latex")
           ("e" . "example")))
 
+  (when (or (eq system-type 'gnu/linux)
+	    (eq system-type 'darwin))
+    (require 'jupyter)
+    (require 'ob-jupyter)
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     (append org-babel-load-languages
+             '((jupyter . t))))
+
+    (setq org-babel-default-header-args:jupyter-python
+	  '((:async . "yes")
+	    (:session . "py")
+	    (:results . "raw drawer"))))
+
   (defun org-babel-kill-session ()
     "Kill session for current code block."
     (interactive)

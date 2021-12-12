@@ -1,27 +1,10 @@
 (setq package-list
       '(use-package
-           elfeed
-           jupyter
-           ))
+         elfeed))
 
 (dolist (package package-list)
   (when (not (package-installed-p package))
     (package-install package)))
-
-;; Emacs Jupyter
-;;
-
-(require 'jupyter)
-(require 'ob-jupyter)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- (append org-babel-load-languages
-         '((jupyter . t))))
-
-(setq org-babel-default-header-args:jupyter-python '((:async . "yes")
-                                                     (:session . "py")
-                                                     (:results . "raw drawer")))
 
 ;; elfeed
 
