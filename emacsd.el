@@ -23,10 +23,6 @@
                                                      (:session . "py")
                                                      (:results . "raw drawer")))
 
-;; PDF Tools
-;;
-
-
 ;; elfeed
 
 (require 'elfeed)
