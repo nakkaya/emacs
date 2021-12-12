@@ -26,6 +26,9 @@
 	org
         poly-org
         org-superstar
+	pdf-tools
+        saveplace-pdf-view
+        org-noter
         docker
         dockerfile-mode
         docker-compose-mode
