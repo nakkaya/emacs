@@ -8,11 +8,13 @@
 
 (setq package-list
       '(use-package
-	undo-tree
+        undo-tree
+        hl-todo
         clojure-mode
 	clojure-mode-extra-font-locking
 	cider
 	python-mode
+	python-cell
 	matlab-mode
 	yaml-mode
 	markdown-mode
@@ -29,6 +31,7 @@
         docker-compose-mode
 	multi-term
 	magit
+	magit-todos
 	popper
         doom-themes
         doom-modeline

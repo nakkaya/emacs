@@ -7,11 +7,14 @@ USER root
 #
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install \
+    apt-get install curl -y --no-install-recommends && \
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+RUN apt-get install \
     # apt
     gnupg software-properties-common \
     # Misc
-    openssh-server sudo curl iputils-ping bash-completion \
+    openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
     graphviz postgresql-client qutebrowser\
     # Backup & Storage
@@ -25,7 +28,8 @@ RUN apt-get update && \
     python3 python3-dev python3-pip \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
-    texlive-lang-european texlive-plain-generic pandoc latexmk \
+    texlive-lang-european texlive-plain-generic texlive-fonts-recommended \
+    pandoc latexmk \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
@@ -36,6 +40,10 @@ RUN apt-get update && \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
+
+# Node
+#
+RUN apt-get install -y nodejs
 
 # Install Terraform
 #
@@ -82,46 +90,61 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     pip install \
     invoke \
     ansible \
-    pyinotify \
-    pyxdg \
-    paramiko \
     tensorflow-gpu \
     tensorflow-datasets \
+    gym \
     numpy \
     numexpr \
+    pandas \
+    tables \
     matplotlib \
+    #fbprophet \
+    scipy \
     scikit-learn \
     scikit-image \
     pillow \
     opencv-python \
-    scipy \
     boto3 \
     nibabel \
     pydicom \
     pymcubes \
     trimesh \
-    mplfinance \
-    pandas \
-    tables \
     pandas_ta \
+    mplfinance \
     yfinance \
+    cryptocmd \
     python-binance \
+    quandl \
     click \
-    jupyterlab \
-    mlflow \
-    dash \
-    dash-renderer \
-    dash-html-components \
-    dash-core-components \
+    streamlit \
     plotly \
+    jupyterlab \
+    ipywidgets \
+    nbstripout \
+    jupyter-dash \
+    jupyterlab-lsp \
+    lckr-jupyterlab-variableinspector \
+    mlflow \
     python-lsp-server[all]
+
+# Install Jupyter
+#
+
+COPY resources/jupyter/themes.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
+COPY resources/jupyter/shortcuts.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings
+COPY resources/jupyter/tracker.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
+COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
+COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
+
+RUN jupyter labextension install @aquirdturtle/collapsible_headings
+RUN jupyter lab build --name='Notebook'
 
 # Install Clojure
 #
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
     curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
-    bash install --version 2021.10.20-16.49.47 && \
+    bash install && \
     rm install
 
 # Install AWS CLI

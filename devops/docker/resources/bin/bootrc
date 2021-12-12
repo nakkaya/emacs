@@ -1,5 +1,7 @@
 echo ' ' >> /home/$USER/.bashrc
 
+export SHELL=/bin/bash
+
 if [[ -v AWS_ACCESS_KEY_ID ]]; then
     echo "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> /home/$USER/.bashrc
     echo "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> /home/$USER/.bashrc
@@ -19,6 +21,14 @@ fi
 
 if [[ -v MLFLOW_SERVER_ENB ]]; then
     (cd /storage;mlflow server -h 0.0.0.0 -p 8080 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://mlflow.nakkaya.com/ &)
+fi
+
+if [[ -v JUPYTER_SERVER_ENB ]]; then
+    if [[ -v PASSWD ]]; then
+	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
+    else
+        (cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token='' &)
+    fi
 fi
 
 if [[ -v SYNCTHING_ENB ]]; then

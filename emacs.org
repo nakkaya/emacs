@@ -119,7 +119,27 @@ Will bounce between matching parens just like % in vi
   (global-set-key (kbd "M-x") #'helm-M-x)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (setq display-buffer-alist
+	'(("magit:.*" (display-buffer-same-window))))
+#+END_SRC
+
 * Languages
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(("TODO"       warning bold)
+            ("FIXME"      error bold)
+            ("HACK"       font-lock-constant-face bold)
+            ("REVIEW"     font-lock-keyword-face bold)
+            ("NOTE"       success bold)
+            ("DEPRECATED" font-lock-doc-face bold))))
+#+END_SRC
+
 ** Clojure
 
  #+BEGIN_SRC emacs-lisp
@@ -158,6 +178,11 @@ Will bounce between matching parens just like % in vi
    (require 'python)
    (setq python-shell-interpreter "python3")
    (setq python-indent-guess-indent-offset-verbose nil)
+   (add-hook 'python-mode-hook #'python-cell-mode 1)
+
+   (with-eval-after-load 'python-cell
+     (setq python-cell-highlight-cell nil)
+     (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell))
  #+END_SRC
 
 ** Docker
@@ -373,7 +398,7 @@ Will bounce between matching parens just like % in vi
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
-  (let ((areas '("mode-line" "left-margin" "left-fringe" "right-fringe" "header-line" "vertical-scroll-bar"))
+  (let ((areas '("mode-line" "left-margin" "left-fringe" "right-fringe" "header-line" "vertical-scroll-bar" "nil"))
         loc)
     (while areas
       (setq loc (pop areas))
@@ -684,6 +709,10 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (require 'magit)
+  (require 'magit-todos)
+
+  (setq magit-todos-exclude-globs '("*.ipynb"))
+  (magit-todos-mode 1)
 
   (defalias 'mr 'magit-list-repositories)
 
@@ -832,6 +861,7 @@ Agenda Management
   (eshell/alias "ps-grep" "ps ax | grep -i $1")
   (eshell/alias "sudo" "eshell/sudo $*")
   (eshell/alias "docker" "/usr/bin/docker $*")
+  (eshell/alias "chmod" "/usr/bin/chmod $*")
 
   ;; nq exec remote file
   (defun eshell/rnq (host file &rest options)
@@ -849,7 +879,7 @@ Agenda Management
 
   ;; mirror host /folder/
   (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
-  (eshell/alias "rcp" "rsync -rvLK $1 $2 --delete")
+  (eshell/alias "rcp" "rsync -rvLK $1 $2")
 
   ;;Clear the eshell buffer.
   (defun eshell/clear ()
@@ -1111,15 +1141,21 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                            (name . "^\\*elfeed-.*")
                            (name . "^\\*pylsp.*")
 			   (name . "^\\*pyls-remote*")
-			   (name . "^\\*LSP Error List*")))))))
+			   (name . "^\\*LSP Error List*")
+			   (name . "^\\*Flycheck Errors*")))))))
 
-  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-show-empty-filter-groups nil
+	ibuffer-expert t)
 
   (add-hook 'ibuffer-mode-hook
             (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-
-  (setq ibuffer-expert t)
+	      (ibuffer-auto-mode 1)
+              (ibuffer-switch-to-saved-filter-groups "default")
+	      (setq ibuffer-hidden-filter-groups (list "Terminal"
+						       "Dired"
+						       "Magit"
+						       "Emacs"))
+	      (ibuffer-update nil t)))
 
   (setq ibuffer-formats '((mark modified read-only " "
                                 (name 18 18 :left :elide)
@@ -1149,6 +1185,11 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    inferior-python-mode
 	    inferior-lisp-mode
             compilation-mode))
+
+    (setq popper-display-function
+	  (lambda (b a)
+	    (display-buffer-same-window b a)))
+
     (popper-mode +1)
     (popper-echo-mode +1))
 #+end_src
