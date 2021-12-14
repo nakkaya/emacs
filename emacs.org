@@ -418,7 +418,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob)
-  (require 'poly-org)
   (require 'org-superstar)
 
   (setq org-startup-folded t)
@@ -426,10 +425,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
   (setq org-src-window-setup 'current-window)
-  (setq org-src-fontify-natively t)
   (setq org-confirm-babel-evaluate nil)
   (setq org-babel-python-command "python3")
   (setq org-hide-leading-stars t)
+
+  (setq org-src-fontify-natively t
+	org-src-tab-acts-natively t
+	org-src-preserve-indentation t)
 
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
   (setq org-superstar-headline-bullets-list '("◉" "◉" "◉" "◉" "◉"))
@@ -438,10 +440,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (setq org-babel-python-command "python.exe"))
 
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
-
-  (define-key poly-org-mode-map (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
-  (pm-around-advice #'org-ctrl-c-ctrl-c #'polymode-with-current-base-buffer)
 
   ;; Run/highlight code using babel in org-mode
   (org-babel-do-load-languages
@@ -453,13 +451,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
   (setq org-structure-template-alist
-        '(("el" . "src emacs-lisp\n")
-          ("cl" . "src clojure\n")
-          ("sh" . "src sh\n")
-          ("jp" . "src jupyter-python\n")
-          ("s" . "src")
-          ("l" . "export latex")
-          ("e" . "example")))
+	'(("el" . "src emacs-lisp\n")
+	  ("cl" . "src clojure\n")
+	  ("sh" . "src sh\n")
+	  ("jp" . "src jupyter-python\n")
+	  ("s" . "src")
+	  ("l" . "export latex")
+	  ("e" . "example")))
 
   (when module-file-suffix
     (require 'jupyter)
@@ -468,7 +466,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (org-babel-do-load-languages
      'org-babel-load-languages
      (append org-babel-load-languages
-             '((jupyter . t))))
+	     '((jupyter . t))))
 
     (setq org-babel-default-header-args:jupyter-python
 	  '((:async . "yes")
@@ -490,7 +488,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward org-babel-src-block-regexp nil t)
-        (org-babel-remove-result))))
+	(org-babel-remove-result))))
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -1303,7 +1301,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (set-face-background 'org-block na-theme-bg)
   (set-face-background 'org-block-begin-line na-theme-bg)
   (set-face-background 'org-block-end-line na-theme-bg)
-  (setq poly-lock-allow-background-adjustment nil)
 
   (set-face-background 'mode-line          "SteelBlue4")
   (set-face-background 'mode-line-inactive "SlateGray4")

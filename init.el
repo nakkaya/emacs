@@ -25,7 +25,6 @@
         lsp-java
 	org
 	jupyter
-        poly-org
         org-superstar
 	pdf-tools
         saveplace-pdf-view
