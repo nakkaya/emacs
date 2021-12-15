@@ -19,6 +19,7 @@
 	yaml-mode
 	markdown-mode
         terraform-mode
+	pine-script-mode
 	flycheck
         lsp-mode
 	lsp-ui

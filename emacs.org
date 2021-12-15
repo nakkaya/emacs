@@ -211,6 +211,13 @@ Will bounce between matching parens just like % in vi
 	(concat latex-run-command " " buffer-file-name))))
  #+END_SRC
 
+** Pine Script
+
+#+begin_src emacs-lisp
+  (require 'pine-script-mode)
+  (add-to-list 'auto-mode-alist '("\\.pine$" . pine-script-mode))
+#+end_src
+
 ** Skeletons
 
  #+BEGIN_SRC emacs-lisp
