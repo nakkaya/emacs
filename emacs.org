@@ -1303,7 +1303,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
     (all-the-icons-install-fonts t))
 
   (load-theme 'doom-one t)
-  (setq na-theme-bg (face-attribute 'default :background))
+  (setq na-theme-bg "unspecified-bg")
 
   (set-face-background 'org-block na-theme-bg)
   (set-face-background 'org-block-begin-line na-theme-bg)
