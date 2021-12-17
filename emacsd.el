@@ -10,7 +10,7 @@
 
 (require 'elfeed)
 
-(setq elfeed-db-directory "/storage/.elfeed"
+(setq elfeed-db-directory "/storage/dropbox/.elfeed"
       elfeed-sort-order   'ascending)
 
 (run-with-idle-timer (* 2 60 60) t #'elfeed-update)
