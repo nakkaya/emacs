@@ -55,18 +55,27 @@
   (setq mouse-wheel-progressive-speed nil)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (require 'saveplace)
-  (save-place-mode 1)
+#+BEGIN_SRC emacs-lisp :results silent
+(require 'saveplace)
+(save-place-mode 1)
 
-  (when (getenv "EMACS_HOME_DIR")
-    (setq save-place-file "/storage/.emacs-places")
-    (run-with-idle-timer (* 30 60) t #'save-place-kill-emacs-hook))
+(cond ((getenv "EMACS_HOME_DIR")
+       (setq save-place-file
+	     "/storage/source/.emacs-places"))
+      (t
+       (setq save-place-file
+	     "~/source/.emacs-places")))
+
+(run-with-idle-timer (* 30 60) t #'save-place-kill-emacs-hook)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (when (getenv "EMACS_HOME_DIR")
-    (setq bookmark-default-file "/storage/.emacs-bookmarks"))
+(cond ((getenv "EMACS_HOME_DIR")
+       (setq bookmark-default-file
+	     "/storage/source/.emacs-bookmarks"))
+      (t
+       (setq bookmark-default-file
+	     "~/source/.emacs-bookmarks")))
 #+END_SRC
 
 Will bounce between matching parens just like % in vi
