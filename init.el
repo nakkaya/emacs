@@ -25,17 +25,12 @@
 	lsp-ui
         lsp-java
 	org
-	jupyter
         org-superstar
-	pdf-tools
-        saveplace-pdf-view
-        org-noter
         docker
         dockerfile-mode
         docker-compose-mode
 	multi-term
 	magit
-	magit-todos
 	popper
         doom-themes
         doom-modeline
@@ -43,6 +38,17 @@
         projectile
         helm
         quelpa))
+
+(when (eq system-type 'gnu/linux)
+  (push 'jupyter package-list))
+
+(when (or (eq system-type 'gnu/linux)
+	  (eq system-type 'darwin))
+
+  (push 'magit-todos package-list)
+  (push 'pdf-tools package-list)
+  (push 'saveplace-pdf-view package-list)
+  (push 'org-noter package-list))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")

@@ -466,7 +466,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	  ("l" . "export latex")
 	  ("e" . "example")))
 
-  (when module-file-suffix
+  (when (and module-file-suffix
+	     (eq system-type 'gnu/linux))
+
     (require 'jupyter)
     (require 'ob-jupyter)
 
@@ -728,10 +730,13 @@ Agenda Management
 
 #+BEGIN_SRC emacs-lisp
   (require 'magit)
-  (require 'magit-todos)
 
-  (setq magit-todos-exclude-globs '("*.ipynb"))
-  (magit-todos-mode 1)
+  (when (or (eq system-type 'gnu/linux)
+	    (eq system-type 'darwin))
+
+    (require 'magit-todos)
+    (setq magit-todos-exclude-globs '("*.ipynb"))
+    (magit-todos-mode 1))
 
   (defalias 'mr 'magit-list-repositories)
 
