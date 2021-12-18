@@ -52,7 +52,7 @@ def buildx(ctx):
 
     run(cmd +
         "-f Dockerfile.emacs " + tag("emacs-cpu") +
-        " --platform linux/amd64 .",
+        " --platform linux/amd64,linux/arm64 .",
         "devops/docker/")
 
 
