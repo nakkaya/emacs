@@ -91,7 +91,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
             amd64) pip install tensorflow-gpu tensorflow-datasets gym ;; \
-            arm64) apt-get install python3-h5py -y ;; \
+            #arm64) apt-get install python3-h5py -y ;; \
     esac;
 
 RUN pip install \
@@ -100,7 +100,7 @@ RUN pip install \
     numpy \
     numexpr \
     pandas \
-    tables \
+    #tables \
     matplotlib \
     scipy \
     scikit-learn \
