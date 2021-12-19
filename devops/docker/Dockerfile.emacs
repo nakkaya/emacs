@@ -96,6 +96,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN pip install \
     invoke \
     ansible \
+    h5py \
     numpy \
     numexpr \
     pandas \
