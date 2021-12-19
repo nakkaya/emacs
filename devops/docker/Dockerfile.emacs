@@ -86,19 +86,21 @@ RUN apt-get clean && apt-get autoclean
 # Configure Python
 #
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
-    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 && \
-    pip install \
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) pip install tensorflow-gpu tensorflow-datasets gym ;; \
+    esac;
+
+RUN pip install \
     invoke \
     ansible \
-    tensorflow-gpu \
-    tensorflow-datasets \
-    gym \
     numpy \
     numexpr \
     pandas \
     tables \
     matplotlib \
-    #fbprophet \
     scipy \
     scikit-learn \
     scikit-image \
