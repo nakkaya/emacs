@@ -521,8 +521,8 @@ Agenda Management
 #+BEGIN_SRC emacs-lisp
   (cond ((file-exists-p "~/org/")
          (setq na-agenda-folder "~/org/"))
-        ((file-exists-p "/storage/org/")
-         (setq na-agenda-folder "/storage/org/"))
+        ((file-exists-p "/storage/source/org/")
+         (setq na-agenda-folder "/storage/source/org/"))
         ((file-exists-p "~/source/org/")
          (setq na-agenda-folder "~/source/org/"))
         (t

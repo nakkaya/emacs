@@ -24,8 +24,6 @@ RUN apt-get install \
     openjdk-11-jdk maven  \
     # C/C++
     build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
-    # Python
-    python3 python3-dev python3-pip \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
     texlive-lang-european texlive-plain-generic texlive-fonts-recommended \
@@ -85,9 +83,6 @@ RUN apt-get clean && apt-get autoclean
 
 # Configure Python
 #
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
-    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
             amd64) pip install tensorflow-gpu tensorflow-datasets gym ;; \
@@ -147,7 +142,8 @@ RUN jupyter lab build --name='Notebook'
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
     curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
-    bash install && \
+    chmod +x install && \
+    ./install --version "2021.12.01-12.28.16" && \
     rm install
 
 # Install AWS CLI
