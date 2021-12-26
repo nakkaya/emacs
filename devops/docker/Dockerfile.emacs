@@ -108,6 +108,7 @@ RUN pip install \
     pymcubes \
     trimesh \
     pandas_ta \
+    backtrader \
     mplfinance \
     yfinance \
     cryptocmd \
