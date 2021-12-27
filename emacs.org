@@ -1368,7 +1368,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
     (or frame (setq frame (selected-frame)))
     "unsets the background color in terminal mode"
     (unless (display-graphic-p frame)
-      (set-face-background 'default "unspecified-bg" frame)))
+      (set-face-background 'default "unspecified-bg" frame)
+      (set-face-background 'org-hide "black" frame)
+      (set-face-foreground 'org-hide "black" frame)))
 
   (add-hook 'after-make-frame-functions 'fix-theme-in-tty)
   (add-hook 'window-setup-hook 'fix-theme-in-tty)
