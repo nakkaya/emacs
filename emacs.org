@@ -1261,16 +1261,33 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 * elfeed
 
 #+begin_src emacs-lisp
-  (when (getenv "ELFEED_ENB")
-    (require 'elfeed)
+(when (getenv "ELFEED_ENB")
+  (require 'elfeed)
 
-    (setq elfeed-db-directory "/storage/dropbox/.elfeed"
-	  elfeed-sort-order   'ascending)
+  (setq elfeed-db-directory "/storage/dropbox/.elfeed"
+	elfeed-sort-order   'ascending)
 
-    (run-with-idle-timer (* 2 60 60) t #'elfeed-update)
+  (run-with-idle-timer (* 2 60 60) t #'elfeed-update)
 
-    (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
-    (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev))
+  ;;functions to support syncing .elfeed between machines
+  ;;makes sure elfeed reads index from disk before launching
+  (defun na-elfeed-load-db-and-open ()
+    "Wrapper to load the elfeed db from disk before opening"
+    (interactive)
+    (elfeed-db-load)
+    (elfeed)
+    (elfeed-search-update--force))
+
+  ;;write to disk when quiting
+  (defun na-elfeed-save-db-and-bury ()
+    "Wrapper to save the elfeed db to disk before burying buffer"
+    (interactive)
+    (elfeed-db-save)
+    (quit-window))
+
+  (define-key elfeed-search-mode-map (kbd "q") 'na-elfeed-save-db-and-bury)
+  (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
+  (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev))
 #+end_src
 
 * Key Bindings
