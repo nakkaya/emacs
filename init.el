@@ -40,7 +40,8 @@
         quelpa))
 
 (when (eq system-type 'gnu/linux)
-  (push 'jupyter package-list))
+  (push 'jupyter package-list)
+  (push 'elfeed package-list))
 
 (when (or (eq system-type 'gnu/linux)
 	  (eq system-type 'darwin))
@@ -68,3 +69,6 @@
 
 (org-babel-load-file
  (expand-file-name "emacs.org" dotfiles-dir))
+
+;; Load Private Config If Present
+(load "~/.netrc.el" t)

@@ -179,8 +179,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
-    echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
-    echo "(load-file \"/opt/emacsd/conf/emacsd.el\")" >> /home/$USER/.emacs
+    echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
 
 COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
