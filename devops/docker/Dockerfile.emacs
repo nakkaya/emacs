@@ -23,7 +23,7 @@ RUN apt-get install \
     # Java
     openjdk-11-jdk maven  \
     # C/C++
-    build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
+    build-essential autoconf gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english \
     texlive-lang-european texlive-plain-generic texlive-fonts-recommended \
