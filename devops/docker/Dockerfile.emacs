@@ -34,7 +34,7 @@ RUN apt-get install \
     # for cv2
     libgl1 libglib2.0-0 \
     # emcas-jupyter
-    autoconf libtool \
+    autoconf automake aclocal libtool \
     # For Teensy
     # libxft2 \
     -y --no-install-recommends
