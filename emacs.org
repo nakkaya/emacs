@@ -38,11 +38,13 @@
 
   (delete-selection-mode)
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (global-auto-revert-mode 1)
   (global-font-lock-mode t)
   (electric-pair-mode 1)
   (show-paren-mode 1)
   (global-undo-tree-mode)
+
+  (global-auto-revert-mode 1)
+  (setq revert-without-query '(".pdf"))
 
   (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
