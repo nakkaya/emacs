@@ -1323,6 +1323,10 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (global-set-key (kbd "C-c <left>")  'hs-hide-block)
   (global-set-key (kbd "C-c <up>")    'hs-hide-all)
   (global-set-key (kbd "C-c <down>")  'hs-show-all)
+
+  (global-set-key [f12] (lambda ()
+			  (interactive)
+			  (async-shell-command "QT_XCB_GL_INTEGRATION=none qutebrowser")))
 #+END_SRC
 
 * Theme
