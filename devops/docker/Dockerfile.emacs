@@ -116,6 +116,7 @@ RUN pip install \
     cryptocmd \
     python-binance \
     quandl \
+    py3cw \
     click \
     streamlit \
     plotly \
