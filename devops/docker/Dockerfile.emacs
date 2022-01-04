@@ -104,6 +104,7 @@ RUN pip install \
     scikit-image \
     pillow \
     opencv-python \
+    albumentations \
     boto3 \
     nibabel \
     pydicom \
