@@ -184,6 +184,10 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #     ./TeensyduinoInstall.linux64  --dir=/usr/local/share/arduino && \
 #     rm -rf TeensyduinoInstall.linux64
 
+RUN apt-get autoremove -y && \
+    apt-get clean && \
+    apt-get autoclean
+
 # Setup Emacs
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
