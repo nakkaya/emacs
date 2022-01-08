@@ -1,5 +1,9 @@
 ARG BASE_IMAGE=ghcr.io/nakkaya/emacsd-cpu
-FROM $BASE_IMAGE
+FROM $BASE_IMAGE as build
+
+ENV USER="core" \
+    UID=1000 \
+    TZ=UTC
 
 USER root
 
@@ -191,12 +195,15 @@ RUN sudo chmod +x /usr/bin/ob-tangle
 COPY resources/bin/bootrc /home/$USER/.bootrc
 
 RUN mkdir -p /home/$USER/.local/share/ && \
-    chown -R core:core /opt/emacsd && \
-    chown -R core:core /home/core && \
-    chown -R core:core /storage
+    chown -R $USER:$USER /opt/emacsd && \
+    chown -R $USER:$USER /home/$USER && \
+    chown -R $USER:$USER /storage
 
-USER core
+USER $USER
 
 RUN echo ' ' >> /home/$USER/.bashrc && \
     echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
     echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc
+
+FROM scratch
+COPY --from=build / /

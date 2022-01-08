@@ -32,7 +32,7 @@ def build(ctx):
     cmd = "docker build "
 #    cmd = "docker build --no-cache "
 
-    run(cmd + "-f Dockerfile.emacs " + tag("emacs-cpu") + " .",
+    run(cmd + "-f Dockerfile " + tag("emacs-cpu") + " .",
         "devops/docker/")
 
 
@@ -45,13 +45,13 @@ def buildx(ctx):
     cmd = "docker buildx build --push "
 
     run(cmd +
-        " -f Dockerfile.emacs " + tag("emacs-gpu") +
+        " -f Dockerfile " + tag("emacs-gpu") +
         " --platform linux/amd64 " +
         " --build-arg " + gpu_image + " .",
         "devops/docker/")
 
     run(cmd +
-        "-f Dockerfile.emacs " + tag("emacs-cpu") +
+        "-f Dockerfile " + tag("emacs-cpu") +
         " --platform linux/amd64,linux/arm64 .",
         "devops/docker/")
 
