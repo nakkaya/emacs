@@ -10,6 +10,13 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        build-cmd:
+          - buildx-amd64-gpu
+          - buildx-amd64-cpu
+          - buildx-arm64-cpu
+
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +44,4 @@ jobs:
         run: docker login --username nakkaya --password '${{ secrets.DOCKER_PASSWORD }}'
 
       - name: Build Image
-        run: invoke buildx
-
-      # - name: Push Build
-      #   run: invoke push
-
-      # - name: Push Build
-      #   run: invoke push-ghcr
+        run: invoke ${{ matrix.build-cmd }}
