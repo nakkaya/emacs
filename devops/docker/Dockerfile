@@ -195,3 +195,6 @@ RUN echo ' ' >> /home/$USER/.bashrc && \
 
 FROM scratch
 COPY --from=build / /
+
+WORKDIR /home/$USER/
+CMD /opt/emacsd/exec.sh
