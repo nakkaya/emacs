@@ -10,9 +10,7 @@ USER root
 # Install Packages
 #
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install curl -y --no-install-recommends && \
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    apt-get upgrade -y
 
 RUN apt-get install \
     # apt
@@ -22,7 +20,7 @@ RUN apt-get install \
     unzip wget htop xz-utils nq \
     graphviz postgresql-client qutebrowser\
     # Backup & Storage
-    rsync rclone git myrepos git-annex git-annex-remote-rclone \
+    rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
     # Java
     openjdk-11-jdk maven  \
@@ -44,10 +42,6 @@ RUN apt-get install \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
-
-# Node
-#
-RUN apt-get install -y nodejs
 
 # Install Terraform
 #
@@ -83,10 +77,6 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
     apt-get update && \
     apt-get install syncthing -y --no-install-recommends
 
-# Clean Apt
-#
-RUN apt-get clean && apt-get autoclean
-
 # Configure Python
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
@@ -112,26 +102,23 @@ RUN pip install \
     boto3 \
     nibabel \
     pydicom \
-    pymcubes \
-    trimesh \
+    #pymcubes \
+    #trimesh \
     pandas_ta \
     backtrader \
-    mplfinance \
+    #mplfinance \
     yfinance \
-    cryptocmd \
+    #cryptocmd \
     python-binance \
-    quandl \
+    #quandl \
     py3cw \
-    textual \
+    #textual \
     click \
-    streamlit \
+    #streamlit \
     plotly \
     jupyterlab \
-    ipywidgets \
+    #ipywidgets \
     nbstripout \
-    jupyter-dash \
-    jupyterlab-lsp \
-    lckr-jupyterlab-variableinspector \
     mlflow \
     python-lsp-server[all]
 
@@ -143,9 +130,6 @@ COPY resources/jupyter/shortcuts.jupyterlab-settings /home/$USER/.jupyter/lab/us
 COPY resources/jupyter/tracker.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
 COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
 COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
-
-RUN jupyter labextension install @aquirdturtle/collapsible_headings
-RUN jupyter lab build --name='Notebook'
 
 # Install Clojure
 #
