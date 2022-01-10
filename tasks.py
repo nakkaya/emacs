@@ -41,7 +41,7 @@ buildx_cmd = "docker buildx build --push "
 
 
 @task
-def buildx_amd64_gpu(ctx):
+def buildx_gpu(ctx):
     """Build adm64 Image."""
     run(buildx_cmd +
         " -f Dockerfile " + tag("emacs-gpu") +
@@ -51,20 +51,11 @@ def buildx_amd64_gpu(ctx):
 
 
 @task
-def buildx_amd64_cpu(ctx):
+def buildx_cpu(ctx):
     """Build amd64 CPU Image."""
     run(buildx_cmd +
         "-f Dockerfile " + tag("emacs-cpu") +
-        " --platform linux/amd64 .",
-        "devops/docker/")
-
-
-@task
-def buildx_arm64_cpu(ctx):
-    """Build arm64 CPU Image."""
-    run(buildx_cmd +
-        "-f Dockerfile " + tag("emacs-cpu") +
-        " --platform linux/arm64 .",
+        " --platform linux/amd64,linux/arm64 .",
         "devops/docker/")
 
 def compose_files():

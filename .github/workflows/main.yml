@@ -13,9 +13,8 @@ jobs:
     strategy:
       matrix:
         build-cmd:
-          - buildx-amd64-gpu
-          - buildx-amd64-cpu
-          - buildx-arm64-cpu
+          - buildx-gpu
+          - buildx-cpu
 
     runs-on: ubuntu-latest
 
