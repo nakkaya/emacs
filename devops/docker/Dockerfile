@@ -81,43 +81,38 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) pip install tensorflow-gpu tensorflow-datasets gym ;; \
+            amd64) pip install tensorflow-gpu tensorflow-datasets gym albumentations ;; \
             #arm64) apt-get install python3-h5py -y ;; \
     esac;
 
 RUN pip install \
+    # System
     invoke \
     ansible \
+    click \
+    # ML
     numpy \
     numexpr \
     pandas \
-    #tables \
-    matplotlib \
     scipy \
     scikit-learn \
     scikit-image \
     pillow \
     opencv-python \
-    albumentations \
     boto3 \
     nibabel \
     pydicom \
-    #pymcubes \
-    #trimesh \
+    # Trading
     pandas_ta \
     backtrader \
-    #mplfinance \
     yfinance \
-    #cryptocmd \
     python-binance \
-    #quandl \
     py3cw \
-    #textual \
-    click \
-    #streamlit \
+    # Graphing
+    matplotlib \
     plotly \
+    # Server
     jupyterlab \
-    #ipywidgets \
     nbstripout \
     mlflow \
     python-lsp-server[all]
@@ -151,8 +146,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     curl -s "${URL}" -o "awscliv2.zip" && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
-    rm awscliv2.zip && \
-    pip install boto3
+    rm awscliv2.zip
 
 # Arduino
 #
