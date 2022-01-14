@@ -1309,7 +1309,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    "^*monroe.*"
 	    "^*MATLAB.*"
 	    term-mode
-	    "^*jupyter-repl.*"
+	    "^\\*jupyter-.*"
 	    inferior-python-mode
 	    inferior-lisp-mode
             compilation-mode))
