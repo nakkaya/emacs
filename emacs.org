@@ -34,7 +34,8 @@
         search-highlight t
         inhibit-splash-screen t
         indent-tabs-mode nil
-        show-paren-delay 0)
+        show-paren-delay 0
+	mouse-highlight nil)
 
   (delete-selection-mode)
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -404,7 +405,8 @@ Will bounce between matching parens just like % in vi
 	 lsp-eldoc-enable-hover nil
 	 lsp-signature-auto-activate nil
 	 lsp-signature-render-documentation nil
-	 lsp-ui-sideline-show-diagnostics t)
+	 lsp-ui-sideline-show-diagnostics t
+	 lsp-enable-symbol-highlighting nil)
 
    (require 'lsp-java)
 
