@@ -60,6 +60,24 @@
   (setq mouse-wheel-progressive-speed nil)
 #+END_SRC
 
+Fix mouse when using emacsclient in tty and daemon launches via gui.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my-terminal-config (&optional frame)
+    "Establish settings for the current terminal."
+    (if (not frame) ;; The initial call.
+        (xterm-mouse-mode 1)
+      ;; Otherwise called via after-make-frame-functions.
+      (if xterm-mouse-mode
+          ;; Re-initialise the mode in case of a new terminal.
+          (xterm-mouse-mode 1))))
+
+  ;; Evaluate both now (for non-daemon emacs) and upon frame creation
+  ;; (for new terminals via emacsclient).
+  (my-terminal-config)
+  (add-hook 'after-make-frame-functions 'my-terminal-config)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :results silent
 (require 'saveplace)
 (save-place-mode 1)
@@ -838,6 +856,7 @@ Agenda Management
 #+END_SRC
 
 * Terminal
+** Path
 
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'windows-nt)
@@ -870,6 +889,8 @@ Agenda Management
   (setenv "PAGER" "cat")
   ;; (setenv "DISPLAY" ":0")
 #+END_SRC
+
+** EShell
 
 #+BEGIN_SRC emacs-lisp
   (require 'eshell)
@@ -987,6 +1008,8 @@ SSH at least,
 
 #+BEGIN_SRC emacs-lisp :results silent
 ;; https://gist.github.com/ralt/a36288cd748ce185b26237e6b85b27bb
+(require 'em-term)
+
 (defun eshell-exec-visual (&rest args)
   "Run the specified PROGRAM in a terminal emulation buffer.
  ARGS are passed to the program.  At the moment, no piping of input is
@@ -1044,10 +1067,14 @@ SSH at least,
   nil)
 #+END_SRC
 
+** Term
+
 #+BEGIN_SRC emacs-lisp
   (require 'multi-term)
   (setq multi-term-program "/bin/bash")
 #+END_SRC
+
+** Misc
 
 #+BEGIN_SRC emacs-lisp
   (defun na-new-term(term-or-shell)
@@ -1059,67 +1086,6 @@ SSH at least,
           ;;pass C-c
           (define-key term-raw-map [?\C-c] 'term-send-raw))
       (eshell 'N)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defconst na-sources-dir
-    (if (eq system-type 'windows-nt)
-        (expand-file-name "~/Documents/GitHub/")
-      (expand-file-name "~/source")))
-
-  (defun na-list-directories (f)
-    (seq-filter
-     (lambda (x)
-       (file-directory-p
-        (expand-file-name (concat f "/" x))))
-     (directory-files f nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
-
-  (defun pcomplete/src ()
-    "Completion for `src'"
-    (pcomplete-here* (na-list-directories na-sources-dir)))
-
-  (defun src (&optional d)
-    (let ((dir (if d
-                   (concat na-sources-dir "/" d)
-                 na-sources-dir)))
-      (eshell/cd (expand-file-name dir))))
-
-  (defun pcomplete/usb ()
-    "Completion for `usb'"
-    (pcomplete-here* (na-list-directories "/media/nakkaya")))
-
-  (defun usb (d)
-    (eshell/cd
-     (expand-file-name
-      (concat "/media/nakkaya/" d))))
-
-  (defun pcomplete/cdb ()
-    "Completion for `cdb'"
-    (pcomplete-here* (mapcar (function buffer-name) (buffer-list))))
-
-  (defun cdb (b)
-    (eshell/cd
-     (expand-file-name
-      (with-current-buffer (get-buffer b)
-        default-directory))))
-#+END_SRC
-
-Fix mouse when using emacsclient in tty and daemon launches via gui.
-
-#+BEGIN_SRC emacs-lisp
-  (defun my-terminal-config (&optional frame)
-    "Establish settings for the current terminal."
-    (if (not frame) ;; The initial call.
-        (xterm-mouse-mode 1)
-      ;; Otherwise called via after-make-frame-functions.
-      (if xterm-mouse-mode
-          ;; Re-initialise the mode in case of a new terminal.
-          (xterm-mouse-mode 1))))
-
-  ;; Evaluate both now (for non-daemon emacs) and upon frame creation
-  ;; (for new terminals via emacsclient).
-  (my-terminal-config)
-  (add-hook 'after-make-frame-functions 'my-terminal-config)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
