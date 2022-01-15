@@ -101,18 +101,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	     "~/source/.emacs-bookmarks")))
 #+END_SRC
 
-Will bounce between matching parens just like % in vi
-
-#+BEGIN_SRC emacs-lisp
-  (defun na-bounce-sexp ()
-    (interactive)
-    (let ((prev-char (char-to-string (preceding-char)))
-          (next-char (char-to-string (following-char))))
-      (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-            ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-            (t (error "%s" "Not on a paren, brace, or bracket")))))
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
   (setq password-cache t) ; enable password caching
   (setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
@@ -157,6 +145,18 @@ Will bounce between matching parens just like % in vi
 #+END_SRC
 
 * Languages
+
+Will bounce between matching parens just like % in vi
+
+#+BEGIN_SRC emacs-lisp
+  (defun na-bounce-sexp ()
+    (interactive)
+    (let ((prev-char (char-to-string (preceding-char)))
+          (next-char (char-to-string (following-char))))
+      (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
+            ((string-match "[\]})>]" prev-char) (backward-sexp 1))
+            (t (error "%s" "Not on a paren, brace, or bracket")))))
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (use-package hl-todo
@@ -459,16 +459,15 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (require 'ob)
   (require 'org-superstar)
 
-  (setq org-startup-folded t)
-  (setq org-return-follows-link t)
-  (setq org-startup-with-inline-images t)
-  (setq org-image-actual-width nil)
-  (setq org-src-window-setup 'current-window)
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-babel-python-command "python3")
-  (setq org-hide-leading-stars t)
-
-  (setq org-src-fontify-natively t
+  (setq org-startup-folded t
+        org-return-follows-link t
+        org-startup-with-inline-images t
+        org-image-actual-width nil
+        org-src-window-setup 'current-window
+        org-confirm-babel-evaluate nil
+        org-babel-python-command "python3"
+        org-hide-leading-stars t
+	org-src-fontify-natively t
 	org-src-tab-acts-natively t
 	org-src-preserve-indentation t)
 
@@ -632,18 +631,17 @@ Agenda Management
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
 
-  (setq large-file-warning-threshold nil)
-  (setq ls-lisp-use-insert-directory-program nil)
-  (setq ls-lisp-dirs-first t)
+  (setq large-file-warning-threshold nil
+	ls-lisp-use-insert-directory-program nil
+	ls-lisp-dirs-first t
+	dired-dwim-target t
+	dired-recursive-deletes 'always)
   
   (quelpa '(emacs-async
             :fetcher github :repo "jwiegley/emacs-async"))
 
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1)
-
-  (setq dired-dwim-target t)
-  (setq dired-recursive-deletes 'always)
 
   (add-hook 'dired-mode-hook
             (lambda ()
@@ -678,53 +676,6 @@ Agenda Management
 
   (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
   (define-key dired-mode-map (kbd "RET") 'na-dired-down-directory-after-kill)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq na-external-open-files-types 
-        '("avi" "mp4" "flv" "wmv" "mov" "mkv" 
-          "m4v" "mpg" "mpeg" "ts" "m3u"))
-
-  (setq na-file-assocs (make-hash-table :test 'equal))
-
-  (if (eq system-type 'gnu/linux)
-      (progn 
-        (puthash "avi" "vlc" na-file-assocs)
-        (puthash "mp4" "vlc" na-file-assocs)
-        (puthash "flv" "vlc" na-file-assocs)
-        (puthash "wmv" "vlc" na-file-assocs)
-        (puthash "mov" "vlc" na-file-assocs)
-        (puthash "mkv" "vlc" na-file-assocs)
-        (puthash "m4v" "vlc" na-file-assocs)
-        (puthash "mpg" "vlc" na-file-assocs)
-        (puthash "ts" "vlc" na-file-assocs)
-        (puthash "mpeg" "vlc" na-file-assocs)))
-
-  (if (eq system-type 'gnu/linux)
-      (setq na-dired-external-viewer "xdg-open"))
-
-  (defun na-dired-display-external (extension)
-    "Open file at point in an external application."
-    (interactive)
-    (let ((file (dired-get-filename))
-          (ext-viewer (gethash extension na-file-assocs))
-          (process-connection-type nil))
-      (if ext-viewer
-          (start-process "" nil ext-viewer file)
-        (start-process "" nil na-dired-external-viewer file))))
-
-  (defun na-dired-open ()
-    "Open file at point in an external application."
-    (interactive)
-    (let ((file-extension (file-name-extension 
-                           (dired-get-filename))))
-      (if file-extension
-          (if (member (downcase file-extension) na-external-open-files-types)
-              (na-dired-display-external (downcase file-extension))
-            (na-dired-down-directory-after-kill))
-        (na-dired-down-directory-after-kill))))
-
-  (define-key dired-mode-map [return] 'na-dired-open)
 #+END_SRC
 
 * Tramp
@@ -909,13 +860,9 @@ Agenda Management
 
   (add-hook 'eshell-mode-hook
             (lambda ()
+	      (company-mode -1)
               (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
               (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
-
-  (defun eshell-mode-setup-function () 
-    (company-mode -1))
-
-  (add-hook 'eshell-mode-hook 'eshell-mode-setup-function)
 
   (eshell/alias "df" "df -h")
   (eshell/alias "ps-grep" "ps ax | grep -i $1")
@@ -977,11 +924,7 @@ Agenda Management
   (defun pcomplete/conn ()
     (pcomplete-here* (na-ssh-completions)))
 
-  (defun pcomplete/tmux-ssh ()
-    (pcomplete-here* (na-ssh-completions)))
-
   (eshell/alias "conn" "cd /ssh:$1:~")
-  (eshell/alias "tmux-ssh" "ssh $1 -t \"tmux attach\"")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
