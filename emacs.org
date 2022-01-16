@@ -465,6 +465,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
         org-return-follows-link t
         org-startup-with-inline-images t
         org-image-actual-width nil
+	org-use-speed-commands t
         org-src-window-setup 'current-window
         org-confirm-babel-evaluate nil
         org-babel-python-command "python3"
