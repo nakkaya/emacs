@@ -584,15 +584,18 @@ Agenda Management
         '(("p" "Personal TODO" entry
            (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
            "* TODO %?\n" :prepend t)
-          ("r" "Robotics Lab TODO" entry
-           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Robotics Lab")
+	  ("r" "Research TODO" entry
+           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Research")
            "* TODO %?\n" :prepend t)
+	  ("b" "Read Later" entry
+           (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
+           "* %?\n" :prepend t)
           ("a" "Akademik TODO" entry
            (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
            "* TODO %?\n" :prepend t)
-          ("b" "Read Later" entry
-           (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
-           "* %?\n" :prepend t)))
+	  ("l" "Robotics Lab TODO" entry
+           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Robotics Lab")
+           "* TODO %?\n" :prepend t)))
 
   (setq org-agenda-window-setup 'current-window)
   (setq org-agenda-restore-windows-after-quit t)
