@@ -473,10 +473,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	org-src-fontify-natively t
 	org-src-tab-acts-natively t
 	org-src-preserve-indentation t
-	org-ellipsis " ▶")
+	org-ellipsis " ▶"
+	org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
 
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  (setq org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
 
   (when  (eq system-type 'windows-nt)
     (setq org-babel-python-command "python.exe"))
