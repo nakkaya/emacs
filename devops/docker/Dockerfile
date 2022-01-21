@@ -18,7 +18,7 @@ RUN apt-get install \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
-    graphviz postgresql-client qutebrowser\
+    graphviz postgresql-client offlineimap qutebrowser \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
