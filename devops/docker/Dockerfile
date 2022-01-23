@@ -105,7 +105,6 @@ RUN pip install \
     pydicom \
     # Trading
     pandas_ta \
-    backtrader \
     yfinance \
     python-binance \
     py3cw \
