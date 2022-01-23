@@ -80,6 +80,14 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 
 # Configure Python
 #
+
+RUN pip install \
+    invoke \
+    ansible \
+    jupyterlab \
+    mlflow \
+    python-lsp-server[all]
+
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
             amd64) pip install tensorflow-gpu tensorflow-datasets gym albumentations ;; \
@@ -87,10 +95,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     esac;
 
 RUN pip install \
-    # System
-    invoke \
-    ansible \
-    click \
     # ML
     numpy \
     numexpr \
@@ -111,11 +115,10 @@ RUN pip install \
     # Graphing
     matplotlib \
     plotly \
-    # Server
-    jupyterlab \
+    # Misc
     nbstripout \
-    mlflow \
-    python-lsp-server[all]
+    click
+
 
 # Install Jupyter
 #
