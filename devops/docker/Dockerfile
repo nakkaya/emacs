@@ -119,6 +119,7 @@ RUN pip install \
     nbstripout \
     click
 
+RUN pip install numpy --upgrade
 
 # Install Jupyter
 #
