@@ -1315,94 +1315,94 @@ SSH at least,
 * Theme
 
 #+BEGIN_SRC emacs-lisp :results silent
-  (setq frame-title-format (list "Emacs " emacs-version))
+(setq frame-title-format (list "Emacs " emacs-version))
 
+(when window-system
+  (let ((font-dejavu "DejaVu Sans Mono 11")
+        (font-monaco "Monaco 10")
+        (font-jetbrains "Jet Brains Mono 14")
+        (font-jetbrains-w32 "JetBrains Mono-11")
+	(font-jetbrains-darwin "JetBrains Mono"))
+
+    (cond ((member font-jetbrains-darwin (font-family-list))
+	   (set-face-attribute 'default nil
+			       :family font-jetbrains-darwin
+			       :height 140))
+	  ((x-list-fonts font-jetbrains)
+           (set-frame-font font-jetbrains nil t))
+          ((x-list-fonts font-monaco)
+           (set-frame-font font-monaco nil t))
+          ((x-list-fonts font-dejavu)
+           (set-frame-font font-dejavu nil t))
+          ((x-list-fonts font-jetbrains-w32)
+           (set-frame-font font-jetbrains-w32 nil t)))))
+
+(unless (member "all-the-icons" (font-family-list))
+  (all-the-icons-install-fonts t))
+
+(load-theme 'doom-one t)
+(setq na-theme-bg "unspecified-bg")
+
+(set-face-background 'org-block na-theme-bg)
+(set-face-background 'org-block-begin-line na-theme-bg)
+(set-face-background 'org-block-end-line na-theme-bg)
+
+(set-face-background 'mode-line          "SteelBlue4")
+(set-face-background 'mode-line-inactive "SlateGray4")
+(set-face-foreground 'mode-line          "gray5")
+(set-face-foreground 'mode-line-inactive "gray15")
+
+(require 'doom-modeline)
+(add-hook 'after-init-hook #'doom-modeline-mode)
+(setq doom-modeline-major-mode-icon nil)
+(setq doom-modeline-buffer-state-icon nil)
+(setq doom-modeline-buffer-encoding nil)
+
+(eval-after-load "magit"
+  '(progn
+     (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+     (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+     (set-face-background 'magit-diff-context na-theme-bg)
+     (set-face-background 'magit-diff-added-highlight na-theme-bg)
+     (set-face-background 'magit-diff-context-highlight na-theme-bg)
+     (set-face-background 'magit-diff-added na-theme-bg)
+     (set-face-background 'magit-diff-removed na-theme-bg)
+     (set-face-background 'magit-diff-hunk-heading na-theme-bg)
+     (set-face-background 'magit-diff-removed-highlight na-theme-bg)))
+
+(set-face-background 'show-paren-match (face-background 'default))
+(set-face-attribute 'show-paren-match nil :foreground "red")
+(set-face-background 'show-paren-match na-theme-bg)
+
+(column-number-mode 1)
+(blink-cursor-mode 1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+
+(defun na-reset-window-size ()
+  (interactive)
   (when window-system
-    (let ((font-dejavu "DejaVu Sans Mono 11")
-          (font-monaco "Monaco 10")
-          (font-jetbrains "Jet Brains Mono 14")
-          (font-jetbrains-w32 "JetBrains Mono-11")
-	  (font-jetbrains-darwin "JetBrains Mono"))
+    (set-frame-size (selected-frame) 80 25)))
 
-      (cond ((member font-jetbrains-darwin (font-family-list))
-	     (set-face-attribute 'default nil
-				 :family font-jetbrains-darwin
-				 :height 140))
-	    ((x-list-fonts font-jetbrains)
-             (set-frame-font font-jetbrains nil t))
-            ((x-list-fonts font-monaco)
-             (set-frame-font font-monaco nil t))
-            ((x-list-fonts font-dejavu)
-             (set-frame-font font-dejavu nil t))
-            ((x-list-fonts font-jetbrains-w32)
-             (set-frame-font font-jetbrains-w32 nil t)))))
+(add-hook 'window-setup-hook 'na-reset-window-size)
 
-  (unless (member "all-the-icons" (font-family-list))
-    (all-the-icons-install-fonts t))
+(defun fix-theme-in-tty (&optional frame)
+  (or frame (setq frame (selected-frame)))
+  "unsets the background color in terminal mode"
+  (unless (display-graphic-p frame)
+    (set-face-background 'default "unspecified-bg" frame)
+    (set-face-background 'org-hide "black" frame)
+    (set-face-foreground 'org-hide "black" frame)))
 
-  (load-theme 'doom-one t)
-  (setq na-theme-bg "unspecified-bg")
+(add-hook 'after-make-frame-functions 'fix-theme-in-tty)
+(add-hook 'window-setup-hook 'fix-theme-in-tty)
 
-  (set-face-background 'org-block na-theme-bg)
-  (set-face-background 'org-block-begin-line na-theme-bg)
-  (set-face-background 'org-block-end-line na-theme-bg)
-
-  (set-face-background 'mode-line          "SteelBlue4")
-  (set-face-background 'mode-line-inactive "SlateGray4")
-  (set-face-foreground 'mode-line          "gray5")
-  (set-face-foreground 'mode-line-inactive "gray15")
-
-  (require 'doom-modeline)
-  (add-hook 'after-init-hook #'doom-modeline-mode)
-  (setq doom-modeline-major-mode-icon nil)
-  (setq doom-modeline-buffer-state-icon nil)
-  (setq doom-modeline-buffer-encoding nil)
-
-  (eval-after-load "magit"
-    '(progn
-       (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-       (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-       (set-face-background 'magit-diff-context na-theme-bg)
-       (set-face-background 'magit-diff-added-highlight na-theme-bg)
-       (set-face-background 'magit-diff-context-highlight na-theme-bg)
-       (set-face-background 'magit-diff-added na-theme-bg)
-       (set-face-background 'magit-diff-removed na-theme-bg)
-       (set-face-background 'magit-diff-hunk-heading na-theme-bg)
-       (set-face-background 'magit-diff-removed-highlight na-theme-bg)))
-
-  (set-face-background 'show-paren-match (face-background 'default))
-  (set-face-attribute 'show-paren-match nil :foreground "red")
-  (set-face-background 'show-paren-match na-theme-bg)
-
-  (column-number-mode 1)
-  (blink-cursor-mode 1)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (toggle-scroll-bar -1)
-  (tool-bar-mode -1)
-
-  (defun na-reset-window-size ()
-    (interactive)
-    (when window-system
-      (set-frame-size (selected-frame) 80 25)))
-
-  (add-hook 'window-setup-hook 'na-reset-window-size)
-
-  (defun fix-theme-in-tty (&optional frame)
-    (or frame (setq frame (selected-frame)))
-    "unsets the background color in terminal mode"
-    (unless (display-graphic-p frame)
-      (set-face-background 'default "unspecified-bg" frame)
-      (set-face-background 'org-hide "black" frame)
-      (set-face-foreground 'org-hide "black" frame)))
-
-  (add-hook 'after-make-frame-functions 'fix-theme-in-tty)
-  (add-hook 'window-setup-hook 'fix-theme-in-tty)
-
-  (when (getenv "EMACS_HOME_DIR")
-    (setq frame-title-format (list "emacsd"))
-    (set-face-attribute 'default nil :height 125)
-    (blink-cursor-mode))
+(when (getenv "EMACS_HOME_DIR")
+  (setq frame-title-format (list "emacsd"))
+  (set-face-attribute 'default nil :height 125)
+  (blink-cursor-mode))
 #+END_SRC
 
 * Server
