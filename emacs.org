@@ -57,8 +57,11 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq mouse-wheel-scroll-amount '(1))
-  (setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-scroll-amount '(1))
+(setq mouse-wheel-progressive-speed nil)
+
+(global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+(global-set-key (kbd "<mouse-5>") 'scroll-up-line)
 #+END_SRC
 
 Fix mouse when using emacsclient in tty and daemon launches via gui.
@@ -1342,27 +1345,30 @@ SSH at least,
 
 (load-theme 'doom-one t)
 
-(defun na-fix-background ()
-  (let ((bg "#1c1c1c"))
-    (set-background-color bg)
-    (set-face-background 'org-block bg)
-    (set-face-background 'org-block-begin-line bg)
-    (set-face-background 'org-block-end-line bg)
-    (set-face-background 'show-paren-match bg)
+(defun na-fix-background (&optional frame)
+  (let ((frame (or frame (setq frame (selected-frame))))
+	(bg "#1c1c1c"))
+    (set-face-background 'default bg frame)
+    (set-face-background 'org-block bg frame)
+    (set-face-background 'org-block-begin-line bg frame)
+    (set-face-background 'org-block-end-line bg frame)
+    (set-face-background 'show-paren-match bg frame)
     (eval-after-load "magit"
       '(progn
 	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
 	 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-	 (set-face-background 'magit-diff-context bg)
-	 (set-face-background 'magit-diff-added-highlight bg)
-	 (set-face-background 'magit-diff-context-highlight bg)
-	 (set-face-background 'magit-diff-added bg)
-	 (set-face-background 'magit-diff-removed bg)
-	 (set-face-background 'magit-diff-hunk-heading bg)
-	 (set-face-background 'magit-diff-removed-highlight bg)))))
+	 (set-face-background 'magit-diff-context bg frame)
+	 (set-face-background 'magit-diff-added-highlight bg frame)
+	 (set-face-background 'magit-diff-context-highlight bg frame)
+	 (set-face-background 'magit-diff-added bg frame)
+	 (set-face-background 'magit-diff-removed bg frame)
+	 (set-face-background 'magit-diff-hunk-heading bg frame)
+	 (set-face-background 'magit-diff-removed-highlight bg frame)))))
 
-(na-fix-background)
 (set-face-attribute 'show-paren-match nil :foreground "red")
+
+(add-hook 'after-make-frame-functions 'na-fix-background)
+(add-hook 'window-setup-hook 'na-fix-background)
 
 (require 'doom-modeline)
 (add-hook 'after-init-hook #'doom-modeline-mode)
