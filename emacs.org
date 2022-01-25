@@ -1,4 +1,6 @@
-#+property: results silent
+# -*- mode: Org; eval: (flyspell-mode 0) -*- #
+#+title: Emacs Configuration
+#+STARTUP: hidestars
 
 * Editor
 
@@ -146,6 +148,239 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 #+BEGIN_SRC emacs-lisp
   (setq display-buffer-alist
 	'(("magit:.*" (display-buffer-same-window))))
+#+END_SRC
+
+* Terminal
+** Path
+
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (progn
+        (setenv "PATH"
+                (concat
+                 "C:\\Program Files\\CMake\\bin;"
+                 "C:\\MinGW\\bin;"
+                 "$HOME\\.rclone/;"
+                 "$HOME\\Documents\\;"
+                 "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
+                 "$HOME\\AppData\\Roaming\\Python\\Python39\\Scripts/;"
+                 "C:\\Program Files\\Arduino;"
+                 (getenv "PATH")))
+        (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
+        (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
+    (setenv "PATH"
+            (concat
+             "/usr/local/bin:"
+	     "/opt/homebrew/bin/:"
+             (concat (getenv "HOME") "/.bin:")
+             (concat (getenv "HOME") "/.local/bin:")
+             (concat (getenv "HOME") "/.git-annex.linux:")
+             (concat (getenv "HOME") "/.rclone:")
+             (getenv "PATH"))))
+
+  (when (eq system-type 'darwin)
+    (setq exec-path (split-string (getenv "PATH") ":")))
+
+  (setenv "PAGER" "cat")
+  ;; (setenv "DISPLAY" ":0")
+#+END_SRC
+
+** EShell
+
+#+BEGIN_SRC emacs-lisp
+  (require 'eshell)
+  (require 'em-alias)
+  (require 'em-tramp) ; to load eshell’s sudo
+
+  (setq eshell-hist-ignoredups t
+        eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
+        eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
+        eshell-visual-commands '("htop" "ssh" "nvtop")
+        eshell-prompt-regexp (rx bol "\u03BB" space)
+        eshell-banner-message ""
+        eshell-cmpl-cycle-completions nil
+        eshell-scroll-to-bottom-on-input 'all
+        eshell-destroy-buffer-when-process-dies t)
+
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+	      (company-mode -1)
+              (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
+              (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+
+  (eshell/alias "df" "df -h")
+  (eshell/alias "ps-grep" "ps ax | grep -i $1")
+  (eshell/alias "sudo" "eshell/sudo $*")
+  (eshell/alias "docker" "/usr/bin/docker $*")
+  (eshell/alias "chmod" "/usr/bin/chmod $*")
+
+  ;; nq exec remote file
+  (defun eshell/rnq (host file &rest options)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string
+	(concat "nq " file " "
+		(string-join
+		 (mapcar 'prin1-to-string options) " "))))))
+
+  (defun eshell/rkill (host pid)
+    (let ((default-directory (concat "/ssh:" host ":~")))
+      (eshell/echo
+       (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
+
+  ;; mirror host /folder/
+  (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+  (eshell/alias "rcp" "rsync -rvLK $1 $2")
+
+  ;;Clear the eshell buffer.
+  (defun eshell/clear ()
+    (let ((eshell-buffer-maximum-lines 0))
+      (eshell-truncate-buffer)))
+
+  (defalias 'cls 'eshell/clear)
+
+  (defun eshell/gst (&rest args)
+    (magit-status)
+    (eshell/echo))
+
+  (eshell/alias "ggc" "git repack -ad; git gc")
+  (eshell/alias "gd" "magit-diff-unstaged")
+  (eshell/alias "ga" "git annex  $*")
+  (eshell/alias "gas" "git annex sync")
+  (eshell/alias "gag" "git annex get . --not --in here")
+  (eshell/alias "gac" "git annex add . && git annex sync --content")
+
+  (defun eshell/pshell ()
+    (insert
+     (concat "powershell.exe -windowstyle hidden -Command"
+             " \"Start-Process powershell  -ArgumentList '-NoExit',"
+             " '-Command cd " default-directory "' -Verb runAs\""))
+    (eshell-send-input))
+
+  (eshell/alias "rclone-mount" "mkdir $2 && rclone mount $1:$2/ $2/ &")
+  (eshell/alias "rclone-umount" "fusermount -u $1 && rm -rf $1")
+  (eshell/alias "rclone-sync" "rclone -v sync $2/ $1:$2/")
+  (eshell/alias "rclone-pull" "rclone copy -u -v $1:$2/ $2/")
+  (eshell/alias
+   "rclone-two-way"
+   (concat "rclone copy -u -v $1:$2/ $2/" "&&" "rclone -v sync $2/ $1:$2/"))
+
+  (defun pcomplete/conn ()
+    (pcomplete-here* (na-ssh-completions)))
+
+  (eshell/alias "conn" "cd /ssh:$1:~")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun na-shell-git-branch (pwd)
+    (interactive)
+    (if (and (eshell-search-path "git")
+             (locate-dominating-file pwd ".git"))
+        (concat " \u2014 " (magit-get-current-branch))
+      ""))
+
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
+           (propertize " \u2014 " 'face `(:foreground "Grey30"))
+           (propertize (eshell/pwd) 'face `(:foreground "Grey50"))
+           (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
+           (propertize "\n" 'face `(:foreground "Grey30"))
+           (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+#+END_SRC
+
+=eshell-exec-visual= is not tramp-aware. Let’s make it tramp-aware for
+SSH at least,
+
+#+BEGIN_SRC emacs-lisp :results silent
+;; https://gist.github.com/ralt/a36288cd748ce185b26237e6b85b27bb
+(require 'em-term)
+
+(defun eshell-exec-visual (&rest args)
+  "Run the specified PROGRAM in a terminal emulation buffer.
+ ARGS are passed to the program.  At the moment, no piping of input is
+ allowed."
+  (let* (eshell-interpreter-alist
+	 (original-args args)
+	 (interp (eshell-find-interpreter (car args) (cdr args)))
+	 (in-ssh-tramp (and (tramp-tramp-file-p default-directory)
+			    (equal (tramp-file-name-method
+				    (tramp-dissect-file-name default-directory))
+				   "ssh")))
+	 (program (if in-ssh-tramp
+		      "ssh"
+		    (car interp)))
+	 (args (if in-ssh-tramp
+		   (let ((dir-name (tramp-dissect-file-name default-directory)))
+		     (eshell-flatten-list
+		      (list
+		       "-t"
+		       (tramp-file-name-host dir-name)
+		       (format
+			;;"export TERM=xterm-256color; cd %s; exec %s"
+			"cd %s; exec %s"
+			(tramp-file-name-localname dir-name)
+			(string-join
+			 (append
+			  (list (tramp-file-name-localname (tramp-dissect-file-name (car interp))))
+			  (cdr args))
+			 " ")))))
+		 (eshell-flatten-list
+		  (eshell-stringify-list (append (cdr interp)
+						 (cdr args))))))
+	 (term-buf
+	  (generate-new-buffer
+	   (concat "*"
+		   (if in-ssh-tramp
+		       (format "%s %s" default-directory (string-join original-args " "))
+		     (file-name-nondirectory program))
+		   "*")))
+	 (eshell-buf (current-buffer)))
+    (save-current-buffer
+      (switch-to-buffer term-buf)
+      (term-mode)
+      (set (make-local-variable 'term-term-name) eshell-term-name)
+      (make-local-variable 'eshell-parent-buffer)
+      (setq eshell-parent-buffer eshell-buf)
+      (term-exec term-buf program program nil args)
+      (let ((proc (get-buffer-process term-buf)))
+	(if (and proc (eq 'run (process-status proc)))
+	    (set-process-sentinel proc 'eshell-term-sentinel)
+	  (error "Failed to invoke visual command")))
+      (term-char-mode)
+      (if eshell-escape-control-x
+	  (term-set-escape-char ?\C-x))))
+  nil)
+#+END_SRC
+
+** Term
+
+#+BEGIN_SRC emacs-lisp
+  (require 'multi-term)
+  (setq multi-term-program "/bin/bash")
+#+END_SRC
+
+** Misc
+
+#+BEGIN_SRC emacs-lisp
+  (defun na-new-term(term-or-shell)
+    "Open a new instance of eshell."
+    (interactive "P")
+    (if term-or-shell
+        (progn
+          (multi-term)
+          ;;pass C-c
+          (define-key term-raw-map [?\C-c] 'term-send-raw))
+      (eshell 'N)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq async-shell-command-display-buffer t
+	async-shell-command-buffer 'new-buffer)
+
+  (add-to-list 'display-buffer-alist
+	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
 * Languages
@@ -818,239 +1053,6 @@ Agenda Management
               (define-key magit-repolist-mode-map (kbd "f") #'na-magit-fetch-all-repositories)
               (define-key magit-repolist-mode-map (kbd "p") #'na-magit-push-all-repositories)
               (define-key magit-repolist-mode-map (kbd "c") #'na-magit-auto-commit-multi-repo)))
-#+END_SRC
-
-* Terminal
-** Path
-
-#+BEGIN_SRC emacs-lisp
-  (if (eq system-type 'windows-nt)
-      (progn
-        (setenv "PATH"
-                (concat
-                 "C:\\Program Files\\CMake\\bin;"
-                 "C:\\MinGW\\bin;"
-                 "$HOME\\.rclone/;"
-                 "$HOME\\Documents\\;"
-                 "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
-                 "$HOME\\AppData\\Roaming\\Python\\Python39\\Scripts/;"
-                 "C:\\Program Files\\Arduino;"
-                 (getenv "PATH")))
-        (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
-        (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
-    (setenv "PATH"
-            (concat
-             "/usr/local/bin:"
-	     "/opt/homebrew/bin/:"
-             (concat (getenv "HOME") "/.bin:")
-             (concat (getenv "HOME") "/.local/bin:")
-             (concat (getenv "HOME") "/.git-annex.linux:")
-             (concat (getenv "HOME") "/.rclone:")
-             (getenv "PATH"))))
-
-  (when (eq system-type 'darwin)
-    (setq exec-path (split-string (getenv "PATH") ":")))
-
-  (setenv "PAGER" "cat")
-  ;; (setenv "DISPLAY" ":0")
-#+END_SRC
-
-** EShell
-
-#+BEGIN_SRC emacs-lisp
-  (require 'eshell)
-  (require 'em-alias)
-  (require 'em-tramp) ; to load eshell’s sudo
-
-  (setq eshell-hist-ignoredups t
-        eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
-        eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-        eshell-visual-commands '("htop" "ssh" "nvtop")
-        eshell-prompt-regexp (rx bol "\u03BB" space)
-        eshell-banner-message ""
-        eshell-cmpl-cycle-completions nil
-        eshell-scroll-to-bottom-on-input 'all
-        eshell-destroy-buffer-when-process-dies t)
-
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-	      (company-mode -1)
-              (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
-              (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
-
-  (eshell/alias "df" "df -h")
-  (eshell/alias "ps-grep" "ps ax | grep -i $1")
-  (eshell/alias "sudo" "eshell/sudo $*")
-  (eshell/alias "docker" "/usr/bin/docker $*")
-  (eshell/alias "chmod" "/usr/bin/chmod $*")
-
-  ;; nq exec remote file
-  (defun eshell/rnq (host file &rest options)
-    (let ((default-directory (concat "/ssh:" host ":~")))
-      (eshell/echo
-       (shell-command-to-string
-	(concat "nq " file " "
-		(string-join
-		 (mapcar 'prin1-to-string options) " "))))))
-
-  (defun eshell/rkill (host pid)
-    (let ((default-directory (concat "/ssh:" host ":~")))
-      (eshell/echo
-       (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
-
-  ;; mirror host /folder/
-  (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
-  (eshell/alias "rcp" "rsync -rvLK $1 $2")
-
-  ;;Clear the eshell buffer.
-  (defun eshell/clear ()
-    (let ((eshell-buffer-maximum-lines 0))
-      (eshell-truncate-buffer)))
-
-  (defalias 'cls 'eshell/clear)
-
-  (defun eshell/gst (&rest args)
-    (magit-status)
-    (eshell/echo))
-
-  (eshell/alias "ggc" "git repack -ad; git gc")
-  (eshell/alias "gd" "magit-diff-unstaged")
-  (eshell/alias "ga" "git annex  $*")
-  (eshell/alias "gas" "git annex sync")
-  (eshell/alias "gag" "git annex get . --not --in here")
-  (eshell/alias "gac" "git annex add . && git annex sync --content")
-
-  (defun eshell/pshell ()
-    (insert
-     (concat "powershell.exe -windowstyle hidden -Command"
-             " \"Start-Process powershell  -ArgumentList '-NoExit',"
-             " '-Command cd " default-directory "' -Verb runAs\""))
-    (eshell-send-input))
-
-  (eshell/alias "rclone-mount" "mkdir $2 && rclone mount $1:$2/ $2/ &")
-  (eshell/alias "rclone-umount" "fusermount -u $1 && rm -rf $1")
-  (eshell/alias "rclone-sync" "rclone -v sync $2/ $1:$2/")
-  (eshell/alias "rclone-pull" "rclone copy -u -v $1:$2/ $2/")
-  (eshell/alias
-   "rclone-two-way"
-   (concat "rclone copy -u -v $1:$2/ $2/" "&&" "rclone -v sync $2/ $1:$2/"))
-
-  (defun pcomplete/conn ()
-    (pcomplete-here* (na-ssh-completions)))
-
-  (eshell/alias "conn" "cd /ssh:$1:~")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun na-shell-git-branch (pwd)
-    (interactive)
-    (if (and (eshell-search-path "git")
-             (locate-dominating-file pwd ".git"))
-        (concat " \u2014 " (magit-get-current-branch))
-      ""))
-
-  (setq eshell-prompt-function
-        (lambda ()
-          (concat
-           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
-           (propertize " \u2014 " 'face `(:foreground "Grey30"))
-           (propertize (eshell/pwd) 'face `(:foreground "Grey50"))
-           (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
-           (propertize "\n" 'face `(:foreground "Grey30"))
-           (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
-#+END_SRC
-
-=eshell-exec-visual= is not tramp-aware. Let’s make it tramp-aware for
-SSH at least,
-
-#+BEGIN_SRC emacs-lisp :results silent
-;; https://gist.github.com/ralt/a36288cd748ce185b26237e6b85b27bb
-(require 'em-term)
-
-(defun eshell-exec-visual (&rest args)
-  "Run the specified PROGRAM in a terminal emulation buffer.
- ARGS are passed to the program.  At the moment, no piping of input is
- allowed."
-  (let* (eshell-interpreter-alist
-	 (original-args args)
-	 (interp (eshell-find-interpreter (car args) (cdr args)))
-	 (in-ssh-tramp (and (tramp-tramp-file-p default-directory)
-			    (equal (tramp-file-name-method
-				    (tramp-dissect-file-name default-directory))
-				   "ssh")))
-	 (program (if in-ssh-tramp
-		      "ssh"
-		    (car interp)))
-	 (args (if in-ssh-tramp
-		   (let ((dir-name (tramp-dissect-file-name default-directory)))
-		     (eshell-flatten-list
-		      (list
-		       "-t"
-		       (tramp-file-name-host dir-name)
-		       (format
-			;;"export TERM=xterm-256color; cd %s; exec %s"
-			"cd %s; exec %s"
-			(tramp-file-name-localname dir-name)
-			(string-join
-			 (append
-			  (list (tramp-file-name-localname (tramp-dissect-file-name (car interp))))
-			  (cdr args))
-			 " ")))))
-		 (eshell-flatten-list
-		  (eshell-stringify-list (append (cdr interp)
-						 (cdr args))))))
-	 (term-buf
-	  (generate-new-buffer
-	   (concat "*"
-		   (if in-ssh-tramp
-		       (format "%s %s" default-directory (string-join original-args " "))
-		     (file-name-nondirectory program))
-		   "*")))
-	 (eshell-buf (current-buffer)))
-    (save-current-buffer
-      (switch-to-buffer term-buf)
-      (term-mode)
-      (set (make-local-variable 'term-term-name) eshell-term-name)
-      (make-local-variable 'eshell-parent-buffer)
-      (setq eshell-parent-buffer eshell-buf)
-      (term-exec term-buf program program nil args)
-      (let ((proc (get-buffer-process term-buf)))
-	(if (and proc (eq 'run (process-status proc)))
-	    (set-process-sentinel proc 'eshell-term-sentinel)
-	  (error "Failed to invoke visual command")))
-      (term-char-mode)
-      (if eshell-escape-control-x
-	  (term-set-escape-char ?\C-x))))
-  nil)
-#+END_SRC
-
-** Term
-
-#+BEGIN_SRC emacs-lisp
-  (require 'multi-term)
-  (setq multi-term-program "/bin/bash")
-#+END_SRC
-
-** Misc
-
-#+BEGIN_SRC emacs-lisp
-  (defun na-new-term(term-or-shell)
-    "Open a new instance of eshell."
-    (interactive "P")
-    (if term-or-shell
-        (progn
-          (multi-term)
-          ;;pass C-c
-          (define-key term-raw-map [?\C-c] 'term-send-raw))
-      (eshell 'N)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq async-shell-command-display-buffer t
-	async-shell-command-buffer 'new-buffer)
-
-  (add-to-list 'display-buffer-alist
-	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
 * Research
