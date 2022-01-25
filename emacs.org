@@ -1341,16 +1341,28 @@ SSH at least,
   (all-the-icons-install-fonts t))
 
 (load-theme 'doom-one t)
-(setq na-theme-bg "unspecified-bg")
 
-(set-face-background 'org-block na-theme-bg)
-(set-face-background 'org-block-begin-line na-theme-bg)
-(set-face-background 'org-block-end-line na-theme-bg)
+(defun na-fix-background ()
+  (let ((bg "#1c1c1c"))
+    (set-background-color bg)
+    (set-face-background 'org-block bg)
+    (set-face-background 'org-block-begin-line bg)
+    (set-face-background 'org-block-end-line bg)
+    (set-face-background 'show-paren-match bg)
+    (eval-after-load "magit"
+      '(progn
+	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+	 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+	 (set-face-background 'magit-diff-context bg)
+	 (set-face-background 'magit-diff-added-highlight bg)
+	 (set-face-background 'magit-diff-context-highlight bg)
+	 (set-face-background 'magit-diff-added bg)
+	 (set-face-background 'magit-diff-removed bg)
+	 (set-face-background 'magit-diff-hunk-heading bg)
+	 (set-face-background 'magit-diff-removed-highlight bg)))))
 
-(set-face-background 'mode-line          "SteelBlue4")
-(set-face-background 'mode-line-inactive "SlateGray4")
-(set-face-foreground 'mode-line          "gray5")
-(set-face-foreground 'mode-line-inactive "gray15")
+(na-fix-background)
+(set-face-attribute 'show-paren-match nil :foreground "red")
 
 (require 'doom-modeline)
 (add-hook 'after-init-hook #'doom-modeline-mode)
@@ -1358,21 +1370,10 @@ SSH at least,
 (setq doom-modeline-buffer-state-icon nil)
 (setq doom-modeline-buffer-encoding nil)
 
-(eval-after-load "magit"
-  '(progn
-     (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-     (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-     (set-face-background 'magit-diff-context na-theme-bg)
-     (set-face-background 'magit-diff-added-highlight na-theme-bg)
-     (set-face-background 'magit-diff-context-highlight na-theme-bg)
-     (set-face-background 'magit-diff-added na-theme-bg)
-     (set-face-background 'magit-diff-removed na-theme-bg)
-     (set-face-background 'magit-diff-hunk-heading na-theme-bg)
-     (set-face-background 'magit-diff-removed-highlight na-theme-bg)))
-
-(set-face-background 'show-paren-match (face-background 'default))
-(set-face-attribute 'show-paren-match nil :foreground "red")
-(set-face-background 'show-paren-match na-theme-bg)
+(set-face-background 'mode-line          "SteelBlue4")
+(set-face-background 'mode-line-inactive "SlateGray4")
+(set-face-foreground 'mode-line          "gray5")
+(set-face-foreground 'mode-line-inactive "gray15")
 
 (column-number-mode 1)
 (blink-cursor-mode 1)
@@ -1387,17 +1388,6 @@ SSH at least,
     (set-frame-size (selected-frame) 80 25)))
 
 (add-hook 'window-setup-hook 'na-reset-window-size)
-
-(defun fix-theme-in-tty (&optional frame)
-  (or frame (setq frame (selected-frame)))
-  "unsets the background color in terminal mode"
-  (unless (display-graphic-p frame)
-    (set-face-background 'default "unspecified-bg" frame)
-    (set-face-background 'org-hide "black" frame)
-    (set-face-foreground 'org-hide "black" frame)))
-
-(add-hook 'after-make-frame-functions 'fix-theme-in-tty)
-(add-hook 'window-setup-hook 'fix-theme-in-tty)
 
 (when (getenv "EMACS_HOME_DIR")
   (setq frame-title-format (list "emacsd"))
