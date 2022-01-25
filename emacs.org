@@ -1316,10 +1316,34 @@ SSH at least,
 #+END_SRC
 
 * Theme
+** Layout
 
-#+BEGIN_SRC emacs-lisp :results silent
+#+begin_src emacs-lisp :results silent
 (setq frame-title-format (list "Emacs " emacs-version))
 
+(column-number-mode 1)
+(blink-cursor-mode 1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+
+(defun na-reset-window-size ()
+  (interactive)
+  (when window-system
+    (set-frame-size (selected-frame) 80 25)))
+
+(add-hook 'window-setup-hook 'na-reset-window-size)
+
+(when (getenv "EMACS_HOME_DIR")
+  (setq frame-title-format (list "emacsd"))
+  (set-face-attribute 'default nil :height 125)
+  (blink-cursor-mode))
+#+end_src
+
+** Font
+
+#+begin_src emacs-lisp :results silent
 (when window-system
   (let ((font-dejavu "DejaVu Sans Mono 11")
         (font-monaco "Monaco 10")
@@ -1342,7 +1366,11 @@ SSH at least,
 
 (unless (member "all-the-icons" (font-family-list))
   (all-the-icons-install-fonts t))
+#+end_src
 
+** Theme
+
+#+BEGIN_SRC emacs-lisp :results silent
 (load-theme 'doom-one t)
 
 (defun na-fix-background (&optional frame)
@@ -1380,25 +1408,6 @@ SSH at least,
 (set-face-background 'mode-line-inactive "SlateGray4")
 (set-face-foreground 'mode-line          "gray5")
 (set-face-foreground 'mode-line-inactive "gray15")
-
-(column-number-mode 1)
-(blink-cursor-mode 1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-
-(defun na-reset-window-size ()
-  (interactive)
-  (when window-system
-    (set-frame-size (selected-frame) 80 25)))
-
-(add-hook 'window-setup-hook 'na-reset-window-size)
-
-(when (getenv "EMACS_HOME_DIR")
-  (setq frame-title-format (list "emacsd"))
-  (set-face-attribute 'default nil :height 125)
-  (blink-cursor-mode))
 #+END_SRC
 
 * Server
