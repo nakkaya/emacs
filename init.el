@@ -40,7 +40,6 @@
         quelpa))
 
 (when (eq system-type 'gnu/linux)
-  (push 'jupyter package-list)
   (push 'elfeed package-list))
 
 (when (or (eq system-type 'gnu/linux)
@@ -49,7 +48,8 @@
   (push 'magit-todos package-list)
   (push 'pdf-tools package-list)
   (push 'saveplace-pdf-view package-list)
-  (push 'org-noter package-list))
+  (push 'org-noter package-list)
+  (push 'jupyter package-list))
 
 (setq package-archives
       '(("melpa" . "http://melpa.org/packages/")

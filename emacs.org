@@ -501,8 +501,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	  ("l" . "export latex")
 	  ("e" . "example")))
 
+  ;; Install libtool
+  ;; autoreconf -f -i
+  ;; aclocal && automake --add-missing && autoconf
   (when (and module-file-suffix
-	     (eq system-type 'gnu/linux))
+	     ;;(eq system-type 'gnu/linux)
+	     )
 
     (require 'jupyter)
     (require 'ob-jupyter)
