@@ -715,8 +715,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-ellipsis " ▶"
       org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
 
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(add-hook 'org-mode-hook (lambda ()
+			   (org-superstar-mode 1)
+			   (save-place-local-mode -1)
+			   (org-next-visible-heading 1)))
 #+end_src
 
 #+begin_src emacs-lisp
