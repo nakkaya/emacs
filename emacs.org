@@ -695,87 +695,29 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   
 * Org-Mode
 
-#+BEGIN_SRC emacs-lisp
-  (require 'ob)
-  (require 'org-superstar)
+#+begin_src emacs-lisp
+(require 'org)
+(require 'org-superstar)
 
-  (setq org-startup-folded t
-        org-return-follows-link t
-        org-startup-with-inline-images t
-        org-image-actual-width nil
-	org-use-speed-commands t
-        org-src-window-setup 'current-window
-        org-confirm-babel-evaluate nil
-        org-babel-python-command "python3"
-        org-hide-leading-stars t
-	org-src-fontify-natively t
-	org-src-tab-acts-natively t
-	org-src-preserve-indentation t
-	org-ellipsis " ▶"
-	org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
+(setq org-startup-folded t
+      org-adapt-indentation nil
+      org-return-follows-link t
+      org-startup-with-inline-images t
+      org-image-actual-width nil
+      org-use-speed-commands t
+      org-src-window-setup 'current-window
+      org-confirm-babel-evaluate nil
+      org-babel-python-command "python3"
+      org-hide-leading-stars t
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-src-preserve-indentation t
+      org-ellipsis " ▶"
+      org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
 
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-
-  (when  (eq system-type 'windows-nt)
-    (setq org-babel-python-command "python.exe"))
-
-  (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-
-  ;; Run/highlight code using babel in org-mode
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((clojure . t)
-     (python . t)
-     (shell . t)))
-
-  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
-
-  (setq org-structure-template-alist
-	'(("el" . "src emacs-lisp\n")
-	  ("cl" . "src clojure\n")
-	  ("sh" . "src sh\n")
-	  ("jp" . "src jupyter-python\n")
-	  ("s" . "src")
-	  ("l" . "export latex")
-	  ("e" . "example")))
-
-  ;; Install libtool
-  ;; autoreconf -f -i
-  ;; aclocal && automake --add-missing && autoconf
-  (when (and module-file-suffix
-	     ;;(eq system-type 'gnu/linux)
-	     )
-
-    (require 'jupyter)
-    (require 'ob-jupyter)
-
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     (append org-babel-load-languages
-	     '((jupyter . t))))
-
-    (setq org-babel-default-header-args:jupyter-python
-	  '((:async . "yes")
-	    (:session . "py")
-	    (:results . "raw drawer"))))
-
-  (defun org-babel-kill-session ()
-    "Kill session for current code block."
-    (interactive)
-    ;; (unless (org-in-src-block-p)
-    ;;   (error "You must be in a src-block to run this command"))
-    (save-window-excursion
-      (org-babel-switch-to-session)
-      (kill-buffer)))
-
-  (defun org-babel-remove-result-buffer ()
-    "Remove results from every code block in buffer."
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward org-babel-src-block-regexp nil t)
-	(org-babel-remove-result))))
-#+END_SRC
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+#+end_src
 
 #+begin_src emacs-lisp
   (setq org-refile-targets '((nil :maxlevel . 9)
@@ -784,95 +726,162 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 #+end_src
 
-Agenda Management
+** Babel
 
 #+BEGIN_SRC emacs-lisp
-  (cond ((file-exists-p "~/org/")
-         (setq na-agenda-folder "~/org/"))
-        ((file-exists-p "/storage/source/org/")
-         (setq na-agenda-folder "/storage/source/org/"))
-        ((file-exists-p "~/source/org/")
-         (setq na-agenda-folder "~/source/org/"))
-        (t
-         (setq na-agenda-folder "~/org/")))
+(require 'ob)
 
-  (setq na-agenda-files '("notes.org"
-                          "inbox.org"
-                          "bookmarks.org"
-                          "shopping.org"
-                          "devops.org"))
+(when  (eq system-type 'windows-nt)
+  (setq org-babel-python-command "python.exe"))
 
-  (when (file-exists-p na-agenda-folder)
-    (setq org-agenda-files
-          (mapcar (lambda (f)
-                    (concat na-agenda-folder f))
-                  na-agenda-files)))
+;; Run/highlight code using babel in org-mode
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((clojure . t)
+   (python . t)
+   (shell . t)))
 
-  (setq org-default-notes-file 
-    (concat na-agenda-folder (car na-agenda-files)))
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
-  (setq org-agenda-custom-commands
-        '(("h" "Agenda and Todo"
-           ((agenda "" ((org-agenda-span 7)
-                        (org-agenda-start-on-weekday nil)))
-            (tags-todo "personal/TODO")
-            (tags-todo "work/TODO")
-            (tags-todo "home/TODO")
-            (tags-todo "personal/WAIT")
-            (tags-todo "work/WAIT")
-            (tags-todo "home/WAIT")))))
+(setq org-structure-template-alist
+      '(("el" . "src emacs-lisp\n")
+	("cl" . "src clojure\n")
+	("sh" . "src sh\n")
+	("jp" . "src jupyter-python\n")
+	("s" . "src")
+	("l" . "export latex")
+	("e" . "example")))
 
-  (setq org-capture-templates
-        '(("p" "Personal TODO" entry
-           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
-           "* TODO %?\n" :prepend t)
-	  ("r" "Research TODO" entry
-           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Research")
-           "* TODO %?\n" :prepend t)
-	  ("b" "Read Later" entry
-           (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
-           "* %?\n" :prepend t)
-          ("a" "Akademik TODO" entry
-           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
-           "* TODO %?\n" :prepend t)
-	  ("l" "Robotics Lab TODO" entry
-           (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Robotics Lab")
-           "* TODO %?\n" :prepend t)))
+;; Install libtool
+;; autoreconf -f -i
+;; aclocal && automake --add-missing && autoconf
+(when (and module-file-suffix
+	   ;;(eq system-type 'gnu/linux)
+	   )
 
-  (setq org-agenda-window-setup 'current-window)
-  (setq org-agenda-restore-windows-after-quit t)
-  (setq org-agenda-show-all-dates t)
-  (setq org-deadline-warning-days 150)
-  (setq org-archive-subtree-save-file-p t)
-  (org-toggle-sticky-agenda)
+  (require 'jupyter)
+  (require 'ob-jupyter)
 
-  (let ((window-configuration))
-    (defun kill-org-agenda ()
-      (interactive)
-      (kill-this-buffer)
-      (set-window-configuration window-configuration))
-  
-    (defun jump-to-org-agenda ()
-      (interactive)
-      (unless (get-buffer "*Org Agenda(h)*")
-        (setq window-configuration (current-window-configuration))
-        (delete-other-windows)
-        (org-agenda nil "h")
-        (org-agenda-redo)
-        (local-set-key [f1] #'kill-org-agenda)
-        (local-set-key "q" #'kill-org-agenda))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages
+	   '((jupyter . t))))
 
-  (global-set-key [f1] 'jump-to-org-agenda)
+  (setq org-babel-default-header-args:jupyter-python
+	'((:async . "yes")
+	  (:session . "py")
+	  (:results . "raw drawer"))))
 
-  (when (file-exists-p na-agenda-folder)
-    (run-with-idle-timer (* 30 60) t #'jump-to-org-agenda))
+(defun org-babel-kill-session ()
+  "Kill session for current code block."
+  (interactive)
+  ;; (unless (org-in-src-block-p)
+  ;;   (error "You must be in a src-block to run this command"))
+  (save-window-excursion
+    (org-babel-switch-to-session)
+    (kill-buffer)))
+
+(defun org-babel-remove-result-buffer ()
+  "Remove results from every code block in buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward org-babel-src-block-regexp nil t)
+      (org-babel-remove-result))))
 #+END_SRC
+
+** Latex
 
 #+BEGIN_SRC emacs-lisp
   (setq org-latex-prefer-user-labels t)
 
   (setq org-latex-pdf-process
         '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+#+END_SRC
+
+** Agenda
+
+#+BEGIN_SRC emacs-lisp
+(cond ((file-exists-p "~/org/")
+       (setq na-agenda-folder "~/org/"))
+      ((file-exists-p "/storage/source/org/")
+       (setq na-agenda-folder "/storage/source/org/"))
+      ((file-exists-p "~/source/org/")
+       (setq na-agenda-folder "~/source/org/"))
+      (t
+       (setq na-agenda-folder "~/org/")))
+
+(setq na-agenda-files '("notes.org"
+                        "inbox.org"
+                        "bookmarks.org"
+                        "shopping.org"
+                        "devops.org"))
+
+(when (file-exists-p na-agenda-folder)
+  (setq org-agenda-files
+        (mapcar (lambda (f)
+                  (concat na-agenda-folder f))
+                na-agenda-files)))
+
+(setq org-default-notes-file
+      (concat na-agenda-folder (car na-agenda-files)))
+
+(setq org-agenda-custom-commands
+      '(("h" "Agenda and Todo"
+         ((agenda "" ((org-agenda-span 7)
+                      (org-agenda-start-on-weekday nil)))
+          (tags-todo "personal/TODO")
+          (tags-todo "work/TODO")
+          (tags-todo "home/TODO")
+          (tags-todo "personal/WAIT")
+          (tags-todo "work/WAIT")
+          (tags-todo "home/WAIT")))))
+
+(setq org-capture-templates
+      '(("p" "Personal TODO" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
+         "* TODO %?\n" :prepend t)
+	("r" "Research TODO" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Research")
+         "* TODO %?\n" :prepend t)
+	("b" "Read Later" entry
+         (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
+         "* %?\n" :prepend t)
+        ("a" "Akademik TODO" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
+         "* TODO %?\n" :prepend t)
+	("l" "Robotics Lab TODO" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Robotics Lab")
+         "* TODO %?\n" :prepend t)))
+
+(setq org-agenda-window-setup 'current-window
+      org-agenda-restore-windows-after-quit t
+      org-agenda-show-all-dates t
+      org-deadline-warning-days 150
+      org-archive-subtree-save-file-p t)
+
+(org-toggle-sticky-agenda)
+
+(let ((window-configuration))
+  (defun kill-org-agenda ()
+    (interactive)
+    (kill-this-buffer)
+    (set-window-configuration window-configuration))
+
+  (defun jump-to-org-agenda ()
+    (interactive)
+    (unless (get-buffer "*Org Agenda(h)*")
+      (setq window-configuration (current-window-configuration))
+      (delete-other-windows)
+      (org-agenda nil "h")
+      (org-agenda-redo)
+      (local-set-key [f1] #'kill-org-agenda)
+      (local-set-key "q" #'kill-org-agenda))))
+
+(global-set-key [f1] 'jump-to-org-agenda)
+
+(when (file-exists-p na-agenda-folder)
+  (run-with-idle-timer (* 30 60) t #'jump-to-org-agenda))
 #+END_SRC
 
 * Dired
