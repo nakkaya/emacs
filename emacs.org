@@ -190,106 +190,93 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 ** EShell
 
 #+BEGIN_SRC emacs-lisp
-  (require 'eshell)
-  (require 'em-alias)
-  (require 'em-tramp) ; to load eshell’s sudo
+(require 'eshell)
+(require 'em-alias)
+(require 'em-tramp) ; to load eshell’s sudo
 
-  (setq eshell-hist-ignoredups t
-        eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
-        eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-        eshell-visual-commands '("htop" "ssh" "nvtop")
-        eshell-prompt-regexp (rx bol "\u03BB" space)
-        eshell-banner-message ""
-        eshell-cmpl-cycle-completions nil
-        eshell-scroll-to-bottom-on-input 'all
-        eshell-destroy-buffer-when-process-dies t)
+(setq eshell-hist-ignoredups t
+      eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
+      eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
+      eshell-visual-commands '("htop" "ssh" "nvtop")
+      eshell-prompt-regexp (rx bol "\u03BB" space)
+      eshell-banner-message ""
+      eshell-cmpl-cycle-completions nil
+      eshell-scroll-to-bottom-on-input 'all
+      eshell-destroy-buffer-when-process-dies t)
 
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-	      (company-mode -1)
-              (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
-              (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+(add-hook 'eshell-mode-hook
+          (lambda ()
+	    (company-mode -1)
+            (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
+            (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
 
-  (eshell/alias "df" "df -h")
-  (eshell/alias "ps-grep" "ps ax | grep -i $1")
-  (eshell/alias "sudo" "eshell/sudo $*")
-  (eshell/alias "docker" "/usr/bin/docker $*")
-  (eshell/alias "chmod" "/usr/bin/chmod $*")
+(eshell/alias "df" "df -h")
+(eshell/alias "ps-grep" "ps ax | grep -i $1")
+(eshell/alias "sudo" "eshell/sudo $*")
+(eshell/alias "docker" "/usr/bin/docker $*")
+(eshell/alias "chmod" "/usr/bin/chmod $*")
 
-  ;; nq exec remote file
-  (defun eshell/rnq (host file &rest options)
-    (let ((default-directory (concat "/ssh:" host ":~")))
-      (eshell/echo
-       (shell-command-to-string
-	(concat "nq " file " "
-		(string-join
-		 (mapcar 'prin1-to-string options) " "))))))
+;; nq exec remote file
+(defun eshell/rnq (host file &rest options)
+  (let ((default-directory (concat "/ssh:" host ":~")))
+    (eshell/echo
+     (shell-command-to-string
+      (concat "nq " file " "
+	      (string-join
+	       (mapcar 'prin1-to-string options) " "))))))
 
-  (defun eshell/rkill (host pid)
-    (let ((default-directory (concat "/ssh:" host ":~")))
-      (eshell/echo
-       (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
+(defun eshell/rkill (host pid)
+  (let ((default-directory (concat "/ssh:" host ":~")))
+    (eshell/echo
+     (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
 
-  ;; mirror host /folder/
-  (eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
-  (eshell/alias "rcp" "rsync -rvLK $1 $2")
+;; mirror host /folder/
+(eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+(eshell/alias "rcp" "rsync -rvLK $1 $2")
 
-  ;;Clear the eshell buffer.
-  (defun eshell/clear ()
-    (let ((eshell-buffer-maximum-lines 0))
-      (eshell-truncate-buffer)))
+;;Clear the eshell buffer.
+(defun eshell/clear ()
+  (let ((eshell-buffer-maximum-lines 0))
+    (eshell-truncate-buffer)))
 
-  (defalias 'cls 'eshell/clear)
+(defalias 'cls 'eshell/clear)
 
-  (defun eshell/gst (&rest args)
-    (magit-status)
-    (eshell/echo))
+(defun eshell/gst (&rest args)
+  (magit-status)
+  (eshell/echo))
 
-  (eshell/alias "ggc" "git repack -ad; git gc")
-  (eshell/alias "gd" "magit-diff-unstaged")
-  (eshell/alias "ga" "git annex  $*")
-  (eshell/alias "gas" "git annex sync")
-  (eshell/alias "gag" "git annex get . --not --in here")
-  (eshell/alias "gac" "git annex add . && git annex sync --content")
+(eshell/alias "ggc" "git repack -ad; git gc")
+(eshell/alias "gd" "magit-diff-unstaged")
+(eshell/alias "ga" "git annex  $*")
+(eshell/alias "gas" "git annex sync")
+(eshell/alias "gag" "git annex get . --not --in here")
+(eshell/alias "gac" "git annex add . && git annex sync --content")
 
-  (defun eshell/pshell ()
-    (insert
-     (concat "powershell.exe -windowstyle hidden -Command"
-             " \"Start-Process powershell  -ArgumentList '-NoExit',"
-             " '-Command cd " default-directory "' -Verb runAs\""))
-    (eshell-send-input))
+(defun pcomplete/conn ()
+  (pcomplete-here* (na-ssh-completions)))
 
-  (eshell/alias "rclone-mount" "mkdir $2 && rclone mount $1:$2/ $2/ &")
-  (eshell/alias "rclone-umount" "fusermount -u $1 && rm -rf $1")
-  (eshell/alias "rclone-sync" "rclone -v sync $2/ $1:$2/")
-  (eshell/alias "rclone-pull" "rclone copy -u -v $1:$2/ $2/")
-  (eshell/alias
-   "rclone-two-way"
-   (concat "rclone copy -u -v $1:$2/ $2/" "&&" "rclone -v sync $2/ $1:$2/"))
-
-  (defun pcomplete/conn ()
-    (pcomplete-here* (na-ssh-completions)))
-
-  (eshell/alias "conn" "cd /ssh:$1:~")
+(if (eq system-type 'windows-nt)
+    (eshell/alias "conn" "cd /sshx:$1:~")
+  (eshell/alias "conn" "cd /ssh:$1:~"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defun na-shell-git-branch (pwd)
-    (interactive)
-    (if (and (eshell-search-path "git")
-             (locate-dominating-file pwd ".git"))
-        (concat " \u2014 " (magit-get-current-branch))
-      ""))
+(defun na-shell-git-branch (pwd)
+  (interactive)
+  (if (and (eshell-search-path "git")
+           (locate-dominating-file pwd ".git"))
+      (concat " \u2014 " (magit-get-current-branch))
+    ""))
 
-  (setq eshell-prompt-function
-        (lambda ()
-          (concat
-           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
-           (propertize " \u2014 " 'face `(:foreground "Grey30"))
-           (propertize (eshell/pwd) 'face `(:foreground "Grey50"))
-           (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
-           (propertize "\n" 'face `(:foreground "Grey30"))
-           (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+(setq eshell-prompt-function
+      (lambda ()
+        (concat
+         (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "Grey50"))
+         (propertize " \u2014 " 'face `(:foreground "Grey30"))
+         (propertize (eshell/pwd) 'face `(:foreground "Grey50"))
+         (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
+         (propertize "\n" 'face `(:foreground "Grey30"))
+         (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
 #+END_SRC
 
 =eshell-exec-visual= is not tramp-aware. Let’s make it tramp-aware for
@@ -943,16 +930,16 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * Tramp
 
 #+BEGIN_SRC emacs-lisp
-  (require 'tramp)
+(require 'tramp)
 
-  (setq remote-file-name-inhibit-cache nil
-        tramp-verbose 1
-        tramp-completion-reread-directory-timeout nil)
+(setq remote-file-name-inhibit-cache nil
+      tramp-verbose 1
+      tramp-completion-reread-directory-timeout nil)
 
-  (setq tramp-default-method "ssh")
+(setq tramp-default-method "ssh")
 
-  (when (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink"))
+(when (eq system-type 'windows-nt)
+  (setq tramp-default-method "sshx"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
