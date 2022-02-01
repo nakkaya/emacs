@@ -48,7 +48,9 @@
   (push 'magit-todos package-list)
   (push 'pdf-tools package-list)
   (push 'saveplace-pdf-view package-list)
-  (push 'org-noter package-list)
+  (push 'org-noter package-list))
+
+(when module-file-suffix
   (push 'jupyter package-list))
 
 (setq package-archives

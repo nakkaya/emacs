@@ -162,6 +162,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
                "C:\\MinGW\\bin;"
 	       (concat (getenv "HOME") ";")
 	       (concat (getenv "HOME") "\\Documents;")
+	       (concat (getenv "HOME") "\\Documents\\gzip\\bin;")
 	       (concat (getenv "HOME") "\\AppData\\Roaming\\Python\\Python36\\Scripts;")
 	       (concat (getenv "HOME") "\\AppData\\Roaming\\Python\\Python39\\Scripts;")
 	       "C:\\Arduino;"
