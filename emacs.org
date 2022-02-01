@@ -154,35 +154,37 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 ** Path
 
 #+BEGIN_SRC emacs-lisp
-  (if (eq system-type 'windows-nt)
-      (progn
-        (setenv "PATH"
-                (concat
-                 "C:\\Program Files\\CMake\\bin;"
-                 "C:\\MinGW\\bin;"
-                 "$HOME\\.rclone/;"
-                 "$HOME\\Documents\\;"
-                 "$HOME\\AppData\\Roaming\\Python\\Python36\\Scripts/;"
-                 "$HOME\\AppData\\Roaming\\Python\\Python39\\Scripts/;"
-                 "C:\\Program Files\\Arduino;"
-                 (getenv "PATH")))
-        (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
-        (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
-    (setenv "PATH"
-            (concat
-             "/usr/local/bin:"
-	     "/opt/homebrew/bin/:"
-             (concat (getenv "HOME") "/.bin:")
-             (concat (getenv "HOME") "/.local/bin:")
-             (concat (getenv "HOME") "/.git-annex.linux:")
-             (concat (getenv "HOME") "/.rclone:")
-             (getenv "PATH"))))
+(if (eq system-type 'windows-nt)
+    (progn
+      (setenv "PATH"
+              (concat
+               "C:\\Program Files\\CMake\\bin;"
+               "C:\\MinGW\\bin;"
+	       (concat (getenv "HOME") ";")
+	       (concat (getenv "HOME") "\\Documents;")
+	       (concat (getenv "HOME") "\\AppData\\Roaming\\Python\\Python36\\Scripts;")
+	       (concat (getenv "HOME") "\\AppData\\Roaming\\Python\\Python39\\Scripts;")
+	       "C:\\Arduino;"
+               "C:\\Program Files\\Arduino;"
+               (getenv "PATH")))
+      (setenv "C_INCLUDE_PATH" "C:\\MinGW\\include")
+      (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
+  (setenv "PATH"
+          (concat
+           "/usr/local/bin:"
+	   "/opt/homebrew/bin/:"
+           (concat (getenv "HOME") "/.bin:")
+           (concat (getenv "HOME") "/.local/bin:")
+           (concat (getenv "HOME") "/.git-annex.linux:")
+           (concat (getenv "HOME") "/.rclone:")
+           (getenv "PATH"))))
 
-  (when (eq system-type 'darwin)
-    (setq exec-path (split-string (getenv "PATH") ":")))
+(if (eq system-type 'windows-nt)
+    (setq exec-path (split-string (getenv "PATH") ";"))
+  (setq exec-path (split-string (getenv "PATH") ":")))
 
-  (setenv "PAGER" "cat")
-  ;; (setenv "DISPLAY" ":0")
+(setenv "PAGER" "cat")
+;; (setenv "DISPLAY" ":0")
 #+END_SRC
 
 ** EShell
