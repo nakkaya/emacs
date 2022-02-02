@@ -193,7 +193,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 ** EShell
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (require 'eshell)
 (require 'em-alias)
 (require 'em-tramp) ; to load eshell’s sudo
@@ -213,56 +213,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	    (company-mode -1)
             (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
             (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+#+end_src
 
-(eshell/alias "df" "df -h")
-(eshell/alias "ps-grep" "ps ax | grep -i $1")
-(eshell/alias "sudo" "eshell/sudo $*")
-(eshell/alias "docker" "/usr/bin/docker $*")
-(eshell/alias "chmod" "/usr/bin/chmod $*")
-
-;; nq exec remote file
-(defun eshell/rnq (host file &rest options)
-  (let ((default-directory (concat "/ssh:" host ":~")))
-    (eshell/echo
-     (shell-command-to-string
-      (concat "nq " file " "
-	      (string-join
-	       (mapcar 'prin1-to-string options) " "))))))
-
-(defun eshell/rkill (host pid)
-  (let ((default-directory (concat "/ssh:" host ":~")))
-    (eshell/echo
-     (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
-
-;; mirror host /folder/
-(eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
-(eshell/alias "rcp" "rsync -rvLK $1 $2")
-
-;;Clear the eshell buffer.
-(defun eshell/clear ()
-  (let ((eshell-buffer-maximum-lines 0))
-    (eshell-truncate-buffer)))
-
-(defalias 'cls 'eshell/clear)
-
-(defun eshell/gst (&rest args)
-  (magit-status)
-  (eshell/echo))
-
-(eshell/alias "ggc" "git repack -ad; git gc")
-(eshell/alias "gd" "magit-diff-unstaged")
-(eshell/alias "ga" "git annex  $*")
-(eshell/alias "gas" "git annex sync")
-(eshell/alias "gag" "git annex get . --not --in here")
-(eshell/alias "gac" "git annex add . && git annex sync --content")
-
-(defun pcomplete/conn ()
-  (pcomplete-here* (na-ssh-completions)))
-
-(if (eq system-type 'windows-nt)
-    (eshell/alias "conn" "cd /sshx:$1:~")
-  (eshell/alias "conn" "cd /ssh:$1:~"))
-#+END_SRC
+*** Prompt
 
 #+BEGIN_SRC emacs-lisp
 (defun na-shell-git-branch (pwd)
@@ -282,6 +235,63 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
          (propertize "\n" 'face `(:foreground "Grey30"))
          (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
 #+END_SRC
+
+*** Aliases
+
+#+BEGIN_SRC emacs-lisp
+(eshell/alias "df" "df -h")
+(eshell/alias "ps-grep" "ps ax | grep -i $1")
+(eshell/alias "sudo" "eshell/sudo $*")
+(eshell/alias "docker" "/usr/bin/docker $*")
+(eshell/alias "chmod" "/usr/bin/chmod $*")
+
+;; mirror host /folder/
+(eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+(eshell/alias "rcp" "rsync -rvLK $1 $2")
+
+(eshell/alias "ggc" "git repack -ad; git gc")
+(eshell/alias "gd" "magit-diff-unstaged")
+(eshell/alias "ga" "git annex  $*")
+(eshell/alias "gas" "git annex sync")
+(eshell/alias "gag" "git annex get . --not --in here")
+(eshell/alias "gac" "git annex add . && git annex sync --content")
+#+END_SRC
+
+*** Commands
+
+#+begin_src emacs-lisp
+;;Clear the eshell buffer.
+(defun eshell/clear ()
+  (let ((eshell-buffer-maximum-lines 0))
+    (eshell-truncate-buffer)))
+
+(defalias 'cls 'eshell/clear)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun pcomplete/conn ()
+  (pcomplete-here* (na-ssh-completions)))
+
+(if (eq system-type 'windows-nt)
+    (eshell/alias "conn" "cd /sshx:$1:~")
+  (eshell/alias "conn" "cd /ssh:$1:~"))
+#+end_src
+
+#+begin_src emacs-lisp
+;; nq exec remote file
+(defun eshell/rnq (host file &rest options)
+  (let ((default-directory (concat "/ssh:" host ":~")))
+    (eshell/echo
+     (shell-command-to-string
+      (concat "nq " file " "
+	      (string-join
+	       (mapcar 'prin1-to-string options) " "))))))
+
+(defun eshell/rkill (host pid)
+  (let ((default-directory (concat "/ssh:" host ":~")))
+    (eshell/echo
+     (shell-command-to-string (concat "kill -9 " (number-to-string pid))))))
+#+end_src
 
 =eshell-exec-visual= is not tramp-aware. Let’s make it tramp-aware for
 SSH at least,
