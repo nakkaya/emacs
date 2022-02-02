@@ -88,12 +88,15 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (require 'saveplace)
 (save-place-mode 1)
 
+(setq na-save-places-filename
+      (concat "source/.emacs-places-" (system-name)))
+
 (cond ((getenv "EMACS_HOME_DIR")
        (setq save-place-file
-	     "/storage/source/.emacs-places"))
+	     (concat "/storage/" na-save-places-filename)))
       (t
        (setq save-place-file
-	     "~/source/.emacs-places")))
+	     (concat "~/" na-save-places-filename))))
 
 (run-with-idle-timer (* 30 60) t #'save-place-kill-emacs-hook)
 #+END_SRC
@@ -706,9 +709,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
 
 (add-hook 'org-mode-hook (lambda ()
-			   (org-superstar-mode 1)
-			   (save-place-local-mode -1)
-			   (org-next-visible-heading 1)))
+			   (org-superstar-mode 1)))
 #+end_src
 
 #+begin_src emacs-lisp
