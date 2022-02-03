@@ -948,7 +948,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
 
-(setq remote-file-name-inhibit-cache nil
+(setq tramp-ssh-controlmaster-options ""
+      remote-file-name-inhibit-cache nil
       tramp-verbose 1
       tramp-completion-reread-directory-timeout nil)
 
