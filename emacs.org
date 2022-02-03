@@ -1080,11 +1080,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (use-package pdf-tools
       :config
       (pdf-tools-install :no-query)
-      (setq-default pdf-view-display-size 'fit-page)
-      (setq pdf-annot-activate-created-annotations t)
-      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-      (setq TeX-view-program-selection '((output-pdf "pdf-tools")))
-      (setq TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view"))))
+      (setq pdf-view-display-size 'fit-page
+	    pdf-annot-activate-created-annotations t
+	    TeX-view-program-selection '((output-pdf "pdf-tools"))
+	    TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+
+      (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)))
 
     (require 'saveplace-pdf-view)
 
