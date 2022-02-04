@@ -10,7 +10,9 @@ USER root
 # Install Packages
 #
 RUN apt-get update && \
-    apt-get upgrade -y
+    apt-get upgrade -y && \
+    apt-get install curl -y --no-install-recommends && \
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
 RUN apt-get install \
     # apt
@@ -43,6 +45,10 @@ RUN apt-get install \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
+
+# Node
+#
+RUN apt-get install -y nodejs
 
 # Install Terraform
 #
