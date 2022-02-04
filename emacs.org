@@ -179,6 +179,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	   "/opt/homebrew/bin/:"
            (concat (getenv "HOME") "/.bin:")
            (concat (getenv "HOME") "/.local/bin:")
+	   (concat (getenv "HOME") "/.emacs.build/src:")
+	   (concat (getenv "HOME") "/.emacs.build/lib-src:")
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
            (getenv "PATH"))))
@@ -1086,7 +1088,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	    TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
 
       (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
-      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)))
+      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 
     (require 'saveplace-pdf-view)
 
