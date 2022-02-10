@@ -790,13 +790,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (org-babel-switch-to-session)
     (kill-buffer)))
 
-(defun org-babel-remove-result-buffer ()
-  "Remove results from every code block in buffer."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward org-babel-src-block-regexp nil t)
-      (org-babel-remove-result))))
+(define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
+(define-key org-mode-map (kbd "C-c k") 'org-babel-kill-session)
 #+END_SRC
 
 ** Latex
