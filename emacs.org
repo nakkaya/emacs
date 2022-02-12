@@ -362,8 +362,10 @@ SSH at least,
 ** Term
 
 #+BEGIN_SRC emacs-lisp
-  (require 'multi-term)
-  (setq multi-term-program "/bin/bash")
+(setq term-term-name "xterm-256color")
+
+(require 'multi-term)
+(setq multi-term-program "/bin/bash")
 #+END_SRC
 
 ** Misc
