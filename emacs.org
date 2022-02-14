@@ -20,36 +20,37 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8-unix)
 
-  (setq gc-cons-threshold (* 100 1024 1024)
-        read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024))
 
-  (setq visible-bell t
-        fill-column 80
-        make-backup-files nil
-        query-replace-highlight t
-        search-highlight t
-        inhibit-splash-screen t
-        indent-tabs-mode nil
-        show-paren-delay 0
-	mouse-highlight nil)
+(setq visible-bell t
+      fill-column 80
+      make-backup-files nil
+      query-replace-highlight t
+      search-highlight t
+      inhibit-splash-screen t
+      indent-tabs-mode nil
+      show-paren-delay 0
+      mouse-highlight nil)
 
-  (delete-selection-mode)
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (global-font-lock-mode t)
-  (electric-pair-mode 1)
-  (show-paren-mode 1)
-  (global-undo-tree-mode)
+(delete-selection-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(global-font-lock-mode t)
+(electric-pair-mode 1)
+(show-paren-mode 1)
+(global-undo-tree-mode)
 
-  (global-auto-revert-mode 1)
-  (setq revert-without-query '(".pdf"))
+(global-auto-revert-mode 1)
+(setq revert-without-query '(".pdf"))
 
-  (add-hook 'prog-mode-hook #'hs-minor-mode)
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
