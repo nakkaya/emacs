@@ -455,14 +455,17 @@ Will bounce between matching parens just like % in vi
 ** Python
 
  #+BEGIN_SRC emacs-lisp
-   (require 'python)
-   (setq python-shell-interpreter "python3")
-   (setq python-indent-guess-indent-offset-verbose nil)
-   (add-hook 'python-mode-hook #'python-cell-mode 1)
+(setenv "PYTHONIOENCODING" "utf8")
+(setenv "PYTHONDONTWRITEBYTECODE" "1")
 
-   (with-eval-after-load 'python-cell
-     (setq python-cell-highlight-cell nil)
-     (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell))
+(require 'python)
+(setq python-shell-interpreter "python3"
+      python-indent-guess-indent-offset-verbose nil)
+(add-hook 'python-mode-hook #'python-cell-mode 1)
+
+(with-eval-after-load 'python-cell
+  (setq python-cell-highlight-cell nil)
+  (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell))
  #+END_SRC
 
 ** Docker
