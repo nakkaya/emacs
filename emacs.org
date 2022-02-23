@@ -48,7 +48,8 @@
 (global-undo-tree-mode)
 
 (global-auto-revert-mode 1)
-(setq revert-without-query '(".pdf"))
+(setq global-auto-revert-non-file-buffers t
+      revert-without-query '(".pdf"))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
