@@ -27,7 +27,7 @@
 (prefer-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8-unix)
 
-(setq gc-cons-threshold (* 100 1024 1024)
+(setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 1024 1024))
 
 (setq visible-bell t
@@ -647,7 +647,9 @@ Will bounce between matching parens just like % in vi
    (require 'lsp-mode)
    (require 'lsp-ui)
 
-   (setq lsp-diagnostics-provider :flycheck
+   (setq lsp-log-io nil
+	 lsp-idle-delay 0.500
+	 lsp-diagnostics-provider :flycheck
 	 lsp-headerline-breadcrumb-enable nil
 	 lsp-ui-sideline-enable t
 	 lsp-ui-doc-show-with-cursor nil
