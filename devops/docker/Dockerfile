@@ -122,6 +122,7 @@ RUN pip install \
     matplotlib \
     plotly \
     # Misc
+    pygments \
     nbstripout \
     click
 
