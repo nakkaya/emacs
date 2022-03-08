@@ -143,7 +143,7 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     chmod 755 /usr/bin/lein && \
     curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
     chmod +x install && \
-    ./install --version "2021.12.01-12.28.16" && \
+    ./install --version "2022.02.23-12.12.12" && \
     rm install
 
 # Install AWS CLI
