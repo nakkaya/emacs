@@ -96,7 +96,7 @@ RUN pip install \
 
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) pip install tensorflow-gpu tensorflow-datasets gym albumentations ;; \
+            amd64) pip install tensorflow-gpu tensorflow-datasets gym segmentation-models albumentations ;; \
             #arm64) apt-get install python3-h5py -y ;; \
     esac;
 
