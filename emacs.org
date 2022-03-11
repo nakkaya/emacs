@@ -182,6 +182,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	   "/opt/homebrew/opt/coreutils/libexec/gnubin:"
 	   "/Users/nakkaya/Library/Python/3.8/bin/:"
 	   "/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/bin:"
+	   "/Applications/Postgres.app/Contents/Versions/latest/bin:"
            (concat (getenv "HOME") "/.bin:")
            (concat (getenv "HOME") "/.local/bin:")
 	   (concat (getenv "HOME") "/.emacs.build/src:")
