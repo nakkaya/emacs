@@ -249,8 +249,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 #+BEGIN_SRC emacs-lisp
 (eshell/alias "df" "df -h")
 (eshell/alias "ps-grep" "ps ax | grep -i $1")
-(eshell/alias "sudo" "eshell/sudo $*")
+(eshell/alias "sudo" "/usr/bin/sudo $*")
 (eshell/alias "docker" "/usr/bin/docker $*")
+(eshell/alias "docker-compose" "/usr/local/bin/docker-compose $*")
 (eshell/alias "chmod" "/usr/bin/chmod $*")
 
 ;; mirror host /folder/
