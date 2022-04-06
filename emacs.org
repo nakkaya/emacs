@@ -765,6 +765,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
  'org-babel-load-languages
  '((clojure . t)
    (python . t)
+   (sql . t)
    (shell . t)))
 
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
@@ -805,11 +806,26 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (defun org-babel-kill-session ()
   "Kill session for current code block."
   (interactive)
-  ;; (unless (org-in-src-block-p)
-  ;;   (error "You must be in a src-block to run this command"))
+  (unless (org-in-src-block-p)
+    (error "You must be in a src-block to run this command"))
   (save-window-excursion
     (org-babel-switch-to-session)
     (kill-buffer)))
+
+(defun jupyter-eshell ()
+  "Launch EShell to Jupyter Session."
+  (interactive)
+  (unless (org-in-src-block-p)
+    (error "You must be in a src-block to run this command"))
+
+  (let* ((info (org-babel-get-src-block-info))
+	 (header (nth 2 (org-babel-get-src-block-info)))
+	 (session (alist-get :session header))
+	 (host (with-parsed-tramp-file-name (alist-get :session header) nil
+		 host))
+	 (default-directory (concat "/ssh:" host ":~")))
+
+    (eshell 'N)))
 
 (define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
 (define-key org-mode-map (kbd "C-c k") 'org-babel-kill-session)
