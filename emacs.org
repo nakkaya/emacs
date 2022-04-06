@@ -773,8 +773,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq org-structure-template-alist
       '(("el" . "src emacs-lisp\n")
 	("cl" . "src clojure\n")
+	("cc" . "src c++\n")
 	("sh" . "src sh\n")
 	("jp" . "src jupyter-python\n")
+	("p" . "src python\n")
 	("s" . "src")
 	("l" . "export latex")
 	("e" . "example")))
