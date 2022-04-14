@@ -89,6 +89,7 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN pip install \
+    markupsafe==2.0.1 \
     invoke \
     ansible \
     jupyterlab \
