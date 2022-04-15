@@ -152,7 +152,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 #+BEGIN_SRC emacs-lisp
   (setq display-buffer-alist
-	'(("magit:.*" (display-buffer-same-window))))
+	'(("magit:.*" (display-buffer-same-window))
+	  ("\*grep\*" (display-buffer-same-window))))
 #+END_SRC
 
 * Terminal
