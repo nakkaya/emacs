@@ -45,6 +45,8 @@
 (global-font-lock-mode t)
 (electric-pair-mode 1)
 (show-paren-mode 1)
+
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 (global-undo-tree-mode)
 
 (global-auto-revert-mode 1)
@@ -1453,6 +1455,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (set-face-background 'org-block-begin-line bg frame)
     (set-face-background 'org-block-end-line bg frame)
     (set-face-background 'show-paren-match bg frame)
+    (set-face-background 'ansi-color-yellow bg frame)
     (eval-after-load "magit"
       '(progn
 	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
