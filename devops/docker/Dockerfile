@@ -142,11 +142,11 @@ COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/$USER/.jupyter
 # Install Clojure
 #
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
-    chmod 755 /usr/bin/lein # && \
-    # curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
-    # chmod +x install && \
-    # ./install && \
-    # rm install
+    chmod 755 /usr/bin/lein && \
+    curl -s https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install -o install && \
+    chmod +x install && \
+    ./install && \
+    rm install
 
 # Install AWS CLI
 #
