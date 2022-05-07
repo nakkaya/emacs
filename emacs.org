@@ -1166,6 +1166,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                ("Source" (or
                           (mode . java-mode)
                           (mode . clojure-mode)
+			  (mode . clojurescript-mode)
                           (mode . org-mode)
                           (mode . bibtex-mode)
                           (mode . latex-mode)
@@ -1235,6 +1236,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                          (name . "^\\*Org Agenda.*\\*$")
                          (name . "^\\*Org Help\\*$")
                          (name . "^\\*Backtrace\\*$")
+			 (name . "^\\*Colors\\*$")
                          (name . "^TAGS$")
                          (name . "^\\*Help\\*$")
                          (name . "^\\*Shell Command Output\\*$")
@@ -1256,6 +1258,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                          (name . "^\\*elfeed-.*")
                          (name . "^\\*pylsp.*")
 			 (name . "^\\*pyls-remote*")
+			 (name . "^\\*clojure-lsp.*")
 			 (name . "^\\*LSP Error List*")
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")))))))
@@ -1468,6 +1471,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	 (set-face-background 'magit-diff-added bg frame)
 	 (set-face-background 'magit-diff-removed bg frame)
 	 (set-face-background 'magit-diff-hunk-heading bg frame)
+	 (set-face-foreground 'magit-diff-hunk-heading "#727272" frame)
 	 (set-face-background 'magit-diff-removed-highlight bg frame)))))
 
 (set-face-attribute 'show-paren-match nil :foreground "red")
