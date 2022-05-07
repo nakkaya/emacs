@@ -20,7 +20,7 @@ RUN apt-get install \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
-    graphviz postgresql-client qutebrowser \
+    graphviz postgresql-client python3-psycopg2 qutebrowser \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
