@@ -1348,8 +1348,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * Key Bindings
 
 #+BEGIN_SRC emacs-lisp
-(setq mac-option-modifier 'super
-      mac-command-modifier 'meta)
+(setq mac-option-modifier 'meta
+      mac-command-modifier 'super)
 
 (global-set-key (kbd "C-]")  'ibuffer)
 (global-set-key (kbd "C-c c") 'org-capture)
