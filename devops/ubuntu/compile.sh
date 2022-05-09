@@ -14,6 +14,7 @@ EMACS_BUILD_TOOLS="wget \
 
 EMACS_BUILD_DEPS="xaw3dg \
                   xaw3dg-dev \
+		  libxaw7-dev \
                   libncurses-dev \
                   libotf-dev \
                   libotf0 \
