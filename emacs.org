@@ -1191,6 +1191,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                           (mode . matlab-mode)
                           (mode . css-mode)
                           (mode . js-mode)
+			  (mode . sql-mode)
                           (mode . terraform-mode)
                           (mode . dockerfile-mode)
                           (mode . docker-compose-mode)
@@ -1261,7 +1262,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*clojure-lsp.*")
 			 (name . "^\\*LSP Error List*")
 			 (name . "^\\*Flycheck Errors*")
-			 (name . "^\\*xref\\*$")))))))
+			 (name . "^\\*xref\\*$")
+			 (name . "^\\*cider-repl.*")
+			 (name . "^\\*nrepl-server.*")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t)
