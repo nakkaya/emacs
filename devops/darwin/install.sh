@@ -6,3 +6,6 @@ echo "(load-file \"`pwd`/../../init.el\")" > ~/.emacs
 brew install automake poppler libtool
 # brew install python3
 pip3 install jupyterlab
+
+brew tap railwaycat/emacsmacport
+brew install emacs-mac --with-native-comp --with-xwidgets --with-natural-title-bar
