@@ -34,6 +34,7 @@
 	popper
         doom-themes
         doom-modeline
+	all-the-icons
 	company
         projectile
         helm
