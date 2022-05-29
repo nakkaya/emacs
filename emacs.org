@@ -883,12 +883,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (require 'org-agenda)
 
 (setq org-agenda-prefix-format '(
-  ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
-  (agenda  . "  ● ")
-  (timeline  . "  % s")
-  (todo  . " %i %-12:c")
-  (tags  . " %i %-12:c")
-  (search . " %i %-12:c")))
+				 ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
+				 (agenda  . "  ● ")
+				 (timeline  . "  % s")
+				 (todo  . " %i %-12:c")
+				 (tags  . " %i %-12:c")
+				 (search . " %i %-12:c")))
 
 (setq org-agenda-custom-commands
       '(("h" "Agenda and Todo"
@@ -934,13 +934,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
   (defun jump-to-org-agenda ()
     (interactive)
-    (unless (get-buffer "*Org Agenda(h)*")
-      (setq window-configuration (current-window-configuration))
-      (delete-other-windows)
-      (org-agenda nil "h")
-      (org-agenda-redo)
-      (local-set-key [f1] #'kill-org-agenda)
-      (local-set-key "q" #'kill-org-agenda))))
+    (setq window-configuration (current-window-configuration))
+    (delete-other-windows)
+    (org-agenda nil "h")
+    (org-agenda-redo)
+    (local-set-key [f1] #'kill-org-agenda)
+    (local-set-key "q" #'kill-org-agenda)))
 
 (global-set-key [f1] 'jump-to-org-agenda)
 
