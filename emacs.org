@@ -880,6 +880,16 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq org-default-notes-file
       (concat na-agenda-folder (car na-agenda-files)))
 
+(require 'org-agenda)
+
+(setq org-agenda-prefix-format '(
+  ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
+  (agenda  . "  ● ")
+  (timeline  . "  % s")
+  (todo  . " %i %-12:c")
+  (tags  . " %i %-12:c")
+  (search . " %i %-12:c")))
+
 (setq org-agenda-custom-commands
       '(("h" "Agenda and Todo"
          ((agenda "" ((org-agenda-span 7)
