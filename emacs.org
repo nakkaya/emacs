@@ -1165,7 +1165,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                  (name . "^devops.org$")
                  (name . "^devops.org_archive$")
                  (name . "^shopping.org$")
-                 (name . "^shopping.org_archive$")))
+                 (name . "^shopping.org_archive$")
+		 (name . "^calender_.*$")))
                ("Documents" (or (mode . pdf-view-mode)
 				(mode . mhtml-mode)))
                ("Source" (or
@@ -1269,7 +1270,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")
 			 (name . "^\\*cider-repl.*")
-			 (name . "^\\*nrepl-server.*")))))))
+			 (name . "^\\*nrepl-server.*")
+			 (name . "^\\*calender-.*")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t)
