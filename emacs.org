@@ -942,9 +942,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (local-set-key "q" #'kill-org-agenda)))
 
 (global-set-key [f1] 'jump-to-org-agenda)
-
-(when (file-exists-p na-agenda-folder)
-  (run-with-idle-timer (* 30 60) t #'jump-to-org-agenda))
 #+END_SRC
 
 * Dired
