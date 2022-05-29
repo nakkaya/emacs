@@ -882,9 +882,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (require 'org-agenda)
 
-(setq org-agenda-prefix-format '(
-				 ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
-				 (agenda  . "  ● ")
+(setq org-agenda-prefix-format '((agenda  . "  ● %i %?-12t% s")
 				 (timeline  . "  % s")
 				 (todo  . " %i %-12:c")
 				 (tags  . " %i %-12:c")
