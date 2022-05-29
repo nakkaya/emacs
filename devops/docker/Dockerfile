@@ -94,7 +94,8 @@ RUN pip install \
     ansible \
     jupyterlab \
     mlflow \
-    python-lsp-server[all]
+    python-lsp-server[all] \
+    ical2orgpy
 
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
