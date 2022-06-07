@@ -80,6 +80,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     apt-get install docker-ce-cli -y --no-install-recommends && \
     pip install docker-compose && \
     touch /var/run/docker.sock && \
+    groupadd docker && \
     chown root:docker /var/run/docker.sock && \
     usermod -a -G docker $USER
 
