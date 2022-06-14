@@ -1313,7 +1313,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     :init
     (setq popper-reference-buffers
           '("^*eshell.*"
-	    "^*monroe.*"
+	    "^*cider-repl.*"
 	    "^*MATLAB.*"
 	    term-mode
 	    "^\\*jupyter-.*"
