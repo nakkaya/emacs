@@ -9,8 +9,7 @@ USER root
 
 # Install Packages
 #
-RUN apt-mark hold xpra xpra-html5 && \
-    apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install curl -y --no-install-recommends && \
     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
