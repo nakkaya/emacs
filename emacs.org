@@ -1128,30 +1128,34 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * Research
 
 #+begin_src emacs-lisp
-  (when (or (eq system-type 'gnu/linux)
-	    (eq system-type 'darwin))
-    (use-package pdf-tools
-      :config
-      (pdf-tools-install :no-query)
-      (setq pdf-view-display-size 'fit-page
-	    pdf-annot-activate-created-annotations t
-	    TeX-view-program-selection '((output-pdf "pdf-tools"))
-	    TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
+(when (or (eq system-type 'gnu/linux)
+	  (eq system-type 'darwin))
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install :no-query)
+    (setq pdf-view-display-size 'fit-page
+	  pdf-annot-activate-created-annotations t
+	  pdf-view-resize-factor 1.1
+	  TeX-view-program-selection '((output-pdf "pdf-tools"))
+	  TeX-view-program-list '(("pdf-tools" "TeX-pdf-tools-sync-view")))
 
-      (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
-      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+    (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+    (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
 
-    (require 'saveplace-pdf-view)
+  (require 'saveplace-pdf-view)
 
-    (use-package org-noter
-      :after (:any org pdf-tools)
-      :config
-      (setq
-       org-noter-always-create-frame nil
-       org-noter-hide-other t
-       org-noter-notes-search-path (list na-agenda-folder)
-       org-noter-auto-save-last-location t)
-      :ensure t))
+  (use-package org-noter
+    :after (:any org pdf-tools)
+    :config
+    (setq
+     org-noter-always-create-frame nil
+     org-noter-hide-other t
+     org-noter-notes-search-path (list na-agenda-folder)
+     org-noter-auto-save-last-location t)
+    :ensure t))
 #+end_src
 
 * IBuffer
