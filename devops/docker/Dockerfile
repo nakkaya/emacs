@@ -135,7 +135,8 @@ RUN pip install \
     nbstripout \
     click
 
-RUN pip install numpy --upgrade
+RUN pip install numpy --upgrade && \
+    pip install jinja2 --upgrade
 
 # Install Jupyter
 #
