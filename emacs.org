@@ -1279,7 +1279,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*LSP Error List*")
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")
-			 (name . "^\\*cider-repl.*")
+			 (name . "^\\*cider-.*")
 			 (name . "^\\*nrepl-server.*")
 			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")))))))
