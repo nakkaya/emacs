@@ -391,10 +391,7 @@ SSH at least,
     "Open a new instance of eshell."
     (interactive "P")
     (if term-or-shell
-        (progn
-          (multi-term)
-          ;;pass C-c
-          (define-key term-raw-map [?\C-c] 'term-send-raw))
+        (multi-term)
       (eshell 'N)))
 #+END_SRC
 
@@ -1388,6 +1385,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key (kbd "C-x t") 'na-new-term)
 (add-hook 'term-mode-hook
           '(lambda ()
+	     (define-key term-raw-map (kbd "C-c C-c")  'term-send-raw)
 	     (define-key term-raw-map [(control \])] 'ibuffer)
              (define-key term-raw-map (kbd "C-y")  'term-paste)
              (define-key term-raw-map (kbd "C-\\") 'other-window)
