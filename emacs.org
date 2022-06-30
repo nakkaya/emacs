@@ -433,11 +433,18 @@ Will bounce between matching parens just like % in vi
 
 ** Clojure
 
- #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
    (require 'clojure-mode)
    (require 'clojure-mode-extra-font-locking)
- #+END_SRC
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(use-package html-to-hiccup
+  :ensure t
+  :config
+  (define-key clojure-mode-map (kbd "H-h") 'html-to-hiccup-convert-region))
+#+END_SRC
+ 
 ** C/C++
 
  #+BEGIN_SRC emacs-lisp

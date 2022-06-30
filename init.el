@@ -12,6 +12,7 @@
         hl-todo
         clojure-mode
 	clojure-mode-extra-font-locking
+	html-to-hiccup
 	cider
 	python-mode
 	python-cell
