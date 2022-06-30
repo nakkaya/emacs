@@ -1215,7 +1215,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                           (mode . terraform-mode)
                           (mode . dockerfile-mode)
                           (mode . docker-compose-mode)
-                          (name . "^\\*jupyter-.*")))
+                          (name . "^\\*jupyter-.*")
+			  (mode . markdown-mode)))
                ("Terminal" (or (mode . term-mode)
                                (mode . inferior-lisp-mode)
                                (mode . inferior-python-mode)
@@ -1286,7 +1287,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*cider-.*")
 			 (name . "^\\*nrepl-server.*")
 			 (name . "^\\*calender-.*")
-			 (name . "^\\*grep\\*$")))))))
+			 (name . "^\\*grep\\*$")
+			 (name . "^\\*vc-dir\\*$")
+			 (name . "^\\*Bookmark List\\*$")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t)
