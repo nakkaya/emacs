@@ -704,6 +704,12 @@ Will bounce between matching parens just like % in vi
                      :major-modes '(python-mode)
                      :remote? t
                      :server-id 'pyls-remote))
+
+   (lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                     :major-modes '(clojure-mode)
+                     :remote? t
+                     :server-id 'clojure-lsp-remote))
  #+END_SRC
 
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
