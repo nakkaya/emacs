@@ -715,7 +715,7 @@ Will bounce between matching parens just like % in vi
     (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
                      :major-modes '(clojurescript-mode)
                      :remote? t
-                     :server-id 'clojure-lsp-remote))
+                     :server-id 'clojurescript-lsp-remote))
  #+END_SRC
 
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
