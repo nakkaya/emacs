@@ -434,8 +434,10 @@ Will bounce between matching parens just like % in vi
 ** Clojure
 
 #+BEGIN_SRC emacs-lisp
-   (require 'clojure-mode)
-   (require 'clojure-mode-extra-font-locking)
+(require 'clojure-mode)
+(require 'clojure-mode-extra-font-locking)
+
+(setq nrepl-use-ssh-fallback-for-remote-hosts t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1297,7 +1299,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")
 			 (name . "^\\*cider-.*")
-			 (name . "^\\*nrepl-server.*")
+			 (name . "^\\*nrepl-.*")
 			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")
 			 (name . "^\\*vc-dir\\*$")
