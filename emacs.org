@@ -1230,7 +1230,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                           (mode . dockerfile-mode)
                           (mode . docker-compose-mode)
                           (name . "^\\*jupyter-.*")
-			  (mode . markdown-mode)))
+			  (mode . markdown-mode)
+			  (name . "^\\.gitignore")))
 	       ("REPL" (or (name . "^\\*cider-.*")
 			   (name . "^\\*nrepl-.*")
 			   (mode . inferior-lisp-mode)
@@ -1303,7 +1304,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")
 			 (name . "^\\*vc-dir\\*$")
-			 (name . "^\\*Bookmark List\\*$")))))))
+			 (name . "^\\*Bookmark List\\*$")
+			 (name . "^\\*Disabled Command\\*$")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t)
