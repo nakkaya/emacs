@@ -166,6 +166,11 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (setq tab-bar-new-tab-choice "*scratch*")  ;; buffer to show in new tabs
 (setq tab-bar-tab-hints t)                 ;; show tab numbers
 (setq tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+
+(global-set-key (kbd "C-c t p") 'tab-bar-switch-to-prev-tab)
+(global-set-key (kbd "C-c t n") 'tab-bar-switch-to-next-tab)
+(global-set-key (kbd "C-c t t") 'tab-bar-new-tab)
+(global-set-key (kbd "C-c t w") 'tab-bar-close-tab)
 #+END_SRC
 
 * Terminal
