@@ -1486,24 +1486,23 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
 (when window-system
-  (let ((font-dejavu "DejaVu Sans Mono 11")
-        (font-monaco "Monaco 10")
-        (font-jetbrains "Jet Brains Mono 14")
-        (font-jetbrains-w32 "JetBrains Mono-11")
-	(font-jetbrains-darwin "JetBrains Mono"))
+  (let ((height 130)
+	(font-dejavu "DejaVu Sans Mono")
+        (font-monaco "Monaco")
+        (font-jetbrains "JetBrains Mono"))
 
-    (cond ((member font-jetbrains-darwin (font-family-list))
+    (cond ((member font-jetbrains (font-family-list))
 	   (set-face-attribute 'default nil
-			       :family font-jetbrains-darwin
-			       :height 140))
-	  ((x-list-fonts font-jetbrains)
-           (set-frame-font font-jetbrains nil t))
-          ((x-list-fonts font-monaco)
-           (set-frame-font font-monaco nil t))
-          ((x-list-fonts font-dejavu)
-           (set-frame-font font-dejavu nil t))
-          ((x-list-fonts font-jetbrains-w32)
-           (set-frame-font font-jetbrains-w32 nil t)))))
+			       :family font-jetbrains
+			       :height height))
+          ((member font-monaco (font-family-list))
+           (set-face-attribute 'default nil
+			       :family font-monaco
+			       :height height))
+          ((member font-dejavu (font-family-list))
+           (set-face-attribute 'default nil
+			       :family font-monaco
+			       :height height)))))
 
 (unless (member "all-the-icons" (font-family-list))
   (all-the-icons-install-fonts t))
