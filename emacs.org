@@ -1542,6 +1542,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (require 'doom-modeline)
 (add-hook 'after-init-hook #'doom-modeline-mode)
+(setq doom-modeline-height 35)
 (setq doom-modeline-major-mode-icon nil)
 (setq doom-modeline-buffer-state-icon nil)
 (setq doom-modeline-buffer-encoding nil)
