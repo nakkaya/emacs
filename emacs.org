@@ -149,8 +149,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 #+BEGIN_SRC emacs-lisp
 (require 'helm)
 
-(helm-mode 1)
-
 (setq-default helm-M-x-fuzzy-match t
 	      helm-split-window-in-side-p t
 	      helm-move-to-line-cycle-in-source t)
@@ -1308,7 +1306,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                          (name . "^\\*Calc Trail\\*$")
                          (name . "^\\*Compile-Log\\*$")
                          (name . "^\\*quelpa-build-checkout\\*$")
-                         (name . "^\\*helm M-x\\*$")
+                         (name . "^\\*helm.*\\*$")
                          (name . "^\\*transmission\\*$")
                          (name . "^\\*lsp-.*")
                          (name . "^\\*jdtls.*")
@@ -1329,7 +1327,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")
 			 (name . "^\\*vc-dir\\*$")
+			 (name . "^\\*vc\\*$")
 			 (name . "^\\*Bookmark List\\*$")
+			 (name . "^\\*Buffer List\\*$")
 			 (name . "^\\*Disabled Command\\*$")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
