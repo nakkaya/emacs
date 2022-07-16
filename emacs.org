@@ -156,7 +156,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x b") #'helm-buffers-list)
 (global-set-key (kbd "C-x r b") #'helm-bookmarks)
-(global-set-key (kbd "C-s") #'helm-occur)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
