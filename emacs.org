@@ -1250,11 +1250,11 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                           (mode . terraform-mode)
                           (mode . dockerfile-mode)
                           (mode . docker-compose-mode)
-                          (name . "^\\*jupyter-.*")
 			  (mode . markdown-mode)
 			  (name . "^\\.gitignore")))
 	       ("REPL" (or (name . "^\\*cider-.*")
 			   (name . "^\\*nrepl-.*")
+			   (name . "^\\*jupyter-.*")
 			   (mode . inferior-lisp-mode)
                            (mode . inferior-python-mode)
                            (name . "^*MATLAB.*")
@@ -1368,7 +1368,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	    "^*cider-repl.*"
 	    "^*MATLAB.*"
 	    term-mode
-	    "^\\*jupyter-.*"
+	    "^*jupyter-.*"
 	    inferior-python-mode
 	    inferior-lisp-mode
             compilation-mode))
