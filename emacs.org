@@ -757,6 +757,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (setq loc (pop areas))
     (global-set-key
      (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+
+(eval-after-load 'clojure-mode
+  '(define-key clojure-mode-map (kbd "<tab-bar> <mouse-movement>") #'ignore))
 #+end_src
 
 ** Projectile
