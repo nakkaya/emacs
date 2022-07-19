@@ -458,6 +458,10 @@ Will bounce between matching parens just like % in vi
 (require 'clojure-mode-extra-font-locking)
 
 (setq nrepl-use-ssh-fallback-for-remote-hosts t)
+
+(add-hook 'cider-repl-mode-hook
+	  '(lambda () (define-key cider-repl-mode-map (kbd "C-c C-o")
+			'cider-repl-clear-buffer)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
