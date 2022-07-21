@@ -30,7 +30,7 @@
 (setq gc-cons-threshold (* 256 1024 1024)
       read-process-output-max (* 1024 1024))
 
-(setq visible-bell t
+(setq visible-bell nil
       fill-column 80
       make-backup-files nil
       query-replace-highlight t
