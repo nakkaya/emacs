@@ -1340,7 +1340,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*Disabled Command\\*$")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
-      ibuffer-expert t)
+      ibuffer-expert t
+      ibuffer-display-summary nil)
 
 (add-hook 'ibuffer-mode-hook
           (lambda ()
@@ -1353,7 +1354,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	    (ibuffer-update nil t)))
 
 (setq ibuffer-formats '((mark modified read-only " "
-                              (name 18 18 :left :elide)
+                              (name 30 30 :left :elide)
                               " "
                               (mode 16 16 :left :elide)
                               " " filename-and-process)
