@@ -39,7 +39,8 @@
 	company
         projectile
         helm
-        quelpa))
+        quelpa
+	transmission))
 
 (when (eq system-type 'gnu/linux)
   (push 'elfeed package-list))
