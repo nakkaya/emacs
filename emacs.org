@@ -1281,6 +1281,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                             (mode . magit-revision-mode)
                             (mode . magit-log-mode)
 			    (mode . magit-refs-mode)))
+	       ("Gnus" (or (name . "^\\*Group.*\\*$")
+			   (name . "^\\*Summary.*\\*$")
+			   (name . "^\\*Article.*\\*$")
+			   (name . "^\\.newsrc-dribble")))
                ("Emacs" (or
                          (name . "^\\*Process List\\*$")
                          (name . "^\\*Dired log\\*$")
