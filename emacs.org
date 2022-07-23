@@ -769,9 +769,14 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 ** Projectile
 
  #+BEGIN_SRC emacs-lisp
-   (require 'projectile)
-   (projectile-mode +1)
-   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(require 'projectile)
+
+(setq projectile-completion-system 'helm
+      projectile-switch-project-action #'projectile-dired)
+
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+(projectile-mode +1)
  #+END_SRC
   
 * Org-Mode
