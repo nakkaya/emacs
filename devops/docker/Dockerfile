@@ -94,7 +94,6 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN pip install \
-    python3-venv \
     markupsafe==2.0.1 \
     invoke \
     ansible \
@@ -195,6 +194,7 @@ RUN mkdir /var/lib/pgadmin && \
     mkdir /var/log/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
+    pip install prompt --upgrade && \
     pip install pgadmin4 && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /usr/local/lib/python3.8/dist-packages/pgadmin4/config.py
 
