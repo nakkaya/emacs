@@ -124,9 +124,7 @@ RUN pip install \
     pydicom \
     # Trading
     pandas_ta \
-    yfinance \
     python-binance \
-    py3cw \
     # Graphing
     matplotlib \
     plotly \
