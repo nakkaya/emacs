@@ -21,6 +21,7 @@ RUN apt-get install \
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
     graphviz qutebrowser \
+    postgresql-client python3-psycopg2 \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
@@ -93,6 +94,7 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN pip install \
+    python3-venv \
     markupsafe==2.0.1 \
     invoke \
     ansible \
@@ -186,15 +188,15 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     apt-get update && \
     apt-get install gh -y --no-install-recommends
 
-# Install GitHub Tool
+# Install pgAdmin
 #
 
-RUN curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | apt-key add && \
-    echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && \
-    apt-get update && \
-    apt-get install \
-    pgadmin4-desktop postgresql-client python3-psycopg2 \
-    -y --no-install-recommends
+RUN mkdir /var/lib/pgadmin && \
+    mkdir /var/log/pgadmin && \
+    chown $USER /var/lib/pgadmin && \
+    chown $USER /var/log/pgadmin && \
+    pip install pgadmin4 && \
+    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /usr/local/lib/python3.8/dist-packages/pgadmin4/config.py
 
 # Arduino
 #
