@@ -21,7 +21,7 @@ RUN apt-get install \
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
     graphviz qutebrowser \
-    postgresql-client python3-psycopg2 \
+    libpq-dev postgresql-client python3-psycopg2 \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
