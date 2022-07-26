@@ -19,10 +19,6 @@ if [[ -v MLFLOW_TRACKING_PASSWORD ]]; then
     echo "export MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}" >> /home/$USER/.bashrc
 fi
 
-if [[ -v MLFLOW_SERVER_ENB ]]; then
-    (cd /storage/source;mlflow server -h 0.0.0.0 -p 8080 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://mlflow.nakkaya.com/ &)
-fi
-
 if [[ -v JUPYTER_SERVER_ENB ]]; then
     if [[ -v PASSWD ]]; then
 	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
