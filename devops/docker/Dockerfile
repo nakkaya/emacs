@@ -20,9 +20,8 @@ RUN apt-get install \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
-    graphviz postgresql-client python3-psycopg2 qutebrowser \
+    graphviz qutebrowser \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
-    direnv \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
@@ -186,6 +185,16 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
     apt-get update && \
     apt-get install gh -y --no-install-recommends
+
+# Install GitHub Tool
+#
+
+RUN curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | apt-key add && \
+    echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && \
+    apt-get update && \
+    apt-get install \
+    pgadmin4-desktop postgresql-client python3-psycopg2 \
+    -y --no-install-recommends
 
 # Arduino
 #
