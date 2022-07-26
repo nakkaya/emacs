@@ -816,6 +816,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+BEGIN_SRC emacs-lisp
 (require 'ob)
+(require 'ob-async)
+
+(setq ob-async-no-async-languages-alist '("jupyter-python"))
 
 (quelpa '(ob-ansible
           :fetcher github :repo "zweifisch/ob-ansible"))
@@ -828,7 +831,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 ;; Run/highlight code using babel in org-mode
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((clojure . t)
+ '((emacs-lisp . t)
+   (clojure . t)
    (python . t)
    (sql . t)
    (shell . t)))

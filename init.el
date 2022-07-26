@@ -27,6 +27,7 @@
         lsp-java
 	org
         org-superstar
+	ob-async
         docker
         dockerfile-mode
         docker-compose-mode
