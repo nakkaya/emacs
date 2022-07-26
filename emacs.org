@@ -817,6 +817,11 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+BEGIN_SRC emacs-lisp
 (require 'ob)
 
+(quelpa '(ob-ansible
+          :fetcher github :repo "zweifisch/ob-ansible"))
+
+(require 'ob-ansible)
+
 (when  (eq system-type 'windows-nt)
   (setq org-babel-python-command "python.exe"))
 

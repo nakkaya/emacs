@@ -16,7 +16,7 @@ RUN apt-get update && \
 
 RUN apt-get install \
     # apt
-    gnupg software-properties-common \
+    apt-utils gnupg software-properties-common \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     unzip wget htop xz-utils nq \
@@ -43,6 +43,8 @@ RUN apt-get install \
     autoconf automake libtool \
     # For Teensy
     # libxft2 \
+    # Python
+    python3-invoke ansible ansible-lint python3-matplotlib python3-boto3 \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
@@ -94,47 +96,37 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN pip install \
-    markupsafe==2.0.1 \
-    invoke \
-    ansible \
-    ansible-lint \
-    jupyterlab \
-    mlflow \
-    python-lsp-server[all] \
+    python-lsp-server \
     ical2orgpy
 
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) pip install tensorflow-gpu tensorflow-datasets torch torchvision gym segmentation-models albumentations ;; \
-            #arm64) apt-get install python3-h5py -y ;; \
-    esac;
-
-RUN pip install \
-    # ML
-    numpy \
+ENV ML_ENV="\
+    jinja2==3.1.2 \
+    jupyterlab \
+    mlflow \
+    numpy==1.23.1 \
     numexpr \
     pandas \
+    protobuf==3.15.0 \
+    tensorflow-gpu \
+    tensorflow-datasets \
+    torch \
+    torchvision \
     scipy \
     scikit-learn \
     scikit-image \
-    pillow \
-    opencv-python \
-    boto3 \
+    pillow==9.2.0 \
     nibabel \
-    pydicom \
-    # Trading
-    pandas_ta \
-    python-binance \
-    # Graphing
-    matplotlib \
-    plotly \
-    # Misc
-    pygments \
-    nbstripout \
-    click
+    opencv-python \
+    gym \
+    segmentation-models \
+    albumentations"
 
-RUN pip install numpy --upgrade && \
-    pip install jinja2 --upgrade
+
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) pip install $ML_ENV  ;; \
+            #arm64) apt-get install python3-h5py -y ;; \
+    esac;
 
 # Install Jupyter
 #
@@ -192,7 +184,6 @@ RUN mkdir /var/lib/pgadmin && \
     mkdir /var/log/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
-    pip install prompt --upgrade && \
     pip install pgadmin4 && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /usr/local/lib/python3.8/dist-packages/pgadmin4/config.py
 
