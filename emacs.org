@@ -828,11 +828,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq ob-async-no-async-languages-alist '("jupyter-python"))
 
-(quelpa '(ob-ansible
-          :fetcher github :repo "zweifisch/ob-ansible"))
-
-(require 'ob-ansible)
-
 (when  (eq system-type 'windows-nt)
   (setq org-babel-python-command "python.exe"))
 
@@ -910,6 +905,52 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
 (define-key org-mode-map (kbd "C-c k") 'org-babel-kill-session)
 #+END_SRC
+
+#+begin_src emacs-lisp :results silent
+(quelpa '(ob-ansible
+          :fetcher github :repo "zweifisch/ob-ansible"))
+
+(require 'ob-ansible)
+
+(setq org-babel-default-header-args:ansible
+	'((:results . "silent")))
+
+(add-to-list 'org-src-lang-modes '("ansible" . yaml))
+
+(defun org-babel-execute:ansible (body params)
+  (let* ((inventory (org-babel-ref-resolve
+                     (cdr (assoc :inventory params))))
+         (inventory-file (org-babel-temp-file "ob-ansible-inventory"))
+         (module (or (cdr (assoc :module params)) "shell"))
+         (hosts (or (cdr (assoc :hosts params)) "all"))
+         (forks (cdr (assoc :forks params)))
+         (user (or (cdr (assoc :user params)) "root"))
+         (oneline (assoc :oneline params))
+         (become (assoc :become params))
+         (become-user (cdr (assoc :become-user params)))
+         (playbook (assoc :playbook params))
+         (args (concat " -i " inventory-file
+                       (when user (format " -u %s" user))
+                       (when become " --become")
+                       (when become-user (format " --become-user %s" become-user))
+                       (when forks (format " -f %s" forks)))))
+    (with-temp-file inventory-file (insert inventory))
+    (let ((cmd
+           (if playbook
+               (let ((playbook-file (org-babel-temp-file "ob-ansible-playbook")))
+                 (with-temp-file playbook-file (insert body))
+                 (concat "ansible-playbook" args " " playbook-file))
+             (concat "ansible"
+                     (format " \"%s\"" hosts)
+                     args
+                     " --module-name " module
+                     (when oneline " --one-line")
+                     (format " --args %s" (shell-quote-argument
+                                           (org-babel-ansible--preprocess-inline-src body)))))))
+      (let ((default-directory (file-name-directory (buffer-file-name))))
+	(async-shell-command cmd "*ob-ansible*"))
+      'ob-ansible)))
+#+end_src
 
 ** Latex
 
