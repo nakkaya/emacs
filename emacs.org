@@ -913,7 +913,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (require 'ob-ansible)
 
 (setq org-babel-default-header-args:ansible
-	'((:results . "silent")))
+      '((:results . "silent")))
 
 (add-to-list 'org-src-lang-modes '("ansible" . yaml))
 
@@ -935,20 +935,21 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                        (when become-user (format " --become-user %s" become-user))
                        (when forks (format " -f %s" forks)))))
     (with-temp-file inventory-file (insert inventory))
-    (let ((cmd
-           (if playbook
-               (let ((playbook-file (org-babel-temp-file "ob-ansible-playbook")))
-                 (with-temp-file playbook-file (insert body))
-                 (concat "ansible-playbook" args " " playbook-file))
-             (concat "ansible"
-                     (format " \"%s\"" hosts)
-                     args
-                     " --module-name " module
-                     (when oneline " --one-line")
-                     (format " --args %s" (shell-quote-argument
-                                           (org-babel-ansible--preprocess-inline-src body)))))))
-      (let ((default-directory (file-name-directory (buffer-file-name))))
-	(async-shell-command cmd "*ob-ansible*"))
+    (let* ((default-directory (file-name-directory (buffer-file-name)))
+	   (org-babel-temporary-directory default-directory)
+	   (cmd
+            (if playbook
+		(let ((playbook-file (org-babel-temp-file "ob-ansible-playbook")))
+                  (with-temp-file playbook-file (insert body))
+                  (concat "ansible-playbook" args " " playbook-file " && rm " playbook-file))
+              (concat "ansible"
+                      (format " \"%s\"" hosts)
+                      args
+                      " --module-name " module
+                      (when oneline " --one-line")
+                      (format " --args %s" (shell-quote-argument
+                                            (org-babel-ansible--preprocess-inline-src body)))))))
+      (async-shell-command cmd "*ob-ansible*")
       'ob-ansible)))
 #+end_src
 
