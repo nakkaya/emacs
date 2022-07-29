@@ -1611,6 +1611,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       '(progn
 	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
 	 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+	 (set-face-background 'magit-diff-lines-heading bg frame)
+	 (set-face-foreground 'magit-diff-lines-heading "#727272" frame)
 	 (set-face-background 'magit-diff-context bg frame)
 	 (set-face-background 'magit-diff-added-highlight bg frame)
 	 (set-face-background 'magit-diff-context-highlight bg frame)
