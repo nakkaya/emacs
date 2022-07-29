@@ -1292,6 +1292,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                ("Source" (or
                           (mode . java-mode)
                           (mode . clojure-mode)
+			  (mode . clojurec-mode)
 			  (mode . clojurescript-mode)
                           (mode . org-mode)
                           (mode . bibtex-mode)
