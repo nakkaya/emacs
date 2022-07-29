@@ -179,6 +179,15 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (global-set-key (kbd "C-c t w") 'tab-bar-close-tab)
 #+END_SRC
 
+#+begin_src emacs-lisp
+(defun suppress-messages (old-fun &rest args)
+  (cl-flet ((silence (&rest args1) (ignore)))
+    (advice-add 'message :around #'silence)
+    (unwind-protect
+        (apply old-fun args)
+      (advice-remove 'message #'silence))))
+#+end_src
+
 * Terminal
 ** Path
 
@@ -1467,6 +1476,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
   (setq elfeed-db-directory "/storage/dropbox/.elfeed"
 	elfeed-sort-order   'ascending)
+
+  (advice-add 'elfeed-show-visit :around #'suppress-messages)
 
   (run-with-idle-timer (* 2 60 60) t #'elfeed-update)
 
