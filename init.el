@@ -41,10 +41,9 @@
         projectile
         helm
         quelpa
+	elfeed
+	elfeed-protocol
 	transmission))
-
-(when (eq system-type 'gnu/linux)
-  (push 'elfeed package-list))
 
 (when (or (eq system-type 'gnu/linux)
 	  (eq system-type 'darwin))

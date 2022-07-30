@@ -1471,35 +1471,21 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * elfeed
 
 #+begin_src emacs-lisp
-(when (getenv "ELFEED_ENB")
-  (require 'elfeed)
+(require 'elfeed)
+(require 'elfeed-protocol)
 
-  (setq elfeed-db-directory "/storage/dropbox/.elfeed"
-	elfeed-sort-order   'ascending)
+(setq elfeed-sort-order 'ascending
+      elfeed-protocol-fever-maxsize 50
+      elfeed-feeds '("fever+https://nakkaya@rss.computie.net/fever/"
+		     :api-url "https://rss.computie.net/fever/"
+                     :use-authinfo t))
 
-  (advice-add 'elfeed-show-visit :around #'suppress-messages)
+(elfeed-protocol-enable)
 
-  (run-with-idle-timer (* 2 60 60) t #'elfeed-update)
+(advice-add 'elfeed-show-visit :around #'suppress-messages)
 
-  ;;functions to support syncing .elfeed between machines
-  ;;makes sure elfeed reads index from disk before launching
-  (defun na-elfeed-load-db-and-open ()
-    "Wrapper to load the elfeed db from disk before opening"
-    (interactive)
-    (elfeed-db-load)
-    (elfeed)
-    (elfeed-search-update--force))
-
-  ;;write to disk when quiting
-  (defun na-elfeed-save-db-and-bury ()
-    "Wrapper to save the elfeed db to disk before burying buffer"
-    (interactive)
-    (elfeed-db-save)
-    (quit-window))
-
-  (define-key elfeed-search-mode-map (kbd "q") 'na-elfeed-save-db-and-bury)
-  (define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
-  (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev))
+(define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
+(define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
 #+end_src
 
 * Key Bindings
