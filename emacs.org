@@ -1532,7 +1532,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key (kbd "C-c <up>")    'hs-hide-all)
 (global-set-key (kbd "C-c <down>")  'hs-show-all)
 
-(global-set-key [f2] 'na-elfeed-load-db-and-open)
+(global-set-key [f2] 'elfeed)
 (global-set-key [f12] (lambda ()
 			(interactive)
 			(async-shell-command "QT_XCB_GL_INTEGRATION=none qutebrowser")))
