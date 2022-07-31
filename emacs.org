@@ -1581,23 +1581,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
 (when window-system
-  (let ((height 130)
-	(font-dejavu "DejaVu Sans Mono")
-        (font-monaco "Monaco")
-        (font-jetbrains "JetBrains Mono"))
+  (let ((height 110)
+	(jetbrains "JetBrains Mono"))
+    (when (member jetbrains (font-family-list))
+      (set-face-attribute 'default nil :family jetbrains :height height))))
 
-    (cond ((member font-jetbrains (font-family-list))
-	   (set-face-attribute 'default nil
-			       :family font-jetbrains
-			       :height height))
-          ((member font-monaco (font-family-list))
-           (set-face-attribute 'default nil
-			       :family font-monaco
-			       :height height))
-          ((member font-dejavu (font-family-list))
-           (set-face-attribute 'default nil
-			       :family font-monaco
-			       :height height)))))
+(when (eq system-type 'darwin)
+  (set-face-attribute 'default nil :height 150))
 
 (unless (member "all-the-icons" (font-family-list))
   (all-the-icons-install-fonts t))
