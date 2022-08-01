@@ -22,6 +22,7 @@
         terraform-mode
 	pine-script-mode
 	flycheck
+	yasnippet
         lsp-mode
 	lsp-ui
         lsp-java

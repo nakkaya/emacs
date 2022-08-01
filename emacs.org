@@ -695,6 +695,7 @@ Will bounce between matching parens just like % in vi
  #+END_SRC
 
  #+BEGIN_SRC emacs-lisp
+(require 'yasnippet)
 (require 'flycheck)
 (require 'lsp-mode)
 (require 'lsp-ui)
@@ -1393,6 +1394,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                          (name . "^\\*quelpa-build-checkout\\*$")
                          (name . "^\\*helm.*\\*$")
                          (name . "^\\*transmission\\*$")
+			 (name . "^\\*projectile-files-errors\\*$")
                          (name . "^\\*lsp-.*")
                          (name . "^\\*jdtls.*")
                          (name . "^\\*clangd.*")
