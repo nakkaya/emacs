@@ -156,6 +156,15 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x b") #'helm-buffers-list)
 (global-set-key (kbd "C-x r b") #'helm-bookmarks)
+
+;; Fixes helm messing modeline colors.
+(add-hook 'helm-minibuffer-set-up-hook
+          (lambda ()
+            (advice-add #'doom-modeline--active :override (lambda () t))))
+
+(add-hook 'helm-cleanup-hook
+          (lambda ()
+            (advice-remove #'doom-modeline--active (lambda () t))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
