@@ -716,7 +716,7 @@ Will bounce between matching parens just like % in vi
       lsp-ui-sideline-enable t
       lsp-ui-doc-show-with-cursor nil
       lsp-ui-sideline-show-code-actions nil
-      lsp-modeline-code-actions-enable t
+      lsp-modeline-code-actions-enable nil
       lsp-eldoc-enable-hover nil
       lsp-signature-auto-activate nil
       lsp-signature-render-documentation nil
@@ -1643,16 +1643,16 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (add-hook 'window-setup-hook 'na-fix-background)
 
 (require 'doom-modeline)
-(add-hook 'after-init-hook #'doom-modeline-mode)
-(setq doom-modeline-height 35)
-(setq doom-modeline-major-mode-icon nil)
-(setq doom-modeline-buffer-state-icon nil)
-(setq doom-modeline-buffer-encoding nil)
+
+(setq doom-modeline-icon nil
+      doom-modeline-buffer-encoding nil)
 
 (set-face-background 'mode-line          "SteelBlue4")
 (set-face-background 'mode-line-inactive "SlateGray4")
 (set-face-foreground 'mode-line          "gray5")
 (set-face-foreground 'mode-line-inactive "gray15")
+
+(add-hook 'after-init-hook #'doom-modeline-mode)
 #+END_SRC
 
 * Server
