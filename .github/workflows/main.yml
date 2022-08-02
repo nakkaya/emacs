@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         build-cmd:
-          - buildx-gpu
+          - build-gpu
           - buildx-cpu
 
     runs-on: ubuntu-latest

@@ -1,11 +1,9 @@
-"""emacsd build file."""
+"""emacs build file."""
 
 from invoke import task
 import subprocess
 import os
-import sys
 import glob
-sys.tracebacklimit = 0
 
 version = subprocess.check_output(["git", "describe", "--always"])
 version = version.strip().decode('UTF-8')
@@ -26,37 +24,34 @@ def run(cmd, dir="."):
     os.chdir(wd)
 
 
-@task
-def build(ctx):
-    """Build Images."""
-    cmd = "docker build "
-#    cmd = "docker build --no-cache "
-
-    run(cmd + "-f Dockerfile " + tag("emacs-cpu") + " .",
-        "devops/docker/")
+def docker(builder, type, *arg):
+    """Run docker command."""
+    cmd = ("docker " + builder +
+           " -f Dockerfile " + tag("emacs-" + type) +
+           " ".join(arg) + " .")
+    run(cmd, "devops/docker/")
 
 
 gpu_image = 'BASE_IMAGE=ghcr.io/nakkaya/emacsd-gpu'
-buildx_cmd = "docker buildx build --push "
 
 
 @task
-def buildx_gpu(ctx):
-    """Build adm64 Image."""
-    run(buildx_cmd +
-        " -f Dockerfile " + tag("emacs-gpu") +
-        " --platform linux/amd64 " +
-        " --build-arg " + gpu_image + " .",
-        "devops/docker/")
+def build_cpu(ctx):
+    """Build CPU Image."""
+    docker("build", "cpu")
+
+
+@task
+def build_gpu(ctx):
+    """Build GPU Image."""
+    docker("build", "gpu", "--build-arg", gpu_image)
 
 
 @task
 def buildx_cpu(ctx):
-    """Build amd64 CPU Image."""
-    run(buildx_cmd +
-        "-f Dockerfile " + tag("emacs-cpu") +
-        " --platform linux/amd64,linux/arm64 .",
-        "devops/docker/")
+    """Build Multi Arch CPU Image."""
+    docker("buildx build --push", "cpu", "--platform linux/amd64,linux/arm64")
+
 
 def compose_files():
     """Build list of compose files."""
