@@ -999,8 +999,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			"calender_cagla.org"
 			"calender_flexiana.org"
                         "bookmarks.org"
-                        "shopping.org"
-                        "devops.org"))
+                        "shopping.org"))
 
 (when (file-exists-p na-agenda-folder)
   (setq org-agenda-files
@@ -1301,8 +1300,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                  (name . "^bookmarks.org_archive$")
                  (name . "^inbox.org$")
                  (name . "^inbox.org_archive$")
-                 (name . "^devops.org$")
-                 (name . "^devops.org_archive$")
                  (name . "^shopping.org$")
                  (name . "^shopping.org_archive$")
 		 (name . "^calender_.*$")))
@@ -1418,6 +1415,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*pyls-remote*")
 			 (name . "^\\*clojure-lsp.*")
 			 (name . "^\\*LSP Error List*")
+			 (name . "^\\*lsp session*")
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")
 			 (name . "^\\*calender-.*")
