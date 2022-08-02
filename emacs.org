@@ -725,13 +725,6 @@ Will bounce between matching parens just like % in vi
 
 (require 'lsp-java)
 
-(defun na-xref-mode-hook ()
-  (interactive)
-  (toggle-truncate-lines)
-  (hl-line-mode))
-
-(add-hook 'xref--xref-buffer-mode-hook 'na-xref-mode-hook)
-
 (setq lsp-keymap-prefix "C-c l")
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
