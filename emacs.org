@@ -989,7 +989,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq na-agenda-files '("notes.org"
                         "inbox.org"
 			"calender_nakkaya.org"
-			"calender_cagla.org"
 			"calender_flexiana.org"
                         "bookmarks.org"
                         "shopping.org"))
