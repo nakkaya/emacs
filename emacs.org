@@ -786,7 +786,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (eval-after-load 'clojure-mode
   '(progn
      (define-key clojure-mode-map (kbd "<tab-bar> <mouse-movement>") #'ignore)
-     (define-key clojure-mode-map (kbd "M-[ <mouse-movement>") #'ignore))
+     (define-key clojure-mode-map (kbd "M-[ <mouse-movement>") #'ignore)))
 #+end_src
 
 ** Projectile
