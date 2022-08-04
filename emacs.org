@@ -775,6 +775,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	       "vertical-scroll-bar"
 	       "vertical-line"
 	       "tab-bar"
+	       "M-["
 	       "nil"))
       loc)
   (while areas
