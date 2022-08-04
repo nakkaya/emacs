@@ -1516,6 +1516,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key (kbd "C-\\") 'other-window)
 (global-set-key (kbd "C-d")  'na-bounce-sexp)
 
+(global-set-key (kbd "C-M-k")  'beginning-of-defun)
+(global-set-key (kbd "C-M-j")  'end-of-defun)
+
 (add-hook 'c-mode-hook
           '(lambda ()
 	     (define-key c-mode-map (kbd "C-d")  'na-bounce-sexp)))
