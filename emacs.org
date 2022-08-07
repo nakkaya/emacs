@@ -197,6 +197,23 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
       (advice-remove 'message #'silence))))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun na-recursive-grep (search-term search-path)
+  "Recursively search for SEARCH-TERM in SEARCH-PATH."
+  (interactive
+   (progn
+     (unless grep-command
+       (grep-compute-defaults))
+     (let ((search-term (grep-read-regexp))
+           (search-path (expand-file-name
+                         (read-directory-name
+                          "Directory: " nil default-directory t))))
+       (list search-term search-path))))
+  (if (vc-root-dir)
+      (vc-git-grep search-term "*" search-path)
+    (rgrep search-term "*" search-path)))
+#+end_src
+
 * Terminal
 ** Path
 
