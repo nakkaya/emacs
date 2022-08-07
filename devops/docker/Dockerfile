@@ -135,7 +135,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 # Install Jupyter
 #
 
-RUN chown -R $USER:$USER /usr/local/share/jupyter/lab
+RUN chown -R $USER:$USER /usr/local/share/jupyter
 COPY resources/jupyter/themes.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
 COPY resources/jupyter/shortcuts.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings
 COPY resources/jupyter/tracker.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
