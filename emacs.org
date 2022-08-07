@@ -1415,6 +1415,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*xref\\*$")
 			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")
+			 (name . "^\\*ob-ansible\\*$")
 			 (name . "^\\*vc-dir\\*$")
 			 (name . "^\\*vc\\*$")
 			 (name . "^\\*Bookmark List\\*$")
