@@ -45,6 +45,7 @@ def build_cpu(ctx):
 def build_gpu(ctx):
     """Build GPU Image."""
     docker("build", "gpu", "--build-arg", gpu_image)
+    run("docker push ghcr.io/nakkaya/emacs-gpu:latest")
 
 
 @task
