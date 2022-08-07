@@ -23,6 +23,7 @@ RUN apt-get install \
     graphviz qutebrowser \
     libpq-dev postgresql-client python3-psycopg2 \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
+    meshlab \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
@@ -123,7 +124,9 @@ ENV ML_GPU="\
     opencv-python \
     gym \
     segmentation-models \
-    albumentations"
+    albumentations\
+    PyMCubes\
+    trimesh"
 
 
 RUN ARCH="$(dpkg --print-architecture)"; \
