@@ -99,13 +99,17 @@ RUN pip install \
     python-lsp-server \
     ical2orgpy
 
-ENV ML_ENV="\
+ENV ML_CPU="\
     jinja2==3.1.2 \
     jupyterlab \
-    mlflow \
+    ipywidgets \
     numpy==1.23.1 \
     numexpr \
     pandas \
+    pandas_ta"
+
+ENV ML_GPU="\
+    mlflow \
     protobuf==3.15.0 \
     tensorflow-gpu \
     tensorflow-datasets \
@@ -124,13 +128,14 @@ ENV ML_ENV="\
 
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) pip install $ML_ENV  ;; \
-            #arm64) apt-get install python3-h5py -y ;; \
+            amd64) pip install $ML_CPU $ML_GPU  ;; \
+            arm64) apt-get install $ML_CPU -y ;; \
     esac;
 
 # Install Jupyter
 #
 
+RUN chown -R $USER:$USER /usr/local/share/jupyter/lab
 COPY resources/jupyter/themes.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
 COPY resources/jupyter/shortcuts.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings
 COPY resources/jupyter/tracker.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
