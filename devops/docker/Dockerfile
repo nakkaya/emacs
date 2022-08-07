@@ -129,7 +129,7 @@ ENV ML_GPU="\
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
             amd64) pip install $ML_CPU $ML_GPU  ;; \
-            arm64) apt-get install $ML_CPU -y ;; \
+            arm64) pip install $ML_CPU ;; \
     esac;
 
 # Install Jupyter
