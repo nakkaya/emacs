@@ -1,0 +1,16 @@
+version: "3.7"
+   
+services:
+  emacs:
+    image: ghcr.io/nakkaya/emacs-gpu:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+                - utility
+                - compute
+                - video

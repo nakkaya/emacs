@@ -9,11 +9,10 @@ services:
     hostname: emacsd
     restart: always
     volumes:
-      - storage:/storage
-      - emacs_db:/home/core/.emacs.d
+      - home:/home/core
     ports:
       # SSH
-      - "2222:22"
+      - "2222:2222"
       # Webdav
       - "4242:4242"
       # GUI
@@ -22,5 +21,4 @@ services:
       #- PASSWD=pass
 
 volumes:
-  emacs_db:
-  storage:
+  home:
