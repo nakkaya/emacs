@@ -15,7 +15,7 @@ services:
       # SSH
       - "2222:22"
       # Webdav
-      - "1010:1010"
+      - "4242:4242"
       # GUI
       - "9090:9090"
     #environment:
