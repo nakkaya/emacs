@@ -54,6 +54,11 @@ RUN apt-get install ispell -y
 #
 RUN apt-get install -y nodejs
 
+# Install Serverless
+#
+
+RUN npm install -g serverless
+
 # Install Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
