@@ -97,7 +97,7 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN pip install \
-    python-lsp-server \
+    python-lsp-server[all] \
     ical2orgpy
 
 ENV ML_CPU="\
