@@ -19,7 +19,7 @@ RUN apt-get install \
     apt-utils gnupg software-properties-common \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
-    unzip wget htop xz-utils nq \
+    zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
     libpq-dev postgresql-client python3-psycopg2 \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
