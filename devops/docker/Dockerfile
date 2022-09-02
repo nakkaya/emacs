@@ -136,7 +136,7 @@ ENV ML_GPU="\
 
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) pip install $ML_CPU $ML_GPU  ;; \
+            amd64) apt-get install -y --no-install-recommends nvidia-cuda-toolkit && pip install $ML_CPU $ML_GPU  ;; \
             arm64) pip install $ML_CPU ;; \
     esac;
 
