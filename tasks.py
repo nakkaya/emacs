@@ -44,7 +44,7 @@ def build_cpu(ctx):
 @task
 def build_gpu(ctx):
     """Build GPU Image."""
-    docker("build", "gpu", "--build-arg", gpu_image)
+    docker("build", "gpu", "--build-arg", gpu_image, "--build-arg IMAGE_TYPE=GPU")
     run("docker push ghcr.io/nakkaya/emacs-gpu:latest")
     run("docker push --all-tags nakkaya/emacs-gpu")
 
@@ -52,7 +52,9 @@ def build_gpu(ctx):
 @task
 def buildx_cpu(ctx):
     """Build Multi Arch CPU Image."""
-    docker("buildx build --push", "cpu", "--platform linux/amd64,linux/arm64")
+    docker("buildx build --push", "cpu",
+           "--platform linux/amd64,linux/arm64"
+           "--build-arg IMAGE_TYPE=CPU")
 
 
 def compose_files():

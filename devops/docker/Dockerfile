@@ -1,6 +1,9 @@
 ARG BASE_IMAGE=ghcr.io/nakkaya/emacsd-cpu
 FROM $BASE_IMAGE as build
 
+ARG IMAGE_TYPE
+ENV IMAGE_TYPE=$IMAGE_TYPE
+
 ENV USER="core" \
     UID=1000 \
     TZ=UTC
@@ -134,10 +137,9 @@ ENV ML_GPU="\
     trimesh"
 
 
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) apt-get install -y --no-install-recommends nvidia-cuda-toolkit && pip install $ML_CPU $ML_GPU  ;; \
-            arm64) pip install $ML_CPU ;; \
+RUN case "$IMAGE_TYPE" in \
+            'GPU') apt-get install -y --no-install-recommends nvidia-cuda-toolkit && pip install $ML_CPU $ML_GPU  ;; \
+            'CPU') pip install $ML_CPU ;; \
     esac;
 
 # Install Jupyter
