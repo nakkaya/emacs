@@ -54,7 +54,7 @@ def buildx_cpu(ctx):
     """Build Multi Arch CPU Image."""
     docker("buildx build --push", "cpu",
            "--platform linux/amd64,linux/arm64"
-           "--build-arg IMAGE_TYPE=CPU")
+           " --build-arg IMAGE_TYPE=CPU")
 
 
 def compose_files():
