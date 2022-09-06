@@ -171,7 +171,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (setq display-buffer-alist
 	'(("magit:.*" (display-buffer-same-window))
 	  ("\*grep\*" (display-buffer-same-window))
-	  ("\*cider-repl.*" (display-buffer-same-window))))
+	  ("\*cider-repl.*" (display-buffer-same-window))
+	  ("\*ein:.*" (display-buffer-same-window))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1102,7 +1103,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (progn
     (require 'ein-notebook)
 
-    (setq ein:url-or-port '("http://lab-desktop:8181"))
+    (setq ein:url-or-port '("http://lab-desktop:8181"
+			    "https://omid.emacsd.com"
+			    "https://rabiyev.emacsd.com"))
     (setq ein:output-area-inlined-images t)
     (setq ein:worksheet-enable-undo t)
 
