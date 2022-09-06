@@ -1,8 +1,12 @@
-$version = "emacs-27.1-x86_64"
+Invoke-WebRequest -Uri "https://corwin.bru.st/emacs-28/emacs-28.1-NATIVE_FULL_AOT.zip" -OutFile "$env:temp\emacs.zip"
 
-Invoke-WebRequest -Uri "https://ftp.gnu.org/gnu/emacs/windows/emacs-27/$version.zip" -OutFile ".\$version.zip" 
-Expand-Archive ".\$version.zip" -DestinationPath "C:\Emacs"
-Remove-Item ".\$version.zip"
+if (Test-Path -Path "C:\Emacs") {
+    Get-ChildItem "C:\Emacs" -Recurse | Remove-Item -Force -Recurse -Confirm:$false -ErrorAction SilentlyContinue
+}
+
+#Remove-Item "C:\Emacs" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
+Expand-Archive "$env:temp\emacs.zip" -DestinationPath "C:\Emacs"
+Remove-Item "$env:temp\emacs.zip"
 
 $dotEmacs = Resolve-Path -Path ".\..\..\init.el"
 $dotEmacs = "$dotEmacs".Replace("\", "/")

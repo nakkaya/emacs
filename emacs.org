@@ -1093,6 +1093,31 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key [f1] 'jump-to-org-agenda)
 #+END_SRC
 
+* EIN
+
+#+BEGIN_SRC emacs-lisp :results silent
+(use-package ein
+  :defer t
+  :init
+  (progn
+    (require 'ein-notebook)
+
+    (setq ein:url-or-port '("http://lab-desktop:8181"))
+    (setq ein:output-area-inlined-images t)
+    (setq ein:worksheet-enable-undo t)
+
+    (let ((bg "#1c1c1c"))
+      (eval-after-load "ein-cell"
+        '(progn
+           (set-face-attribute 'ein:codecell-input-area-face nil :background bg)
+	   (set-face-attribute 'ein:codecell-input-prompt-face nil :background bg)
+	   (set-face-attribute 'ein:codecell-input-prompt-face nil :foreground "#51afef"))))
+
+    (with-eval-after-load 'ein-notebooklist
+      (define-key ein:notebook-mode-map (kbd "C-c C-c")
+        'ein:worksheet-execute-cell))))
+#+END_SRC
+
 * Dired
 
 #+BEGIN_SRC emacs-lisp
@@ -1309,7 +1334,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 * IBuffer
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (setq ibuffer-saved-filter-groups
       (quote (("default"
                ("Notes"
@@ -1361,7 +1386,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                           (mode . docker-compose-mode)
 			  (mode . markdown-mode)
 			  (name . "^\\.gitignore")
-			  (name . "^\\Jenkinsfile")))
+			  (name . "^\\Jenkinsfile")
+			  (name . "^\\*ein:.*")))
 	       ("REPL" (or (name . "^\\*cider-.*")
 			   (name . "^\\*nrepl-.*")
 			   (name . "^\\*jupyter-.*")
