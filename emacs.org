@@ -1113,8 +1113,11 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       (eval-after-load "ein-cell"
         '(progn
            (set-face-attribute 'ein:codecell-input-area-face nil :background bg)
+	   (set-face-attribute 'ein:markdowncell-input-area-face nil :background bg)
 	   (set-face-attribute 'ein:codecell-input-prompt-face nil :background bg)
-	   (set-face-attribute 'ein:codecell-input-prompt-face nil :foreground "#51afef"))))
+	   (set-face-attribute 'ein:codecell-input-prompt-face nil :foreground "#51afef")
+	   (set-face-attribute 'ein:markdowncell-input-prompt-face nil :background bg)
+	   (set-face-attribute 'ein:markdowncell-input-prompt-face nil :foreground "#51afef"))))
 
     (with-eval-after-load 'ein-notebooklist
       (define-key ein:notebook-mode-map (kbd "C-c C-c")
