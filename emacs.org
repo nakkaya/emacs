@@ -1104,8 +1104,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (require 'ein-notebook)
 
     (setq ein:url-or-port '("http://lab-desktop:8181"
-			    "https://omid.emacsd.com"
-			    "https://rabiyev.emacsd.com"))
+			    "http://lab-workstation:8181"
+			    "http://100.99.197.40:8181"
+			    "http://lab-212-rabiyev:8181"))
     (setq ein:output-area-inlined-images t)
     (setq ein:worksheet-enable-undo t)
 
