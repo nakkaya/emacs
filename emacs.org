@@ -317,7 +317,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (eshell/alias "chmod" "/usr/bin/chmod $*")
 
 ;; mirror host /folder/
-(eshell/alias "mirror" "rsync -avuz -e ssh $2 $1:$2 --delete")
+(eshell/alias "mirror" "rsync -avuzL -e ssh \"$1\" \"$2\" --delete")
 (eshell/alias "rcp" "rsync -rvLK $1 $2")
 (eshell/alias "lab" "jupyter lab --no-browser --ip='*' --port=8888 --NotebookApp.token=\"jupyter\"")
 
