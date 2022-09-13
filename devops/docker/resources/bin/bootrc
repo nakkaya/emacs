@@ -32,3 +32,7 @@ fi
 if [[ -v SYNCTHING_ENB ]]; then
     (cd /home/$USER/;syncthing &)
 fi
+
+if [[ -v PGADMIN_ENB ]]; then
+    (cd /home/$USER/;pgadmin4 &)
+fi
