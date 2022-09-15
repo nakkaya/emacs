@@ -434,7 +434,7 @@ SSH at least,
 ** Term
 
 #+BEGIN_SRC emacs-lisp
-(setq term-term-name "xterm-256color")
+(setq term-term-name "eterm-color")
 
 (require 'multi-term)
 (setq multi-term-program "/bin/bash")
@@ -1018,8 +1018,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq na-agenda-files '("notes.org"
                         "inbox.org"
-			"calender_nakkaya.org"
-			"calender_flexiana.org"
                         "bookmarks.org"
                         "shopping.org"))
 
@@ -1356,8 +1354,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                  (name . "^inbox.org$")
                  (name . "^inbox.org_archive$")
                  (name . "^shopping.org$")
-                 (name . "^shopping.org_archive$")
-		 (name . "^calender_.*$")))
+                 (name . "^shopping.org_archive$")))
                ("Documents" (or (mode . pdf-view-mode)
 				(mode . mhtml-mode)))
                ("Source" (or
@@ -1474,7 +1471,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			 (name . "^\\*lsp session*")
 			 (name . "^\\*Flycheck Errors*")
 			 (name . "^\\*xref\\*$")
-			 (name . "^\\*calender-.*")
 			 (name . "^\\*grep\\*$")
 			 (name . "^\\*ob-ansible\\*$")
 			 (name . "^\\*vc-dir\\*$")
