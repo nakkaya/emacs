@@ -26,7 +26,7 @@ RUN apt-get install \
     graphviz qutebrowser \
     libpq-dev postgresql-client python3-psycopg2 \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
-    meshlab rlwrap netcat \
+    meshlab rlwrap netcat less \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
