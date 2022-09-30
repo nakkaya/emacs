@@ -5,15 +5,12 @@ import subprocess
 import os
 import glob
 
-version = subprocess.check_output(["git", "describe", "--always"])
-version = version.strip().decode('UTF-8')
-
-
 def tag(n):
     """Create tag command."""
+    t_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     return ("--tag nakkaya/" + n + ":latest " +
             "--tag ghcr.io/nakkaya/" + n + ":latest " +
-            "--tag nakkaya/" + n + ":" + version + " ")
+            "--tag nakkaya/" + n + ":" + t_str + " ")
 
 
 def run(cmd, dir="."):
