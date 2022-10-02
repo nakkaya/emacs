@@ -25,6 +25,7 @@ RUN apt-get install \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
     libpq-dev postgresql-client python3-psycopg2 \
+    redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less \
     # Backup & Storage
