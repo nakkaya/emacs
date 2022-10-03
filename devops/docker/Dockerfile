@@ -49,7 +49,8 @@ RUN apt-get install \
     # For Teensy
     # libxft2 \
     # Python
-    python3-invoke ansible ansible-lint python3-matplotlib python3-boto3 \
+    python3-invoke ansible ansible-lint \
+    python3-tk python3-matplotlib python3-boto3 \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
