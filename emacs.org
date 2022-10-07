@@ -237,9 +237,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
       (setenv "CPLUS_INCLUDE_PATH" "C:\\MinGW\\include"))
   (setenv "PATH"
           (concat
-	   "/Users/nakkaya/Library/Python/3.8/bin/:"
 	   "/opt/homebrew/opt/python@3.9/libexec/bin:"
 	   "/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/bin:"
+	   ;;"/Users/nakkaya/Library/Python/3.8/bin/:"
            "/usr/local/bin:"
 	   "/opt/homebrew/bin/:"
 	   "/opt/homebrew/opt/coreutils/libexec/gnubin:"
