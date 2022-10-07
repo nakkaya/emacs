@@ -27,7 +27,7 @@ RUN apt-get install \
     libpq-dev postgresql-client python3-psycopg2 \
     redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
-    meshlab rlwrap netcat less \
+    meshlab rlwrap netcat less jq \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
