@@ -110,6 +110,7 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 RUN pip install python-lsp-server[all]
 
 ENV ML_CPU="\
+    jinja2==3.1.2 \
     jupyterlab \
     ipywidgets \
     numpy==1.23.1 \
