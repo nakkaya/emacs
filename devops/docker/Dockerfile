@@ -28,6 +28,7 @@ RUN apt-get install \
     redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
+    python3-venv \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
@@ -106,12 +107,9 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 # Configure Python
 #
 
-RUN pip install \
-    python-lsp-server[all] \
-    ical2orgpy
+RUN pip install python-lsp-server[all]
 
 ENV ML_CPU="\
-    jinja2==3.1.2 \
     jupyterlab \
     ipywidgets \
     numpy==1.23.1 \
@@ -201,8 +199,9 @@ RUN mkdir /var/lib/pgadmin && \
     mkdir /var/log/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
-    pip install pgadmin4 && \
-    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /usr/local/lib/python3.8/dist-packages/pgadmin4/config.py
+    python3 -m venv /opt/pgadmin && \
+    /opt/pgadmin/bin/python -m pip install install pgadmin4 && \
+    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.8/site-packages/pgadmin4/config.py
 
 # Arduino
 #

@@ -34,5 +34,5 @@ if [[ -v SYNCTHING_ENB ]]; then
 fi
 
 if [[ -v PGADMIN_ENB ]]; then
-    (cd /home/$USER/;pgadmin4 &)
+    (cd /home/$USER/;/opt/pgadmin/bin/pgadmin4 &)
 fi
