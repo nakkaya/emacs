@@ -329,6 +329,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (eshell/alias "gas" "git annex sync")
 (eshell/alias "gag" "git annex get . --not --in here")
 (eshell/alias "gac" "git annex add . && git annex sync --content")
+(eshell/alias "to-wasabi" "git annex add . && git annex copy . --to wasabi --not --in wasabi && git annex unused && git annex move --unused --to wasabi && git annex sync")
 
 (eshell/alias "x86" "/usr/bin/arch -x86_64 $*")
 #+END_SRC
