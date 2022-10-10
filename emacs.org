@@ -1542,8 +1542,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq elfeed-use-curl t
       elfeed-sort-order 'ascending
       elfeed-protocol-fever-maxsize 50
-      elfeed-feeds '(("fever+https://nakkaya@rss.computie.net/fever/"
-		      :api-url "https://rss.computie.net/fever/"
+      elfeed-feeds '(("fever+https://nakkaya@rss.nakkaya.com/fever/"
+		      :api-url "https://rss.nakkaya.com/fever/"
                       :use-authinfo t)))
 
 (elfeed-protocol-enable)
