@@ -735,7 +735,7 @@ Will bounce between matching parens just like % in vi
       lsp-diagnostics-provider :flycheck
       lsp-headerline-breadcrumb-enable nil
       lsp-ui-sideline-enable t
-      lsp-ui-doc-show-with-cursor nil
+      lsp-ui-doc-enable nil
       lsp-ui-sideline-show-code-actions nil
       lsp-modeline-code-actions-enable nil
       lsp-eldoc-enable-hover nil
@@ -788,35 +788,35 @@ Will bounce between matching parens just like % in vi
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
-(setq na-ignore-areas '("mode-line"
-			"left-margin"
-			"left-fringe"
-			"right-fringe"
-			"header-line"
-			"vertical-scroll-bar"
-			"vertical-line"
-			"tab-bar"
-			"M-["
-			"nil"))
+;; (setq na-ignore-areas '("mode-line"
+;; 			"left-margin"
+;; 			"left-fringe"
+;; 			"right-fringe"
+;; 			"header-line"
+;; 			"vertical-scroll-bar"
+;; 			"vertical-line"
+;; 			"tab-bar"
+;; 			"M-["
+;; 			"nil"))
 
-(let ((areas na-ignore-areas)
-      loc)
-  (while areas
-    (setq loc (pop areas))
-    (global-set-key
-     (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+;; (let ((areas na-ignore-areas)
+;;       loc)
+;;   (while areas
+;;     (setq loc (pop areas))
+;;     (global-set-key
+;;      (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
 
-(let ((areas na-ignore-areas)
-      loc)
-  (while areas
-    (setq loc (pop areas))
-    (define-key clojure-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+;; (let ((areas na-ignore-areas)
+;;       loc)
+;;   (while areas
+;;     (setq loc (pop areas))
+;;     (define-key clojure-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
 
-(let ((areas na-ignore-areas)
-      loc)
-  (while areas
-    (setq loc (pop areas))
-    (define-key python-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+;; (let ((areas na-ignore-areas)
+;;       loc)
+;;   (while areas
+;;     (setq loc (pop areas))
+;;     (define-key python-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
 #+end_src
 
 ** Projectile
