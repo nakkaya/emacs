@@ -742,7 +742,8 @@ Will bounce between matching parens just like % in vi
       lsp-signature-auto-activate nil
       lsp-signature-render-documentation nil
       lsp-ui-sideline-show-diagnostics t
-      lsp-enable-symbol-highlighting nil)
+      lsp-enable-symbol-highlighting nil
+      dap-auto-configure-features '(sessions locals controls))
 
 (require 'lsp-java)
 
