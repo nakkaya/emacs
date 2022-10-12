@@ -47,9 +47,6 @@
 (electric-pair-mode 1)
 (show-paren-mode 1)
 
-(setq auto-save-file-name-transforms
-      `((".*" "~/.emacs.d/auto-save" t)))
-
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 (global-undo-tree-mode)
 
