@@ -1380,6 +1380,7 @@ Will bounce between matching parens just like % in vi
                          (name . "^\\*helm.*\\*$")
                          (name . "^\\*transmission\\*$")
 			 (name . "^\\*projectile-files-errors\\*$")
+			 (name . "^\\*EGLOT.*")
                          (name . "^\\*lsp-.*")
                          (name . "^\\*jdtls.*")
                          (name . "^\\*clangd.*")
