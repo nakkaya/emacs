@@ -23,9 +23,8 @@
 	pine-script-mode
 	flycheck
 	yasnippet
-        lsp-mode
-	lsp-ui
-        lsp-java
+        eglot
+	lsp-java
 	org
         org-superstar
 	ob-async
