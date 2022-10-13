@@ -720,13 +720,13 @@ Will bounce between matching parens just like % in vi
 
    (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
  #+END_SRC
-** Company & LSP
+** Company & Eglot
 
- #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
    (add-hook 'after-init-hook 'global-company-mode)
    (setq company-minimum-prefix-length 1)
    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
- #+END_SRC
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
 (require 'eglot)
@@ -744,7 +744,7 @@ Will bounce between matching parens just like % in vi
 
 ** Projectile
 
- #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (require 'projectile)
 
 (setq projectile-completion-system 'helm
@@ -753,7 +753,7 @@ Will bounce between matching parens just like % in vi
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (projectile-mode +1)
- #+END_SRC
+#+END_SRC
   
 * Org-Mode
 
