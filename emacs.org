@@ -732,7 +732,8 @@ Will bounce between matching parens just like % in vi
 (require 'eglot)
 (require 'lsp-java)
 
-(setq eldoc-echo-area-use-multiline-p nil)
+(setq eldoc-echo-area-use-multiline-p nil
+      eglot-connect-timeout nil)
 
 (add-hook 'java-mode-hook 'eglot-ensure)
 (add-hook 'clojure-mode-hook 'eglot-ensure)
