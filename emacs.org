@@ -153,6 +153,75 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	      helm-split-window-in-side-p t
 	      helm-move-to-line-cycle-in-source t)
 
+(setq helm-boring-buffer-regexp-list
+      (list
+       "\\` "
+       "^\\*Process List\\*$"
+       "^\\*Dired log\\*$"
+       "^\\*info\\*$"
+       "^\\*Man.*\\*$"
+       "^\\*tramp.+\\*$"
+       "^\\*trace.+SMTP.+\\*$"
+       "^\\.todo-do"
+       "^\\*scratch\\*$"
+       "^\\*git-status\\*$"
+       "^\\*git-diff\\*$"
+       "^\\*git-commit\\*$"
+       "^\\*Git Command Output\\*$"
+       "^\\*Org Export/Publishing Help\\*$"
+       "^\\*Org-Babel Error Output\\*$"
+       "^\\*Org PDF LaTeX Output\\*$"
+       "^\\*Org Agenda\\*$"
+       "^\\*Calendar\\*$"
+       "^\\*Messages\\*$"
+       "^\\*Completions\\*$"
+       "^\\*Warnings\\*$"
+       "^\\*Org Agenda.*\\*$"
+       "^\\*Org Help\\*$"
+       "^\\*Backtrace\\*$"
+       "^\\*Colors\\*$"
+       "^TAGS$"
+       "^\\*Help\\*$"
+       "^\\*Shell Command Output\\*$"
+       "^\\*Calculator\\*$"
+       "^\\*Calc Trail\\*$"
+       "^\\*Compile-Log\\*$"
+       "^\\*quelpa-build-checkout\\*$"
+       "^\\*helm.*\\*$"
+       "^\\*transmission\\*$"
+       "^\\*projectile-files-errors\\*$"
+       "^\\*EGLOT.*"
+       "^\\*lsp-.*"
+       "^\\*jdtls.*"
+       "^\\*clangd.*"
+       "^\\*Flymake.*"
+       "^\\*Native-.*"
+       "^\\*Async-native-.*"
+       "^\\*emacs\\*$"
+       "^\\*GNU Emacs\\*$"
+       "^\\*compilation\\*$"
+       "^\\*elfeed-.*"
+       "^\\*pylsp.*"
+       "^\\*pyls-remote*"
+       "^\\*clojure-lsp.*"
+       "^\\*LSP Error List*"
+       "^\\*lsp session*"
+       "^\\*Flycheck Errors*"
+       "^\\*xref\\*$"
+       "^\\*grep\\*$"
+       "^\\*ob-ansible\\*$"
+       "^\\*vc-dir\\*$"
+       "^\\*vc\\*$"
+       "^\\*Bookmark List\\*$"
+       "^\\*Buffer List\\*$"
+       "^\\*Disabled Command\\*$"
+       (rx "*nrepl-server")
+       (rx "*magit-")
+       (rx "*Ibuffer")
+       (rx "*Echo Area")
+       (rx "*Minibuf")
+       (rx "*quelpa-build-checkout")))
+
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x b") #'helm-buffers-list)
 (global-set-key (kbd "C-x r b") #'helm-bookmarks)
