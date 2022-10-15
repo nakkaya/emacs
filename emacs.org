@@ -848,7 +848,8 @@ Will bounce between matching parens just like % in vi
       org-src-tab-acts-natively t
       org-src-preserve-indentation t
       org-ellipsis " ▶"
-      org-superstar-headline-bullets-list '("●" "●" "●" "●" "●"))
+      org-superstar-headline-bullets-list '("●" "●" "●" "●" "●")
+      org-link-file-path-type 'relative)
 
 (add-hook 'org-mode-hook (lambda ()
 			   (org-superstar-mode 1)))
