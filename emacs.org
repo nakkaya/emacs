@@ -1335,7 +1335,10 @@ Will bounce between matching parens just like % in vi
      org-noter-hide-other t
      org-noter-notes-search-path (list na-agenda-folder)
      org-noter-auto-save-last-location t)
-    :ensure t))
+    :ensure t)
+
+  (use-package org-pdftools
+    :hook (org-mode . org-pdftools-setup-link)))
 #+end_src
 
 * IBuffer
