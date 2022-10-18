@@ -792,7 +792,7 @@ Will bounce between matching parens just like % in vi
 
    (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
  #+END_SRC
-** Company & Eglot
+** Company & LSP
 
 #+BEGIN_SRC emacs-lisp
    (add-hook 'after-init-hook 'global-company-mode)
@@ -801,18 +801,63 @@ Will bounce between matching parens just like % in vi
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(require 'eglot)
+(require 'yasnippet)
+(require 'flycheck)
+(require 'lsp-mode)
+(require 'lsp-ui)
+
+(setq lsp-log-io nil
+      lsp-idle-delay 0.500
+      lsp-diagnostics-provider :flycheck
+      lsp-headerline-breadcrumb-enable nil
+      lsp-ui-sideline-enable t
+      lsp-ui-sideline-show-code-actions nil
+      lsp-modeline-code-actions-enable nil
+      lsp-ui-doc-enable nil
+      lsp-signature-auto-activate nil
+      lsp-signature-render-documentation nil
+      lsp-ui-sideline-show-diagnostics t
+      lsp-enable-symbol-highlighting nil)
+
 (require 'lsp-java)
 
-(setq eldoc-echo-area-use-multiline-p nil
-      eglot-connect-timeout nil)
+(setq lsp-keymap-prefix "C-c l")
+(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
-(add-hook 'java-mode-hook 'eglot-ensure)
-(add-hook 'clojure-mode-hook 'eglot-ensure)
-(add-hook 'python-mode-hook 'eglot-ensure)
-(add-hook 'terraform-mode-hook 'eglot-ensure)
+(dolist (dir '(
+               "[/\\\\]matlab_runtime"
+               ))
+  (push dir lsp-file-watch-ignored))
 
-(add-to-list 'eglot-server-programs '((terraform-mode) '("terraform-ls" "serve")))
+(add-hook 'java-mode-hook #'lsp-deferred)
+(add-hook 'clojure-mode-hook #'lsp-deferred)
+;;(add-hook 'c++-mode-hook #'lsp-deferred)
+(add-hook 'python-mode-hook #'lsp-deferred)
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
+                  :major-modes '(terraform-mode)
+                  :server-id 'terraform-ls))
+
+(add-hook 'terraform-mode-hook #'lsp-deferred)
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
+                  :major-modes '(python-mode)
+                  :remote? t
+                  :server-id 'pyls-remote))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                  :major-modes '(clojure-mode)
+                  :remote? t
+                  :server-id 'clojure-lsp-remote))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                  :major-modes '(clojurescript-mode)
+                  :remote? t
+                  :server-id 'clojurescript-lsp-remote))
 #+END_SRC
 
 ** Projectile
