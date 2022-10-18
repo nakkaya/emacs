@@ -866,35 +866,22 @@ Will bounce between matching parens just like % in vi
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
-(setq na-ignore-areas '("mode-line"
-			"left-margin"
-			"left-fringe"
-			"right-fringe"
-			"header-line"
-			"vertical-scroll-bar"
-			"vertical-line"
-			"tab-bar"
-			"M-["
-			"nil"))
-
-(let ((areas na-ignore-areas)
+(let ((areas '("mode-line"
+	       "left-margin"
+	       "left-fringe"
+	       "right-fringe"
+	       "header-line"
+	       "vertical-scroll-bar"
+	       "vertical-line"
+	       "tab-bar"
+	       "M-["
+	       "nil"))
       loc)
   (while areas
     (setq loc (pop areas))
-    (global-set-key
-     (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
-
-;; (let ((areas na-ignore-areas)
-;;       loc)
-;;   (while areas
-;;     (setq loc (pop areas))
-;;     (define-key clojure-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
-
-;; (let ((areas na-ignore-areas)
-;;       loc)
-;;   (while areas
-;;     (setq loc (pop areas))
-;;     (define-key python-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+    (global-set-key (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)
+    (define-key clojure-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)
+    (define-key python-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
 #+end_src
 
 ** Projectile
