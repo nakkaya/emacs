@@ -806,6 +806,9 @@ Will bounce between matching parens just like % in vi
 (require 'lsp-mode)
 (require 'lsp-ui)
 
+(define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-find-definition)
+(define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
+
 (setq lsp-log-io nil
       lsp-idle-delay 0.500
       lsp-diagnostics-provider :flycheck
@@ -859,6 +862,40 @@ Will bounce between matching parens just like % in vi
                   :remote? t
                   :server-id 'clojurescript-lsp-remote))
 #+END_SRC
+
+Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
+
+#+begin_src emacs-lisp :results silent
+(setq na-ignore-areas '("mode-line"
+			"left-margin"
+			"left-fringe"
+			"right-fringe"
+			"header-line"
+			"vertical-scroll-bar"
+			"vertical-line"
+			"tab-bar"
+			"M-["
+			"nil"))
+
+(let ((areas na-ignore-areas)
+      loc)
+  (while areas
+    (setq loc (pop areas))
+    (global-set-key
+     (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+
+;; (let ((areas na-ignore-areas)
+;;       loc)
+;;   (while areas
+;;     (setq loc (pop areas))
+;;     (define-key clojure-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+
+;; (let ((areas na-ignore-areas)
+;;       loc)
+;;   (while areas
+;;     (setq loc (pop areas))
+;;     (define-key python-mode-map (kbd (concat "<" loc "> <mouse-movement>")) #'ignore)))
+#+end_src
 
 ** Projectile
 
