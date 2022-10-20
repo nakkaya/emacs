@@ -146,7 +146,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
       (flyspell-mode 1)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'helm)
 
 (setq-default helm-M-x-fuzzy-match t
@@ -197,6 +197,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
        "^\\*Flymake.*"
        "^\\*Native-.*"
        "^\\*Async-native-.*"
+       "^\\*Async Shell Command.*"
        "^\\*emacs\\*$"
        "^\\*GNU Emacs\\*$"
        "^\\*compilation\\*$"
