@@ -573,7 +573,8 @@ Will bounce between matching parens just like % in vi
 (require 'clojure-mode-extra-font-locking)
 
 (setq nrepl-use-ssh-fallback-for-remote-hosts t
-      cider-use-tooltips nil)
+      cider-use-tooltips nil
+      cider-eldoc-display-for-symbol-at-point nil)
 
 (add-hook 'cider-repl-mode-hook
 	  '(lambda () (define-key cider-repl-mode-map (kbd "C-c C-o")
@@ -821,7 +822,8 @@ Will bounce between matching parens just like % in vi
       lsp-signature-auto-activate nil
       lsp-signature-render-documentation nil
       lsp-ui-sideline-show-diagnostics t
-      lsp-enable-symbol-highlighting nil)
+      lsp-enable-symbol-highlighting nil
+      lsp-eldoc-enable-hover nil)
 
 (require 'lsp-java)
 
