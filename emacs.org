@@ -1256,6 +1256,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq tramp-ssh-controlmaster-options ""
       remote-file-name-inhibit-cache nil
+      remote-file-name-inhibit-locks t
       tramp-verbose 1
       tramp-completion-reread-directory-timeout nil)
 
@@ -1284,27 +1285,29 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * Git
 
 #+BEGIN_SRC emacs-lisp
-  (require 'magit)
+(setq vc-handled-backends '(Git))
 
-  (when (or (eq system-type 'gnu/linux)
-	    (eq system-type 'darwin))
+(require 'magit)
 
-    (require 'magit-todos)
-    (setq magit-todos-exclude-globs '("*.ipynb"))
-    (magit-todos-mode 1))
+(when (or (eq system-type 'gnu/linux)
+	  (eq system-type 'darwin))
 
-  (defalias 'mr 'magit-list-repositories)
+  (require 'magit-todos)
+  (setq magit-todos-exclude-globs '("*.ipynb"))
+  (magit-todos-mode 1))
 
-  (setq git-committer-name "Nurullah Akkaya"
-	git-committer-email "nurullah@nakkaya.com")
+(defalias 'mr 'magit-list-repositories)
 
-  (setq vc-follow-symlinks t
-	magit-hide-diffs t
-	magit-save-repository-buffers 'dontask)
+(setq git-committer-name "Nurullah Akkaya"
+      git-committer-email "nurullah@nakkaya.com")
+
+(setq vc-follow-symlinks t
+      magit-hide-diffs t
+      magit-save-repository-buffers 'dontask)
 
 
-  (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-  (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+(remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+(remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
