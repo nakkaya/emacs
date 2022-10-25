@@ -63,12 +63,18 @@
     (y-or-n-p arg))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (setq mouse-wheel-scroll-amount '(1))
 (setq mouse-wheel-progressive-speed nil)
 
 (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
 (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
+
+;;keep cursor at same position when scrolling
+(setq scroll-preserve-screen-position 1)
+;;scroll window up/down by one line
+(global-set-key (kbd "M-n") (kbd "C-u 2 C-v"))
+(global-set-key (kbd "M-p") (kbd "C-u 2 M-v"))
 #+END_SRC
 
 Fix mouse when using emacsclient in tty and daemon launches via gui.
@@ -245,20 +251,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	  ("\*grep\*" (display-buffer-same-window))
 	  ("\*cider-repl.*" (display-buffer-same-window))
 	  ("\*ein:.*" (display-buffer-same-window))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(tab-bar-mode 1)                           ;; enable tab bar
-(setq tab-bar-show 1)                      ;; hide bar if <= 1 tabs open
-(setq tab-bar-close-button-show nil)       ;; hide tab close / X button
-(setq tab-bar-new-tab-choice "*scratch*")  ;; buffer to show in new tabs
-(setq tab-bar-tab-hints t)                 ;; show tab numbers
-(setq tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
-
-(global-set-key (kbd "C-c t p") 'tab-bar-switch-to-prev-tab)
-(global-set-key (kbd "C-c t n") 'tab-bar-switch-to-next-tab)
-(global-set-key (kbd "C-c t t") 'tab-bar-new-tab)
-(global-set-key (kbd "C-c t w") 'tab-bar-close-tab)
 #+END_SRC
 
 #+begin_src emacs-lisp
