@@ -139,7 +139,7 @@ ENV ML_GPU="\
 
 
 RUN case "$IMAGE_TYPE" in \
-            'GPU') apt-get install -y --no-install-recommends nvidia-cuda-toolkit && pip install $ML_CPU $ML_GPU  ;; \
+            'GPU') pip install $ML_CPU $ML_GPU  ;; \
             'CPU') pip install $ML_CPU ;; \
     esac;
 
