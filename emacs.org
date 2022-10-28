@@ -609,8 +609,10 @@ Will bounce between matching parens just like % in vi
 ** Python
 
  #+BEGIN_SRC emacs-lisp
-(setenv "PYTHONIOENCODING" "utf8")
 (setenv "PYTHONDONTWRITEBYTECODE" "1")
+(setenv "PYTHONIOENCODING" "utf8")
+(setenv "TF_CPP_MIN_LOG_LEVEL" "2")
+(setenv "GIT_PYTHON_REFRESH" "quite")
 
 (require 'python)
 (setq python-shell-interpreter "python3"

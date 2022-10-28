@@ -2,24 +2,7 @@ echo ' ' >> /home/$USER/.bashrc
 
 export SHELL=/bin/bash
 
-echo "export XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda" >> /home/$USER/.bashrc
-
-if [[ -v AWS_ACCESS_KEY_ID ]]; then
-    echo "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> /home/$USER/.bashrc
-    echo "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> /home/$USER/.bashrc
-fi
-
-if [[ -v MLFLOW_TRACKING_URI ]]; then
-    echo "export MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}" >> /home/$USER/.bashrc
-fi
-
-if [[ -v MLFLOW_TRACKING_USERNAME ]]; then
-    echo "export MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}" >> /home/$USER/.bashrc
-fi
-
-if [[ -v MLFLOW_TRACKING_PASSWORD ]]; then
-    echo "export MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}" >> /home/$USER/.bashrc
-fi
+source /home/$USER/.bashrc
 
 if [[ -v JUPYTER_SERVER_ENB ]]; then
     if [[ -v PASSWD ]]; then
