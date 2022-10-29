@@ -238,10 +238,3 @@ RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R $USER:$USER /storage
 
 USER $USER
-
-RUN echo ' ' >> /home/$USER/.bashrc && \
-    echo 'export PYTHONDONTWRITEBYTECODE=1' >> /home/$USER/.bashrc && \
-    echo 'export PYTHONIOENCODING=utf8' >> /home/$USER/.bashrc && \
-    echo 'export TF_CPP_MIN_LOG_LEVEL=2' >> /home/$USER/.bashrc && \
-    echo 'export GIT_PYTHON_REFRESH=quiet' >> /home/$USER/.bashrc
-

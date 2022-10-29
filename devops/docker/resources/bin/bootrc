@@ -1,10 +1,6 @@
-echo ' ' >> /home/$USER/.bashrc
-
-export SHELL=/bin/bash
-
-source /home/$USER/.bashrc
-
 if [[ -v JUPYTER_SERVER_ENB ]]; then
+    export SHELL=/bin/bash
+
     if [[ -v PASSWD ]]; then
 	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
     else
