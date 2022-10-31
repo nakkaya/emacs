@@ -93,7 +93,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
     apt-get install docker-ce-cli -y --no-install-recommends && \
-    pip install docker-compose && \
+    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     touch /var/run/docker.sock && \
     groupadd docker && \
     chown root:docker /var/run/docker.sock && \
