@@ -33,7 +33,7 @@ RUN apt-get install \
     redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
-    python3-venv \
+    python3-venv python3-wheel \
     # Backup & Storage
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
