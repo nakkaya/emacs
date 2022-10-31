@@ -900,6 +900,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+begin_src emacs-lisp
 (require 'org)
 (require 'org-superstar)
+(require 'helm-org-rifle)
 
 (setq org-startup-folded t
       org-adapt-indentation nil
@@ -916,7 +917,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-src-preserve-indentation t
       org-ellipsis " ▶"
       org-superstar-headline-bullets-list '("●" "●" "●" "●" "●")
-      org-link-file-path-type 'relative)
+      org-link-file-path-type 'relative
+      helm-org-rifle-show-path t)
 
 (add-hook 'org-mode-hook (lambda ()
 			   (org-superstar-mode 1)))
@@ -1683,6 +1685,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key (kbd "C-c <left>")  'hs-hide-block)
 (global-set-key (kbd "C-c <up>")    'hs-hide-all)
 (global-set-key (kbd "C-c <down>")  'hs-show-all)
+
+(global-set-key (kbd "C-c j") 'helm-org-rifle-agenda-files)
 
 (global-set-key [f2] 'na-elfeed)
 (global-set-key [f12] (lambda ()

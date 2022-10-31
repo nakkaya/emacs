@@ -42,6 +42,7 @@
 	 company
          projectile
          helm
+	 helm-org-rifle
          quelpa
 	 elfeed
 	 elfeed-protocol
