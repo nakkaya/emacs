@@ -111,9 +111,9 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 
 ENV ML_CPU="\
     python-lsp-server[all] \
-    jinja2 \
-    requests \
-    urllib3 \
+    jinja2==3.1.2 \
+    requests==2.28.1 \
+    urllib3==1.26.12 \
     invoke \
     ansible \
     ansible-lint \
