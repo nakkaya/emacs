@@ -19,12 +19,12 @@ USER root
 #
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install curl -y --no-install-recommends && \
+    apt-get install curl apt-utils -y --no-install-recommends && \
     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
 RUN apt-get install \
     # apt
-    apt-utils gnupg software-properties-common \
+    gnupg software-properties-common \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
