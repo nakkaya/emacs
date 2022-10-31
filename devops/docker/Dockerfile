@@ -49,9 +49,6 @@ RUN apt-get install \
     autoconf automake libtool \
     # For Teensy
     # libxft2 \
-    # Python
-    python3-invoke ansible ansible-lint \
-    python3-tk python3-matplotlib python3-boto3 \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
@@ -107,16 +104,21 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 # Configure Python
 #
 
-RUN pip install python-lsp-server[all]
-
 ENV ML_CPU="\
+    python-lsp-server[all] \
     jinja2==3.1.2 \
+    invoke \
+    ansible \
+    ansible-lint \
     jupyterlab \
     ipywidgets \
     numpy==1.23.1 \
     numexpr \
     pandas \
-    pandas_ta"
+    pandas_ta \
+    tk \
+    matplotlib \
+    boto3"
 
 ENV ML_GPU="\
     mlflow \
