@@ -4,6 +4,11 @@ FROM $BASE_IMAGE as build
 ARG IMAGE_TYPE
 ENV IMAGE_TYPE=$IMAGE_TYPE
 
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    DEBIAN_FRONTEND=noninteractive
+
 ENV USER="core" \
     UID=1000 \
     TZ=UTC
