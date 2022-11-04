@@ -283,13 +283,14 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 * Terminal
 ** Path
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (if (eq system-type 'windows-nt)
     (progn
       (setenv "PATH"
               (concat
                "C:\\Program Files\\CMake\\bin;"
                "C:\\MinGW\\bin;"
+	       (concat (getenv "HOME") "\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin;")
 	       (concat (getenv "HOME") ";")
 	       (concat (getenv "HOME") "\\Documents;")
 	       (concat (getenv "HOME") "\\Documents\\gzip\\bin;")
