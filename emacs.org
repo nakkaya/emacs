@@ -1642,7 +1642,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 * Key Bindings
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (setq mac-option-modifier 'super
       mac-command-modifier 'meta)
 
@@ -1663,14 +1663,14 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	     (define-key c++-mode-map (kbd "C-d")  'na-bounce-sexp)))
 
 (global-set-key (kbd "C-x t") 'na-new-term)
-(add-hook 'term-mode-hook
-          '(lambda ()
-	     (define-key term-raw-map (kbd "C-c C-c")  'term-send-raw)
-	     (define-key term-raw-map [(control \])] 'ibuffer)
-             (define-key term-raw-map (kbd "C-y")  'term-paste)
-             (define-key term-raw-map (kbd "C-\\") 'other-window)
-	     (define-key term-raw-map (kbd "M-\\") 'popper-cycle)
-	     (define-key term-raw-map (kbd "M-q") 'popper-toggle-latest)))
+
+(with-eval-after-load 'term-mode
+  (define-key term-raw-map (kbd "C-c C-c")  'term-send-raw)
+  (define-key term-raw-map [(control \])] 'ibuffer)
+  (define-key term-raw-map (kbd "C-y")  'term-paste)
+  (define-key term-raw-map (kbd "C-\\") 'other-window)
+  (define-key term-raw-map (kbd "M-\\") 'popper-cycle)
+  (define-key term-raw-map (kbd "M-q") 'popper-toggle-latest))
 
 (global-set-key "\M-[1;5C" 'forward-word)
 (global-set-key "\M-[1;5D" 'backward-word)
