@@ -1664,9 +1664,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (global-set-key (kbd "C-x t") 'na-new-term)
 
-(with-eval-after-load 'term-mode
+(with-eval-after-load 'term
   (define-key term-raw-map (kbd "C-c C-c")  'term-send-raw)
-  (define-key term-raw-map [(control \])] 'ibuffer)
+  (define-key term-raw-map (kbd "C-]") 'ibuffer)
   (define-key term-raw-map (kbd "C-y")  'term-paste)
   (define-key term-raw-map (kbd "C-\\") 'other-window)
   (define-key term-raw-map (kbd "M-\\") 'popper-cycle)

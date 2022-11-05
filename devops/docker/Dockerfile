@@ -104,7 +104,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
     add-apt-repository "deb https://apt.syncthing.net/ syncthing stable" && \
-    apt-get update && \
     apt-get install syncthing -y --no-install-recommends
 
 # Configure Python
@@ -149,7 +148,7 @@ ENV ML_GPU="\
 
 
 RUN case "$IMAGE_TYPE" in \
-            'GPU') pip install $ML_CPU $ML_GPU  ;; \
+            'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends;; \
             'CPU') pip install $ML_CPU ;; \
     esac;
 
