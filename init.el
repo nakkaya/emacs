@@ -8,6 +8,7 @@
 
 (setq package-list
       '(use-package
+	 quelpa-use-package
 	 clipetty
          undo-tree
          hl-todo
@@ -73,6 +74,7 @@
   (when (not (package-installed-p package))
     (package-install package)))
 
+(require 'quelpa-use-package)
 (require 'org)
 (require 'ob-tangle)
 
