@@ -230,7 +230,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
        (rx "*Ibuffer")
        (rx "*Echo Area")
        (rx "*Minibuf")
-       (rx "*quelpa-build-checkout")))
+       (rx "*quelpa-build-checkout")
+       (rx "*quelpa-build-info*")))
 
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x b") #'helm-buffers-list)
@@ -1537,6 +1538,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                          (name . "^\\*Calc Trail\\*$")
                          (name . "^\\*Compile-Log\\*$")
                          (name . "^\\*quelpa-build-checkout\\*$")
+			 (name . "^\\*quelpa-build-info\\*$")
                          (name . "^\\*helm.*\\*$")
                          (name . "^\\*transmission\\*$")
 			 (name . "^\\*projectile-files-errors\\*$")
