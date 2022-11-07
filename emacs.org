@@ -47,9 +47,6 @@
 (electric-pair-mode 1)
 (show-paren-mode 1)
 
-(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-(global-undo-tree-mode)
-
 (global-auto-revert-mode 1)
 (setq global-auto-revert-non-file-buffers t
       revert-without-query '(".pdf"))
@@ -1075,7 +1072,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 ** Agenda
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (cond ((file-exists-p "~/org/")
        (setq na-agenda-folder "~/org/"))
       ((file-exists-p "/storage/source/org/")
@@ -1122,12 +1119,21 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       '(("p" "Personal TODO" entry
          (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
          "* TODO %?\n" :prepend t)
+	("t" "Personal TODO for Tomorrow" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
+         "* TODO %?\nSCHEDULED: <%(org-read-date nil nil \"+1d\")>" :prepend t)
+	("h" "Personal TODO for Next Hour" entry
+         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
+         "* TODO %?\nSCHEDULED: <%(concat (org-read-date nil nil \"\") \" \" (format-time-string \"%H:%M\" (+ (float-time) 3600)))>" :prepend t)
 	("r" "Research TODO" entry
          (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Research")
          "* TODO %?\n" :prepend t)
 	("b" "Read Later" entry
          (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
          "* %?\n" :prepend t)
+	("s" "Stylitics TODO" entry
+         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Stylitics" "Todo")
+         "* TODO %?\n" :prepend t)
         ("a" "Akademik TODO" entry
          (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
          "* TODO %?\n" :prepend t)
