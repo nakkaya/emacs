@@ -29,7 +29,7 @@ RUN apt-get install \
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
-    libpq-dev postgresql-client python3-psycopg2 \
+    libpq-dev postgresql-client influx-client python3-psycopg2 \
     redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
@@ -99,15 +99,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     groupadd docker && \
     chown root:docker /var/run/docker.sock && \
     usermod -a -G docker $USER
-
-# Install Influx CLI
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    INFLUX_VERSION=1.8.0; \
-    INFLUX_DIST="influxdb_${INFLUX_VERSION}_${ARCH}"; \
-    echo $INFLUX_DIST && \
-    wget -q https://dl.influxdata.com/influxdb/releases/${INFLUX_DIST}.deb && \
-    sudo dpkg -i ${INFLUX_DIST}.deb
 
 # Install Syncthing
 #
