@@ -29,7 +29,7 @@ RUN apt-get install \
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
-    libpq-dev postgresql-client influx-client python3-psycopg2 \
+    libpq-dev postgresql-client influxdb-client python3-psycopg2 \
     redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
