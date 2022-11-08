@@ -100,6 +100,18 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     chown root:docker /var/run/docker.sock && \
     usermod -a -G docker $USER
 
+# Install Influx CLI
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    INFLUX_VERSION=2.5.0; \
+    INFLUX_DIST="influxdb2-client-${INFLUX_VERSION}-linux-${ARCH}"; \
+    echo $INFLUX_DIST && \
+    wget -q https://dl.influxdata.com/influxdb/releases/${INFLUX_DIST}.tar.gz && \
+    tar xvzf ${INFLUX_DIST}.tar.gz && \
+    mv ${INFLUX_DIST}/influx /usr/local/bin/influx && \
+    rm -rf ${INFLUX_DIST} ${INFLUX_DIST}.tar.gz
+
+
 # Install Syncthing
 #
 RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
