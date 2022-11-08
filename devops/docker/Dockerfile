@@ -147,8 +147,9 @@ ENV ML_GPU="\
     trimesh"
 
 
+# 'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends;;
 RUN case "$IMAGE_TYPE" in \
-            'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends;; \
+            'GPU') pip install $ML_CPU $ML_GPU ;; \
             'CPU') pip install $ML_CPU ;; \
     esac;
 
