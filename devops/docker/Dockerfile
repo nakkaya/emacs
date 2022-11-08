@@ -103,14 +103,11 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 # Install Influx CLI
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
-    INFLUX_VERSION=2.5.0; \
-    INFLUX_DIST="influxdb2-client-${INFLUX_VERSION}-linux-${ARCH}"; \
+    INFLUX_VERSION=1.8.0; \
+    INFLUX_DIST="influxdb_${INFLUX_VERSION}_${ARCH}"; \
     echo $INFLUX_DIST && \
-    wget -q https://dl.influxdata.com/influxdb/releases/${INFLUX_DIST}.tar.gz && \
-    tar xvzf ${INFLUX_DIST}.tar.gz && \
-    mv ${INFLUX_DIST}/influx /usr/local/bin/influx && \
-    rm -rf ${INFLUX_DIST} ${INFLUX_DIST}.tar.gz
-
+    wget -q https://dl.influxdata.com/influxdb/releases/${INFLUX_DIST}.deb && \
+    sudo dpkg -i ${INFLUX_DIST}.deb
 
 # Install Syncthing
 #
