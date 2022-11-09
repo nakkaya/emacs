@@ -146,10 +146,8 @@ ENV ML_GPU="\
     PyMCubes\
     trimesh"
 
-
-# 'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends;;
 RUN case "$IMAGE_TYPE" in \
-            'GPU') pip install $ML_CPU $ML_GPU ;; \
+            'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends ;; \
             'CPU') pip install $ML_CPU ;; \
     esac;
 
