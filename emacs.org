@@ -309,6 +309,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 	   "/opt/homebrew/opt/coreutils/libexec/gnubin:"
 	   "/opt/homebrew/opt/openjdk/bin:"
 	   "/Applications/Postgres.app/Contents/Versions/latest/bin:"
+	   (concat (getenv "HOME") "/Documents/:")
 	   (concat (getenv "HOME") "/Documents/google-cloud-sdk/bin:")
            (concat (getenv "HOME") "/.bin:")
            (concat (getenv "HOME") "/.local/bin:")
