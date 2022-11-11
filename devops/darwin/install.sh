@@ -3,7 +3,7 @@
 rm -f ~/.emacs
 echo "(load-file \"`pwd`/../../init.el\")" > ~/.emacs
 
-brew install automake poppler libtool
+brew install automake poppler libtool aspell
 brew install python@3.9
 # pip3 install jupyterlab
 
