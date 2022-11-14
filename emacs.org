@@ -222,6 +222,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
        "^\\*Disabled Command\\*$"
        (rx "*nrepl-server")
        (rx "cider-error")
+       (rx "cider-macroexpansion")
        (rx "*magit-")
        "magit-*"
        (rx "*Ibuffer")
