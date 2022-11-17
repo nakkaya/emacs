@@ -402,6 +402,13 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (eshell/alias "lein-repl" "lein repl :headless :host 0.0.0.0 :port $1")
 (eshell/alias "clj-repl" "clojure -Sdeps '{:deps {nrepl/nrepl {:mvn/version \"0.9.0\"} cider/cider-nrepl {:mvn/version \"0.28.5\"}} :aliases {:cider/nrepl {:main-opts [\"-m\" \"nrepl.cmdline\" \"--middleware\" \"[cider.nrepl/cider-middleware]\"]}}}' -M:cider/nrepl -h 0.0.0.0 -p $1")
 
+(defun htop ()
+  (interactive)
+  (eshell-command "*htop"))
+
+(defun reboot ()
+  (interactive)
+  (eshell-command "conn $HOSTNAME && sudo systemctl restart emacsd"))
 #+END_SRC
 
 *** Commands
