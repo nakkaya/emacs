@@ -1190,6 +1190,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (use-package helm-org-ql
   :quelpa (helm-org-ql :fetcher github :repo "alphapapa/org-ql"
                        :files ("helm-org-ql.el")))
+
+(define-key org-mode-map (kbd "C-c C-j") 'helm-org-ql)
 #+end_src
 
 * EIN
