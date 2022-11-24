@@ -17,7 +17,6 @@
 	 html-to-hiccup
 	 cider
 	 python-mode
-	 python-cell
 	 matlab-mode
 	 yaml-mode
 	 markdown-mode

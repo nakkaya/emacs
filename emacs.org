@@ -629,11 +629,6 @@ Will bounce between matching parens just like % in vi
 (require 'python)
 (setq python-shell-interpreter "python3"
       python-indent-guess-indent-offset-verbose nil)
-(add-hook 'python-mode-hook #'python-cell-mode 1)
-
-(with-eval-after-load 'python-cell
-  (setq python-cell-highlight-cell nil)
-  (define-key python-cell-mode-map (kbd "C-j") 'python-cell-shell-send-cell))
  #+END_SRC
 
 ** Docker
@@ -943,7 +938,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 ** Babel
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'ob)
 (require 'ob-async)
 
@@ -986,6 +981,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
   (setq jupyter-long-timeout 30
 	jupyter-default-timeout 10)
+
+  (define-key jupyter-repl-mode-map (kbd "<up>") 'jupyter-repl-history-previous)
+  (define-key jupyter-repl-mode-map (kbd "<down>") 'jupyter-repl-history-next)
 
   (require 'ob-jupyter)
 
