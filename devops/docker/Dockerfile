@@ -146,10 +146,20 @@ ENV ML_GPU="\
     PyMCubes\
     trimesh"
 
-RUN case "$IMAGE_TYPE" in \
-            'GPU') pip install $ML_CPU $ML_GPU && add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends ;; \
-            'CPU') pip install $ML_CPU ;; \
-    esac;
+RUN pip install $ML_CPU
+
+RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
+    then \
+    wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run && \
+    sh cuda_11.8.0_520.61.05_linux.run --silent --toolkit && \
+    rm cuda_11.8.0_520.61.05_linux.run \
+    fi
+
+RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
+    then \
+    pip install $ML_GPU && \
+    add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends \
+    fi
 
 # Install Jupyter
 #
