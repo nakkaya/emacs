@@ -153,13 +153,13 @@ RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run && \
     sh cuda_11.8.0_520.61.05_linux.run --silent --toolkit && \
     rm cuda_11.8.0_520.61.05_linux.run \
-    fi
+    ; fi
 
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
     pip install $ML_GPU && \
     add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends \
-    fi
+    ; fi
 
 # Install Jupyter
 #
