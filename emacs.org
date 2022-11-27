@@ -573,7 +573,7 @@ Will bounce between matching parens just like % in vi
 
 ** Clojure
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'clojure-mode)
 (require 'clojure-mode-extra-font-locking)
 
@@ -584,6 +584,11 @@ Will bounce between matching parens just like % in vi
 (add-hook 'cider-repl-mode-hook
 	  '(lambda () (define-key cider-repl-mode-map (kbd "C-c C-o")
 			'cider-repl-clear-buffer)))
+
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'lisp-mode-hook           #'enable-paredit-mode)
+(add-hook 'clojure-mode-hook        #'enable-paredit-mode)
+(add-hook 'clojurescript-mode-hook  #'enable-paredit-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
