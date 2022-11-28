@@ -594,6 +594,8 @@ Will bounce between matching parens just like % in vi
   '(progn
      (define-key paredit-mode-map (kbd "<M-right>") 'paredit-forward-slurp-sexp)
      (define-key paredit-mode-map (kbd "<M-left>")  'paredit-forward-barf-sexp)
+     (define-key paredit-mode-map (kbd "M-d")       'paredit-delete-char)
+     (define-key paredit-mode-map (kbd "C-d")       nil)
      (define-key paredit-mode-map (kbd "<C-right>") nil)
      (define-key paredit-mode-map (kbd "<C-left>")  nil)))
 #+END_SRC
