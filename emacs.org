@@ -589,6 +589,13 @@ Will bounce between matching parens just like % in vi
 (add-hook 'lisp-mode-hook           #'enable-paredit-mode)
 (add-hook 'clojure-mode-hook        #'enable-paredit-mode)
 (add-hook 'clojurescript-mode-hook  #'enable-paredit-mode)
+
+(eval-after-load 'paredit
+  '(progn
+     (define-key paredit-mode-map (kbd "<M-right>") 'paredit-forward-slurp-sexp)
+     (define-key paredit-mode-map (kbd "<M-left>")  'paredit-forward-barf-sexp)
+     (define-key paredit-mode-map (kbd "<C-right>") nil)
+     (define-key paredit-mode-map (kbd "<C-left>")  nil)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1718,6 +1725,11 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key "\M-[1;5D" 'backward-word)
 (global-set-key "\M-[1;5A" 'backward-paragraph)
 (global-set-key "\M-[1;5B" 'forward-paragraph)
+
+(define-key input-decode-map "\e[1;9A" [M-up])
+(define-key input-decode-map "\e[1;9B" [M-down])
+(define-key input-decode-map "\e[1;9C" [M-right])
+(define-key input-decode-map "\e[1;9D" [M-left])
 
 (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
