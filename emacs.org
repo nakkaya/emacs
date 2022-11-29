@@ -42,7 +42,7 @@
       show-help-function nil)
 
 (delete-selection-mode)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook #'turn-on-auto-fill)
 (global-font-lock-mode t)
 (electric-pair-mode 1)
 (show-paren-mode 1)
@@ -87,7 +87,13 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 ;; Evaluate both now (for non-daemon emacs) and upon frame creation
 ;; (for new terminals via emacsclient).
 (my-terminal-config)
-(add-hook 'after-make-frame-functions 'my-terminal-config)
+(add-hook 'after-make-frame-functions #'my-terminal-config)
+
+(add-hook 'tty-setup-hook (lambda ()
+			    (define-key input-decode-map "\e[1;9A" [M-up])
+			    (define-key input-decode-map "\e[1;9B" [M-down])
+			    (define-key input-decode-map "\e[1;9C" [M-right])
+			    (define-key input-decode-map "\e[1;9D" [M-left])))
 
 (require 'clipetty)
 (global-clipetty-mode)
@@ -140,8 +146,8 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
   (when  (not (eq system-type 'windows-nt))
     (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 
-    (add-hook 'message-mode-hook 'turn-on-flyspell)
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
+    (add-hook 'message-mode-hook #'turn-on-flyspell)
+    (add-hook 'text-mode-hook    #'turn-on-flyspell)
     (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
 
     (defun turn-on-flyspell ()
@@ -582,20 +588,29 @@ Will bounce between matching parens just like % in vi
       cider-eldoc-display-for-symbol-at-point nil)
 
 (add-hook 'cider-repl-mode-hook
-	  '(lambda () (define-key cider-repl-mode-map (kbd "C-c C-o")
-			'cider-repl-clear-buffer)))
+	  (lambda ()
+	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'lisp-mode-hook           #'enable-paredit-mode)
 (add-hook 'clojure-mode-hook        #'enable-paredit-mode)
 (add-hook 'clojurescript-mode-hook  #'enable-paredit-mode)
+
+(eval-after-load 'paredit
+  '(progn
+     (define-key paredit-mode-map (kbd "<M-right>") #'paredit-forward-slurp-sexp)
+     (define-key paredit-mode-map (kbd "<M-left>")  #'paredit-forward-barf-sexp)
+     (define-key paredit-mode-map (kbd "M-d")       #'paredit-delete-char)
+     (define-key paredit-mode-map (kbd "C-d")       nil)
+     (define-key paredit-mode-map (kbd "<C-right>") nil)
+     (define-key paredit-mode-map (kbd "<C-left>")  nil)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
 (use-package html-to-hiccup
   :ensure t
   :config
-  (define-key clojure-mode-map (kbd "H-h") 'html-to-hiccup-convert-region))
+  (define-key clojure-mode-map (kbd "H-h") #'html-to-hiccup-convert-region))
 #+END_SRC
  
 ** C/C++
@@ -674,11 +689,11 @@ Will bounce between matching parens just like % in vi
  #+BEGIN_SRC emacs-lisp
    (setq abbrev-mode t)
 
-   (add-hook 'emacs-lisp-mode-hook 'abbrev-mode)
-   (add-hook 'clojure-mode-hook 'abbrev-mode)
-   (add-hook 'c++-mode-hook 'abbrev-mode)
-   (add-hook 'c-mode-hook 'abbrev-mode)
-   (add-hook 'org-mode-hook 'abbrev-mode)
+   (add-hook 'emacs-lisp-mode-hook #'abbrev-mode)
+   (add-hook 'clojure-mode-hook #'abbrev-mode)
+   (add-hook 'c++-mode-hook #'abbrev-mode)
+   (add-hook 'c-mode-hook #'abbrev-mode)
+   (add-hook 'org-mode-hook #'abbrev-mode)
 
    (define-abbrev-table 'java-mode-abbrev-table '())
    (define-abbrev-table 'clojure-mode-abbrev-table '())
@@ -804,7 +819,7 @@ Will bounce between matching parens just like % in vi
 ** Company & LSP
 
 #+BEGIN_SRC emacs-lisp
-   (add-hook 'after-init-hook 'global-company-mode)
+   (add-hook 'after-init-hook #'global-company-mode)
    (setq company-minimum-prefix-length 1)
    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+END_SRC
@@ -1719,11 +1734,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key "\M-[1;5A" 'backward-paragraph)
 (global-set-key "\M-[1;5B" 'forward-paragraph)
 
-(define-key input-decode-map "\e[1;9A" [M-up])
-(define-key input-decode-map "\e[1;9B" [M-down])
-(define-key input-decode-map "\e[1;9C" [M-right])
-(define-key input-decode-map "\e[1;9D" [M-left])
-
 (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-S-<down>") 'shrink-window)
@@ -1740,15 +1750,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (global-set-key [f12] (lambda ()
 			(interactive)
 			(async-shell-command "QT_XCB_GL_INTEGRATION=none qutebrowser")))
-
-(eval-after-load 'paredit
-  '(progn
-     (define-key paredit-mode-map (kbd "<M-right>") 'paredit-forward-slurp-sexp)
-     (define-key paredit-mode-map (kbd "<M-left>")  'paredit-forward-barf-sexp)
-     (define-key paredit-mode-map (kbd "M-d")       'paredit-delete-char)
-     (define-key paredit-mode-map (kbd "C-d")       nil)
-     (define-key paredit-mode-map (kbd "<C-right>") nil)
-     (define-key paredit-mode-map (kbd "<C-left>")  nil)))
 #+END_SRC
 
 * Theme
