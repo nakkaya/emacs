@@ -251,9 +251,6 @@ to ensure it autosaves the latests version back.
        (rx "*quelpa-build-checkout")
        (rx "*quelpa-build-info*")))
 
-(global-set-key (kbd "M-x") #'helm-M-x)
-(global-set-key (kbd "C-x b") #'helm-buffers-list)
-
 ;; Fixes helm messing modeline colors.
 (add-hook 'helm-minibuffer-set-up-hook
           (lambda ()
@@ -1716,50 +1713,53 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq mac-option-modifier 'super
       mac-command-modifier 'meta)
 
-(global-set-key (kbd "C-]")  'ibuffer)
-(global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-\\") 'other-window)
-(global-set-key (kbd "C-d")  'na-bounce-sexp)
+(global-set-key (kbd "M-x")  #'helm-M-x)
+(global-set-key (kbd "C-]")  #'helm-buffers-list)
 
-(global-set-key (kbd "C-M-k")  'beginning-of-defun)
-(global-set-key (kbd "C-M-j")  'end-of-defun)
+(global-set-key (kbd "C-x b") #'ibuffer)
+(global-set-key (kbd "C-c c") #'org-capture)
+(global-set-key (kbd "C-\\")  #'other-window)
+(global-set-key (kbd "C-d")   #'na-bounce-sexp)
+
+(global-set-key (kbd "C-M-k")  #'beginning-of-defun)
+(global-set-key (kbd "C-M-j")  #'end-of-defun)
 
 (add-hook 'c-mode-hook
           '(lambda ()
-	     (define-key c-mode-map (kbd "C-d")  'na-bounce-sexp)))
+	     (define-key c-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
 (add-hook 'c++-mode-hook
           '(lambda ()
-	     (define-key c++-mode-map (kbd "C-d")  'na-bounce-sexp)))
+	     (define-key c++-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
-(global-set-key (kbd "C-x t") 'na-new-term)
+(global-set-key (kbd "C-x t") #'na-new-term)
 
 (with-eval-after-load 'term
-  (define-key term-raw-map (kbd "C-c C-c")  'term-send-raw)
-  (define-key term-raw-map (kbd "C-]") 'ibuffer)
-  (define-key term-raw-map (kbd "C-y")  'term-paste)
-  (define-key term-raw-map (kbd "C-\\") 'other-window)
-  (define-key term-raw-map (kbd "M-\\") 'popper-cycle)
-  (define-key term-raw-map (kbd "M-q") 'popper-toggle-latest))
+  (define-key term-raw-map (kbd "C-c C-c")  #'term-send-raw)
+  (define-key term-raw-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key term-raw-map (kbd "C-y")      #'term-paste)
+  (define-key term-raw-map (kbd "C-\\")     #'other-window)
+  (define-key term-raw-map (kbd "M-\\")     #'popper-cycle)
+  (define-key term-raw-map (kbd "M-q")      #'popper-toggle-latest))
 
-(global-set-key "\M-[1;5C" 'forward-word)
-(global-set-key "\M-[1;5D" 'backward-word)
-(global-set-key "\M-[1;5A" 'backward-paragraph)
-(global-set-key "\M-[1;5B" 'forward-paragraph)
+(global-set-key "\M-[1;5C" #'forward-word)
+(global-set-key "\M-[1;5D" #'backward-word)
+(global-set-key "\M-[1;5A" #'backward-paragraph)
+(global-set-key "\M-[1;5B" #'forward-paragraph)
 
-(global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-S-<down>") 'shrink-window)
-(global-set-key (kbd "C-S-<up>") 'enlarge-window)
+(global-set-key (kbd "C-S-<left>")  #'shrink-window-horizontally)
+(global-set-key (kbd "C-S-<right>") #'enlarge-window-horizontally)
+(global-set-key (kbd "C-S-<down>")  #'shrink-window)
+(global-set-key (kbd "C-S-<up>")    #'enlarge-window)
 
-(global-set-key (kbd "C-c <right>") 'hs-show-block)
-(global-set-key (kbd "C-c <left>")  'hs-hide-block)
-(global-set-key (kbd "C-c <up>")    'hs-hide-all)
-(global-set-key (kbd "C-c <down>")  'hs-show-all)
+(global-set-key (kbd "C-c <right>") #'hs-show-block)
+(global-set-key (kbd "C-c <left>")  #'hs-hide-block)
+(global-set-key (kbd "C-c <up>")    #'hs-hide-all)
+(global-set-key (kbd "C-c <down>")  #'hs-show-all)
 
-(global-set-key (kbd "C-c j") 'helm-org-ql-agenda-files)
+(global-set-key (kbd "C-c j") #'helm-org-ql-agenda-files)
 
-(global-set-key [f2] 'na-elfeed)
+(global-set-key [f2] #'na-elfeed)
 (global-set-key [f12] (lambda ()
 			(interactive)
 			(async-shell-command "QT_XCB_GL_INTEGRATION=none qutebrowser")))
