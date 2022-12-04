@@ -116,13 +116,27 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (run-with-idle-timer (* 30 60) t #'save-place-kill-emacs-hook)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+I use =syncthing= to sync my bookmarks file across machines, following
+makes sure we always reload the file before use and same immidiatly
+after a modification. Bookmark file is reload before emacs is killed
+to ensure it autosaves the latests version back.
+
+#+BEGIN_SRC emacs-lisp :results silent
+(setq bookmark-save-flag 1)
+
 (cond ((getenv "EMACS_HOME_DIR")
        (setq bookmark-default-file
 	     "/storage/source/.emacs-bookmarks"))
       (t
        (setq bookmark-default-file
 	     "~/source/.emacs-bookmarks")))
+
+(global-set-key (kbd "C-x r b") (lambda ()
+				  (interactive)
+				  (bookmark-load bookmark-default-file t)
+				  (helm-bookmarks)))
+
+(add-hook 'kill-emacs-hook (lambda () (bookmark-load bookmark-default-file t)) -100)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -239,7 +253,6 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 (global-set-key (kbd "M-x") #'helm-M-x)
 (global-set-key (kbd "C-x b") #'helm-buffers-list)
-(global-set-key (kbd "C-x r b") #'helm-bookmarks)
 
 ;; Fixes helm messing modeline colors.
 (add-hook 'helm-minibuffer-set-up-hook
