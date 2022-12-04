@@ -240,6 +240,7 @@ to ensure it autosaves the latests version back.
        "^\\*Bookmark List\\*$"
        "^\\*Buffer List\\*$"
        "^\\*Disabled Command\\*$"
+       (rx "*ein:log-all")
        (rx "*nrepl-server")
        (rx "cider-error")
        (rx "cider-macroexpansion")
