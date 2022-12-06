@@ -972,6 +972,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+BEGIN_SRC emacs-lisp :results silent
 (require 'ob)
+
+(quelpa '(ob-async
+          :fetcher github :repo "astahlman/ob-async"))
+
 (require 'ob-async)
 
 (setq ob-async-no-async-languages-alist '("jupyter-python"))

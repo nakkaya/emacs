@@ -29,7 +29,6 @@
 	 lsp-java
 	 org
          org-superstar
-	 ob-async
 	 ein
          docker
          dockerfile-mode
