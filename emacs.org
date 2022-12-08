@@ -544,12 +544,12 @@ SSH at least,
 ** Misc
 
 #+BEGIN_SRC emacs-lisp
-  (defun na-new-term(term-or-shell)
-    "Open a new instance of eshell."
-    (interactive "P")
-    (if term-or-shell
-        (multi-term)
-      (eshell 'N)))
+(defun na-new-term(term-or-shell)
+  "Open a new instance of eshell."
+  (interactive "P")
+  (if term-or-shell
+      (multi-term)
+    (eshell 'N)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

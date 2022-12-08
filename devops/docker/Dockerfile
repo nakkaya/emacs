@@ -38,7 +38,7 @@ RUN apt-get install \
     rsync rclone git git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
     # Java
-    openjdk-11-jdk maven  \
+    openjdk-11-jdk maven visualvm  \
     # C/C++
     build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
     # Latex
