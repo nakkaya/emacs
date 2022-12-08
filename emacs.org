@@ -959,6 +959,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (add-hook 'org-mode-hook (lambda ()
 			   (org-superstar-mode 1)))
+
+(define-key org-mode-map (kbd "C-c b") #'org-insert-structure-template)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1000,6 +1002,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	("cl" . "src clojure\n")
 	("cc" . "src c++\n")
 	("sh" . "src sh\n")
+	("sq" . "src sql\n")
 	("jp" . "src jupyter-python\n")
 	("p" . "src python\n")
 	("s" . "src")
