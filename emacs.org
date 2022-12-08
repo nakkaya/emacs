@@ -936,7 +936,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   
 * Org-Mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
 (require 'org)
 (require 'org-superstar)
 
@@ -961,6 +961,23 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			   (org-superstar-mode 1)))
 
 (define-key org-mode-map (kbd "C-c b") #'org-insert-structure-template)
+
+(setq-default prettify-symbols-alist
+	      '(("#+NAME:"        . ?☰)
+		("#+name:"        . ?☰)
+		("#+BEGIN_SRC"    . "λ")
+		("#+END_SRC"      . "⁃")
+		("#+begin_src"    . "λ")
+		("#+end_src"      . "⁃")
+		("#+RESULTS:"     . ?✎)
+		(":PROPERTIES:"   . ?∵)
+		(":header-args+:" . ?✎)
+		(":results:"      . ?∵)
+		(":end:"          . ?∴)
+		(":END:"          . ?∴)))
+
+;;(setq prettify-symbols-unprettify-at-point 'right-edge)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
 #+end_src
 
 #+begin_src emacs-lisp
