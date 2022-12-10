@@ -173,9 +173,10 @@ to ensure it autosaves the latests version back.
 #+BEGIN_SRC emacs-lisp :results silent
 (require 'helm)
 
-(setq-default helm-M-x-fuzzy-match t
-	      helm-split-window-in-side-p t
-	      helm-move-to-line-cycle-in-source t)
+(setq helm-M-x-fuzzy-match t
+      helm-split-window-in-side-p t
+      helm-move-to-line-cycle-in-source t
+      helm-buffer-max-length nil)
 
 (setq helm-boring-buffer-regexp-list
       (list
