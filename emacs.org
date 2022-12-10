@@ -1869,6 +1869,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (set-face-attribute 'show-paren-match nil :foreground "red")
 
+(eval-after-load "helm-buffers"
+  '(progn
+     (set-face-attribute 'helm-buffer-file nil
+			 :foreground (face-foreground 'default nil 'default) :background "#1c1c1c")
+     (set-face-attribute 'helm-buffer-directory nil
+			 :foreground (face-foreground 'font-lock-keyword-face nil 'default) :background "#1c1c1c")))
+
 (add-hook 'after-make-frame-functions 'na-fix-background)
 (add-hook 'window-setup-hook 'na-fix-background)
 
