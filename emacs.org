@@ -1562,7 +1562,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			  (mode . markdown-mode)
 			  (name . "^\\.gitignore")
 			  (name . "^\\Jenkinsfile")
-			  (name . "^\\*ein:.*")))
+			  (name . "^\\*ein.*")))
 	       ("REPL" (or (name . "^\\*cider-.*")
 			   (name . "^\\*nrepl-.*")
 			   (name . "^\\*jupyter-.*")
