@@ -1258,36 +1258,83 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * EIN
 
 #+BEGIN_SRC emacs-lisp :results silent
-(use-package ein
-  :defer t
-  :init
-  (progn
-    (require 'ein-notebook)
+(require 'cl)
+(require 'ein)
+(require 'ein-notebook)
 
-    (setq ein:url-or-port '("http://workstation:8181"
-			    "http://compute:8181"
-			    "http://lab-desktop:8181"
-			    "http://lab-212-rabiyev:8181"))
-    (setq ein:output-area-inlined-images t)
-    (setq ein:worksheet-enable-undo t)
+(setq ein:url-or-port '("http://workstation:8181"
+			"http://compute:8181"
+			"http://lab-desktop:8181"
+			"http://lab-212-rabiyev:8181"))
 
-    (let ((bg "#1c1c1c"))
-      (eval-after-load "ein-cell"
-        '(progn
-           (set-face-attribute 'ein:codecell-input-area-face nil :background bg)
-	   (set-face-attribute 'ein:markdowncell-input-area-face nil :background bg)
-	   (set-face-attribute 'ein:codecell-input-prompt-face nil :background bg)
-	   (set-face-attribute 'ein:codecell-input-prompt-face nil :foreground "#51afef")
-	   (set-face-attribute 'ein:markdowncell-input-prompt-face nil :background bg)
-	   (set-face-attribute 'ein:markdowncell-input-prompt-face nil :foreground "#51afef")
-	   (set-face-attribute 'ein:cell-output-area nil :background bg)
-	   (set-face-attribute 'ein:cell-output-area nil :foreground "#5B6268"))))
+(setq ein:output-area-inlined-images t
+      ein:worksheet-enable-undo t)
 
-    (with-eval-after-load 'ein-notebooklist
-      (define-key ein:notebook-mode-map (kbd "C-c C-c")
-        'ein:worksheet-execute-cell))))
+(let ((bg "#1c1c1c"))
+  (eval-after-load "ein-cell"
+    '(progn
+       (set-face-attribute 'ein:codecell-input-area-face nil :background bg)
+       (set-face-attribute 'ein:markdowncell-input-area-face nil :background bg)
+       (set-face-attribute 'ein:codecell-input-prompt-face nil :background bg)
+       (set-face-attribute 'ein:codecell-input-prompt-face nil :foreground "#51afef")
+       (set-face-attribute 'ein:markdowncell-input-prompt-face nil :background bg)
+       (set-face-attribute 'ein:markdowncell-input-prompt-face nil :foreground "#51afef")
+       (set-face-attribute 'ein:cell-output-area nil :background bg)
+       (set-face-attribute 'ein:cell-output-area nil :foreground "#5B6268"))))
+
+(with-eval-after-load 'ein-notebooklist
+  (define-key ein:notebook-mode-map (kbd "C-c C-c")
+    'ein:worksheet-execute-cell))
+
+(defun ein:org-open (link-path)
+  "Open IPython notebook specified by LINK-PATH.
+This function is to be used for FOLLOW function of
+`org-add-link-type'."
+  (let ((link (read link-path)))
+    (destructuring-bind (&key url-or-port name &allow-other-keys)
+        link
+      (ein:notebooklist-login 
+       url-or-port 
+       (apply-partially (lambda (url-or-port* path* &rest args)
+                          (ein:notebook-open url-or-port* path*))
+                        url-or-port name)))))
+
+(defun ein:org-store-link ()
+  "Call `org-store-link-props' when in notebook buffer.
+This function is to be used for `org-store-link-functions'.
+Examples::
+  ipynb:(:url-or-port 8888 :name \"My_Notebook\")
+  ipynb:(:url-or-port \"http://notebook-server\" :name \"My_Notebook\")
+Note that spaces will be escaped in org files.
+As how IPython development team supports multiple directory in
+IPython notebook server is unclear, it is not easy to decide the
+format for notebook links.  Current approach is to use
+S-expression based (rather verbose) serialization, so that
+extending link spec without loosing backward compatibility is
+easier.  For the examples of link format in general, see Info
+node `(org) External links' and Info node `(org) Search options'"
+  (ein:and-let* (((ein:worksheet-buffer-p))
+                 (notebook (ein:get-notebook))
+                 (name (ein:$notebook-notebook-path notebook))
+                 (link (list :url-or-port (ein:get-url-or-port)
+			     :name name))
+                 (description name))
+    (org-store-link-props
+     :type "ipynb"
+     :link (let ((print-length nil)
+                 (print-level nil))
+	     (format "ipynb:%S" link))
+     :description description)))
+
+(eval-after-load "org"
+  '(if (fboundp 'org-link-set-parameters)
+       (org-link-set-parameters "ipynb"
+                                :follow 'ein:org-open
+                                :help-echo "Open ipython notebook."
+                                :store 'ein:org-store-link)
+     (org-add-link-type "ipynb" :follow 'ein:org-open)
+     (add-hook 'org-store-link-functions 'ein:org-store-link)))
 #+END_SRC
-
 * Dired
 
 #+BEGIN_SRC emacs-lisp
