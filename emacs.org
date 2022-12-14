@@ -125,11 +125,9 @@ to ensure it autosaves the latests version back.
 (setq bookmark-save-flag 1)
 
 (cond ((getenv "EMACS_HOME_DIR")
-       (setq bookmark-default-file
-	     "/storage/source/.emacs-bookmarks"))
-      (t
-       (setq bookmark-default-file
-	     "~/source/.emacs-bookmarks")))
+       (setq bookmark-default-file "/storage/source/.emacs-bookmarks"))
+      ((file-exists-p "~/source/.emacs-bookmarks")
+       (setq bookmark-default-file "~/source/.emacs-bookmarks")))
 
 (global-set-key (kbd "C-x r b") (lambda ()
 				  (interactive)
