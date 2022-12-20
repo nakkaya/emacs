@@ -133,10 +133,13 @@ to ensure it autosaves the latests version back.
 
 (global-set-key (kbd "C-x r b") (lambda ()
 				  (interactive)
-				  (bookmark-load bookmark-default-file t)
+				  (when (file-exists-p bookmark-default-file)
+				    (bookmark-load bookmark-default-file t))
 				  (helm-bookmarks)))
 
-(add-hook 'kill-emacs-hook (lambda () (bookmark-load bookmark-default-file t)) -100)
+(add-hook 'kill-emacs-hook (lambda ()
+			     (when (file-exists-p bookmark-default-file)
+			       (bookmark-load bookmark-default-file t))) -100)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
