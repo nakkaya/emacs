@@ -1155,19 +1155,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       (t
        (setq na-agenda-folder "~/org/")))
 
-(setq na-agenda-files '("notes.org"
-                        "inbox.org"
-                        "bookmarks.org"
-                        "shopping.org"))
-
 (when (file-exists-p na-agenda-folder)
-  (setq org-agenda-files
-        (mapcar (lambda (f)
-                  (concat na-agenda-folder f))
-                na-agenda-files)))
-
-(setq org-default-notes-file
-      (concat na-agenda-folder (car na-agenda-files)))
+  (add-to-list 'org-agenda-files na-agenda-folder)
+  (setq org-default-notes-file
+	(concat na-agenda-folder "notes.org")))
 
 (require 'org-agenda)
 

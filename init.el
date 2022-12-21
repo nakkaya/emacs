@@ -25,7 +25,7 @@
 	 pine-script-mode
 	 flycheck
 	 yasnippet
-         eglot
+         lsp-mode
 	 lsp-java
 	 org
          org-superstar
@@ -61,7 +61,7 @@
   (push 'jupyter package-list))
 
 (setq package-archives
-      '(("melpa" . "http://melpa.org/packages/")
+      '(("melpa" . "https://melpa.org/packages/")
 	("gnu" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
