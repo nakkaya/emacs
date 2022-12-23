@@ -26,6 +26,7 @@
 	 flycheck
 	 yasnippet
          lsp-mode
+	 lsp-ui
 	 lsp-java
 	 org
          org-superstar
