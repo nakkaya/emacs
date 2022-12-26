@@ -5,18 +5,20 @@
 * Editor
 
 #+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'windows-nt)
-    (setenv "Home" (getenv "UserProfile")))
+;;;  -*- lexical-binding: t -*-
 
-  (cond ((getenv "EMACS_HOME_DIR")
-         (setq default-directory (getenv "EMACS_HOME_DIR")))
-        ((eq system-type 'windows-nt)
-         (setq default-directory (concat (getenv "UserProfile") "\\")))
-        (t
-         (setq default-directory "~/")))
+(when (eq system-type 'windows-nt)
+  (setenv "Home" (getenv "UserProfile")))
 
-  (when (getenv "EMACS_HOME_DIR")
-    (setenv "EDITOR" "edit"))
+(cond ((getenv "EMACS_HOME_DIR")
+       (setq default-directory (getenv "EMACS_HOME_DIR")))
+      ((eq system-type 'windows-nt)
+       (setq default-directory (concat (getenv "UserProfile") "\\")))
+      (t
+       (setq default-directory "~/")))
+
+(when (getenv "EMACS_HOME_DIR")
+  (setenv "EDITOR" "edit"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1218,15 +1220,16 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (org-toggle-sticky-agenda)
 
-(let ((window-configuration))
+(let ((window-configuration (make-hash-table :test 'equal)))
   (defun kill-org-agenda ()
     (interactive)
     (kill-this-buffer)
-    (set-window-configuration window-configuration))
+    (set-window-configuration
+     (gethash (selected-window) window-configuration nil)))
 
   (defun jump-to-org-agenda ()
     (interactive)
-    (setq window-configuration (current-window-configuration))
+    (puthash (selected-window) (current-window-configuration) window-configuration)
     (delete-other-windows)
     (org-agenda nil "h")
     (org-agenda-redo)
