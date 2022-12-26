@@ -2,16 +2,16 @@ if [[ -v JUPYTER_SERVER_ENB ]]; then
     export SHELL=/bin/bash
 
     if [[ -v PASSWD ]]; then
-	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &)
+	(cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &> /opt/emacsd/logs/jupyter.log &)
     else
-        (cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token='' &)
+        (cd /storage;jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token='' &> /opt/emacsd/logs/jupyter.log &)
     fi
 fi
 
 if [[ -v SYNCTHING_ENB ]]; then
-    (cd /home/$USER/;syncthing &)
+    (cd /home/$USER/;syncthing &> /opt/emacsd/logs/syncthing.log &)
 fi
 
 if [[ -v PGADMIN_ENB ]]; then
-    (cd /home/$USER/;/opt/pgadmin/bin/pgadmin4 &)
+    (cd /home/$USER/;/opt/pgadmin/bin/pgadmin4 &> /opt/emacsd/logs/pgadmin.log &)
 fi
