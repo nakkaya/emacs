@@ -125,7 +125,8 @@ ENV ML_CPU="\
     pandas_ta \
     tk \
     matplotlib \
-    boto3"
+    boto3 \
+    skypilot[aws,gcp]"
 
 ENV ML_GPU="\
     mlflow \
