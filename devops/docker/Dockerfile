@@ -112,9 +112,13 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
 
-RUN python3 -m venv /opt/skypilot && \
+
+RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
+    then \
+    python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install install wheel "colorama==0.4.4" "click==8.0.3" && \
-    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1"
+    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1" \
+    ; fi
 
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install install ansible ansible-lint
