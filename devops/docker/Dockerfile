@@ -109,24 +109,28 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 # Configure Python
 #
 
+RUN python3 -m venv /opt/python-lsp-server && \
+    /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
+
+RUN python3 -m venv /opt/skypilot && \
+    /opt/skypilot/bin/python -m pip install install skypilot[aws,gcp]
+
+RUN python3 -m venv /opt/ansible && \
+    /opt/ansible/bin/python -m pip install install ansible ansible-lint
+
+RUN python3 -m venv /opt/invoke && \
+    /opt/invoke/bin/python -m pip install install invoke
+
 ENV ML_CPU="\
-    python-lsp-server[all] \
-    jinja2==3.1.2 \
     requests==2.28.1 \
-    urllib3==1.26.12 \
-    invoke \
-    ansible \
-    ansible-lint \
-    jupyterlab \
-    ipywidgets \
-    numpy==1.23.1 \
-    numexpr \
-    pandas \
-    pandas_ta \
-    tk \
-    matplotlib \
-    boto3 \
-    skypilot[aws,gcp]"
+    jinja2==3.1.2 \
+    jupyterlab==3.5.2 \
+    ipywidgets==8.0.4 \
+    numpy==1.24.1 \
+    numexpr==2.8.4 \
+    pandas==1.5.2 \
+    pandas_ta==0.3.14b \
+    matplotlib==3.6.2"
 
 ENV ML_GPU="\
     mlflow \
@@ -220,6 +224,7 @@ RUN mkdir /var/lib/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
     python3 -m venv /opt/pgadmin && \
+    /opt/pgadmin/bin/python -m pip install install wheel && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.8/site-packages/pgadmin4/config.py
 
