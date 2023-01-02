@@ -113,7 +113,8 @@ RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
 
 RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install install skypilot[aws,gcp]
+    /opt/skypilot/bin/python -m pip install install wheel "colorama==0.4.4" "click==8.0.3" && \
+    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1"
 
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install install ansible ansible-lint
@@ -126,44 +127,44 @@ ENV ML_CPU="\
     jinja2==3.1.2 \
     jupyterlab==3.5.2 \
     ipywidgets==8.0.4 \
-    numpy==1.24.1 \
+    numpy==1.23.5 \
     numexpr==2.8.4 \
     pandas==1.5.2 \
     pandas_ta==0.3.14b \
     matplotlib==3.6.2"
 
-ENV ML_GPU="\
-    mlflow \
-    protobuf==3.15.0 \
-    tensorflow-gpu \
-    tensorflow-datasets \
-    torch \
-    torchvision \
-    scipy \
-    scikit-learn \
-    scikit-image \
-    pillow==9.2.0 \
-    nibabel \
-    opencv-python \
-    gym \
-    segmentation-models \
-    albumentations\
-    PyMCubes\
-    trimesh"
-
 RUN pip install $ML_CPU
 
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
-    wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run && \
+    wget -q https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run && \
     sh cuda_11.8.0_520.61.05_linux.run --silent --toolkit && \
-    rm cuda_11.8.0_520.61.05_linux.run \
+    rm cuda_11.8.0_520.61.05_linux.run && \
+    add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends \
     ; fi
+
+ENV ML_GPU="\
+    urllib3==1.26.13 \
+    mlflow==2.1.1 \
+    protobuf==3.19.6 \
+    tensorflow-gpu==2.11.0 \
+    tensorflow-datasets==4.8.0 \
+    torch==1.13.1 \
+    torchvision==0.14.1 \
+    scipy==1.9.3 \
+    scikit-learn==1.2.0 \
+    scikit-image==0.19.3 \
+    pillow==9.4.0 \
+    nibabel==4.0.2 \
+    opencv-python==4.7.0.68 \
+    segmentation-models==1.0.1 \
+    albumentations==1.3.0 \
+    PyMCubes==0.1.2 \
+    trimesh==3.17.1"
 
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
-    pip install $ML_GPU && \
-    add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends \
+    pip install $ML_GPU \
     ; fi
 
 # Install Jupyter
