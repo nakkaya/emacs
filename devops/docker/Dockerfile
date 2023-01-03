@@ -109,10 +109,6 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 # Configure Python
 #
 
-RUN python3 -m venv /opt/python-lsp-server && \
-    /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
-
-
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
     python3 -m venv /opt/skypilot && \
@@ -127,6 +123,7 @@ RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install install invoke
 
 ENV ML_CPU="\
+    python-lsp-server[all] \
     requests==2.28.1 \
     jinja2==3.1.2 \
     jupyterlab==3.5.2 \
