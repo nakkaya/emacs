@@ -341,11 +341,11 @@ to ensure it autosaves the latests version back.
 	   (concat (getenv "HOME") "/.emacs.build/lib-src:")
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
+	   (getenv "PATH") ":"
 	   "/opt/python-lsp-server/bin:"
 	   "/opt/skypilot/bin:"
 	   "/opt/ansible/bin:"
-	   "/opt/invoke/bin:"
-           (getenv "PATH"))))
+	   "/opt/invoke/bin")))
 
 (if (eq system-type 'windows-nt)
     (setq exec-path (split-string (getenv "PATH") ";"))
