@@ -135,7 +135,8 @@ ENV ML_CPU="\
     numexpr==2.8.4 \
     pandas==1.5.2 \
     pandas_ta==0.3.14b \
-    matplotlib==3.6.2"
+    matplotlib==3.6.2 \
+    boto3==1.26.45"
 
 RUN pip install $ML_CPU
 
