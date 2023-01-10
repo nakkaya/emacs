@@ -1341,53 +1341,26 @@ node `(org) External links' and Info node `(org) Search options'"
 * Dired
 
 #+BEGIN_SRC emacs-lisp
-  (require 'dired)
+(require 'dired)
 
-  (setq large-file-warning-threshold nil
-	ls-lisp-use-insert-directory-program nil
-	ls-lisp-dirs-first t
-	dired-dwim-target t
-	dired-recursive-deletes 'always)
-  
-  (quelpa '(emacs-async
-            :fetcher github :repo "jwiegley/emacs-async"))
+(setq large-file-warning-threshold nil
+      ls-lisp-use-insert-directory-program nil
+      ls-lisp-dirs-first t
+      dired-dwim-target t
+      dired-recursive-deletes 'always
+      dired-kill-when-opening-new-dired-buffer t)
 
-  (autoload 'dired-async-mode "dired-async.el" nil t)
-  (dired-async-mode 1)
+(quelpa '(emacs-async
+          :fetcher github :repo "jwiegley/emacs-async"))
 
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (dired-hide-details-mode)))
-#+END_SRC
+(autoload 'dired-async-mode "dired-async.el" nil t)
+(dired-async-mode 1)
 
-#+BEGIN_SRC emacs-lisp
-  (defun na-dired-up-directory-after-kill ()
-    "Call 'dired-up-directory' after calling '(kill-buffer (current-buffer))'."
-    (interactive)
-    (let* ((buf (current-buffer))
-           (kill-curr (if (= (length (get-buffer-window-list buf)) 
-                             1)
-                          t nil)))
-      (dired-up-directory)
-      (when kill-curr
-        (kill-buffer buf))))
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (dired-hide-details-mode)))
 
-  (defun na-dired-down-directory-after-kill ()
-    "Call 'dired-find-alternate-file' after calling '(kill-buffer (current-buffer))'."
-    (interactive)
-    (let ((file (dired-get-filename))) 
-      (if (file-directory-p file) 
-          (let* ((buf (current-buffer))
-                 (kill-curr (if (= (length (get-buffer-window-list buf)) 
-                                   1)
-                                t nil)))
-            (dired-find-file)
-            (when kill-curr
-              (kill-buffer buf)))
-        (dired-advertised-find-file))))
-
-  (define-key dired-mode-map (kbd "C-w") 'na-dired-up-directory-after-kill)
-  (define-key dired-mode-map (kbd "RET") 'na-dired-down-directory-after-kill)
+(define-key dired-mode-map (kbd "C-w") 'dired-up-directory)
 #+END_SRC
 
 * Tramp
