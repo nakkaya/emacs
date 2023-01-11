@@ -113,12 +113,10 @@ RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
 
 
-RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
-    then \
-    python3 -m venv /opt/skypilot && \
+RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install install wheel "colorama==0.4.4" "click==8.0.3" && \
-    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1" \
-    ; fi
+    /opt/skypilot/bin/python -m pip install install "ray==2.2.0" && \
+    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1"
 
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install install ansible ansible-lint
