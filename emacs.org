@@ -342,6 +342,7 @@ to ensure it autosaves the latests version back.
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
 	   (getenv "PATH") ":"
+	   "/opt/conda/bin:"
 	   "/opt/python-lsp-server/bin:"
 	   "/opt/skypilot/bin:"
 	   "/opt/ansible/bin:"

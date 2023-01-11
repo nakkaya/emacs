@@ -172,6 +172,18 @@ RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     pip install $ML_GPU \
     ; fi
 
+# Install Miniconda
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-x86_64.sh' ;; \
+            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-aarch64.sh' ;; \
+    esac; \
+    curl -s "${URL}" -o "Miniconda3.sh" && \
+    bash Miniconda3.sh -b -u -p /opt/conda && \
+    su - $USER -c '/opt/conda/bin/conda init bash' && \
+    rm -rf Miniconda3.sh
+
 # Install Jupyter
 #
 
