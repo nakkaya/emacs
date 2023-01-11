@@ -675,11 +675,11 @@ Will bounce between matching parens just like % in vi
 (setq python-shell-interpreter "python3"
       python-indent-guess-indent-offset-verbose nil)
 
-(when (getenv "EMACS_HOME_DIR")
-  (seq conda-anaconda-home "/opt/conda"))
+(when (file-exists-p "/opt/conda")
+  (seq conda-anaconda-home "/opt/conda")
 
-(require 'conda)
-(conda-env-initialize-eshell)
+  (require 'conda)
+  (conda-env-initialize-eshell))
  #+END_SRC
 
 ** Docker
