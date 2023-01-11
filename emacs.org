@@ -676,7 +676,7 @@ Will bounce between matching parens just like % in vi
       python-indent-guess-indent-offset-verbose nil)
 
 (when (file-exists-p "/opt/conda")
-  (seq conda-anaconda-home "/opt/conda")
+  (setq conda-anaconda-home "/opt/conda")
 
   (require 'conda)
   (conda-env-initialize-eshell))
