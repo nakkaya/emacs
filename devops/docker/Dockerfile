@@ -110,19 +110,19 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 #
 
 RUN python3 -m venv /opt/python-lsp-server && \
-    /opt/python-lsp-server/bin/python -m pip install install python-lsp-server[all]
+    /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
 
 
 RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install install wheel "colorama==0.4.4" "click==8.0.3" && \
-    /opt/skypilot/bin/python -m pip install install "ray==2.2.0" && \
-    /opt/skypilot/bin/python -m pip install install "skypilot[aws,gcp]==0.2.1"
+    /opt/skypilot/bin/python -m pip install wheel "colorama==0.4.4" "click==8.0.3" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "ray==2.2.0" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "skypilot[aws,gcp]==0.2.1" --no-cache-dir
 
 RUN python3 -m venv /opt/ansible && \
-    /opt/ansible/bin/python -m pip install install ansible ansible-lint
+    /opt/ansible/bin/python -m pip install ansible ansible-lint --no-cache-dir
 
 RUN python3 -m venv /opt/invoke && \
-    /opt/invoke/bin/python -m pip install install invoke
+    /opt/invoke/bin/python -m pip install invoke --no-cache-dir
 
 ENV ML_CPU="\
     requests==2.28.1 \
@@ -136,7 +136,7 @@ ENV ML_CPU="\
     matplotlib==3.6.2 \
     boto3==1.26.45"
 
-RUN pip install $ML_CPU
+RUN pip install $ML_CPU --no-cache-dir
 
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
@@ -167,7 +167,7 @@ ENV ML_GPU="\
 
 RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
     then \
-    pip install $ML_GPU \
+    pip install $ML_GPU --no-cache-dir \
     ; fi
 
 # Install Miniconda
@@ -240,8 +240,8 @@ RUN mkdir /var/lib/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
     python3 -m venv /opt/pgadmin && \
-    /opt/pgadmin/bin/python -m pip install install wheel && \
-    /opt/pgadmin/bin/python -m pip install install pgadmin4 && \
+    /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
+    /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.8/site-packages/pgadmin4/config.py
 
 # Arduino
