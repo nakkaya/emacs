@@ -113,13 +113,10 @@ RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
 
 
-RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
-    then \
-    python3 -m venv /opt/skypilot && \
+RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install wheel "colorama==0.4.4" "click==8.0.3" --no-cache-dir && \
     /opt/skypilot/bin/python -m pip install "ray==2.2.0" --no-cache-dir && \
-    /opt/skypilot/bin/python -m pip install "skypilot[aws,gcp]==0.2.1" --no-cache-dir \
-    ; fi
+    /opt/skypilot/bin/python -m pip install "skypilot==0.2.2" --no-cache-dir
 
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install ansible ansible-lint --no-cache-dir
