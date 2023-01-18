@@ -116,7 +116,7 @@ RUN python3 -m venv /opt/python-lsp-server && \
 RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install wheel "colorama==0.4.4" "click==8.0.3" --no-cache-dir && \
     /opt/skypilot/bin/python -m pip install "ray==2.2.0" --no-cache-dir && \
-    /opt/skypilot/bin/python -m pip install "skypilot==0.2.2" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.2" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 RUN python3 -m venv /opt/ansible && \
