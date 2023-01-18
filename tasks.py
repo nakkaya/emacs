@@ -24,9 +24,11 @@ def run(cmd, dir="."):
 
 def docker(builder, type, *arg):
     """Run docker command."""
-    cmd = ("docker " + builder +
-           " -f Dockerfile " + tag("emacs-" + type) +
-           " ".join(arg) + " .")
+    t = tag("emacs-" + type)
+    if type == "cpu":
+        t = t + " " + tag("emacs")
+
+    cmd = ("docker " + builder + " -f Dockerfile " + t + " ".join(arg) + " .")
     run(cmd, "devops/docker/")
 
 
