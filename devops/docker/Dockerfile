@@ -112,13 +112,6 @@ RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
 RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
 
-
-RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install wheel "colorama==0.4.4" "click==8.0.3" --no-cache-dir && \
-    /opt/skypilot/bin/python -m pip install "ray==2.2.0" --no-cache-dir && \
-    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.2" --no-cache-dir && \
-    echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
-
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install ansible ansible-lint --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/ansible/bin\"" >> /home/$USER/.bashrc
@@ -246,6 +239,12 @@ RUN mkdir /var/lib/pgadmin && \
     /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.8/site-packages/pgadmin4/config.py
+
+RUN python3 -m venv /opt/skypilot && \
+    /opt/skypilot/bin/python -m pip install wheel "colorama==0.4.4" "click==8.0.3" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "ray==2.2.0" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.2" --no-cache-dir && \
+    echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # Arduino
 #
