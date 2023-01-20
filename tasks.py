@@ -22,39 +22,16 @@ def run(cmd, dir="."):
     os.chdir(wd)
 
 
-def docker(builder, type, *arg):
+def docker(builder, *arg):
     """Run docker command."""
-    t = tag("emacs-" + type)
-    if type == "cpu":
-        t = t + " " + tag("emacs")
-
-    cmd = ("docker " + builder + " -f Dockerfile " + t + " ".join(arg) + " .")
+    cmd = ("docker " + builder + " -f Dockerfile " + tag("emacs") + " ".join(arg) + " .")
     run(cmd, "devops/docker/")
 
 
-gpu_image = 'BASE_IMAGE=ghcr.io/nakkaya/emacsd-gpu'
-
-
 @task
-def build_cpu(ctx):
-    """Build CPU Image."""
-    docker("build", "cpu")
-
-
-@task
-def build_gpu(ctx):
-    """Build GPU Image."""
-    docker("build", "gpu", "--build-arg", gpu_image, "--build-arg IMAGE_TYPE=GPU")
-    run("docker push ghcr.io/nakkaya/emacs-gpu:latest")
-    run("docker push --all-tags nakkaya/emacs-gpu")
-
-
-@task
-def buildx_cpu(ctx):
+def build(ctx):
     """Build Multi Arch CPU Image."""
-    docker("buildx build --push", "cpu",
-           "--platform linux/amd64,linux/arm64"
-           " --build-arg IMAGE_TYPE=CPU")
+    docker("buildx build --push", "--platform linux/amd64,linux/arm64")
 
 
 def compose_files():

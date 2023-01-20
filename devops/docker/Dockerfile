@@ -1,8 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/nakkaya/emacsd-cpu
-FROM $BASE_IMAGE as build
-
-ARG IMAGE_TYPE
-ENV IMAGE_TYPE=$IMAGE_TYPE
+FROM ghcr.io/nakkaya/emacs as build
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
@@ -132,15 +128,7 @@ ENV ML_CPU="\
     matplotlib==3.6.2 \
     boto3==1.26.45"
 
-RUN pip install $ML_CPU --no-cache-dir
-
-RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
-    then \
-    wget -q https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run && \
-    sh cuda_11.8.0_520.61.05_linux.run --silent --toolkit && \
-    rm cuda_11.8.0_520.61.05_linux.run && \
-    add-apt-repository -y ppa:flexiondotorg/nvtop && apt-get install nvtop -y --no-install-recommends \
-    ; fi
+# RUN pip install $ML_CPU --no-cache-dir
 
 ENV ML_GPU="\
     urllib3==1.26.13 \
@@ -161,10 +149,7 @@ ENV ML_GPU="\
     PyMCubes==0.1.2 \
     trimesh==3.17.1"
 
-RUN if [ "$IMAGE_TYPE" = "GPU" ]; \
-    then \
-    pip install $ML_GPU --no-cache-dir \
-    ; fi
+# RUN pip install $ML_GPU --no-cache-dir
 
 # Install Miniconda
 #

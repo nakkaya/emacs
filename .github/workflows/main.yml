@@ -10,12 +10,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        build-cmd:
-          - build-gpu
-          - buildx-cpu
-
     runs-on: ubuntu-latest
 
     steps:
@@ -43,4 +37,4 @@ jobs:
         run: docker login --username nakkaya --password '${{ secrets.DOCKER_PASSWORD }}'
 
       - name: Build Image
-        run: invoke ${{ matrix.build-cmd }}
+        run: invoke build
