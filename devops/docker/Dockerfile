@@ -128,6 +128,8 @@ ENV ML_CPU="\
     matplotlib==3.6.2 \
     boto3==1.26.45"
 
+RUN pip install jupyterlab==3.5.2 ipywidgets==8.0.4 --no-cache-dir
+
 # RUN pip install $ML_CPU --no-cache-dir
 
 ENV ML_GPU="\
