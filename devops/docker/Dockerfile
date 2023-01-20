@@ -1,4 +1,4 @@
-FROM ghcr.io/nakkaya/emacs as build
+FROM ghcr.io/nakkaya/emacsd as build
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
