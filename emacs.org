@@ -1240,15 +1240,19 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
   (defun jump-to-org-agenda ()
     (interactive)
-    (puthash (selected-window) (current-window-configuration) window-configuration)
-    (delete-other-windows)
-    (org-agenda nil "h")
-    (org-agenda-redo)
-    (org-agenda-follow-mode)
-    (local-set-key [f1] #'kill-org-agenda)
-    (local-set-key "q" #'kill-org-agenda)))
+    (when (not (string= (buffer-name (current-buffer)) "*Org Agenda(h)*"))
+      (puthash (selected-window) (current-window-configuration) window-configuration)
+      (delete-other-windows)
+      (org-agenda nil "h")
+      (org-agenda-redo)
+      (org-agenda-follow-mode)
+      (local-set-key [f1] #'kill-org-agenda)
+      (local-set-key "q" #'kill-org-agenda))))
 
-(global-set-key [f1] 'jump-to-org-agenda)
+(when (file-exists-p na-agenda-folder)
+  (run-with-idle-timer (* 10 60) t #'jump-to-org-agenda))
+
+(global-set-key [f1] #'jump-to-org-agenda)
 #+END_SRC
 
 ** QL
