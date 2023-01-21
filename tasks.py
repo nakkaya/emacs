@@ -6,6 +6,7 @@ import os
 import glob
 from datetime import datetime
 
+
 def tag(n):
     """Create tag command."""
     t_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -24,7 +25,10 @@ def run(cmd, dir="."):
 
 def docker(builder, *arg):
     """Run docker command."""
-    cmd = ("docker " + builder + " -f Dockerfile " + tag("emacs") + " ".join(arg) + " .")
+    cmd = ("docker " + builder +
+           " -f Dockerfile " +
+           tag("emacs") +
+           " ".join(arg) + " .")
     run(cmd, "devops/docker/")
 
 

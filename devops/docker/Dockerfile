@@ -116,42 +116,9 @@ RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
 
-ENV ML_CPU="\
-    requests==2.28.1 \
-    jinja2==3.1.2 \
-    jupyterlab==3.5.2 \
-    ipywidgets==8.0.4 \
-    numpy==1.23.5 \
-    numexpr==2.8.4 \
-    pandas==1.5.2 \
-    pandas_ta==0.3.14b \
-    matplotlib==3.6.2 \
-    boto3==1.26.45"
-
-RUN pip install jupyterlab==3.5.2 ipywidgets==8.0.4 --no-cache-dir
-
-# RUN pip install $ML_CPU --no-cache-dir
-
-ENV ML_GPU="\
-    urllib3==1.26.13 \
-    mlflow==2.1.1 \
-    protobuf==3.19.6 \
-    tensorflow-gpu==2.11.0 \
-    tensorflow-datasets==4.8.0 \
-    torch==1.13.1 \
-    torchvision==0.14.1 \
-    scipy==1.9.3 \
-    scikit-learn==1.2.0 \
-    scikit-image==0.19.3 \
-    pillow==9.4.0 \
-    nibabel==4.0.2 \
-    opencv-python==4.7.0.68 \
-    segmentation-models==1.0.1 \
-    albumentations==1.3.0 \
-    PyMCubes==0.1.2 \
-    trimesh==3.17.1"
-
-# RUN pip install $ML_GPU --no-cache-dir
+RUN python3 -m venv /opt/jupyter && \
+    /opt/jupyter/bin/python -m pip install jupyterlab==3.5.2 ipywidgets==8.0.4 --no-cache-dir && \
+    echo "export PATH=\"\$PATH:/opt/jupyter/bin\"" >> /home/$USER/.bashrc
 
 # Install Miniconda
 #
@@ -164,16 +131,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     bash Miniconda3.sh -b -u -p /opt/conda && \
     su - $USER -c '/opt/conda/bin/conda init bash' && \
     rm -rf Miniconda3.sh
-
-# Install Jupyter
-#
-
-RUN chown -R $USER:$USER /usr/local/share/jupyter
-COPY resources/jupyter/themes.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
-COPY resources/jupyter/shortcuts.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/shortcuts.jupyterlab-settings
-COPY resources/jupyter/tracker.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
-COPY resources/jupyter/terminal-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/terminal-extension/plugin.jupyterlab-settings
-COPY resources/jupyter/extension-plugin.jupyterlab-settings /home/$USER/.jupyter/lab/user-settings/@jupyterlab/extensionmanager-extension/plugin.jupyterlab-settings
 
 # Install Clojure
 #
