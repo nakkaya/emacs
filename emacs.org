@@ -346,6 +346,7 @@ to ensure it autosaves the latests version back.
 	   "/opt/python-lsp-server/bin:"
 	   "/opt/skypilot/bin:"
 	   "/opt/ansible/bin:"
+	   "/opt/jupyter/bin:"
 	   "/opt/invoke/bin")))
 
 (if (eq system-type 'windows-nt)
