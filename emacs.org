@@ -327,7 +327,6 @@ to ensure it autosaves the latests version back.
           (concat
 	   "/opt/homebrew/opt/python@3.9/libexec/bin:"
 	   "/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/bin:"
-	   ;;"/Users/nakkaya/Library/Python/3.8/bin/:"
            "/usr/local/bin:"
 	   "/opt/homebrew/bin/:"
 	   "/opt/homebrew/opt/coreutils/libexec/gnubin:"
@@ -341,6 +340,7 @@ to ensure it autosaves the latests version back.
 	   (concat (getenv "HOME") "/.emacs.build/lib-src:")
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
+	   (concat (getenv "HOME") "/.conda/envs/skypilot/bin/:")
 	   (getenv "PATH") ":"
 	   "/opt/conda/bin:"
 	   "/opt/python-lsp-server/bin:"
