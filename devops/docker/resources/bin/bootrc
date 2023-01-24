@@ -2,9 +2,9 @@ if [[ -v JUPYTER_SERVER_ENB ]]; then
     export SHELL=/bin/bash
 
     if [[ -v PASSWD ]]; then
-	(cd /storage;/opt/jupyter/bin/jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &> /opt/emacsd/logs/jupyter.log &)
+	(cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &> /opt/emacsd/logs/jupyter.log &)
     else
-        (cd /storage;/opt/jupyter/bin/jupyter lab --no-browser --ip='*' --port=8181 --NotebookApp.token='' &> /opt/emacsd/logs/jupyter.log &)
+        (cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token='' &> /opt/emacsd/logs/jupyter.log &)
     fi
 fi
 

@@ -46,6 +46,8 @@ RUN apt-get install \
     libpoppler-private-dev imagemagick \
     # for cv2
     libgl1 libglib2.0-0 \
+    # Jupyter
+    jupyter jupyter-notebook \
     # emcas-jupyter
     autoconf automake libtool \
     # For Teensy
@@ -115,10 +117,6 @@ RUN python3 -m venv /opt/ansible && \
 RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
-
-RUN python3 -m venv /opt/jupyter && \
-    /opt/jupyter/bin/python -m pip install jupyterlab==3.5.2 ipywidgets==8.0.4 --no-cache-dir && \
-    echo "export PATH=\"\$PATH:/opt/jupyter/bin\"" >> /home/$USER/.bashrc
 
 # Install Miniconda
 #
