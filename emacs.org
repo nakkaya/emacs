@@ -1232,6 +1232,41 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (org-toggle-sticky-agenda)
 
+(defun org-agenda-delete-empty-blocks ()
+  "Remove empty agenda blocks.
+  A block is identified as empty if there are fewer than 2
+  non-empty lines in the block (excluding the line with
+  `org-agenda-block-separator' characters)."
+  (when org-agenda-compact-blocks
+    (user-error "Cannot delete empty compact blocks"))
+  (setq buffer-read-only nil)
+  (save-excursion
+    (goto-char (point-min))
+    (let* ((blank-line-re "^\\s-*$")
+           (content-line-count (if (looking-at-p blank-line-re) 0 1))
+           (start-pos (point))
+           (block-re (format "%c\\{10,\\}" org-agenda-block-separator)))
+      (while (and (not (eobp)) (forward-line))
+        (cond
+         ((looking-at-p block-re)
+          (when (< content-line-count 2)
+            (delete-region start-pos (1+ (point-at-bol))))
+          (setq start-pos (point))
+          (forward-line)
+          (setq content-line-count (if (looking-at-p blank-line-re) 0 1)))
+         ((not (looking-at-p blank-line-re))
+          (setq content-line-count (1+ content-line-count)))))
+      (when (< content-line-count 2)
+        (delete-region start-pos (point-max)))
+      (goto-char (point-min))
+      ;; The above strategy can leave a separator line at the beginning
+      ;; of the buffer.
+      (when (looking-at-p block-re)
+        (delete-region (point) (1+ (point-at-eol))))))
+  (setq buffer-read-only t))
+
+(add-hook 'org-agenda-finalize-hook #'org-agenda-delete-empty-blocks)
+
 (let ((window-configuration (make-hash-table :test 'equal)))
   (defun kill-org-agenda ()
     (interactive)
@@ -1920,9 +1955,32 @@ node `(org) External links' and Info node `(org) Search options'"
 (add-hook 'window-setup-hook 'na-fix-background)
 
 (require 'doom-modeline)
+(require 'doom-modeline-segments)
+
+(doom-modeline-def-segment conda-env
+  "The current conda environment.  Works with `conda'."
+  (when (bound-and-true-p conda-env-current-name)
+    (propertize (format " Conda: %s" conda-env-current-name)
+                'face (doom-modeline-face)
+                'help-echo (format "Conda environment: %s"
+                                   conda-env-current-name))))
 
 (setq doom-modeline-icon nil
-      doom-modeline-buffer-encoding nil)
+      doom-modeline-buffer-encoding nil
+      doom-modeline-height 15)
+
+(doom-modeline-def-modeline 'main
+  ;; left part
+  '(bar matches buffer-info buffer-position word-count)
+  ;; right part
+  ;; misc-info is what is present in global-mode-string
+  '(misc-info debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker conda-env))
+
+(doom-modeline-def-modeline 'dired-line
+  '(buffer-info remote-host)
+  '(major-mode))
+
+(add-to-list 'doom-modeline-mode-alist '(dired-mode . dired-line))
 
 (set-face-background 'mode-line          "SteelBlue4")
 (set-face-background 'mode-line-inactive "SlateGray4")
