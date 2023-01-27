@@ -989,12 +989,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 		("#+END_SRC"      . "⁃")
 		("#+begin_src"    . "λ")
 		("#+end_src"      . "⁃")
-		("#+RESULTS:"     . ?✎)
-		(":PROPERTIES:"   . ?∵)
+		("#+RESULTS:"     . ?☰)
+		(":PROPERTIES:"   . ?✎)
 		(":header-args+:" . ?✎)
-		(":results:"      . ?∵)
-		(":end:"          . ?∴)
-		(":END:"          . ?∴)))
+		(":results:"      . ?✎)
+		(":end:"          . "⁃")
+		(":END:"          . "⁃")))
 
 ;;(setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
@@ -1390,6 +1390,15 @@ node `(org) External links' and Info node `(org) Search options'"
                                 :store 'ein:org-store-link)
      (org-add-link-type "ipynb" :follow 'ein:org-open)
      (add-hook 'org-store-link-functions 'ein:org-store-link)))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ (append org-babel-load-languages
+	 '((ein . t))))
+
+(setq org-babel-default-header-args:ein-python
+      '((:session . "http://workstation:8181/org.ipynb")
+	(:results . "raw drawer")))
 #+END_SRC
 * Dired
 
