@@ -1041,6 +1041,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	("sh" . "src sh\n")
 	("sq" . "src sql\n")
 	("jp" . "src jupyter-python\n")
+	("ep" . "src ein-python\n")
 	("p" . "src python\n")
 	("s" . "src")
 	("l" . "export latex")
