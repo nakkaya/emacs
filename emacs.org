@@ -1399,7 +1399,7 @@ node `(org) External links' and Info node `(org) Search options'"
 
 (setq org-babel-default-header-args:ein-python
       '((:session . "http://workstation:8181/org.ipynb")
-	(:results . "raw drawer")))
+	(:results . "output")))
 #+END_SRC
 * Dired
 
