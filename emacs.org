@@ -59,9 +59,9 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defun yes-or-no-p (arg)
-    "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
-    (y-or-n-p arg))
+(defun yes-or-no-p (arg)
+  "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
+  (y-or-n-p arg))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -145,34 +145,34 @@ to ensure it autosaves the latests version back.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq password-cache t) ; enable password caching
-  (setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
+(setq password-cache t) ; enable password caching
+(setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defun na-zoom-in ()
-    (interactive)
-    (set-face-attribute 'default nil :height 
-                        (+ (face-attribute 'default :height) 10)))
+(defun na-zoom-in ()
+  (interactive)
+  (set-face-attribute 'default nil :height
+                      (+ (face-attribute 'default :height) 10)))
 
-  (defun na-zoom-out ()
-    (interactive)
-    (set-face-attribute 'default nil :height 
-                        (- (face-attribute 'default :height) 10)))
+(defun na-zoom-out ()
+  (interactive)
+  (set-face-attribute 'default nil :height
+                      (- (face-attribute 'default :height) 10)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (when  (not (eq system-type 'windows-nt))
-    (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+(when  (not (eq system-type 'windows-nt))
+  (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 
-    (add-hook 'message-mode-hook #'turn-on-flyspell)
-    (add-hook 'text-mode-hook    #'turn-on-flyspell)
-    (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
+  (add-hook 'message-mode-hook #'turn-on-flyspell)
+  (add-hook 'text-mode-hook    #'turn-on-flyspell)
+  (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
 
-    (defun turn-on-flyspell ()
-      "Force flyspell-mode on using a positive arg.  For use in hooks."
-      (interactive)
-      (flyspell-mode 1)))
+  (defun turn-on-flyspell ()
+    "Force flyspell-mode on using a positive arg.  For use in hooks."
+    (interactive)
+    (flyspell-mode 1)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -269,11 +269,11 @@ to ensure it autosaves the latests version back.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq display-buffer-alist
-	'(("magit:.*" (display-buffer-same-window))
-	  ("\*grep\*" (display-buffer-same-window))
-	  ("\*cider-repl.*" (display-buffer-same-window))
-	  ("\*ein:.*" (display-buffer-same-window))))
+(setq display-buffer-alist
+      '(("magit:.*" (display-buffer-same-window))
+	("\*grep\*" (display-buffer-same-window))
+	("\*cider-repl.*" (display-buffer-same-window))
+	("\*ein:.*" (display-buffer-same-window))))
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -410,13 +410,12 @@ to ensure it autosaves the latests version back.
 (eshell/alias "ps-grep" "ps ax | grep -i $1")
 (eshell/alias "sudo" "eshell/sudo $*")
 (eshell/alias "docker" "*docker $*")
-(eshell/alias "docker-compose" "/usr/local/bin/docker-compose $*")
-(eshell/alias "chmod" "/usr/bin/chmod $*")
+(eshell/alias "docker-compose" "*docker-compose $*")
+(eshell/alias "chmod" "*chmod $*")
 
 ;; mirror host /folder/
 (eshell/alias "mirror" "rsync -avuzL -e ssh \"$1\" \"$2\" --delete")
 (eshell/alias "rcp" "rsync -rvLK $1 $2")
-(eshell/alias "lab" "jupyter lab --no-browser --ip='*' --port=8888 --NotebookApp.token=\"jupyter\"")
 
 (eshell/alias "ggc" "git repack -ad; git gc")
 (eshell/alias "gd" "magit-diff-unstaged")
@@ -651,17 +650,17 @@ Will bounce between matching parens just like % in vi
 ** Matlab
 
  #+BEGIN_SRC emacs-lisp
-   (autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
+(autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
 
-   (add-to-list
-    'auto-mode-alist
-    '("\\.m$" . matlab-mode))
+(add-to-list
+ 'auto-mode-alist
+ '("\\.m$" . matlab-mode))
 
-   (setq matlab-indent-function t)
-   (setq matlab-shell-command "matlab")
+(setq matlab-indent-function t)
+(setq matlab-shell-command "matlab")
 
-   (eval-after-load 'matlab-mode 
-     '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
+(eval-after-load 'matlab-mode
+  '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
  #+END_SRC
 
 ** Python
@@ -673,6 +672,7 @@ Will bounce between matching parens just like % in vi
 (setenv "GIT_PYTHON_REFRESH" "quite")
 
 (require 'python)
+
 (setq python-shell-interpreter "python3"
       python-indent-guess-indent-offset-verbose nil)
 
@@ -686,168 +686,133 @@ Will bounce between matching parens just like % in vi
 ** Docker
 
  #+BEGIN_SRC emacs-lisp
-   (require 'dockerfile-mode)
-   (require 'docker-compose-mode)
+(require 'dockerfile-mode)
+(require 'docker-compose-mode)
 
-   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
  #+END_SRC
 
 ** Latex
 
  #+BEGIN_SRC emacs-lisp
-   (setq latex-run-command "pdflatex")
+(setq latex-run-command "pdflatex")
 
-   (add-hook 'TeX-after-compilation-finished-functions
-             #'TeX-revert-document-buffer)
+(add-hook 'TeX-after-compilation-finished-functions
+          #'TeX-revert-document-buffer)
 
-   (defun tex-compile-without-changing-windows ()
-     (interactive)
-     (save-buffer)
-     (save-window-excursion
-       (tex-compile
-	default-directory
-	(concat latex-run-command " " buffer-file-name))))
+(defun tex-compile-without-changing-windows ()
+  (interactive)
+  (save-buffer)
+  (save-window-excursion
+    (tex-compile
+     default-directory
+     (concat latex-run-command " " buffer-file-name))))
  #+END_SRC
 
 ** Pine Script
 
 #+begin_src emacs-lisp
-  (require 'pine-script-mode)
-  (add-to-list 'auto-mode-alist '("\\.pine$" . pine-script-mode))
+(require 'pine-script-mode)
+(add-to-list 'auto-mode-alist '("\\.pine$" . pine-script-mode))
 #+end_src
 
 ** Skeletons
 
  #+BEGIN_SRC emacs-lisp
-   (setq abbrev-mode t)
+(setq abbrev-mode t)
 
-   (add-hook 'emacs-lisp-mode-hook #'abbrev-mode)
-   (add-hook 'clojure-mode-hook #'abbrev-mode)
-   (add-hook 'c++-mode-hook #'abbrev-mode)
-   (add-hook 'c-mode-hook #'abbrev-mode)
-   (add-hook 'org-mode-hook #'abbrev-mode)
+(add-hook 'emacs-lisp-mode-hook #'abbrev-mode)
+(add-hook 'clojure-mode-hook #'abbrev-mode)
+(add-hook 'c++-mode-hook #'abbrev-mode)
+(add-hook 'c-mode-hook #'abbrev-mode)
+(add-hook 'org-mode-hook #'abbrev-mode)
 
-   (define-abbrev-table 'java-mode-abbrev-table '())
-   (define-abbrev-table 'clojure-mode-abbrev-table '())
-   (define-abbrev-table 'c++-mode-abbrev-table '())
-   (define-abbrev-table 'org-mode-abbrev-table '())
- #+END_SRC
-
- org-mode
-
- #+BEGIN_SRC emacs-lisp
-   (define-skeleton skel-org-babel-notebook-header
-     ""
-     nil
-     "#+title: Notebook" \n
-     "#+PROPERTY: header-args:jupyter-python :session /ssh:localhost:python :kernel python" \n
-     "#+STARTUP: hidestars\n\n")
+(define-abbrev-table 'java-mode-abbrev-table '())
+(define-abbrev-table 'clojure-mode-abbrev-table '())
+(define-abbrev-table 'c++-mode-abbrev-table '())
+(define-abbrev-table 'org-mode-abbrev-table '())
  #+END_SRC
 
  Clojure
 
  #+BEGIN_SRC emacs-lisp
-   (define-skeleton skel-clojure-println
-     ""
-     nil
-     "(println "_")")
+(define-skeleton skel-clojure-println
+  ""
+  nil
+  "(println "_")")
 
-   (define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
+(define-abbrev clojure-mode-abbrev-table "prt" "" 'skel-clojure-println)
 
-   (define-skeleton skel-clojure-defn
-     ""
-     nil
-     "(defn "_" [])")
+(define-skeleton skel-clojure-defn
+  ""
+  nil
+  "(defn "_" [])")
 
-   (define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
+(define-abbrev clojure-mode-abbrev-table "defn" "" 'skel-clojure-defn)
 
-   (define-skeleton skel-clojure-if
-     ""
-     nil
-     "(if ("_"))")
+(define-skeleton skel-clojure-if
+  ""
+  nil
+  "(if ("_"))")
 
-   (define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
+(define-abbrev clojure-mode-abbrev-table "if" "" 'skel-clojure-if )
 
-   (define-skeleton skel-clojure-let
-     ""
-     nil
-     "(let ["_"] )")
+(define-skeleton skel-clojure-let
+  ""
+  nil
+  "(let ["_"] )")
 
-   (define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
+(define-abbrev clojure-mode-abbrev-table "let" "" 'skel-clojure-let)
 
-   (define-skeleton skel-clojure-doseq
-     ""
-     nil
-     "(doseq ["_"] "
-     \n > ")")
+(define-skeleton skel-clojure-doseq
+  ""
+  nil
+  "(doseq ["_"] "
+  \n > ")")
 
-   (define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
+(define-abbrev clojure-mode-abbrev-table "doseq" "" 'skel-clojure-doseq)
 
-   (define-skeleton skel-clojure-do
-     ""
-     nil
-     "(do "_" "
-     \n > ")")
+(define-skeleton skel-clojure-do
+  ""
+  nil
+  "(do "_" "
+  \n > ")")
 
-   (define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
+(define-abbrev clojure-mode-abbrev-table "do" "" 'skel-clojure-do)
 
-   (define-skeleton skel-clojure-reduce
-     ""
-     nil
-     "(reduce (fn[h v] ) "_" ) ")
+(define-skeleton skel-clojure-reduce
+  ""
+  nil
+  "(reduce (fn[h v] ) "_" ) ")
 
-   (define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
+(define-abbrev clojure-mode-abbrev-table "reduce" "" 'skel-clojure-reduce)
 
-   (define-skeleton skel-clojure-try
-     ""
-     nil
-     "(try "_" (catch Exception e (println e)))")
+(define-skeleton skel-clojure-try
+  ""
+  nil
+  "(try "_" (catch Exception e (println e)))")
 
-   (define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
+(define-abbrev clojure-mode-abbrev-table "try" "" 'skel-clojure-try)
 
-   (define-skeleton skel-clojure-map
-     ""
-     nil
-     "(map #() "_")")
+(define-skeleton skel-clojure-map
+  ""
+  nil
+  "(map #() "_")")
 
-   (define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
- #+END_SRC
-
- C++
-
- #+BEGIN_SRC emacs-lisp
-   (define-skeleton skel-cpp-prt
-     ""
-     nil
-     \n >
-     "std::cout << " _ " << std::endl;"
-     \n >)
-
-   (define-abbrev c++-mode-abbrev-table "cout"  "" 'skel-cpp-prt)
-
-   (define-skeleton skel-cpp-fsm
-     ""
-     "Class Name: " \n >
-     "class " str " {" \n >
-     "void boot() { state = &" str "::shutdown; }" \n >
-     "void shutdown() { }" \n >
-     "void (" str "::* state)();" \n >
-     "public:" \n >
-     str "() : state(&" str "::boot) {}" \n >
-     "void operator()() {(this->*state)();}" \n >
-     "};"\n >)
+(define-abbrev clojure-mode-abbrev-table "map" "" 'skel-clojure-map)
  #+END_SRC
 
  Java
 
  #+BEGIN_SRC emacs-lisp
-   (define-skeleton skel-java-println
-     "Insert a Java println Statement"
-     nil
-     "System.out.println(" _ " );")
+(define-skeleton skel-java-println
+  "Insert a Java println Statement"
+  nil
+  "System.out.println(" _ " );")
 
-   (define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
+(define-abbrev java-mode-abbrev-table "prt" "" 'skel-java-println )
  #+END_SRC
+
 ** Company & LSP
 
 #+BEGIN_SRC emacs-lisp
@@ -1047,33 +1012,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	("l" . "export latex")
 	("e" . "example")))
 
-;; Install libtool
-;; autoreconf -f -i
-;; aclocal && automake --add-missing && autoconf
-(when (and module-file-suffix
-	   ;;(eq system-type 'gnu/linux)
-	   )
-
-  (require 'jupyter)
-
-  (setq jupyter-long-timeout 30
-	jupyter-default-timeout 10)
-
-  (define-key jupyter-repl-mode-map (kbd "<up>") 'jupyter-repl-history-previous)
-  (define-key jupyter-repl-mode-map (kbd "<down>") 'jupyter-repl-history-next)
-
-  (require 'ob-jupyter)
-
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   (append org-babel-load-languages
-	   '((jupyter . t))))
-
-  (setq org-babel-default-header-args:jupyter-python
-	'((:async . "yes")
-	  (:session . "py")
-	  (:results . "raw drawer"))))
-
 (defun org-babel-kill-session ()
   "Kill session for current code block."
   (interactive)
@@ -1083,22 +1021,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (org-babel-switch-to-session)
     (kill-buffer)))
 
-(defun jupyter-eshell ()
-  "Launch EShell to Jupyter Session."
-  (interactive)
-  (unless (org-in-src-block-p)
-    (error "You must be in a src-block to run this command"))
-
-  (let* ((info (org-babel-get-src-block-info))
-	 (header (nth 2 (org-babel-get-src-block-info)))
-	 (session (alist-get :session header))
-	 (host (with-parsed-tramp-file-name (alist-get :session header) nil
-		 host))
-	 (default-directory (concat "/ssh:" host ":~")))
-
-    (eshell 'N)))
-
-(define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
 (define-key org-mode-map (kbd "C-c k") 'org-babel-kill-session)
 #+END_SRC
 
@@ -1312,7 +1234,72 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (define-key org-mode-map (kbd "C-c C-j") 'helm-org-ql)
 #+end_src
 
-* EIN
+* Jupyter
+** emacs-jupyter
+
+#+begin_example
+;; Extra Setup on OS X
+
+;; Install libtool
+;; autoreconf -f -i
+;; aclocal && automake --add-missing && autoconf
+#+end_example
+
+#+begin_src emacs-lisp :results silent
+(when module-file-suffix
+  (add-to-list 'native-comp-deferred-compilation-deny-list ".*jupyter.*")
+
+  (require 'jupyter)
+
+  (setq jupyter-long-timeout 30
+	jupyter-default-timeout 10)
+
+  (define-key jupyter-repl-mode-map (kbd "<up>") 'jupyter-repl-history-previous)
+  (define-key jupyter-repl-mode-map (kbd "<down>") 'jupyter-repl-history-next)
+
+  (require 'ob-jupyter)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages
+	   '((jupyter . t))))
+
+  (setq org-babel-default-header-args:jupyter-python
+	'((:async . "yes")
+	  (:session . "/ssh:default-gpu:org-session")
+	  (:kernel . "ml")
+	  (:results . "raw drawer"))))
+
+(define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
+#+end_src
+
+#+begin_src emacs-lisp :results silent
+(defun jupyter-eshell ()
+  "Launch EShell to Jupyter Session."
+  (interactive)
+  (unless (org-in-src-block-p)
+    (error "You must be in a src-block to run this command"))
+
+  (let* ((info (org-babel-get-src-block-info))
+	 (header (nth 2 (org-babel-get-src-block-info)))
+	 (session (alist-get :session header))
+	 (host (with-parsed-tramp-file-name (alist-get :session header) nil
+		 host))
+	 (default-directory (concat "/ssh:" host ":~")))
+
+    (eshell 'N)))
+#+end_src
+
+#+BEGIN_SRC emacs-lisp
+(define-skeleton skel-org-babel-notebook-header
+  ""
+  nil
+  "#+title: Notebook" \n
+  "#+PROPERTY: header-args:jupyter-python :session /ssh:default-gpu:org-session :kernel python" \n
+  "#+STARTUP: hidestars\n\n")
+ #+END_SRC
+
+** emacs-ipython-notebook
 
 #+BEGIN_SRC emacs-lisp :results silent
 (require 'cl)
@@ -1320,9 +1307,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (require 'ein-notebook)
 
 (setq ein:url-or-port '("http://workstation:8181"
-			"http://compute:8181"
-			"http://lab-desktop:8181"
-			"http://lab-212-rabiyev:8181"))
+			"http://compute:8181"))
 
 (setq ein:output-area-inlined-images t
       ein:worksheet-enable-undo t)
@@ -1401,6 +1386,7 @@ node `(org) External links' and Info node `(org) Search options'"
       '((:session . "http://workstation:8181/org.ipynb")
 	(:results . "output")))
 #+END_SRC
+
 * Dired
 
 #+BEGIN_SRC emacs-lisp
@@ -1443,19 +1429,19 @@ node `(org) External links' and Info node `(org) Search options'"
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (defun na-ssh-completions ()
-    (mapcar
-     (lambda (x)
-       (car (cdr x)))
-     (seq-filter
-      (lambda (x)
-        (car (cdr x)))
-      (tramp-parse-sconfig "~/.ssh/config"))))
+(defun na-ssh-completions ()
+  (mapcar
+   (lambda (x)
+     (car (cdr x)))
+   (seq-filter
+    (lambda (x)
+      (car (cdr x)))
+    (tramp-parse-sconfig "~/.ssh/config"))))
 
-  (mapc (lambda (method)
-          (tramp-set-completion-function 
-           method '((tramp-parse-sconfig "~/.ssh/config"))))
-        '("rsync" "scp" "sftp" "ssh"))
+(mapc (lambda (method)
+        (tramp-set-completion-function
+         method '((tramp-parse-sconfig "~/.ssh/config"))))
+      '("rsync" "scp" "sftp" "ssh"))
 #+END_SRC
 
 * Git
@@ -2003,11 +1989,11 @@ node `(org) External links' and Info node `(org) Search options'"
 * Server
 
 #+begin_src emacs-lisp
-  (when (getenv "EMACS_HOME_DIR")
-    (setq server-socket-dir "/opt/emacsd/server")
-    (setq server-name "emacsd")
-    (defun server-ensure-safe-dir (dir) "Noop" t))
+(when (getenv "EMACS_HOME_DIR")
+  (setq server-socket-dir "/opt/emacsd/server")
+  (setq server-name "emacsd")
+  (defun server-ensure-safe-dir (dir) "Noop" t))
 
-  (unless (server-running-p)
-    (server-start))
+(unless (server-running-p)
+  (server-start))
 #+end_src
