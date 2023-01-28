@@ -1017,9 +1017,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (interactive)
   (unless (org-in-src-block-p)
     (error "You must be in a src-block to run this command"))
-  (save-window-excursion
-    (org-babel-switch-to-session)
-    (kill-buffer)))
+  (cl-flet ((always-yes (&rest _) t))
+    (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+            ((symbol-function 'yes-or-no-p) #'always-yes))
+    (save-window-excursion
+      (org-babel-switch-to-session)
+      (kill-buffer)))))
 
 (define-key org-mode-map (kbd "C-c k") 'org-babel-kill-session)
 #+END_SRC
@@ -1271,23 +1274,16 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	  (:results . "raw drawer"))))
 
 (define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
-#+end_src
 
-#+begin_src emacs-lisp :results silent
-(defun jupyter-eshell ()
-  "Launch EShell to Jupyter Session."
+(defun jupyter-server-kernel-list-do-shutdown-aux ()
   (interactive)
-  (unless (org-in-src-block-p)
-    (error "You must be in a src-block to run this command"))
+  (cl-flet ((always-yes (&rest _) t))
+    (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+              ((symbol-function 'yes-or-no-p) #'always-yes))
+      (jupyter-server-kernel-list-do-shutdown))))
 
-  (let* ((info (org-babel-get-src-block-info))
-	 (header (nth 2 (org-babel-get-src-block-info)))
-	 (session (alist-get :session header))
-	 (host (with-parsed-tramp-file-name (alist-get :session header) nil
-		 host))
-	 (default-directory (concat "/ssh:" host ":~")))
-
-    (eshell 'N)))
+(define-key jupyter-server-kernel-list-mode-map (kbd "C-c C-d") 'jupyter-server-kernel-list-do-shutdown-aux)
+(define-key jupyter-server-kernel-list-mode-map (kbd "d") 'jupyter-server-kernel-list-do-shutdown-aux)
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
