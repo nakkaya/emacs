@@ -246,6 +246,7 @@ to ensure it autosaves the latests version back.
        "^\\*Bookmark List\\*$"
        "^\\*Buffer List\\*$"
        "^\\*Disabled Command\\*$"
+       (rx "*httpd")
        (rx "*ein:log-all")
        (rx "*nrepl-server")
        (rx "cider-error")
@@ -1713,6 +1714,7 @@ node `(org) External links' and Info node `(org) Search options'"
 			 (name . "^\\*ob-ansible\\*$")
 			 (name . "^\\*vc-dir\\*$")
 			 (name . "^\\*vc\\*$")
+			 (name . "^\\*httpd\\*$")
 			 (name . "^\\*Bookmark List\\*$")
 			 (name . "^\\*Buffer List\\*$")
 			 (name . "^\\*Disabled Command\\*$")))))))
