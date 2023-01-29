@@ -998,7 +998,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
    (shell . t)))
 
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
-(add-hook 'org-babel-after-execute-hook 'save-buffer 'append)
+(add-hook 'org-babel-after-execute-hook 'org-save-all-org-buffers 'append)
 
 (setq org-structure-template-alist
       '(("el" . "src emacs-lisp\n")
