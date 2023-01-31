@@ -1384,6 +1384,25 @@ node `(org) External links' and Info node `(org) Search options'"
 	(:results . "output")))
 #+END_SRC
 
+** Common
+
+#+begin_src emacs-lisp :results silent
+(defun kernel-app (kernel &optional conn-name)
+  (interactive "sKernel: ")
+  (let* ((conn-name (or conn-name "notebook"))
+	 (f-conn (concat "~/" conn-name "-" kernel ".json"))
+	 (f-conn (expand-file-name f-conn))
+	 (default-directory (file-name-directory f-conn))
+	 (buffer (concat "*" "jupyter-" conn-name "-" kernel "*")))
+    (if (file-exists-p f-conn)
+	"Kernel Already Exists!"
+      (let ((cmd (concat "/bin/python3"
+			 " -c \"from jupyter_client.kernelapp import main; main()\""
+			 " --kernel=\"" kernel "\""
+			 " --KernelManager.connection_file=\"" f-conn "\"")))
+	(inhibit-sentinel-messages #'async-shell-command cmd buffer)))))
+#+end_src
+
 * Dired
 
 #+BEGIN_SRC emacs-lisp
