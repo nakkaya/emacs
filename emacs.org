@@ -1393,7 +1393,7 @@ node `(org) External links' and Info node `(org) Search options'"
 	 (f-conn (concat "~/" conn-name "-" kernel ".json"))
 	 (f-conn (expand-file-name f-conn))
 	 (default-directory (file-name-directory f-conn))
-	 (buffer (concat "*" "jupyter-" conn-name "-" kernel "*")))
+	 (buffer (concat "*" "kernel-" conn-name "-" kernel "*")))
     (if (file-exists-p f-conn)
 	"Kernel Already Exists!"
       (let ((cmd (concat "/bin/python3"
