@@ -51,7 +51,6 @@ export CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
 
 ./autogen.sh
 ./configure \
-    --without-all \
     --with-zlib \
     --with-native-compilation \
     --with-modules \
