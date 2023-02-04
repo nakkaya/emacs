@@ -35,6 +35,7 @@
          docker
          dockerfile-mode
          docker-compose-mode
+	 docker-tramp
 	 multi-term
 	 magit
 	 popper
