@@ -348,7 +348,7 @@ to ensure it autosaves the latests version back.
 	   "/opt/skypilot/bin:"
 	   "/opt/ansible/bin:"
 	   "/opt/jupyter/bin:"
-	   "/opt/invoke/bin")))
+	   "/opt/invoke/bin:")))
 
 (if (eq system-type 'windows-nt)
     (setq exec-path (split-string (getenv "PATH") ";"))
