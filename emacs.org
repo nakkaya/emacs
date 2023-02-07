@@ -1400,7 +1400,9 @@ node `(org) External links' and Info node `(org) Search options'"
 			 " -c \"from jupyter_client.kernelapp import main; main()\""
 			 " --kernel=\"" kernel "\""
 			 " --KernelManager.connection_file=\"" f-conn "\"")))
-	(inhibit-sentinel-messages #'async-shell-command cmd buffer)))))
+	(inhibit-sentinel-messages #'async-shell-command cmd buffer)
+	(with-current-buffer (get-buffer buffer)
+	  (local-set-key "q" #'bury-buffer))))))
 #+end_src
 
 * Dired
