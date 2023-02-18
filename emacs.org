@@ -341,11 +341,12 @@ to ensure it autosaves the latests version back.
 	   (concat (getenv "HOME") "/.emacs.build/lib-src:")
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
-	   (concat (getenv "HOME") "/.conda/envs/skypilot/bin/:")
 	   (getenv "PATH") ":"
 	   "/opt/conda/bin:"
 	   "/opt/python-lsp-server/bin:"
 	   "/opt/skypilot/bin:"
+	   (concat (getenv "HOME") "/.conda/envs/skypilot/bin:")
+	   "/opt/homebrew/Caskroom/miniconda/base/envs/skypilot/bin:"
 	   "/opt/ansible/bin:"
 	   "/opt/jupyter/bin:"
 	   "/opt/invoke/bin:")))
@@ -678,8 +679,12 @@ Will bounce between matching parens just like % in vi
       python-indent-guess-indent-offset-verbose nil)
 
 (when (file-exists-p "/opt/conda")
-  (setq conda-anaconda-home "/opt/conda")
+  (setq conda-anaconda-home "/opt/conda"))
 
+(when (file-exists-p "/opt/homebrew/Caskroom/miniconda")
+  (setq conda-anaconda-home "/opt/homebrew/Caskroom/miniconda"))
+
+(when (executable-find "conda")
   (require 'conda)
   (conda-env-initialize-eshell))
  #+END_SRC
