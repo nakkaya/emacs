@@ -346,6 +346,7 @@ to ensure it autosaves the latests version back.
 	   "/opt/python-lsp-server/bin:"
 	   "/opt/skypilot/bin:"
 	   (concat (getenv "HOME") "/.conda/envs/skypilot/bin:")
+	   "/opt/graalvm/bin"
 	   "/opt/homebrew/Caskroom/miniconda/base/envs/skypilot/bin:"
 	   "/opt/ansible/bin:"
 	   "/opt/jupyter/bin:"

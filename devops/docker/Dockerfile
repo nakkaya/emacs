@@ -140,6 +140,20 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     /bin/bash -c "$(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clj-kondo/clj-kondo/master/script/install-clj-kondo)"
 
+# Install GraalVM
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-linux-amd64-22.3.1.tar.gz' ;; \
+            arm64) URL='https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-linux-aarch64-22.3.1.tar.gz' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "graalvm.tar.gz" && \
+    mkdir graalvm && \
+    tar -xzf graalvm.tar.gz --strip 1 -C graalvm && \
+    mv graalvm /opt/ && \
+    /opt/graalvm/bin/gu install native-image
+
+
 # Install AWS CLI
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
