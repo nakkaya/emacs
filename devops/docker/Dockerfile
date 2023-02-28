@@ -151,7 +151,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     mkdir graalvm && \
     tar -xzf graalvm.tar.gz --strip 1 -C graalvm && \
     mv graalvm /opt/ && \
-    /opt/graalvm/bin/gu install native-image
+    /opt/graalvm/bin/gu install native-image && \
+    rm graalvm.tar.gz
 
 
 # Install AWS CLI
