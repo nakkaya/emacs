@@ -1,3 +1,6 @@
+echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
 if [[ -v JUPYTER_SERVER_ENB ]]; then
     export SHELL=/bin/bash
 
