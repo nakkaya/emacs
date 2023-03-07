@@ -5,20 +5,37 @@
 ### Docker Setup
 
 There is a Docker image built from this repository that contains Emacs
-28 with all packages AOT compiled. Image runs as user `nakkaya` replace
+28 with all packages AOT compiled. Image runs as user `core` replace
 your username as required.
 
-There are sample `docker-compose.yml` files in `devops/docker/`. That
-will launch a web based interface that can be used on remote
-machines. If you have `python` `invoke` installed these can be
-launched using,
+    docker push nakkaya/emacs:latest
 
-    # For Web & GUI Interface (By attaching using xpra)
-    invoke up
-    # then
+You can run it using,
+
+    docker run \
+	  --privileged \
+	  --security-opt="seccomp=unconfined" \
+	  --restart=always \
+	  --name emacsd \
+	  --detach \
+	  -p 2222:2222/tcp -p 4242:4242/tcp -p 9090:9090/tcp \
+	  nakkaya/emacs
+
+If you have `python` `invoke` installed you can run more complicated
+commands,
+
+    invoke docker                    # For bares bones version same as above
+	invoke docker --with-gpu         # Run with GPUs attached
+    invoke docker --with-host        # Run with host networking
+    invoke docker --with-passwd 1234 # Set password for Web & SSH login
+
+Either will launch a web based interface that can be used on remote
+machines.
+
+    # Connect using
     xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
     # or
-    chrome http://127.0.0.1:9090
+    chrome --app=http://127.0.0.1:9090
 
 ### Semi Automated Setup
 
