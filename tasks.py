@@ -88,6 +88,7 @@ def docker(ctx, with_host=False, with_passwd=None, with_gpu=False):
         Path(v_host).mkdir(parents=True, exist_ok=True)
         volume_mounts = volume_mounts + " -v " + v_host + ":" + v_docker + " "
 
+    run("docker pull nakkaya/emacs:latest")
     run("docker stop emacsd")
     run("docker container rm emacsd")
     cmd = """

@@ -8,7 +8,7 @@ There is a Docker image built from this repository that contains Emacs
 28 with all packages AOT compiled. Image runs as user `core` replace
 your username as required.
 
-    docker push nakkaya/emacs:latest
+    docker pull nakkaya/emacs:latest
 
 You can run it using,
 
