@@ -7,6 +7,7 @@ from datetime import datetime
 import platform
 from os.path import expanduser
 from pathlib import Path
+import grp
 
 
 def tag(n):
@@ -41,7 +42,7 @@ def build(ctx):
 
 
 @task
-def docker(ctx, with_host=False, with_passwd=None, with_gpu=False):
+def docker(ctx, with_host=False, with_passwd=None, with_gpu=False, with_docker=False):
     """Launch Docker Image."""
     if with_host:
         host = "--network host"
@@ -62,6 +63,16 @@ def docker(ctx, with_host=False, with_passwd=None, with_gpu=False):
     else:
         gpu = ""
 
+    if with_docker:
+        group_info = grp.getgrnam('docker')
+        group_id = group_info[2]
+
+        docker_sock = \
+            "--group-add " + str(group_id) + " " + \
+            "-v /var/run/docker.sock:/var/run/docker.sock"
+    else:
+        docker_sock = ""
+
     home = expanduser("~") + "/.emacsd"
     volumes = [["/storage", "/storage"],
                ["/.emacs.d", "/home/core/.emacs.d"],
@@ -78,7 +89,7 @@ def docker(ctx, with_host=False, with_passwd=None, with_gpu=False):
                ["/deps", "/home/core/.deps.clj"],
                ["/mvn", "/home/core/.m2"],
                ["/qutebrowser/data", "/home/core/.local/share/qutebrowser"],
-               ["/qutebrowser/cache", "/home/core/.cache/qutebrowser"]]
+               ["/qutebrowser/cache", "/home/core/.cache/qutebrowser"], ]
 
     volume_mounts = ""
 
@@ -102,6 +113,7 @@ def docker(ctx, with_host=False, with_passwd=None, with_gpu=False):
     --hostname """ + platform.node() + """
     """ + passwd + """
     """ + volume_mounts + """
+    """ + docker_sock + """
     """ + gpu + """
     nakkaya/emacs"""
 
