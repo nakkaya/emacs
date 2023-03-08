@@ -46,6 +46,9 @@ def docker(ctx,
            with_passwd=None,
            with_gpu=False,
            with_docker=False,
+           with_syncthing=False,
+           with_jupyter=False,
+           with_pgadmin=False,
            restart=False):
     """Launch Docker Image."""
 
@@ -80,6 +83,22 @@ def docker(ctx,
             "--group-add " + str(group_id) + " " + \
             "-v /var/run/docker.sock:/var/run/docker.sock"
 
+    syncthing = ""
+    if with_syncthing:
+        syncthing = "--env SYNCTHING_ENB=1"
+
+    jupyter = ""
+    if with_jupyter:
+        jupyter = "--env JUPYTER_SERVER_ENB=1"
+        if not with_host:
+            jupyter = jupyter + " -p 8181:8181/tcp"
+
+    pgadmin = ""
+    if with_pgadmin:
+        pgadmin = "--env PGADMIN_ENB=1"
+        if not with_host:
+            pgadmin = pgadmin + " -p 5050:5050/tcp"
+
     run("docker volume create emacsd-home")
     run("docker volume create emacsd-storage")
     run("docker volume create emacsd-sandbox")
@@ -110,6 +129,9 @@ def docker(ctx,
     """ + host + """
     --hostname """ + platform.node() + """
     """ + passwd + """
+    """ + syncthing + """
+    """ + jupyter + """
+    """ + pgadmin + """
     """ + volume_mounts + """
     """ + docker_sock + """
     """ + gpu + """
