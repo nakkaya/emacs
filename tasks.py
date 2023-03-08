@@ -7,7 +7,6 @@ from datetime import datetime
 import platform
 from os.path import expanduser
 from pathlib import Path
-import grp
 
 
 def tag(n):
@@ -42,8 +41,18 @@ def build(ctx):
 
 
 @task
-def docker(ctx, with_host=False, with_passwd=None, with_gpu=False, with_docker=False):
+def docker(ctx,
+           with_host=False,
+           with_passwd=None,
+           with_gpu=False,
+           with_docker=False,
+           restart=False):
     """Launch Docker Image."""
+
+    if restart:
+        run("docker stop emacsd")
+        run("docker container rm emacsd")
+
     if with_host:
         host = "--network host"
     else:
@@ -53,55 +62,44 @@ def docker(ctx, with_host=False, with_passwd=None, with_gpu=False, with_docker=F
         -p 9090:9090/tcp
         """
 
+    passwd = ""
     if with_passwd:
         passwd = "--env PASSWD=" + with_passwd
-    else:
-        passwd = ""
 
+    gpu = ""
     if with_gpu:
         gpu = "--gpus all"
-    else:
-        gpu = ""
 
+    docker_sock = ""
     if with_docker:
+        import grp
         group_info = grp.getgrnam('docker')
         group_id = group_info[2]
 
         docker_sock = \
             "--group-add " + str(group_id) + " " + \
             "-v /var/run/docker.sock:/var/run/docker.sock"
-    else:
-        docker_sock = ""
 
-    home = expanduser("~") + "/.emacsd"
-    volumes = [["/storage", "/storage"],
-               ["/.emacs.d", "/home/core/.emacs.d"],
-               ["/sandbox", "/sandbox"],
-               ["/dataset", "/dataset"],
-               ["/pgadmin", "/var/lib/pgadmin"],
-               ["/gcloud", "/home/core/.config/gcloud"],
-               ["/syncthing", "/home/core/.config/syncthing"],
-               ["/jupyter", "/home/core/.local/share/jupyter"],
-               ["/conda", "/home/core/.conda"],
-               ["/skypilot", "/home/core/.sky"],
-               ["/lein", "/home/core/.lein"],
-               ["/clojure", "/home/core/.clojure"],
-               ["/deps", "/home/core/.deps.clj"],
-               ["/mvn", "/home/core/.m2"],
-               ["/qutebrowser/data", "/home/core/.local/share/qutebrowser"],
-               ["/qutebrowser/cache", "/home/core/.cache/qutebrowser"], ]
+    run("docker volume create emacsd-home")
+    run("docker volume create emacsd-storage")
+    run("docker volume create emacsd-sandbox")
+    run("docker volume create emacsd-dataset")
+    run("docker volume create emacsd-pgadmin")
+
+    volumes = [["emacsd-home", "/home/core"],
+               ["emacsd-storage", "/storage"],
+               ["emacsd-sandbox", "/sandbox"],
+               ["emacsd-dataset", "/dataset"],
+               ["emacsd-pgadmin", "/var/lib/pgadmin"], ]
 
     volume_mounts = ""
 
     for v in volumes:
         v_host, v_docker = v
-        v_host = home + v_host
-        Path(v_host).mkdir(parents=True, exist_ok=True)
         volume_mounts = volume_mounts + " -v " + v_host + ":" + v_docker + " "
 
     run("docker pull nakkaya/emacs:latest")
-    run("docker stop emacsd")
-    run("docker container rm emacsd")
+
     cmd = """
     docker run
     --privileged
