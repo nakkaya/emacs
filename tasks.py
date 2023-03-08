@@ -103,13 +103,11 @@ def docker(ctx,
     run("docker volume create emacsd-storage")
     run("docker volume create emacsd-sandbox")
     run("docker volume create emacsd-dataset")
-    run("docker volume create emacsd-pgadmin")
 
     volumes = [["emacsd-home", "/home/core"],
                ["emacsd-storage", "/storage"],
                ["emacsd-sandbox", "/sandbox"],
-               ["emacsd-dataset", "/dataset"],
-               ["emacsd-pgadmin", "/var/lib/pgadmin"], ]
+               ["emacsd-dataset", "/dataset"], ]
 
     volume_mounts = ""
 
