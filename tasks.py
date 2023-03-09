@@ -5,8 +5,6 @@ import subprocess
 import os
 from datetime import datetime
 import platform
-from os.path import expanduser
-from pathlib import Path
 
 
 def tag(n):
@@ -51,7 +49,6 @@ def docker(ctx,
            with_pgadmin=False,
            restart=False):
     """Launch Docker Image."""
-
     if restart:
         run("docker stop emacsd")
         run("docker container rm emacsd")
