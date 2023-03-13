@@ -38,7 +38,15 @@ def build(ctx):
     docker_build("buildx build --push", "--platform linux/amd64,linux/arm64")
 
 
-@task
+@task(auto_shortflags=False,
+      help={'with-host': 'Enable host networking.',
+            'with-passwd': 'Set login password.',
+            'with-gpu': 'Enable GPU in container.',
+            'with-docker': 'Mounts host docker socket into container.',
+            'with-syncthing': 'Enable Syncthing.',
+            'with-jupyter': 'Enable Jupyter.',
+            'with-pgadmin': 'Enable pgAdmin.',
+            'restart': 'Stop/Remove/Start running container.'})
 def docker(ctx,
            with_host=False,
            with_passwd=None,
@@ -48,7 +56,7 @@ def docker(ctx,
            with_jupyter=False,
            with_pgadmin=False,
            restart=False):
-    """Launch Docker Image."""
+    """Launch emacsd Docker Image."""
     if restart:
         run("docker stop emacsd")
         run("docker container rm emacsd")
