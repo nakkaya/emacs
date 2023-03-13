@@ -29,8 +29,12 @@ commands,
     invoke docker --with-host        # Run with host networking
     invoke docker --with-passwd 1234 # Set password for Web & SSH login
 
-Either will launch a web based interface that can be used on remote
-machines.
+See,
+
+    invoke docker --help
+
+For more options, Either of the following can be used to connect to a
+running image.
 
     # Connect using
     xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
