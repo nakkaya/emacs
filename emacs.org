@@ -696,11 +696,13 @@ Will bounce between matching parens just like % in vi
 (setenv "PYTHONDONTWRITEBYTECODE" "1")
 (setenv "PYTHONIOENCODING" "utf8")
 (setenv "TF_CPP_MIN_LOG_LEVEL" "2")
+(setenv "AUTOGRAPH_VERBOSITY" "1")
 (setenv "GIT_PYTHON_REFRESH" "quite")
 
 (require 'python)
 
 (setq python-shell-interpreter "python3"
+      python-interpreter "python3"
       python-indent-guess-indent-offset-verbose nil)
 
 (when (file-exists-p "/opt/conda")
