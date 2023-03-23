@@ -1551,7 +1551,7 @@ node `(org) External links' and Info node `(org) Search options'"
 
   (setq magit-repolist-columns
         '(("Name"    25 magit-repolist-column-ident                  ())
-          ("D"        1 magit-repolist-column-dirty                  ())
+          ("S"        1 magit-repolist-column-flag                   ())
           ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
           ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
           ("Path"    99 magit-repolist-column-path                   ())))
