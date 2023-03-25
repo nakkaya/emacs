@@ -196,7 +196,7 @@ RUN mkdir /var/lib/pgadmin && \
     python3 -m venv /opt/pgadmin && \
     /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
-    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.8/site-packages/pgadmin4/config.py && \
+    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     mkdir -p /etc/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin

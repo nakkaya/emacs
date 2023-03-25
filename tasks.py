@@ -33,9 +33,12 @@ def docker_build(builder, *arg):
 
 
 @task
-def build(ctx):
+def build(ctx, march=False):
     """Build Multi Arch CPU Image."""
-    docker_build("buildx build --push", "--platform linux/amd64,linux/arm64")
+    if march:
+        docker_build("build")
+    else:
+        docker_build("buildx build --push", "--platform linux/amd64,linux/arm64") # noqa
 
 
 @task(auto_shortflags=False,
