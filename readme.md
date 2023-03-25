@@ -41,6 +41,15 @@ running image.
     # or
     chrome --app=http://127.0.0.1:9090
 
+Service ports used by the image when enabled,
+
+ - Xpra: `9090`
+ - SSH: `2222`
+ - WebDAV: `4242`
+ - Jupyter: `8181`
+ - PGAdmin: `5050`
+ - Airflow: `8888`
+
 ### Semi Automated Setup
 
 Clone this repository,
