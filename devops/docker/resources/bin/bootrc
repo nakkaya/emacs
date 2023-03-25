@@ -18,3 +18,14 @@ fi
 if [[ -v PGADMIN_ENB ]]; then
     (cd /home/$USER/;/opt/pgadmin/bin/pgadmin4 &> /opt/emacsd/logs/pgadmin.log &)
 fi
+
+# AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow users create --username admin --firstname admin --lastname admin --role Admin --email nurullah@nakkaya.com
+if [[ -v AIRFLOW_ENB ]]; then
+
+    if [ -d "/home/$USER/.airflow" ]; then
+        AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow db init
+    fi
+
+    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8080 &> /opt/emacsd/logs/airflow_webserver.log &)
+    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
+fi

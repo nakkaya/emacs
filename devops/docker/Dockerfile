@@ -201,6 +201,9 @@ RUN mkdir /var/lib/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin
 
+RUN python3 -m venv /opt/airflow && \
+    /opt/airflow/bin/python -m pip install "apache-airflow==2.5.2" --no-cache-dir
+
 # RUN python3 -m venv /opt/skypilot && \
 #     /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.4" --no-cache-dir && \
 #     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
