@@ -72,13 +72,8 @@ def docker(c,
         -p 9090:9090/tcp
         """
 
-    passwd = ""
-    if with_passwd:
-        passwd = "--env PASSWD=" + with_passwd
-
-    gpu = ""
-    if with_gpu:
-        gpu = "--gpus all"
+    passwd = "--env PASSWD=" + with_passwd if with_passwd else ""
+    gpu = "--gpus all" if with_gpu else ""
 
     docker_sock = ""
     if with_docker:
@@ -90,9 +85,7 @@ def docker(c,
             "--group-add " + str(group_id) + " " + \
             "-v /var/run/docker.sock:/var/run/docker.sock"
 
-    syncthing = ""
-    if with_syncthing:
-        syncthing = "--env SYNCTHING_ENB=1"
+    syncthing = "--env SYNCTHING_ENB=1" if with_syncthing else ""
 
     jupyter = ""
     if with_jupyter:
