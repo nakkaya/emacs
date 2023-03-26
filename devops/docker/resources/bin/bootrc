@@ -26,6 +26,10 @@ if [[ -v AIRFLOW_ENB ]]; then
         AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow db init
     fi
 
+    if [ -d "/home/$USER/.airflow/airflow-webserver.pid" ]; then
+        rm /home/$USER/.airflow/airflow-webserver.pid
+    fi
+
     (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8888 &> /opt/emacsd/logs/airflow_webserver.log &)
     (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
 fi
