@@ -53,8 +53,15 @@ def docker(c,
            restart=False):
     """Launch emacsd Docker Image."""
     if restart:
-        c.run("docker stop emacsd")
-        c.run("docker container rm emacsd")
+        try:
+            c.run("docker stop emacsd")
+        except Exception:
+            pass
+
+        try:
+            c.run("docker container rm emacsd")
+        except Exception:
+            pass
 
     if with_host:
         host = "--network host"
