@@ -49,6 +49,7 @@ def build(ctx, march=False):
             'with-syncthing': 'Enable Syncthing.',
             'with-jupyter': 'Enable Jupyter.',
             'with-pgadmin': 'Enable pgAdmin.',
+            'with-airflow': 'Enable Airflow.',
             'restart': 'Stop/Remove/Start running container.'})
 def docker(ctx,
            with_host=False,
@@ -58,6 +59,7 @@ def docker(ctx,
            with_syncthing=False,
            with_jupyter=False,
            with_pgadmin=False,
+           with_airflow=False,
            restart=False):
     """Launch emacsd Docker Image."""
     if restart:
@@ -107,6 +109,12 @@ def docker(ctx,
         if not with_host:
             pgadmin = pgadmin + " -p 5050:5050/tcp"
 
+    airflow = ""
+    if with_airflow:
+        airflow = "--env AIRFLOW_ENB=1"
+        if not with_host:
+            airflow = airflow + " -p 8888:8888/tcp"
+
     run("docker volume create emacsd-home")
     run("docker volume create emacsd-storage")
     run("docker volume create emacsd-sandbox")
@@ -138,6 +146,7 @@ def docker(ctx,
     """ + syncthing + """
     """ + jupyter + """
     """ + pgadmin + """
+    """ + airflow + """
     """ + volume_mounts + """
     """ + docker_sock + """
     """ + gpu + """
