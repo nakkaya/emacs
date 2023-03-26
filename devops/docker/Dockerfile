@@ -202,7 +202,8 @@ RUN mkdir /var/lib/pgadmin && \
     mkdir -p /home/$USER/.pgadmin
 
 RUN python3 -m venv /opt/airflow && \
-    /opt/airflow/bin/python -m pip install "apache-airflow==2.5.2" --no-cache-dir
+    /opt/airflow/bin/python -m pip install "apache-airflow==2.5.2" --no-cache-dir && \
+    sed -i -e "s/^load_examples = .*/load_examples = False/g" /opt/airflow/lib/python3.10/site-packages/airflow/config_templates/default_airflow.cfg
 
 # RUN python3 -m venv /opt/skypilot && \
 #     /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.4" --no-cache-dir && \
