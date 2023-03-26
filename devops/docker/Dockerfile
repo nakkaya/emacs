@@ -122,13 +122,14 @@ RUN python3 -m venv /opt/invoke && \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-x86_64.sh' ;; \
-            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py38_22.11.1-1-Linux-aarch64.sh' ;; \
+            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-x86_64.sh' ;; \
+            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-aarch64.sh' ;; \
     esac; \
     curl -s "${URL}" -o "Miniconda3.sh" && \
     bash Miniconda3.sh -b -u -p /opt/conda && \
     su - $USER -c '/opt/conda/bin/conda init bash' && \
     su - $USER -c '/opt/conda/bin/conda config --set auto_activate_base false' && \
+    /opt/conda/bin/conda install -c conda-forge conda-execute && \
     rm -rf Miniconda3.sh
 
 # Install Clojure
