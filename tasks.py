@@ -38,8 +38,8 @@ def build(ctx, march=False):
     if march:
         docker_build("build")
     else:
-        # docker_build("buildx build --push", "--platform linux/amd64,linux/arm64") # noqa
-        docker_build("buildx build --push", "--platform linux/amd64") # noqa
+        docker_build("buildx build --push", "--platform linux/amd64,linux/arm64") # noqa
+        # docker_build("buildx build --push", "--platform linux/amd64") # noqa
 
 
 @task(auto_shortflags=False,

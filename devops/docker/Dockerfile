@@ -211,9 +211,9 @@ RUN AIRFLOW_VERSION="2.5.2"; \
     sed -i -e "s/^load_examples = .*/load_examples = False/g" /opt/airflow/lib/python3.10/site-packages/airflow/config_templates/default_airflow.cfg && \
     /opt/airflow/bin/python -m pip install "apache-airflow-providers-postgres==5.4.0" --no-cache-dir
 
-# RUN python3 -m venv /opt/skypilot && \
-#     /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.4" --no-cache-dir && \
-#     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
+RUN python3 -m venv /opt/skypilot && \
+    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.2.5" --no-cache-dir && \
+    echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # Arduino
 #
