@@ -31,5 +31,5 @@ if [[ -v AIRFLOW_ENB ]]; then
     fi
 
     (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8888 &> /opt/emacsd/logs/airflow_webserver.log &)
-    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
+    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow PATH=/opt/airflow/bin:$PATH /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
 fi

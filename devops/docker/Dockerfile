@@ -206,6 +206,7 @@ RUN AIRFLOW_VERSION="2.5.2"; \
     AIRFLOW_HOME=/home/$USER/.bashrc; \
     CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"; \
     python3 -m venv /opt/airflow && \
+    /opt/airflow/bin/python -m pip install virtualenv --no-cache-dir && \
     /opt/airflow/bin/python -m pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}" --no-cache-dir && \
     sed -i -e "s/^load_examples = .*/load_examples = False/g" /opt/airflow/lib/python3.10/site-packages/airflow/config_templates/default_airflow.cfg
 
