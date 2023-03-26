@@ -1,7 +1,6 @@
 """emacs build file."""
 
 from invoke import task
-import subprocess
 import os
 from datetime import datetime
 import platform
@@ -15,31 +14,21 @@ def tag(n):
             "--tag nakkaya/" + n + ":" + t_str + " ")
 
 
-def run(cmd, dir="."):
-    """Run cmd in dir."""
-    wd = os.getcwd()
-    os.chdir(dir)
-    subprocess.check_call(cmd, shell=True)
-    os.chdir(wd)
-
-
-def docker_build(builder, *arg):
-    """Run docker command."""
-    cmd = ("docker " + builder +
-           " -f Dockerfile " +
-           tag("emacs") +
-           " ".join(arg) + " .")
-    run(cmd, "devops/docker/")
-
-
 @task
-def build(ctx, march=False):
+def build(c, march=False):
     """Build Multi Arch CPU Image."""
+    os.chdir("devops/docker/")
+
+    def cmd(builder):
+        return "docker " + builder + " -f Dockerfile " + tag("emacs") + " "
+
     if march:
-        docker_build("build")
+        c.run("docker build -f Dockerfile " + tag("emacs") + " .")
     else:
-        docker_build("buildx build --push", "--platform linux/amd64,linux/arm64") # noqa
-        # docker_build("buildx build --push", "--platform linux/amd64") # noqa
+        c.run("docker buildx build --push -f Dockerfile " + tag("emacs") +
+              " --platform linux/amd64 .")
+        # c.run("docker buildx build --push -f Dockerfile " + tag("emacs") +
+        #       " --platform linux/amd64,linux/arm64 .")
 
 
 @task(auto_shortflags=False,
@@ -52,7 +41,7 @@ def build(ctx, march=False):
             'with-pgadmin': 'Enable pgAdmin.',
             'with-airflow': 'Enable Airflow.',
             'restart': 'Stop/Remove/Start running container.'})
-def docker(ctx,
+def docker(c,
            with_host=False,
            with_passwd=None,
            with_gpu=False,
@@ -64,8 +53,8 @@ def docker(ctx,
            restart=False):
     """Launch emacsd Docker Image."""
     if restart:
-        run("docker stop emacsd")
-        run("docker container rm emacsd")
+        c.run("docker stop emacsd")
+        c.run("docker container rm emacsd")
 
     if with_host:
         host = "--network host"
@@ -116,15 +105,8 @@ def docker(ctx,
         if not with_host:
             airflow = airflow + " -p 8888:8888/tcp"
 
-    run("docker volume create emacsd-home")
-    run("docker volume create emacsd-storage")
-    run("docker volume create emacsd-sandbox")
-    run("docker volume create emacsd-dataset")
-
     volumes = [["emacsd-home", "/home/core"],
-               ["emacsd-storage", "/storage"],
-               ["emacsd-sandbox", "/sandbox"],
-               ["emacsd-dataset", "/dataset"], ]
+               ["emacsd-storage", "/storage"]]
 
     volume_mounts = ""
 
@@ -132,7 +114,7 @@ def docker(ctx,
         v_host, v_docker = v
         volume_mounts = volume_mounts + " -v " + v_host + ":" + v_docker + " "
 
-    run("docker pull nakkaya/emacs:latest")
+    c.run("docker pull nakkaya/emacs:latest")
 
     cmd = """
     docker run
@@ -155,5 +137,4 @@ def docker(ctx,
 
     cmd = cmd.replace('\n', ' ')
     cmd = ' '.join(cmd.split())
-    print(cmd)
-    run(cmd)
+    c.run(cmd)
