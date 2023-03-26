@@ -129,7 +129,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     bash Miniconda3.sh -b -u -p /opt/conda && \
     su - $USER -c '/opt/conda/bin/conda init bash' && \
     su - $USER -c '/opt/conda/bin/conda config --set auto_activate_base false' && \
-    /opt/conda/bin/conda install -c conda-forge conda-execute && \
     rm -rf Miniconda3.sh
 
 # Install Clojure
