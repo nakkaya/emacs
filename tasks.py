@@ -25,10 +25,10 @@ def build(c, march=False):
     if march:
         c.run("docker build -f Dockerfile " + tag("emacs") + " .")
     else:
-        c.run("docker buildx build --push -f Dockerfile " + tag("emacs") +
-              " --platform linux/amd64 .")
         # c.run("docker buildx build --push -f Dockerfile " + tag("emacs") +
-        #       " --platform linux/amd64,linux/arm64 .")
+        #       " --platform linux/amd64 .")
+        c.run("docker buildx build --push -f Dockerfile " + tag("emacs") +
+              " --platform linux/amd64,linux/arm64 .")
 
 
 @task(auto_shortflags=False,
