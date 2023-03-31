@@ -1837,7 +1837,7 @@ node `(org) External links' and Info node `(org) Search options'"
 
 * Popper
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
   (use-package popper
     :ensure t ; or :straight t
     :bind (("M-q"   . popper-toggle-latest)
@@ -1845,10 +1845,10 @@ node `(org) External links' and Info node `(org) Search options'"
            ("C-M-\\" . popper-toggle-type))
     :init
     (setq popper-reference-buffers
-          '("^*eshell.*"
+          '("^\\*eshell.*\\*$" eshell-mode
 	    "^*cider-repl.*"
 	    "^*MATLAB.*"
-	    term-mode
+	    "^\\*term.*\\*$"   term-mode
 	    "^*jupyter-.*"
 	    inferior-python-mode
 	    inferior-lisp-mode
