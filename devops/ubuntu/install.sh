@@ -3,45 +3,45 @@
 set -e
 
 EMACS_BUILD_TOOLS="wget \
-                   gnupg \
-                   software-properties-common \
-                   equivs \
-                   devscripts \
-                   autoconf \
-                   make \
-                   pkg-config \
-                   texinfo \
-                   gcc-10 \
-                   g++-10"
+		   gnupg \
+		   software-properties-common \
+		   equivs \
+		   devscripts \
+		   autoconf \
+		   make \
+		   pkg-config \
+		   texinfo \
+		   gcc-10 \
+		   g++-10 \
+		   libgtk-3-dev \
+		   libotf-dev \
+		   libharfbuzz-dev \
+		   libjansson-dev \
+		   libwebkit2gtk-4.0-dev \
+		   libgccjit-10-dev \
+		   libgif-dev \
+		   libxpm-dev \
+		   gnutls-dev"
 
-EMACS_BUILD_DEPS="libgtk-3-dev \
-                  libharfbuzz-dev \
-                  libwebkit2gtk-4.0 \
-                  libwebkit2gtk-4.0-dev \
-		  xaw3dg \
-                  xaw3dg-dev \
-		  libxaw7-dev \
-                  libncurses-dev \
-                  libotf-dev \
-                  libotf0 \
-                  libgccjit0 \
-                  libgccjit-10-dev \
-                  libjansson-dev \
-		  libjpeg-dev \
-                  gnutls-dev"
+EMACS_BUILD_DEPS="libgtk-3-0 \
+		  libharfbuzz-bin \
+		  libwebkit2gtk-4.0 \
+		  libotf-bin \
+		  libgccjit0 \
+		  libjansson4 \
+		  libm17n-0 \
+		  libgccjit0"
 
-sudo apt-get install \
-     $EMACS_BUILD_TOOLS \
-     $EMACS_BUILD_DEPS \
-     -y --no-install-recommends
-
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install $EMACS_BUILD_TOOLS $EMACS_BUILD_DEPS -y --no-install-recommends
 
 rm -f ~/.emacs
 echo "(load-file \"`pwd`/../../init.el\")" > ~/.emacs
 
 if [ -d ~/.emacs.build ]; then rm -Rf ~/.emacs.build; fi
 
-git clone --depth 1 --branch emacs-28 https://git.savannah.gnu.org/git/emacs.git ~/.emacs.build
+git clone --depth 1 --branch emacs-28.2 https://git.savannah.gnu.org/git/emacs.git ~/.emacs.build
 
 cd ~/.emacs.build
 
@@ -66,8 +66,8 @@ export CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
     --with-x-toolkit=gtk3 \
     --with-harfbuzz \
     --with-jpeg=yes \
-    --with-png=yes && \
-    make -j$(nproc)
+    --with-png=yes
+make -j$(nproc)
 
 if [ -f ~/.local/share/applications/emacs28.desktop ];
 then
