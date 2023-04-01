@@ -241,7 +241,15 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
 
 COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
-COPY resources/bin/bootrc /home/$USER/.bootrc
+COPY resources/bin/bootrc /usr/bin/bootrc
+RUN sudo chmod +x /usr/bin/bootrc
+COPY resources/bin/notebook /usr/bin/notebook
+RUN sudo chmod +x /usr/bin/notebook
+COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/airflow.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R $USER:$USER /opt/emacsd && \

@@ -1,25 +1,18 @@
-echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
+#!/usr/bin/env bash
 
 if [[ -v JUPYTER_SERVER_ENB ]]; then
-    export SHELL=/bin/bash
-
-    if [[ -v PASSWD ]]; then
-	(cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token="${PASSWD}" &> /opt/emacsd/logs/jupyter.log &)
-    else
-        (cd /storage;jupyter notebook --no-browser --ip='*' --port=8181 --NotebookApp.token='' &> /opt/emacsd/logs/jupyter.log &)
-    fi
+    /usr/bin/supervisorctl start jupyter
 fi
 
 if [[ -v SYNCTHING_ENB ]]; then
-    (cd /home/$USER/;syncthing &> /opt/emacsd/logs/syncthing.log &)
+    /usr/bin/supervisorctl start syncthing
 fi
 
 if [[ -v PGADMIN_ENB ]]; then
-    (cd /home/$USER/;/opt/pgadmin/bin/pgadmin4 &> /opt/emacsd/logs/pgadmin.log &)
+    /usr/bin/supervisorctl start pgadmin
 fi
 
-# AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow users create --username admin --firstname admin --lastname admin --role Admin --email nurullah@nakkaya.com
+# AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow users create --username nakkaya --firstname Nurullah --lastname Akkaya --role Admin --email nurullah@nakkaya.com
 if [[ -v AIRFLOW_ENB ]]; then
 
     if [ -d "/home/$USER/.airflow" ]; then
@@ -30,6 +23,9 @@ if [[ -v AIRFLOW_ENB ]]; then
         rm /home/$USER/.airflow/airflow-webserver.pid
     fi
 
-    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8888 &> /opt/emacsd/logs/airflow_webserver.log &)
-    (cd /home/$USER/;AIRFLOW_HOME=~/.airflow PATH=/opt/airflow/bin:$PATH /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
+    /usr/bin/supervisorctl start airflow-webserver
+    /usr/bin/supervisorctl start airflow-scheduler
+
+    # (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8888 &> /opt/emacsd/logs/airflow_webserver.log &)
+    # (cd /home/$USER/;AIRFLOW_HOME=~/.airflow PATH=/opt/airflow/bin:$PATH /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
 fi
