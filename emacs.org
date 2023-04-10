@@ -468,7 +468,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 
 (defun reboot ()
   (interactive)
-  (eshell-command "conn $HOSTNAME && sudo systemctl restart emacsd"))
+  (eshell-command "docker restart emacsd"))
 #+END_SRC
 
 *** Commands
