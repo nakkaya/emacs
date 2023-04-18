@@ -1059,7 +1059,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
-   (clojure . t)
+   ;; (clojure . t)
    (python . t)
    (sql . t)
    (shell . t)))
@@ -1069,7 +1069,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq org-structure-template-alist
       '(("el" . "src emacs-lisp\n")
-	("cl" . "src clojure\n")
+	("cl" . "src inf-clojure\n")
 	("cc" . "src c++\n")
 	("sh" . "src sh\n")
 	("sq" . "src sql\n")
@@ -1140,6 +1140,18 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
                                             (org-babel-ansible--preprocess-inline-src body)))))))
       (async-shell-command cmd "*ob-ansible*")
       'ob-ansible)))
+#+end_src
+
+#+begin_src emacs-lisp :results silent
+(add-to-list 'org-src-lang-modes '("inf-clojure" . clojure))
+
+(defvar org-babel-default-header-args:inf-clojure
+  '((:results . "silent") (:tangle . "yes")))
+
+(defun org-babel-execute:inf-clojure (body params)
+  "Evaluate a block of Clojure code with Babel."
+  (lisp-eval-string body)
+  t)
 #+end_src
 
 ** Latex
