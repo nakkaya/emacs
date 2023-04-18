@@ -12,7 +12,6 @@
 	 clipetty
          undo-tree
          hl-todo
-	 paredit
          clojure-mode
 	 clojure-mode-extra-font-locking
 	 html-to-hiccup
