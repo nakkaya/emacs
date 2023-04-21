@@ -633,6 +633,20 @@ SSH at least,
 	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
+#+begin_src emacs-lisp
+(quelpa '(shell-maker
+          :fetcher github
+	  :repo "xenodium/chatgpt-shell"))
+
+(quelpa '(chatgpt-shell
+          :fetcher github
+	  :repo "xenodium/chatgpt-shell"))
+
+(require 'chatgpt-shell)
+
+(setq chatgpt-shell-streaming nil)
+#+end_src
+
 * Languages
 
 Will bounce between matching parens just like % in vi
@@ -1365,8 +1379,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (require 'ein)
 (require 'ein-notebook)
 
-(setq ein:url-or-port '("http://workstation:8181"
-			"http://compute:8181"))
+(setq ein:url-or-port '("http://lab-desktop:8181"
+			"http://workstation:8181"
+			"http://engine:8181"))
 
 (setq ein:output-area-inlined-images t
       ein:worksheet-enable-undo t)
@@ -1845,6 +1860,7 @@ node `(org) External links' and Info node `(org) Search options'"
 	    "^*MATLAB.*"
 	    "^\\*term.*\\*$"   term-mode
 	    "^*jupyter-.*"
+	    "^*chatgpt\\*$"
 	    inferior-python-mode
 	    inferior-lisp-mode
             compilation-mode))
