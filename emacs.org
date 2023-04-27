@@ -644,7 +644,7 @@ SSH at least,
 
 (require 'chatgpt-shell)
 
-(setq chatgpt-shell-streaming nil)
+(setq chatgpt-shell-streaming t)
 #+end_src
 
 * Languages
