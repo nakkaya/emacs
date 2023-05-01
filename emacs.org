@@ -486,9 +486,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (defun pcomplete/conn ()
   (pcomplete-here* (na-ssh-completions)))
 
-(if (eq system-type 'windows-nt)
-    (eshell/alias "conn" "cd /sshx:$1:~")
-  (eshell/alias "conn" "cd /ssh:$1:~"))
+(eshell/alias "conn" "cd /ssh:$1:~")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1520,7 +1518,10 @@ node `(org) External links' and Info node `(org) Search options'"
       tramp-completion-reread-directory-timeout nil)
 
 (when (eq system-type 'windows-nt)
-  (setq tramp-default-method "sshx"))
+  ;; Add the '-tt' flag to the login arguments for "ssh" ONLY
+  (push '("-tt")
+        (cadr (assoc 'tramp-login-args
+                     (assoc "ssh" tramp-methods)))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
