@@ -632,14 +632,6 @@ SSH at least,
 #+END_SRC
 
 #+begin_src emacs-lisp
-(quelpa '(shell-maker
-          :fetcher github
-	  :repo "xenodium/chatgpt-shell"))
-
-(quelpa '(chatgpt-shell
-          :fetcher github
-	  :repo "xenodium/chatgpt-shell"))
-
 (require 'chatgpt-shell)
 
 (setq chatgpt-shell-streaming t)
@@ -907,8 +899,6 @@ Will bounce between matching parens just like % in vi
       lsp-enable-symbol-highlighting nil
       lsp-eldoc-enable-hover nil)
 
-(require 'lsp-java)
-
 (setq lsp-keymap-prefix "C-c l")
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
@@ -917,9 +907,7 @@ Will bounce between matching parens just like % in vi
                ))
   (push dir lsp-file-watch-ignored))
 
-(add-hook 'java-mode-hook #'lsp-deferred)
 (add-hook 'clojure-mode-hook #'lsp-deferred)
-;;(add-hook 'c++-mode-hook #'lsp-deferred)
 (add-hook 'python-mode-hook #'lsp-deferred)
 
 (lsp-register-client

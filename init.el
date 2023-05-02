@@ -8,6 +8,7 @@
 
 (setq package-list
       '(use-package
+	 quelpa
 	 quelpa-use-package
 	 clipetty
          undo-tree
@@ -22,12 +23,10 @@
 	 yaml-mode
 	 markdown-mode
          terraform-mode
-	 pine-script-mode
 	 flycheck
 	 yasnippet
          lsp-mode
 	 lsp-ui
-	 lsp-java
 	 org
          org-superstar
 	 ein
@@ -45,9 +44,9 @@
          projectile
          helm
 	 helm-org-rifle
-         quelpa
 	 elfeed
 	 elfeed-protocol
+	 chatgpt-shell
 	 transmission))
 
 (when (or (eq system-type 'gnu/linux)
