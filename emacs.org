@@ -877,7 +877,7 @@ Will bounce between matching parens just like % in vi
    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'yasnippet)
 (require 'flycheck)
 (require 'lsp-mode)
@@ -933,6 +933,12 @@ Will bounce between matching parens just like % in vi
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
                   :major-modes '(clojurescript-mode)
+                  :remote? t
+                  :server-id 'clojurescript-lsp-remote))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                  :major-modes '(clojurec-mode)
                   :remote? t
                   :server-id 'clojurescript-lsp-remote))
 #+END_SRC
