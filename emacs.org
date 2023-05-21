@@ -1146,11 +1146,26 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 ** Latex
 
-#+BEGIN_SRC emacs-lisp
-  (setq org-latex-prefer-user-labels t)
+#+BEGIN_SRC emacs-lisp :results silent
+(setq org-latex-prefer-user-labels t)
 
-  (setq org-latex-pdf-process
-        '("latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+(setq org-latex-pdf-process '("latexmk -pdf -f %f"))
+
+;; \\usepackage[style=authoryear-comp,autocite=footnote]{biblatex}
+;; \\addbibresource{/Users/chl/org/references.bib}
+(eval-after-load "ox-latex"
+  '(add-to-list 'org-latex-classes
+                '("tufte-handout"
+                  "\\documentclass[nobib]{tufte-handout}
+                   \\usepackage{nicefrac}
+                   \\usepackage{units}
+                   [NO-DEFAULT-PACKAGES]
+                   [EXTRA]"
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+END_SRC
 
 ** Agenda
@@ -1460,7 +1475,7 @@ node `(org) External links' and Info node `(org) Search options'"
 (defun kernel-app (kernel &optional conn-name)
   (interactive "sKernel: ")
   (let* ((conn-name (or conn-name "notebook"))
-	 (f-conn (concat "~/" conn-name "-" kernel ".json"))
+	 (f-conn (concat "/tmp/" conn-name "-" kernel ".json"))
 	 (f-conn (expand-file-name f-conn))
 	 (default-directory (file-name-directory f-conn))
 	 (buffer (concat "*" "kernel-" conn-name "-" kernel "*")))

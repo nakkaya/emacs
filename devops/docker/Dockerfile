@@ -38,9 +38,8 @@ RUN apt-get install \
     # C/C++
     build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
     # Latex
-    texlive-latex-base texlive-xetex texlive-lang-english \
-    texlive-lang-european texlive-plain-generic texlive-fonts-recommended \
-    pandoc latexmk \
+    texlive-latex-base texlive-xetex texlive-lang-english texlive-lang-european \
+    texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     libpoppler-private-dev imagemagick \
