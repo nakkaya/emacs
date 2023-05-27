@@ -466,6 +466,12 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (eshell/alias "lein-repl" "lein repl :headless :host 0.0.0.0 :port $1")
 (eshell/alias "clj-repl" "clojure -Sdeps '{:deps {nrepl/nrepl {:mvn/version \"0.9.0\"} cider/cider-nrepl {:mvn/version \"0.28.5\"}} :aliases {:cider/nrepl {:main-opts [\"-m\" \"nrepl.cmdline\" \"--middleware\" \"[cider.nrepl/cider-middleware]\"]}}}' -M:cider/nrepl -h 0.0.0.0 -p $1")
 
+(eshell/alias "crun" "conda run -n $1 --no-capture-output $2")
+#+END_SRC
+
+*** Commands
+
+#+begin_src emacs-lisp :results silent
 (defun htop ()
   (interactive)
   (eshell-command "*htop"))
@@ -477,9 +483,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (defun reboot ()
   (interactive)
   (eshell-command "docker restart emacsd"))
-#+END_SRC
-
-*** Commands
+#+end_src
 
 #+begin_src emacs-lisp
 ;;Clear the eshell buffer.
