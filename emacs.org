@@ -1477,7 +1477,8 @@ node `(org) External links' and Info node `(org) Search options'"
 
 #+begin_src emacs-lisp :results silent
 (defun kernel-app (kernel &optional conn-name)
-  (interactive "sKernel: ")
+  (interactive (list (completing-read "Kernel: "
+                                      (mapcar #'car (jupyter-available-kernelspecs t)))))
   (let* ((conn-name (or conn-name "notebook"))
 	 (f-conn (concat "/tmp/" conn-name "-" kernel ".json"))
 	 (f-conn (expand-file-name f-conn))
