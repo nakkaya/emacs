@@ -1578,6 +1578,8 @@ node `(org) External links' and Info node `(org) Search options'"
       magit-hide-diffs t
       magit-save-repository-buffers 'dontask)
 
+(magit-add-section-hook
+  'magit-status-sections-hook 'magit-insert-tracked-files nil 'append)
 
 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
