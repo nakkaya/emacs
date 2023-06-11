@@ -12,7 +12,6 @@
 	 quelpa-use-package
 	 clipetty
          undo-tree
-	 perspective
          hl-todo
          clojure-mode
 	 clojure-mode-extra-font-locking

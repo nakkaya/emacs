@@ -303,14 +303,6 @@ to ensure it autosaves the latests version back.
     (rgrep search-term "*" search-path)))
 #+end_src
 
-* Perspective
-
-#+begin_src emacs-lisp
-(require 'perspective)
-(customize-set-variable 'persp-mode-prefix-key (kbd "C-c M-p"))
-(persp-mode)
-#+end_src
-
 * Terminal
 ** Path
 
@@ -1885,8 +1877,6 @@ node `(org) External links' and Info node `(org) Search options'"
     (setq popper-display-function
 	  (lambda (b a)
 	    (display-buffer-same-window b a)))
-
-    (setq popper-group-function #'popper-group-by-perspective)
 
     (popper-mode +1)
     (popper-echo-mode +1))
