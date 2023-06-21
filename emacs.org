@@ -246,6 +246,8 @@ to ensure it autosaves the latests version back.
        "^\\*Bookmark List\\*$"
        "^\\*Buffer List\\*$"
        "^\\*Disabled Command\\*$"
+       "^\\*tfmls\\*$"
+       "^\\*tfmls::stderr\\*$"
        (rx "*httpd")
        (rx "*ein:log-all")
        (rx "*nrepl-server")
