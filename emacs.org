@@ -1277,7 +1277,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (let ((window-configuration (make-hash-table :test 'equal)))
   (defun kill-org-agenda ()
     (interactive)
-    (kill-this-buffer)
+    (org-agenda-exit)
     (set-window-configuration
      (gethash (selected-window) window-configuration nil)))
 
@@ -1295,7 +1295,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	(local-set-key "q" #'kill-org-agenda)))))
 
 (when (file-exists-p na-agenda-folder)
-  (run-with-idle-timer (* 10 60) t
+  (run-with-idle-timer (* 120 60) t
 		       (lambda ()
 			 (dolist (f (frame-list))
 			   (with-selected-frame f
