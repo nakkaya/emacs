@@ -2020,6 +2020,15 @@ node `(org) External links' and Info node `(org) Search options'"
 #+BEGIN_SRC emacs-lisp :results silent
 (load-theme 'doom-one t)
 
+(set-face-attribute 'show-paren-match nil :foreground "#d65946")
+(set-face-attribute 'font-lock-function-name-face nil :foreground "#1d9a79")
+(set-face-attribute 'font-lock-builtin-face nil :foreground "#7f7dca")
+(set-face-attribute 'font-lock-type-face nil :foreground "#d65946")
+(set-face-attribute 'font-lock-constant-face nil :foreground "#ab75c3")
+(set-face-attribute 'font-lock-string-face nil :foreground "#6aaf50")
+(set-face-attribute 'org-level-2 nil :foreground "#7f7dca")
+(set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
+
 (defun na-fix-background (&optional frame)
   (let ((frame (or frame (setq frame (selected-frame))))
 	(bg "#1c1c1c"))
@@ -2047,8 +2056,6 @@ node `(org) External links' and Info node `(org) Search options'"
 	 (set-face-background 'magit-diff-hunk-heading bg frame)
 	 (set-face-foreground 'magit-diff-hunk-heading "#727272" frame)
 	 (set-face-background 'magit-diff-removed-highlight bg frame)))))
-
-(set-face-attribute 'show-paren-match nil :foreground "red")
 
 (eval-after-load "helm-buffers"
   '(progn
@@ -2088,10 +2095,8 @@ node `(org) External links' and Info node `(org) Search options'"
 
 (add-to-list 'doom-modeline-mode-alist '(dired-mode . dired-line))
 
-(set-face-background 'mode-line          "SteelBlue4")
-(set-face-background 'mode-line-inactive "SlateGray4")
-(set-face-foreground 'mode-line          "gray5")
-(set-face-foreground 'mode-line-inactive "gray15")
+(set-face-attribute 'mode-line nil :background "SteelBlue4" :foreground "gray5")
+(set-face-attribute 'mode-line-inactive nil :background "SlateGray4" :foreground "gray15")
 
 (add-hook 'after-init-hook #'doom-modeline-mode)
 #+END_SRC
