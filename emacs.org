@@ -2095,8 +2095,8 @@ node `(org) External links' and Info node `(org) Search options'"
 
 (add-to-list 'doom-modeline-mode-alist '(dired-mode . dired-line))
 
-(set-face-attribute 'mode-line nil :background "SteelBlue4" :foreground "gray5")
-(set-face-attribute 'mode-line-inactive nil :background "SlateGray4" :foreground "gray15")
+(set-face-attribute 'mode-line nil :background "color-236" :foreground "#aab0ab")
+(set-face-attribute 'mode-line-inactive nil :background "color-234" :foreground "#aab0ab")
 
 (add-hook 'after-init-hook #'doom-modeline-mode)
 #+END_SRC
