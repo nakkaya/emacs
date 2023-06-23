@@ -428,7 +428,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
          (propertize  (fish-path (eshell/pwd) 40) 'face `(:foreground "Grey50"))
          (propertize (na-shell-git-branch (eshell/pwd)) 'face `(:foreground "Grey50"))
          (propertize "\n" 'face `(:foreground "Grey30"))
-         (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "DeepSkyBlue3")))))
+         (propertize (if (= (user-uid) 0) "# " "\u03BB ") 'face `(:foreground "#7f7dca")))))
 #+END_SRC
 
 *** Aliases
@@ -2030,6 +2030,7 @@ node `(org) External links' and Info node `(org) Search options'"
 (set-face-attribute 'font-lock-string-face nil :foreground "#6aaf50")
 (set-face-attribute 'org-level-2 nil :foreground "#7f7dca")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
+(set-face-attribute 'dired-directory nil :foreground "#7f7dca")
 
 (defun na-fix-background (&optional frame)
   (let ((frame (or frame (setq frame (selected-frame))))
