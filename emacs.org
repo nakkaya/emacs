@@ -1279,7 +1279,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (let ((window-configuration (make-hash-table :test 'equal)))
   (defun kill-org-agenda ()
     (interactive)
-    (org-agenda-exit)
+    (kill-this-buffer)
     (set-window-configuration
      (gethash (selected-window) window-configuration nil)))
 
