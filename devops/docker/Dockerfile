@@ -42,7 +42,7 @@ RUN apt-get install \
     texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
-    libpoppler-private-dev imagemagick \
+    poppler-utils libpoppler-private-dev imagemagick \
     # for cv2
     libgl1 libglib2.0-0 \
     # Jupyter
@@ -51,6 +51,7 @@ RUN apt-get install \
     autoconf automake libtool \
     # For Teensy
     # libxft2 \
+    tesseract-ocr \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
