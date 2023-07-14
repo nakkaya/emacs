@@ -31,7 +31,7 @@ RUN apt-get install \
     meshlab rlwrap netcat less jq \
     python3-venv python3-wheel \
     # Backup & Storage
-    rsync rclone git git-annex git-annex-remote-rclone \
+    rsync rclone git git-lfs git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
     # Java
     openjdk-11-jdk maven visualvm  \
