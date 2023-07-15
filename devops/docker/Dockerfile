@@ -37,6 +37,7 @@ RUN apt-get install \
     openjdk-11-jdk maven visualvm  \
     # C/C++
     build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
+    protobuf-compiler protobuf-compiler-grpc-java-plugin \
     # Latex
     texlive-latex-base texlive-xetex texlive-lang-english texlive-lang-european \
     texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
