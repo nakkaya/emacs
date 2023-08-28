@@ -21,7 +21,8 @@ EMACS_BUILD_TOOLS="wget \
 		   libgccjit-10-dev \
 		   libgif-dev \
 		   libxpm-dev \
-		   gnutls-dev"
+		   gnutls-dev \
+                   libncurses-dev"
 
 EMACS_BUILD_DEPS="libgtk-3-0 \
 		  libharfbuzz-bin \
@@ -69,6 +70,8 @@ export CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
     --with-png=yes
 make -j$(nproc)
 
+mkdir -p ~/.local/share/applications
+
 if [ -f ~/.local/share/applications/emacs28.desktop ];
 then
     rm ~/.local/share/applications/emacs28.desktop;
@@ -88,4 +91,5 @@ echo "StartupNotify=true" >> ~/.local/share/applications/emacs28.desktop
 sudo adduser $USER dialout
 sudo adduser $USER dialout
 
-gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+# https://askubuntu.com/a/223674
+# gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
