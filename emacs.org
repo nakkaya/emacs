@@ -2030,6 +2030,8 @@ node `(org) External links' and Info node `(org) Search options'"
 (set-face-attribute 'org-level-2 nil :foreground "#7f7dca")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
 (set-face-attribute 'dired-directory nil :foreground "#7f7dca")
+(set-face-attribute 'markdown-header-face nil :foreground "#51afef")
+
 
 (defun na-fix-background (&optional frame)
   (let ((frame (or frame (setq frame (selected-frame))))
