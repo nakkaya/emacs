@@ -191,6 +191,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 
 # Install pgAdmin
 #
+# /opt/pgadmin/bin/python /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/setup.py
+# supervisorctl restart pgadmin
 
 RUN mkdir /var/lib/pgadmin && \
     mkdir /var/log/pgadmin && \
