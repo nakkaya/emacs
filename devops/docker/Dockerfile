@@ -63,7 +63,13 @@ RUN apt-get install -y nodejs
 
 # K8S
 #
-RUN apt-get install -y kubectl socat
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
+    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo \
+    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
+    | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
+    apt-get update && \
+    apt-get install kubectl socat -y --no-install-recommends
 
 # Install Serverless
 #
