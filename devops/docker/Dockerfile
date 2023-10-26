@@ -63,7 +63,7 @@ RUN apt-get install -y nodejs
 
 # K8S
 #
-RUN apt-get install -y --no-install-recommends kubectl socat
+RUN apt-get install -y kubectl socat
 
 # Install Serverless
 #
