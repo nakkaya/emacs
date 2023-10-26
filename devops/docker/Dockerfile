@@ -69,7 +69,7 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
     "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
     | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
     apt-get update && \
-    apt-get install kubectl socat -y --no-install-recommends
+    apt-get install kubectl socat lsof -y --no-install-recommends
 
 # Install Serverless
 #
