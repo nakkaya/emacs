@@ -53,7 +53,6 @@ RUN apt-get install \
     # For Teensy
     # libxft2 \
     tesseract-ocr \
-    kubectl socat netcat \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
@@ -61,6 +60,10 @@ RUN apt-get install ispell -y
 # Node
 #
 RUN apt-get install -y nodejs
+
+# K8S
+#
+RUN apt-get install -y --no-install-recommends kubectl socat
 
 # Install Serverless
 #
