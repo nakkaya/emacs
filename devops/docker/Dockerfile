@@ -53,6 +53,8 @@ RUN apt-get install \
     # For Teensy
     # libxft2 \
     tesseract-ocr \
+    # For Racher
+    kubectl socat netcat \
     -y --no-install-recommends
 
 RUN apt-get install ispell -y
@@ -217,7 +219,7 @@ RUN AIRFLOW_VERSION="2.5.2"; \
     /opt/airflow/bin/python -m pip install "apache-airflow-providers-postgres==5.4.0" --no-cache-dir
 
 RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws]==0.3.1" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws,kubernetes]==0.3.1" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # Arduino
