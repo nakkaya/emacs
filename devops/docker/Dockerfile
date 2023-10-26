@@ -53,7 +53,6 @@ RUN apt-get install \
     # For Teensy
     # libxft2 \
     tesseract-ocr \
-    # For Racher
     kubectl socat netcat \
     -y --no-install-recommends
 
