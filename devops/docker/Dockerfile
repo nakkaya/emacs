@@ -26,7 +26,7 @@ RUN apt-get install \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
     libpq-dev postgresql-client influxdb-client python3-psycopg2 \
-    redis-tools \
+    nfs-common redis-tools \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
     python3-venv python3-wheel \
