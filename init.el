@@ -23,6 +23,7 @@
 	 yaml-mode
 	 markdown-mode
          terraform-mode
+	 kubel
 	 flycheck
 	 yasnippet
          lsp-mode

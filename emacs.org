@@ -372,7 +372,7 @@ to ensure it autosaves the latests version back.
 (setq eshell-hist-ignoredups t
       eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
       eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-      eshell-visual-commands '("htop" "ssh" "nvtop" "k9s")
+      eshell-visual-commands '("htop" "ssh")
       eshell-prompt-regexp (rx bol "\u03BB" space)
       eshell-banner-message ""
       eshell-cmpl-cycle-completions nil
@@ -471,14 +471,6 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (defun htop ()
   (interactive)
   (eshell-command "*htop"))
-
-(defun k9s ()
-  (interactive)
-  (eshell-command "*k9s"))
-
-(defun nvtop ()
-  (interactive)
-  (eshell-command "*nvtop"))
 
 (defun reboot ()
   (interactive)
@@ -1953,8 +1945,6 @@ node `(org) External links' and Info node `(org) Search options'"
 (global-set-key (kbd "C-x t") #'na-new-term)
 
 (with-eval-after-load 'term
-  (define-key term-raw-map (kbd "C-c M-j")
-    (lambda() (interactive) (term-send-raw-string "\e")))
   (define-key term-raw-map (kbd "C-c C-c")  #'term-send-raw)
   (define-key term-raw-map (kbd "C-]")      #'helm-buffers-list)
   (define-key term-raw-map (kbd "C-y")      #'term-paste)
