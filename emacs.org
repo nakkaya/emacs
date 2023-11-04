@@ -1949,6 +1949,8 @@ node `(org) External links' and Info node `(org) Search options'"
 (global-set-key (kbd "C-x t") #'na-new-term)
 
 (with-eval-after-load 'term
+  (define-key term-raw-map (kbd "C-c M-j")
+    (lambda() (interactive) (term-send-raw-string "\e")))
   (define-key term-raw-map (kbd "C-c C-c")  #'term-send-raw)
   (define-key term-raw-map (kbd "C-]")      #'helm-buffers-list)
   (define-key term-raw-map (kbd "C-y")      #'term-paste)

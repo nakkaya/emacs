@@ -71,9 +71,19 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
     apt-get update && \
     apt-get install kubectl socat lsof -y --no-install-recommends
 
+# k9s
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_arm64.tar.gz' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "k9s.tar.gz" && \
+    tar -xzf k9s.tar.gz --directory=/usr/bin k9s && \
+    rm -rf k9s.tar.gz
+
 # Install Serverless
 #
-
 RUN npm install -g serverless
 
 # Install Terraform
