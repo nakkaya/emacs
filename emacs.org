@@ -372,7 +372,7 @@ to ensure it autosaves the latests version back.
 (setq eshell-hist-ignoredups t
       eshell-ls-initial-args '("-a")              ; list of args to pass to ls (default = nil)
       eshell-prefer-lisp-functions t              ; prefer built-in eshell commands to external ones
-      eshell-visual-commands '("htop" "ssh" "nvtop", "k9s")
+      eshell-visual-commands '("htop" "ssh" "nvtop" "k9s")
       eshell-prompt-regexp (rx bol "\u03BB" space)
       eshell-banner-message ""
       eshell-cmpl-cycle-completions nil
