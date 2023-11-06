@@ -93,10 +93,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     dpkg -i nats.deb && \
     rm -rf nats.deb
 
-# Install Serverless
-#
-RUN npm install -g serverless
-
 # Install Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
