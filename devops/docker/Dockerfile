@@ -82,6 +82,17 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     tar -xzf k9s.tar.gz --directory=/usr/bin k9s && \
     rm -rf k9s.tar.gz
 
+# nats-cli
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.1/nats-0.1.1-amd64.deb' ;; \
+            arm64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.1/nats-0.1.1-arm64.deb' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "nats.deb" && \
+    dpkg -i nats.deb && \
+    rm -rf nats.deb
+
 # Install Serverless
 #
 RUN npm install -g serverless
