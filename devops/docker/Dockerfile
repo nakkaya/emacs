@@ -93,6 +93,17 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     dpkg -i nats.deb && \
     rm -rf nats.deb
 
+# JuiceFS
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/juicedata/juicefs/releases/download/v1.1.0/juicefs-1.1.0-linux-amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/juicedata/juicefs/releases/download/v1.1.0/juicefs-1.1.0-linux-arm64.tar.gz' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "juicefs.tar.gz" && \
+    tar -xzf juicefs.tar.gz --directory=/usr/bin juicefs && \
+    rm -rf juicefs.tar.gz
+
 # Install Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
