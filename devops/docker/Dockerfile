@@ -11,13 +11,13 @@ ENV USER="core" \
 
 USER root
 
-RUN echo 'cleanup_apt_cache() { \
-    apt-get clean && \
+RUN echo '#!/bin/bash' >> /usr/local/bin/cleanup_apt_cache && \
+    echo 'apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get autoremove -y && \
     apt-get autoclean && \
-    apt-get clean; \
-}' >> /root/.bashrc
+    apt-get clean;' >> /usr/local/bin/cleanup_apt_cache && \
+    chmod +x /usr/local/bin/cleanup_apt_cache
 
 # Install Packages
 #
