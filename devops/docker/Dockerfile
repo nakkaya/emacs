@@ -11,22 +11,32 @@ ENV USER="core" \
 
 USER root
 
+RUN echo 'cleanup_apt_cache() { \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    apt-get autoremove -y && \
+    apt-get autoclean && \
+    apt-get clean; \
+}' >> /root/.bashrc
+
 # Install Packages
 #
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install curl apt-utils -y --no-install-recommends && \
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    apt-get install curl apt-utils \
+    -y --no-install-recommends && \
+    cleanup_apt_cache
 
-RUN apt-get install \
+RUN apt-get update && \
+    apt-get install \
     # apt
     gnupg software-properties-common \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
-    libpq-dev postgresql-client influxdb-client python3-psycopg2 \
-    nfs-common redis-tools \
+    libpq-dev postgresql-client python3-psycopg2 \
+    nfs-common \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq \
     python3-venv python3-wheel \
@@ -36,11 +46,12 @@ RUN apt-get install \
     # Java
     openjdk-11-jdk maven visualvm  \
     # C/C++
-    build-essential gcc-10 g++-10 clang clangd cmake cppcheck valgrind \
+    build-essential gcc-10 g++-10 \
+    # clang clangd cmake cppcheck valgrind \
     protobuf-compiler protobuf-compiler-grpc-java-plugin \
     # Latex
-    texlive-latex-base texlive-xetex texlive-lang-english texlive-lang-european \
-    texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
+    # texlive-latex-base texlive-xetex texlive-lang-english texlive-lang-european \
+    # texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     poppler-utils libpoppler-private-dev imagemagick \
@@ -53,13 +64,12 @@ RUN apt-get install \
     # For Teensy
     # libxft2 \
     tesseract-ocr \
-    -y --no-install-recommends
+    -y --no-install-recommends && \
+    cleanup_apt_cache
 
-RUN apt-get install ispell -y
-
-# Node
-#
-RUN apt-get install -y nodejs
+RUN apt-get update && \
+    apt-get install ispell -y && \
+    cleanup_apt_cache
 
 # K8S
 #
@@ -69,7 +79,8 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
     "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
     | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
     apt-get update && \
-    apt-get install kubectl socat lsof -y --no-install-recommends
+    apt-get install kubectl socat lsof -y --no-install-recommends && \
+    cleanup_apt_cache
 
 # k9s
 #
@@ -135,13 +146,15 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     touch /var/run/docker.sock && \
     groupadd docker && \
     chown root:docker /var/run/docker.sock && \
-    usermod -a -G docker $USER
+    usermod -a -G docker $USER && \
+    cleanup_apt_cache
 
 # Install Syncthing
 #
 RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
     add-apt-repository "deb https://apt.syncthing.net/ syncthing stable" && \
-    apt-get install syncthing -y --no-install-recommends
+    apt-get install syncthing -y --no-install-recommends && \
+    cleanup_apt_cache
 
 # Configure Python
 #
@@ -181,20 +194,6 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     rm -f /usr/local/bin/clj && \
     ln -s /usr/local/bin/clojure /usr/local/bin/clj
 
-# Install GraalVM
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) URL='https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-linux-amd64-22.3.1.tar.gz' ;; \
-            arm64) URL='https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java11-linux-aarch64-22.3.1.tar.gz' ;; \
-    esac; \
-    curl -L -s "${URL}" -o "graalvm.tar.gz" && \
-    mkdir graalvm && \
-    tar -xzf graalvm.tar.gz --strip 1 -C graalvm && \
-    mv graalvm /opt/ && \
-    /opt/graalvm/bin/gu install native-image && \
-    rm graalvm.tar.gz
-
 
 # Install AWS CLI
 #
@@ -208,24 +207,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     unzip -q awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip
-
-# Install Google Cloud CLI
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-    echo \
-    "deb [arch=${ARCH} signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt \
-    cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    apt-get update && \
-    apt-get install google-cloud-sdk -y --no-install-recommends
-
-# Install GitHub Tool
-#
-
-# RUN curl https://cli.github.com/packages/githubcli-archive-keyring.gpg  | apt-key --keyring /usr/share/keyrings/githubcli-archive-keyring.gpg add - && \
-#     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-#     apt-get update && \
-#     apt-get install gh -y --no-install-recommends
 
 # Install pgAdmin
 #
@@ -244,37 +225,11 @@ RUN mkdir /var/lib/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin
 
-RUN AIRFLOW_VERSION="2.5.2"; \
-    PYTHON_VERSION="3.10"; \
-    AIRFLOW_HOME=/home/$USER/.bashrc; \
-    CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"; \
-    python3 -m venv /opt/airflow && \
-    /opt/airflow/bin/python -m pip install virtualenv --no-cache-dir && \
-    /opt/airflow/bin/python -m pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}" --no-cache-dir && \
-    sed -i -e "s/^load_examples = .*/load_examples = False/g" /opt/airflow/lib/python3.10/site-packages/airflow/config_templates/default_airflow.cfg && \
-    /opt/airflow/bin/python -m pip install "apache-airflow-providers-postgres==5.4.0" --no-cache-dir
 
 RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install "skypilot[gcp,aws,kubernetes]==0.4.0" --no-cache-dir && \
+    /opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes]==0.4.1" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
-# Arduino
-#
-# RUN wget http://downloads.arduino.cc/arduino-1.8.13-linux64.tar.xz && \
-#     tar xf arduino-1.8.13-linux64.tar.xz && \
-#     mv arduino-1.8.13 /usr/local/share/arduino && \
-#     ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino && \
-#     ln -s /usr/local/share/arduino/arduino-builder /usr/local/bin/arduino-builder && \
-#     rm -rf arduino-1.8.13-linux64.tar.xz && \
-#     arduino --install-boards arduino:sam && \
-#     wget https://www.pjrc.com/teensy/td_153/TeensyduinoInstall.linux64 && \
-#     chmod +x TeensyduinoInstall.linux64 && \
-#     ./TeensyduinoInstall.linux64  --dir=/usr/local/share/arduino && \
-#     rm -rf TeensyduinoInstall.linux64
-
-RUN apt-get autoremove -y && \
-    apt-get clean && \
-    apt-get autoclean
 
 # Setup Emacs
 #
@@ -292,7 +247,6 @@ COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
-COPY resources/conf/supervisord/airflow.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R $USER:$USER /opt/emacsd && \

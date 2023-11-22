@@ -11,21 +11,3 @@ fi
 if [[ -v PGADMIN_ENB ]]; then
     /usr/bin/supervisorctl start pgadmin
 fi
-
-# AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow users create --username nakkaya --firstname Nurullah --lastname Akkaya --role Admin --email nurullah@nakkaya.com
-if [[ -v AIRFLOW_ENB ]]; then
-
-    if [ -d "/home/$USER/.airflow" ]; then
-        AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow db init
-    fi
-
-    if [ -f "/home/$USER/.airflow/airflow-webserver.pid" ]; then
-        rm /home/$USER/.airflow/airflow-webserver.pid
-    fi
-
-    /usr/bin/supervisorctl start airflow-webserver
-    /usr/bin/supervisorctl start airflow-scheduler
-
-    # (cd /home/$USER/;AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow webserver -p 8888 &> /opt/emacsd/logs/airflow_webserver.log &)
-    # (cd /home/$USER/;AIRFLOW_HOME=~/.airflow PATH=/opt/airflow/bin:$PATH /opt/airflow/bin/airflow scheduler &> /opt/emacsd/logs/airflow_scheduler.log &)
-fi

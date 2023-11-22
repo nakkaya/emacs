@@ -441,7 +441,6 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (eshell/alias "docker" "*docker $*")
 (eshell/alias "docker-compose" "*docker-compose $*")
 (eshell/alias "chmod" "*chmod $*")
-(eshell/alias "airflow" "SQLALCHEMY_SILENCE_UBER_WARNING=1 AIRFLOW_HOME=~/.airflow /opt/airflow/bin/airflow $*")
 
 ;; mirror host /folder/
 (eshell/alias "mirror" "rsync -avuzL -e ssh \"$1\" \"$2\" --delete")

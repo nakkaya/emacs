@@ -48,7 +48,6 @@ Service ports used by the image when enabled,
  - WebDAV: `4242`
  - Jupyter: `8181`
  - PGAdmin: `5050`
- - Airflow: `8888`
 
 ### Semi Automated Setup
 
