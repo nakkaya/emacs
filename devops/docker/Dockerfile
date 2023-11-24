@@ -71,6 +71,14 @@ RUN apt-get update && \
     apt-get install ispell -y && \
     cleanup_apt_cache
 
+# Node
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
+    gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" |  tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install nodejs -y --no-install-recommends && \
+    cleanup_apt_cache
+
 # K8S
 #
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
