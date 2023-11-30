@@ -1333,7 +1333,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
 (when module-file-suffix
-  (add-to-list 'native-comp-deferred-compilation-deny-list ".*jupyter.*")
+  ;;(add-to-list 'native-comp-deferred-compilation-deny-list ".*jupyter.*")
 
   (require 'jupyter)
 
