@@ -1917,6 +1917,128 @@ node `(org) External links' and Info node `(org) Search options'"
 (define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
 #+end_src
 
+* mlflow
+
+#+begin_src emacs-lisp
+(defvar mlflow-python "~/.conda/envs/ml-toolbox/bin/python")
+
+(defvar mlflow-list-experiments-command "
+from mlflow.tracking import MlflowClient
+xs = MlflowClient().search_experiments()
+for x in xs: print(x.experiment_id, ',', x.name)")
+
+(defun mlflow-run (py)
+  (shell-command-to-string
+   (format "%s -c \"%s\""
+           mlflow-python
+           (replace-regexp-in-string "\"" "\\\\\"" py))))
+
+(defun mlflow-list-experiments ()
+  (mapcar (lambda (line)
+            (let ((fields (split-string line "," t)))
+              `(nil [, (car fields) ,(cadr fields)])))
+          (split-string (mlflow-run mlflow-list-experiments-command) "\n" t)))
+
+(defvar mlflow-list-runs-command "
+import datetime
+from mlflow.tracking import MlflowClient
+
+client = MlflowClient()
+runs = client.search_runs(
+    experiment_ids=[%s],
+    filter_string='',
+    order_by=['start_time desc']
+)
+
+for run in runs:
+    run_name = run.data.tags.get('mlflow.runName', 'No run name')
+    start_time = datetime.datetime.fromtimestamp(run.info.start_time / 1000.0)
+
+    # Get val_dice or val_accuracy if available
+    val_dice = round(run.data.metrics.get('val_dice'), 3)
+    val_accuracy = round(run.data.metrics.get('val_accuracy'), 3)
+    metric_value = val_dice if val_dice is not None else val_accuracy
+
+    # Prepare the printed metric value
+    metric_str = str(metric_value) if metric_value is not None else 'N/A'
+
+    end_time = datetime.datetime.fromtimestamp(run.info.end_time / 1000.0) if run.info.end_time else None
+    duration = round((end_time - start_time).total_seconds() / 60 / 60, 2) if end_time else None
+    print(f\"{run_name},{start_time},{duration},{metric_str}\")
+")
+
+(defun mlflow-list-runs (experiment-id)
+  (mapcar (lambda (line)
+            (let ((fields (split-string line "," t)))
+              `(nil [, (nth 0 fields)
+                       ,(format-time-string "%Y-%m-%d %H:%M" (date-to-time (nth 1 fields)))
+                       ,(nth 2 fields) ,(nth 3 fields)])))
+          (split-string
+           (mlflow-run (format mlflow-list-runs-command experiment-id))
+           "\n" t)))
+
+(define-derived-mode mlflow-experiments-mode tabulated-list-mode "mlflow-experiments"
+  (setq tabulated-list-format [("ID" 10 nil) ("Experiment" 100 nil)])
+  (setq tabulated-list-padding 1)
+  (add-hook 'tabulated-list-revert-hook 'mlflow-experiments-mode-setup t)
+  (tabulated-list-init-header))
+
+(defun mlflow-experiments-mode-setup ()
+  (setq tabulated-list-entries (mlflow-list-experiments))
+  (tabulated-list-print)
+  (hl-line-mode))
+
+(define-key mlflow-experiments-mode-map (kbd "RET") 'mlflow-show-experiment-runs)
+
+(defun mlflow-experiments ()
+  (interactive)
+  (let ((buffer (get-buffer-create "*mlflow-experiments*")))
+    (with-current-buffer buffer
+      (mlflow-experiments-mode)
+      (mlflow-experiments-mode-setup))
+    (switch-to-buffer buffer)))
+
+(define-derived-mode mlflow-experiment-runs-mode tabulated-list-mode "mlflow-experiment-runs"
+  (setq tabulated-list-format [("Name" 20 nil) ("Created" 30 nil) ("Duration (h)" 30 nil) ("Metric" 10 nil)])
+  (setq tabulated-list-padding 1)
+  (add-hook 'tabulated-list-revert-hook 'mlflow-experiment-runs-mode-setup t)
+  (tabulated-list-init-header))
+
+(defun mlflow-experiment-runs-mode-setup ()
+  (let ((experiment-id (tabulated-list-get-id)))
+    (setq tabulated-list-entries (mlflow-list-runs experiment-id))
+    (tabulated-list-print)
+    (hl-line-mode)))
+
+(defun mlflow-show-experiment-runs ()
+  (interactive)
+  (let* ((entry (tabulated-list-get-entry))
+         (experiment-id (and entry
+                             (> (length entry) 0)
+                             (string-trim (aref entry 0)))))
+    (when experiment-id
+      (let ((buffer (get-buffer-create "*mlflow-experiment-runs*")))
+        (with-current-buffer buffer
+          (mlflow-experiment-runs-mode)
+          (setq tabulated-list-entries (mlflow-list-runs experiment-id))
+          (tabulated-list-print)
+          (hl-line-mode))
+        (switch-to-buffer buffer)))))
+
+(defcustom mlflow-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "q") 'kill-buffer)
+    map)
+  "Keymap for `mlflow-mode'."
+  :group 'mlflow
+  :type 'keymap)
+
+(provide 'mlflow)
+#+end_src
+
+#+RESULTS:
+: mlflow
+
 * Key Bindings
 
 #+BEGIN_SRC emacs-lisp :results silent
