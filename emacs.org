@@ -462,6 +462,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (eshell/alias "crun" "conda run -n $1 --no-capture-output ${cdr $*}")
 (eshell/alias "ddu" "du -h --max-depth=1 | *sort -hr")
 (eshell/alias "k" "kubectl $*")
+(eshell/alias "sq" "sky queue -s")
 #+END_SRC
 
 *** Commands
