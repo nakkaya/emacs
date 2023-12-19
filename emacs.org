@@ -1964,7 +1964,7 @@ for run in runs:
 
     end_time = datetime.datetime.fromtimestamp(run.info.end_time / 1000.0) if run.info.end_time else None
     duration = round((end_time - start_time).total_seconds() / 60 / 60, 2) if end_time else None
-    print(f\"{run_name},{start_time},{duration},{metric_str}\")
+    print(f\"{run_name},{start_time},{duration},{metric_str},{run.info.run_id}\")
 ")
 
 (defun mlflow-list-runs (experiment-id)
@@ -1972,7 +1972,7 @@ for run in runs:
             (let ((fields (split-string line "," t)))
               `(nil [, (nth 0 fields)
                        ,(format-time-string "%Y-%m-%d %H:%M" (date-to-time (nth 1 fields)))
-                       ,(nth 2 fields) ,(nth 3 fields)])))
+                       ,(nth 2 fields) ,(nth 3 fields) ,(nth 4 fields)])))
           (split-string
            (mlflow-run (format mlflow-list-runs-command experiment-id))
            "\n" t)))
@@ -2005,7 +2005,11 @@ for run in runs:
 (make-local-variable 'mlflow-run-idx)
 
 (define-derived-mode mlflow-experiment-runs-mode tabulated-list-mode "mlflow-experiment-runs"
-  (setq tabulated-list-format [("Name" 30 nil) ("Created" 20 nil) ("Duration (h)" 15 nil) ("Metric" 10 nil)])
+  (setq tabulated-list-format [("Name" 30 nil)
+			       ("Created" 20 nil)
+			       ("Duration (h)" 15 nil)
+			       ("Metric" 10 nil)
+			       ("ID" 32 nil)])
   (setq tabulated-list-padding 1)
   (setq revert-buffer-function #'mlflow-experiment-runs-mode-refresh)
   (add-hook 'tabulated-list-revert-hook 'mlflow-experiment-runs-mode-setup t)
