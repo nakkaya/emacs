@@ -1980,8 +1980,12 @@ for run in runs:
 (define-derived-mode mlflow-experiments-mode tabulated-list-mode "mlflow-experiments"
   (setq tabulated-list-format [("ID" 10 nil) ("Experiment" 100 nil)])
   (setq tabulated-list-padding 1)
+  (setq revert-buffer-function #'mlflow-experiments-mode-refresh)
   (add-hook 'tabulated-list-revert-hook 'mlflow-experiments-mode-setup t)
   (tabulated-list-init-header))
+
+(defun mlflow-experiments-mode-refresh (&optional ignore-auto noconfirm)
+  (mlflow-experiments-mode-setup))
 
 (defun mlflow-experiments-mode-setup ()
   (setq tabulated-list-entries (mlflow-list-experiments))
@@ -1998,17 +2002,22 @@ for run in runs:
       (mlflow-experiments-mode-setup))
     (switch-to-buffer buffer)))
 
+(make-local-variable 'mlflow-run-idx)
+
 (define-derived-mode mlflow-experiment-runs-mode tabulated-list-mode "mlflow-experiment-runs"
-  (setq tabulated-list-format [("Name" 20 nil) ("Created" 30 nil) ("Duration (h)" 30 nil) ("Metric" 10 nil)])
+  (setq tabulated-list-format [("Name" 30 nil) ("Created" 20 nil) ("Duration (h)" 15 nil) ("Metric" 10 nil)])
   (setq tabulated-list-padding 1)
+  (setq revert-buffer-function #'mlflow-experiment-runs-mode-refresh)
   (add-hook 'tabulated-list-revert-hook 'mlflow-experiment-runs-mode-setup t)
   (tabulated-list-init-header))
 
+(defun mlflow-experiment-runs-mode-refresh (&optional ignore-auto noconfirm)
+  (mlflow-experiment-runs-mode-setup))
+
 (defun mlflow-experiment-runs-mode-setup ()
-  (let ((experiment-id (tabulated-list-get-id)))
-    (setq tabulated-list-entries (mlflow-list-runs experiment-id))
-    (tabulated-list-print)
-    (hl-line-mode)))
+  (setq tabulated-list-entries (mlflow-list-runs mlflow-run-idx))
+  (tabulated-list-print)
+  (hl-line-mode))
 
 (defun mlflow-show-experiment-runs ()
   (interactive)
@@ -2019,6 +2028,7 @@ for run in runs:
     (when experiment-id
       (let ((buffer (get-buffer-create "*mlflow-experiment-runs*")))
         (with-current-buffer buffer
+	  (setq mlflow-run-idx experiment-id)
           (mlflow-experiment-runs-mode)
           (setq tabulated-list-entries (mlflow-list-runs experiment-id))
           (tabulated-list-print)
