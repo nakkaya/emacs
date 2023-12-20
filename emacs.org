@@ -1986,6 +1986,7 @@ run = client.get_run('%s')
 print(f\"Run ID: {run.info.run_id}\")
 print(f\"Run Name: {run.data.tags.get('mlflow.runName', 'No run name')}\")
 print(f\"Status: {run.info.status}\")
+print(f\"Epoch: {len(client.get_metric_history('%s', 'accuracy'))}\")
 print(\"Metrics:\")
 
 for key, value in run.data.metrics.items():
