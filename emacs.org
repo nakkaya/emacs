@@ -1922,16 +1922,16 @@ node `(org) External links' and Info node `(org) Search options'"
 #+begin_src emacs-lisp
 (defvar mlflow-python "~/.conda/envs/ml-toolbox/bin/python")
 
-(defvar mlflow-list-experiments-command "
-from mlflow.tracking import MlflowClient
-xs = MlflowClient().search_experiments()
-for x in xs: print(x.experiment_id, ',', x.name)")
-
 (defun mlflow-run (py)
   (shell-command-to-string
    (format "%s -c \"%s\""
            mlflow-python
            (replace-regexp-in-string "\"" "\\\\\"" py))))
+
+(defvar mlflow-list-experiments-command "
+from mlflow.tracking import MlflowClient
+xs = MlflowClient().search_experiments()
+for x in xs: print(x.experiment_id, ',', x.name)")
 
 (defun mlflow-list-experiments ()
   (mapcar (lambda (line)
@@ -1976,6 +1976,25 @@ for run in runs:
           (split-string
            (mlflow-run (format mlflow-list-runs-command experiment-id))
            "\n" t)))
+
+(defvar mlflow-show-run-command "
+from mlflow.tracking import MlflowClient
+client = MlflowClient()
+
+run = client.get_run('%s')
+
+print(f\"Run ID: {run.info.run_id}\")
+print(f\"Run Name: {run.data.tags.get('mlflow.runName', 'No run name')}\")
+print(f\"Status: {run.info.status}\")
+print(\"Metrics:\")
+
+for key, value in run.data.metrics.items():
+    print(f\"  {key}: {round(value, 3)}\")
+print(\"Parameters:\")
+
+for key, value in run.data.params.items():
+    print(f\"  {key}: {value}\")")
+
 
 (define-derived-mode mlflow-experiments-mode tabulated-list-mode "mlflow-experiments"
   (setq tabulated-list-format [("ID" 10 nil) ("Experiment" 100 nil)])
@@ -2047,11 +2066,29 @@ for run in runs:
   :group 'mlflow
   :type 'keymap)
 
+(defun mlflow-show-run ()
+  (interactive)
+  (let* ((entry (tabulated-list-get-entry))
+         (run-id (and entry (> (length entry) 4) (string-trim (aref entry 4)))))
+    (when run-id
+      (let* ((command (format mlflow-show-run-command run-id run-id))
+             (run-data (mlflow-run command))
+             (output-buffer (get-buffer-create (format "*mlflow-run-%s*" run-id))))
+	(with-current-buffer output-buffer
+	  (erase-buffer)
+	  (insert run-data)
+	  (goto-char (point-min))
+	  (special-mode)
+	  (local-set-key (kbd "q") (lambda ()
+                                     (interactive)
+                                     (kill-buffer)))
+	  (switch-to-buffer output-buffer))))))
+
+(define-key mlflow-experiment-runs-mode-map (kbd "RET") 'mlflow-show-run)
+
+
 (provide 'mlflow)
 #+end_src
-
-#+RESULTS:
-: mlflow
 
 * Key Bindings
 
