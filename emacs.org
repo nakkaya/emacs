@@ -1954,12 +1954,8 @@ for run in runs:
     run_name = run.data.tags.get('mlflow.runName', 'No run name')
     start_time = datetime.datetime.fromtimestamp(run.info.start_time / 1000.0)
 
-    # Get val_dice or val_accuracy if available
-    val_dice = run.data.metrics.get('val_dice')
-    val_accuracy = run.data.metrics.get('val_accuracy')
-    metric_value = val_dice if val_dice is not None else val_accuracy
-
-    # Prepare the printed metric value
+    preferred_metrics = ['max_val_dice', 'val_dice', 'max_val_iou', 'val_iou', 'val_accuracy']
+    metric_value = next((run.data.metrics.get(metric) for metric in preferred_metrics if metric in run.data.metrics), None)
     metric_str = str(round(metric_value, 3)) if metric_value is not None else 'N/A'
 
     end_time = datetime.datetime.fromtimestamp(run.info.end_time / 1000.0) if run.info.end_time else None
