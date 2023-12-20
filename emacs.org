@@ -1955,12 +1955,12 @@ for run in runs:
     start_time = datetime.datetime.fromtimestamp(run.info.start_time / 1000.0)
 
     # Get val_dice or val_accuracy if available
-    val_dice = round(run.data.metrics.get('val_dice'), 3)
-    val_accuracy = round(run.data.metrics.get('val_accuracy'), 3)
+    val_dice = run.data.metrics.get('val_dice')
+    val_accuracy = run.data.metrics.get('val_accuracy')
     metric_value = val_dice if val_dice is not None else val_accuracy
 
     # Prepare the printed metric value
-    metric_str = str(metric_value) if metric_value is not None else 'N/A'
+    metric_str = str(round(metric_value, 3)) if metric_value is not None else 'N/A'
 
     end_time = datetime.datetime.fromtimestamp(run.info.end_time / 1000.0) if run.info.end_time else None
     duration = round((end_time - start_time).total_seconds() / 60 / 60, 2) if end_time else None
