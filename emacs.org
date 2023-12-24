@@ -1225,7 +1225,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
          (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Dentmetria" "Todo")
          "* TODO %?\n" :prepend t)
 	("i" "Identified TODO" entry
-         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Identified" "Todo")
+         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "identifyd" "Todo")
          "* TODO %?\n" :prepend t)
         ("a" "Akademik TODO" entry
          (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Akademik")
