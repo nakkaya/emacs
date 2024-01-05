@@ -1026,6 +1026,18 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 #+end_src
 
+#+begin_src emacs-lisp
+(require 'org-archive)
+
+(defun kill-org-archive-buffer ()
+  (let* ((archive-file (concat (buffer-file-name (current-buffer)) "_archive"))
+         (archive-buffer (find-buffer-visiting archive-file)))
+    (when archive-buffer
+      (kill-buffer archive-buffer))))
+
+(add-hook 'org-archive-hook 'kill-org-archive-buffer)
+#+end_src
+
 ** Babel
 
 #+BEGIN_SRC emacs-lisp :results silent
