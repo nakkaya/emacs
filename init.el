@@ -22,6 +22,7 @@
 	 matlab-mode
 	 yaml-mode
 	 markdown-mode
+	 jsonnet-mode
          terraform-mode
 	 kubel
 	 flycheck
