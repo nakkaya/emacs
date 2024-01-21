@@ -68,7 +68,7 @@
 
 (package-initialize)
 
-(when (not package-archive-contents)
+(unless (cl-every 'package-installed-p package-list)
   (package-refresh-contents))
 
 (dolist (package package-list)

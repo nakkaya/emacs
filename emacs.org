@@ -1351,7 +1351,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (require 'jupyter)
 
   (setq jupyter-long-timeout 30
-	jupyter-default-timeout 10)
+	jupyter-default-timeout 10
+	jupyter-org-auto-connect nil)
 
   (define-key jupyter-repl-mode-map (kbd "<up>") 'jupyter-repl-history-previous)
   (define-key jupyter-repl-mode-map (kbd "<down>") 'jupyter-repl-history-next)
