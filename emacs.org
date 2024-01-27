@@ -107,8 +107,7 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 (require 'saveplace)
 (save-place-mode 1)
 
-(setq na-save-places-filename
-      (concat "source/.emacs-places-" (system-name)))
+(setq na-save-places-filename ".emacs-places")
 
 (cond ((getenv "EMACS_HOME_DIR")
        (setq save-place-file
