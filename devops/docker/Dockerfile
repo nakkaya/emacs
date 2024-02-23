@@ -238,6 +238,11 @@ RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes]==0.4.1" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
+# Install cog
+#
+
+RUN sudo curl -o /usr/local/bin/cog -L "https://github.com/replicate/cog/releases/latest/download/cog_$(uname -s)_$(uname -m)" && \
+    sudo chmod +x /usr/local/bin/cog
 
 # Setup Emacs
 #
