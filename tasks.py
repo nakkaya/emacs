@@ -97,7 +97,8 @@ def docker(c,
         if not with_host:
             pgadmin = pgadmin + " -p 5050:5050/tcp"
 
-    volumes = [["emacsd-home", "/home/core"],
+    volumes = [["emacsd-sshd", "/etc/ssh"],
+               ["emacsd-home", "/home/core"],
                ["emacsd-storage", "/storage"]]
 
     volume_mounts = ""
