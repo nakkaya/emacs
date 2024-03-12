@@ -2330,7 +2330,7 @@ if artifact_content:
   '(bar matches buffer-info buffer-position word-count)
   ;; right part
   ;; misc-info is what is present in global-mode-string
-  '(misc-info debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker conda-env))
+  '(misc-info debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs conda-env))
 
 (doom-modeline-def-modeline 'dired-line
   '(buffer-info remote-host)
