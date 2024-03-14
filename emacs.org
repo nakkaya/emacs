@@ -2180,6 +2180,14 @@ if artifact_content:
           '(lambda ()
 	     (define-key c++-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
+(add-hook 'chatgpt-shell-mode-hook
+          '(lambda ()
+	     (define-key chatgpt-shell-mode-map (kbd "C-d")  #'na-bounce-sexp)))
+
+(add-hook 'java-mode-hook
+          '(lambda ()
+	     (define-key java-mode-map (kbd "C-d")  #'na-bounce-sexp)))
+
 (global-set-key (kbd "C-x t") #'na-new-term)
 
 (with-eval-after-load 'term
