@@ -38,7 +38,7 @@ RUN apt-get update && \
     libpq-dev postgresql-client python3-psycopg2 \
     nfs-common \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
-    meshlab rlwrap netcat less jq \
+    meshlab rlwrap netcat less jq dcm2niix \
     python3-venv python3-wheel \
     # Backup & Storage
     rsync rclone git git-lfs git-annex git-annex-remote-rclone \
