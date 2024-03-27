@@ -36,7 +36,7 @@ RUN apt-get update && \
     zip unzip wget htop xz-utils nq \
     graphviz qutebrowser \
     libpq-dev postgresql-client python3-psycopg2 \
-    nfs-common \
+    nfs-common jsonnet \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq dcm2niix \
     python3-venv python3-wheel \
