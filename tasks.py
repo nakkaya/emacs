@@ -1,10 +1,10 @@
 """emacs build file."""
 
-from invoke import task
+import sys
 import os
 from datetime import datetime
 import platform
-
+from invoke import task
 
 def tag(n):
     """Create tag command."""
@@ -50,6 +50,8 @@ def docker(c,
            with_pgadmin=False,
            restart=False):
     """Launch emacsd Docker Image."""
+    c.run("docker pull nakkaya/emacs:latest")
+
     if restart:
         try:
             c.run("docker stop emacsd")
@@ -107,8 +109,6 @@ def docker(c,
         v_host, v_docker = v
         volume_mounts = volume_mounts + " -v " + v_host + ":" + v_docker + " "
 
-    c.run("docker pull nakkaya/emacs:latest")
-
     cmd = """
     docker run
     --privileged
@@ -129,4 +129,12 @@ def docker(c,
 
     cmd = cmd.replace('\n', ' ')
     cmd = ' '.join(cmd.split())
+
+
+    filename = "./emacsd"
+    with open(filename, 'w') as f:
+        inv_cmd = ' '.join(sys.argv)
+        f.write(f'#!/bin/bash\n\nsudo {inv_cmd}\n')
+    os.chmod(filename, 0o755)
+
     c.run(cmd)

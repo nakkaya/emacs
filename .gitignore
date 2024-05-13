@@ -8,3 +8,4 @@ devops/emacsd/daemon.pid
 devops/windows/matlabShell/matlabShell.exe
 *.DS_Store*
 devops/ubuntu/emacs/
+emacsd
