@@ -169,9 +169,16 @@ to ensure it autosaves the latests version back.
   (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
 
   (defun turn-on-flyspell ()
-    "Force flyspell-mode on using a positive arg.  For use in hooks."
+    "Force flyspell-mode on.  For use in hooks."
     (interactive)
-    (flyspell-mode 1)))
+    (flyspell-mode 1))
+
+  (defun turn-off-flyspell ()
+    "Force flyspell-mode off.  For use in hooks."
+    (interactive)
+    (flyspell-mode 0))
+
+  (add-hook 'yaml-mode-hook 'turn-off-flyspell))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
