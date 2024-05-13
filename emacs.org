@@ -2171,6 +2171,7 @@ if artifact_content:
 
 (when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
   (add-hook 'prog-mode-hook 'copilot-mode)
+  (add-hook 'yaml-mode-hook 'copilot-mode)
 
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
