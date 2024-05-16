@@ -81,13 +81,20 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
 
 # K8S
 #
-RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_x86_64.deb' ;; \
+            arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_arm64.deb' ;; \
+    esac; \
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
     sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
     echo \
     "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
     | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
     apt-get update && \
     apt-get install kubectl socat lsof -y --no-install-recommends && \
+    curl -L -s "${URL}" -o "kubectl-cnpg.deb" && \
+    dpkg -i kubectl-cnpg.deb && \
     cleanup_apt_cache
 
 # k9s
