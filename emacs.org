@@ -496,7 +496,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (defun pcomplete/conn ()
   (pcomplete-here* (na-ssh-completions)))
 
-(eshell/alias "conn" "cd /ssh:$1:~")
+(eshell/alias "conn" "cd /scp:$1:~")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1541,7 +1541,7 @@ node `(org) External links' and Info node `(org) Search options'"
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
 
-(setq tramp-default-method "ssh"
+(setq tramp-default-method "scp"
       tramp-ssh-controlmaster-options ""
       remote-file-name-inhibit-cache nil
       remote-file-name-inhibit-locks t
