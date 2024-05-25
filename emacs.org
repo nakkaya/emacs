@@ -2170,6 +2170,7 @@ if artifact_content:
 		   :files ("*.el")))
 
 (when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
+  (setq copilot-indent-offset-warning-disable t)
   (add-hook 'prog-mode-hook 'copilot-mode)
   (add-hook 'yaml-mode-hook 'copilot-mode)
 
