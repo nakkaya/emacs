@@ -168,8 +168,9 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 
 # Install Syncthing
 #
-RUN wget -q https://syncthing.net/release-key.txt -O- | apt-key add - && \
-    add-apt-repository "deb https://apt.syncthing.net/ syncthing stable" && \
+RUN curl -fsSL https://syncthing.net/release-key.txt | \
+    sudo gpg --dearmor -o /etc/apt/keyrings/syncthing-apt-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/syncthing-apt-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list && \
     apt-get install syncthing -y --no-install-recommends && \
     cleanup_apt_cache
 
