@@ -194,6 +194,7 @@ to ensure it autosaves the latests version back.
        "\\` "
        "^\\*Process List\\*$"
        "^\\*Dired log\\*$"
+       "^\\*copilot events\\*$"
        "^\\*info\\*$"
        "^\\*Man.*\\*$"
        "^\\*tramp.+\\*$"
