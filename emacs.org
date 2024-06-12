@@ -1267,7 +1267,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
          (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
          "* %?\n" :prepend t)
 	("d" "Dentmetria TODO" entry
-         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Dentmetria" "Todo")
+         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Dentmetria")
          "* TODO %?\n" :prepend t)))
 
 (setq org-agenda-window-setup 'current-window
