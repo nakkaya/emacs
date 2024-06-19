@@ -146,10 +146,11 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     echo $TERRAFORM_LS_DIST && \
     wget -q https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/${TERRAFORM_DIST} && \
     wget -q https://releases.hashicorp.com/terraform-ls/${TERRAFORM_LS_VERSION}/${TERRAFORM_LS_DIST} && \
-    unzip ${TERRAFORM_DIST} -d /usr/bin && \
+    unzip -o ${TERRAFORM_DIST} -d /usr/bin && \
     rm -rf ${TERRAFORM_DIST} && \
-    unzip ${TERRAFORM_LS_DIST} -d /usr/bin && \
-    rm -rf ${TERRAFORM_LS_DIST}
+    unzip -o ${TERRAFORM_LS_DIST} -d /usr/bin && \
+    rm -rf ${TERRAFORM_LS_DIST} && \
+    rm /usr/bin/LICENSE.txt 
 
 # Install Docker CLI
 #
