@@ -72,6 +72,7 @@ RUN apt-get update && \
     cleanup_apt_cache
 
 # Node
+#
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
     gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" |  tee /etc/apt/sources.list.d/nodesource.list && \
@@ -81,18 +82,22 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
 
 # K8S
 #
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | \
+    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo \
+    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" \
+    | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
+    apt-get update && \
+    apt-get install kubectl socat lsof -y --no-install-recommends && \
+    cleanup_apt_cache
+
+# CNPG
+#
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
             amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_x86_64.deb' ;; \
             arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_arm64.deb' ;; \
     esac; \
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | \
-    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
-    echo \
-    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
-    | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
-    apt-get update && \
-    apt-get install kubectl socat lsof -y --no-install-recommends && \
     curl -L -s "${URL}" -o "kubectl-cnpg.deb" && \
     dpkg -i kubectl-cnpg.deb && \
     cleanup_apt_cache
@@ -101,8 +106,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz' ;; \
-            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_arm64.tar.gz' ;; \
+            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_Linux_amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_Linux_arm64.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "k9s.tar.gz" && \
     tar -xzf k9s.tar.gz --directory=/usr/bin k9s && \
@@ -112,8 +117,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.1/nats-0.1.1-amd64.deb' ;; \
-            arm64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.1/nats-0.1.1-arm64.deb' ;; \
+            amd64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.4/nats-0.1.4-amd64.deb' ;; \
+            arm64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.4/nats-0.1.4-arm64.deb' ;; \
     esac; \
     curl -L -s "${URL}" -o "nats.deb" && \
     dpkg -i nats.deb && \
@@ -123,8 +128,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/juicedata/juicefs/releases/download/v1.1.0/juicefs-1.1.0-linux-amd64.tar.gz' ;; \
-            arm64) URL='https://github.com/juicedata/juicefs/releases/download/v1.1.0/juicefs-1.1.0-linux-arm64.tar.gz' ;; \
+            amd64) URL='https://github.com/juicedata/juicefs/releases/download/v1.2.0/juicefs-1.2.0-linux-amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/juicedata/juicefs/releases/download/v1.2.0/juicefs-1.2.0-linux-arm64.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "juicefs.tar.gz" && \
     tar -xzf juicefs.tar.gz --directory=/usr/bin juicefs && \
@@ -133,8 +138,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 # Install Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
-    TERRAFORM_VERSION=0.14.11; \
-    TERRAFORM_LS_VERSION=0.22.0; \
+    TERRAFORM_VERSION=1.8.5; \
+    TERRAFORM_LS_VERSION=0.33.2; \
     TERRAFORM_DIST="terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip"; \
     TERRAFORM_LS_DIST="terraform-ls_${TERRAFORM_LS_VERSION}_linux_${ARCH}.zip"; \
     echo $TERRAFORM_DIST && \
@@ -194,8 +199,8 @@ RUN python3 -m venv /opt/invoke && \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-x86_64.sh' ;; \
-            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-aarch64.sh' ;; \
+            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_24.4.0-0-Linux-x86_64.sh' ;; \
+            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_24.4.0-0-Linux-aarch64.sh' ;; \
     esac; \
     curl -s "${URL}" -o "Miniconda3.sh" && \
     bash Miniconda3.sh -b -u -p /opt/conda && \
