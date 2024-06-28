@@ -11,3 +11,7 @@ fi
 if [[ -v PGADMIN_ENB ]]; then
     /usr/bin/supervisorctl start pgadmin
 fi
+
+if [[ -v VSCODE_ENB ]]; then
+    /usr/bin/supervisorctl start vscode
+fi

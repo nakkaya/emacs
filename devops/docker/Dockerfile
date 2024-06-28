@@ -256,6 +256,18 @@ RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod]==0.6.0" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
+# Install OpenVSCode Server
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.90.1/openvscode-server-v1.90.1-linux-x64.tar.gz' ;; \
+            arm64) URL='https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.90.1/openvscode-server-v1.90.1-linux-arm64.tar.gz' ;; \
+    esac; \
+    cd /opt/ && \
+    curl -L -s "${URL}" -o "vscode.tar.gz" && \
+    mkdir openvscode-server && \
+    tar xf vscode.tar.gz -C openvscode-server --strip-components=1 && \
+    rm vscode.tar.gz
 
 # Setup Emacs
 #
@@ -269,10 +281,13 @@ COPY resources/bin/bootrc /usr/bin/bootrc
 RUN sudo chmod +x /usr/bin/bootrc
 COPY resources/bin/notebook /usr/bin/notebook
 RUN sudo chmod +x /usr/bin/notebook
+COPY resources/bin/openvscode-server /usr/bin/openvscode-server
+RUN sudo chmod +x /usr/bin/openvscode-server
 COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/vscode.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R $USER:$USER /opt/emacsd && \
