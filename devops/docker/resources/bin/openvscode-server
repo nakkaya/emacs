@@ -3,7 +3,7 @@
 export SHELL=/bin/bash
 
 if [[ -v PASSWD ]]; then
-    /opt/openvscode-server/bin/openvscode-server --host 0.0.0.0 --connection-token "${PASSWD}"
+    /opt/openvscode-server/bin/openvscode-server --port 1025 --host 0.0.0.0 --connection-token "${PASSWD}"
 else
-    /opt/openvscode-server/bin/openvscode-server --host 0.0.0.0 --without-connection-token
+    /opt/openvscode-server/bin/openvscode-server --port 1025 --host 0.0.0.0 --without-connection-token
 fi
