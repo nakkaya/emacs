@@ -6,6 +6,7 @@ from datetime import datetime
 import platform
 from invoke import task
 
+
 def tag(n):
     """Create tag command."""
     t_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -129,7 +130,6 @@ def docker(c,
 
     cmd = cmd.replace('\n', ' ')
     cmd = ' '.join(cmd.split())
-
 
     filename = "./emacsd"
     with open(filename, 'w') as f:
