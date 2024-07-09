@@ -68,8 +68,6 @@ def docker(c,
         host = "--network host"
     else:
         host = """
-        -p 2222:2222/tcp
-        -p 4242:4242/tcp
         -p 9090:9090/tcp
         """
 
@@ -126,7 +124,7 @@ def docker(c,
     """ + volume_mounts + """
     """ + docker_sock + """
     """ + gpu + """
-    nakkaya/emacs"""
+    nakkaya/emacs:latest"""
 
     cmd = cmd.replace('\n', ' ')
     cmd = ' '.join(cmd.split())
