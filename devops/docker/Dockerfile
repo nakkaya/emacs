@@ -263,7 +263,7 @@ RUN mkdir /var/lib/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend pgadmin\n    mode http\n    server pgadmin_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
+    printf "\n\nbackend pgadmin\n    mode http\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
 
 
 RUN python3 -m venv /opt/skypilot && \
@@ -284,6 +284,12 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     rm vscode.tar.gz && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_vscode path_beg /vscode\n \ \ \ \use_backend vscode if is_vscode\n' /etc/haproxy/haproxy.cfg && \
     printf "\n\nbackend vscode\n    mode http\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
+
+# Setup Jupter Reverproxy
+#
+
+RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend jupyter\n    mode http\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Emacs
 #
