@@ -13,12 +13,10 @@ your username as required.
 You can run it using,
 
     docker run \
-	  --privileged \
-	  --security-opt="seccomp=unconfined" \
 	  --restart=always \
 	  --name emacsd \
 	  --detach \
-	  -p 2222:2222/tcp -p 4242:4242/tcp -p 9090:9090/tcp \
+	  -p 9090:9090/tcp \
 	  nakkaya/emacs
 
 If you have `python` `invoke` installed you can run more complicated
@@ -41,13 +39,13 @@ running image.
     # or
     chrome --app=http://127.0.0.1:9090
 
-Service ports used by the image when enabled,
+Service ports/paths used by the image when enabled,
 
  - Xpra: `9090`
- - SSH: `2222`
- - WebDAV: `4242`
- - Jupyter: `8181`
- - PGAdmin: `5050`
+ - SSH: `9090`
+ - WebDAV: `/disk`
+ - Jupyter: `/jupyter`
+ - PGAdmin: `/pgadmin`
 
 ### Semi Automated Setup
 
