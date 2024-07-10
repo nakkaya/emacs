@@ -258,9 +258,12 @@ RUN mkdir /var/lib/pgadmin && \
     /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     mkdir -p /etc/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
-    mkdir -p /home/$USER/.pgadmin
+    mkdir -p /home/$USER/.pgadmin && \
+    printf "\n/pgadmin      pgadmin\n" >> /etc/haproxy/paths.map && \
+    printf "\nbackend pgadmin\n    mode http\n    acl pgadmin_path path_beg /pgadmin\n    http-request set-header X-Script-Name /pgadmin if pgadmin_path\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
 
 
 RUN python3 -m venv /opt/skypilot && \
@@ -278,7 +281,9 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     curl -L -s "${URL}" -o "vscode.tar.gz" && \
     mkdir openvscode-server && \
     tar xf vscode.tar.gz -C openvscode-server --strip-components=1 && \
-    rm vscode.tar.gz
+    rm vscode.tar.gz && \
+    printf "\n/vscode      vscode\n" >> /etc/haproxy/paths.map && \
+    printf "\nbackend vscode\n    mode http\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Emacs
 #

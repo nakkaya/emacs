@@ -49,6 +49,7 @@ def docker(c,
            with_syncthing=False,
            with_jupyter=False,
            with_pgadmin=False,
+           with_vscode=False,
            restart=False):
     """Launch emacsd Docker Image."""
     c.run("docker pull nakkaya/emacs:latest")
@@ -95,8 +96,10 @@ def docker(c,
     pgadmin = ""
     if with_pgadmin:
         pgadmin = "--env PGADMIN_ENB=1"
-        if not with_host:
-            pgadmin = pgadmin + " -p 5050:5050/tcp"
+
+    vscode = ""
+    if with_vscode:
+        vscode = "--env VSCODE_ENB=1"
 
     volumes = [["emacsd-sshd", "/etc/ssh"],
                ["emacsd-home", "/home/core"],
@@ -121,6 +124,7 @@ def docker(c,
     """ + syncthing + """
     """ + jupyter + """
     """ + pgadmin + """
+    """ + vscode + """
     """ + volume_mounts + """
     """ + docker_sock + """
     """ + gpu + """
