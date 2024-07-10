@@ -262,8 +262,8 @@ RUN mkdir /var/lib/pgadmin && \
     mkdir -p /etc/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin && \
-    printf "\n/pgadmin      pgadmin\n" >> /etc/haproxy/paths.map && \
-    printf "\nbackend pgadmin\n    mode http\n    acl pgadmin_path path_beg /pgadmin\n    http-request set-header X-Script-Name /pgadmin if pgadmin_path\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
+    sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend pgadmin\n    mode http\n    server pgadmin_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
 
 RUN python3 -m venv /opt/skypilot && \
@@ -282,8 +282,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     mkdir openvscode-server && \
     tar xf vscode.tar.gz -C openvscode-server --strip-components=1 && \
     rm vscode.tar.gz && \
-    printf "\n/vscode      vscode\n" >> /etc/haproxy/paths.map && \
-    printf "\nbackend vscode\n    mode http\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
+    sed -i '/default_backend xpra/i \ \ \ \ acl is_vscode path_beg /vscode\n \ \ \ \use_backend vscode if is_vscode\n' /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend vscode\n    mode http\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Emacs
 #
