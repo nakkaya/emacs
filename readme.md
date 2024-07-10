@@ -44,8 +44,9 @@ Service ports/paths used by the image when enabled,
  - Xpra: `9090`
  - SSH: `9090`
  - WebDAV: `/disk`
- - Jupyter: `/jupyter`
- - PGAdmin: `/pgadmin`
+ - Jupyter: `/jupyter` (When enabled.)
+ - PGAdmin: `/pgadmin` (When enabled.)
+ - VScode: `/vscode` (When enabled.)
 
 ### Semi Automated Setup
 

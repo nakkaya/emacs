@@ -90,8 +90,6 @@ def docker(c,
     jupyter = ""
     if with_jupyter:
         jupyter = "--env JUPYTER_SERVER_ENB=1"
-        if not with_host:
-            jupyter = jupyter + " -p 8181:8181/tcp"
 
     pgadmin = ""
     if with_pgadmin:
