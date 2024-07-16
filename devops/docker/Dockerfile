@@ -48,7 +48,7 @@ RUN apt-get update && \
     # C/C++
     build-essential gcc-10 g++-10 \
     # clang clangd cmake cppcheck valgrind \
-    protobuf-compiler protobuf-compiler-grpc-java-plugin \
+    # protobuf-compiler protobuf-compiler-grpc-java-plugin \
     # Latex
     # texlive-latex-base texlive-xetex texlive-lang-english texlive-lang-european \
     # texlive-luatex texlive-plain-generic texlive-fonts-recommended pandoc latexmk \
@@ -61,9 +61,6 @@ RUN apt-get update && \
     jupyter jupyter-notebook \
     # emcas-jupyter
     autoconf automake libtool \
-    # For Teensy
-    # libxft2 \
-    tesseract-ocr \
     -y --no-install-recommends && \
     cleanup_apt_cache
 
@@ -196,7 +193,6 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
 
 # Configure Python
 #
-
 RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
 
@@ -249,9 +245,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 
 # Install pgAdmin
 #
-# /opt/pgadmin/bin/python /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/setup.py setup-db
-# supervisorctl restart pgadmin
-
 RUN mkdir /var/lib/pgadmin && \
     mkdir /var/log/pgadmin && \
     chown $USER /var/lib/pgadmin && \
@@ -292,7 +285,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 
 # Setup Jupter Reverse Proxy
 #
-
 RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
     printf "\n\nbackend jupyter\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
 
