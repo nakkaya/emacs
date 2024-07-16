@@ -250,7 +250,7 @@ RUN mkdir /var/lib/pgadmin && \
     chown $USER /var/lib/pgadmin && \
     chown $USER /var/log/pgadmin && \
     python3 -m venv /opt/pgadmin && \
-    /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
+    # /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
