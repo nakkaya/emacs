@@ -264,7 +264,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
       mkdir -p /home/$USER/.pgadmin && \
       sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
       printf "\n\nbackend pgadmin\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg \
-   fi
+    ; fi
 
 
 RUN python3 -m venv /opt/skypilot && \
