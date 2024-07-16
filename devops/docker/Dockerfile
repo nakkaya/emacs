@@ -246,25 +246,23 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 # Install pgAdmin
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
-    if [ "$ARCH" = "amd64" ]; then \
-      mkdir /var/lib/pgadmin && \
-      mkdir /var/log/pgadmin && \
-      chown $USER /var/lib/pgadmin && \
-      chown $USER /var/log/pgadmin && \
-      python3 -m venv /opt/pgadmin && \
-      /opt/pgadmin/bin/python -m pip install install wheel --no-cache-dir && \
-      /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
-      sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
-      sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
-      sed -i 's/SERVER_MODE = True/SERVER_MODE = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
-      sed -i 's/ENHANCED_COOKIE_PROTECTION = True/ENHANCED_COOKIE_PROTECTION = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
-      sed -i 's/MASTER_PASSWORD_REQUIRED = True/MASTER_PASSWORD_REQUIRED = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
-      mkdir -p /etc/pgadmin && \
-      echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
-      mkdir -p /home/$USER/.pgadmin && \
-      sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
-      printf "\n\nbackend pgadmin\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg \
-    ; fi
+    mkdir /var/lib/pgadmin && \
+    mkdir /var/log/pgadmin && \
+    chown $USER /var/lib/pgadmin && \
+    chown $USER /var/log/pgadmin && \
+    python3 -m venv /opt/pgadmin && \
+    /opt/pgadmin/bin/python -m pip install wheel --no-cache-dir && \
+    /opt/pgadmin/bin/python -m pip install pgadmin4 --no-cache-dir && \
+    sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/SERVER_MODE = True/SERVER_MODE = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/ENHANCED_COOKIE_PROTECTION = True/ENHANCED_COOKIE_PROTECTION = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/MASTER_PASSWORD_REQUIRED = True/MASTER_PASSWORD_REQUIRED = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    mkdir -p /etc/pgadmin && \
+    echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
+    mkdir -p /home/$USER/.pgadmin && \
+    sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend pgadmin\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
 
 
 RUN python3 -m venv /opt/skypilot && \
