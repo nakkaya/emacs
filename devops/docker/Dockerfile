@@ -190,6 +190,8 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
     echo "deb [signed-by=/etc/apt/keyrings/syncthing-apt-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list && \
     apt-get update  && \
     apt-get install syncthing -y --no-install-recommends && \
+    sed -i '/default_backend xpra/i \ \ \ \ acl is_syncthing path_beg /syncthing\n \ \ \ \use_backend syncthing if is_syncthing\n' /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend syncthing\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /syncthing/ if { path /syncthing }\n    http-request set-path %%[path,regsub(^/syncthing/,/)]\n    server syncthing_server 127.0.0.1:8384\n" >> /etc/haproxy/haproxy.cfg && \
     cleanup_apt_cache
 
 # Configure Python
@@ -259,11 +261,14 @@ RUN mkdir /var/lib/pgadmin && \
     /opt/pgadmin/bin/python -m pip install install pgadmin4 --no-cache-dir && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/SERVER_MODE = True/SERVER_MODE = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/ENHANCED_COOKIE_PROTECTION = True/ENHANCED_COOKIE_PROTECTION = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
+    sed -i 's/MASTER_PASSWORD_REQUIRED = True/MASTER_PASSWORD_REQUIRED = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     mkdir -p /etc/pgadmin && \
     echo "DATA_DIR = '/home/${USER}/.pgadmin/'" >> /etc/pgadmin/config_system.py && \
     mkdir -p /home/$USER/.pgadmin && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_pgadmin path_beg /pgadmin\n \ \ \ \use_backend pgadmin if is_pgadmin\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend pgadmin\n    mode http\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
+    printf "\n\nbackend pgadmin\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
 
 
 RUN python3 -m venv /opt/skypilot && \
@@ -283,13 +288,13 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     tar xf vscode.tar.gz -C openvscode-server --strip-components=1 && \
     rm vscode.tar.gz && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_vscode path_beg /vscode\n \ \ \ \use_backend vscode if is_vscode\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend vscode\n    mode http\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
+    printf "\n\nbackend vscode\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Jupter Reverproxy
 #
 
 RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend jupyter\n    mode http\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
+    printf "\n\nbackend jupyter\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Emacs
 #
@@ -301,10 +306,6 @@ COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
 COPY resources/bin/bootrc /usr/bin/bootrc
 RUN sudo chmod +x /usr/bin/bootrc
-COPY resources/bin/notebook /usr/bin/notebook
-RUN sudo chmod +x /usr/bin/notebook
-COPY resources/bin/openvscode-server /usr/bin/openvscode-server
-RUN sudo chmod +x /usr/bin/openvscode-server
 COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/

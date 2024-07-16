@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-export SHELL=/bin/bash
-
-if [[ -v PASSWD ]]; then
-    /opt/openvscode-server/bin/openvscode-server --port 49164 --host 0.0.0.0 --connection-token "${PASSWD}" --server-base-path vscode
-else
-    /opt/openvscode-server/bin/openvscode-server --port 49164 --host 0.0.0.0 --without-connection-token --server-base-path vscode
-fi

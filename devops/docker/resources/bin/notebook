@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-export SHELL=/bin/bash
-
-if [[ -v PASSWD ]]; then
-    jupyter notebook --no-browser --ip='*' --port=49166 --NotebookApp.token="${PASSWD}" --NotebookApp.base_url=/jupyter
-else
-    jupyter notebook --no-browser --ip='*' --port=49166 --NotebookApp.token='' --NotebookApp.base_url=/jupyter
-fi
