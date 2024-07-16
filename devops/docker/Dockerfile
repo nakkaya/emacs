@@ -290,7 +290,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_vscode path_beg /vscode\n \ \ \ \use_backend vscode if is_vscode\n' /etc/haproxy/haproxy.cfg && \
     printf "\n\nbackend vscode\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
-# Setup Jupter Reverproxy
+# Setup Jupter Reverse Proxy
 #
 
 RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
