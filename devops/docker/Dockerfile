@@ -188,7 +188,7 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
     apt-get update  && \
     apt-get install syncthing -y --no-install-recommends && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_syncthing path_beg /syncthing\n \ \ \ \use_backend syncthing if is_syncthing\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend syncthing\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /syncthing/ if { path /syncthing }\n    http-request set-path %%[path,regsub(^/syncthing/,/)]\n    server syncthing_server 127.0.0.1:8384\n" >> /etc/haproxy/haproxy.cfg && \
+    printf "\n\nbackend syncthing\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /syncthing/ if { path /syncthing }\n    http-request set-path %%[path,regsub(^/syncthing/,/)]\n    http-request set-header Host localhost\n    server syncthing_server 127.0.0.1:8384\n" >> /etc/haproxy/haproxy.cfg && \
     cleanup_apt_cache
 
 # Configure Python
