@@ -295,6 +295,8 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
 
+RUN echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/conda/bin:/opt/python-lsp-server/bin:/opt/skypilot/bin:/opt/ansible/bin:/opt/invoke/bin:"' > /etc/environment
+
 COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 RUN sudo chmod +x /usr/bin/ob-tangle
 COPY resources/bin/bootrc /usr/bin/bootrc
