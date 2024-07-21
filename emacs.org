@@ -341,9 +341,6 @@ to ensure it autosaves the latests version back.
 	   "/opt/homebrew/bin/:"
 	   "/opt/homebrew/opt/coreutils/libexec/gnubin:"
 	   "/opt/homebrew/opt/openjdk/bin:"
-	   "/Applications/Postgres.app/Contents/Versions/latest/bin:"
-	   (concat (getenv "HOME") "/Documents/:")
-	   (concat (getenv "HOME") "/Documents/google-cloud-sdk/bin:")
            (concat (getenv "HOME") "/.bin:")
            (concat (getenv "HOME") "/.local/bin:")
 	   (concat (getenv "HOME") "/.emacs.build/src:")
@@ -351,7 +348,6 @@ to ensure it autosaves the latests version back.
            (concat (getenv "HOME") "/.git-annex.linux:")
            (concat (getenv "HOME") "/.rclone:")
 	   (getenv "PATH") ":"
-	   (concat (getenv "HOME") "/.conda/envs/skypilot/bin:")
 	   "/opt/homebrew/Caskroom/miniconda/base/envs/skypilot/bin:")))
 
 (if (eq system-type 'windows-nt)
@@ -639,13 +635,19 @@ SSH at least,
 (require 'chatgpt-shell)
 
 (setq chatgpt-shell-streaming t)
+(setq shell-maker-prompt-before-killing-buffer nil)
+
+(add-hook 'chatgpt-shell-mode-hook
+          (lambda ()
+	    (define-key chatgpt-shell-mode-map (kbd "M-n") (kbd "C-u 2 C-v"))
+	    (define-key chatgpt-shell-mode-map (kbd "M-p") (kbd "C-u 2 M-v"))))
 
 ;;(custom-reevaluate-setting 'chatgpt-shell-system-prompts)
 
 (add-to-list 'chatgpt-shell-system-prompts '("jph00" . "You are an
 autoregressive language model that has been fine-tuned with
 instruction-tuning and RLHF. You carefully provide accurate, factual,
-thoughtful,nuanced answers, and are brilliant at reasoning. If you
+thoughtful, nuanced answers. You are brilliant at reasoning. If you
 think there might not be a correct answer, you say so.
 
 Your users are experts in AI and ethics, so they already know you're a
