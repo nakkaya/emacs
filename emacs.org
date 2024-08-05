@@ -1356,6 +1356,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 ** emacs-jupyter
 
 #+begin_example
+(jupyter-available-kernelspecs t)
+#+end_example
+
+#+begin_example
 ;; Extra Setup on OS X
 
 ;; Install libtool
