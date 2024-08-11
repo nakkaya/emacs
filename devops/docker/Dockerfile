@@ -72,7 +72,8 @@ RUN apt-get update && \
 #
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
     gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" |  tee /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" |  \
+    tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
     apt-get install nodejs -y --no-install-recommends && \
     cleanup_apt_cache
@@ -82,8 +83,8 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
 RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | \
     sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
     echo \
-    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" \
-    | tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
+    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | \
+    tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
     apt-get update && \
     apt-get install kubectl socat lsof -y --no-install-recommends && \
     cleanup_apt_cache
@@ -143,7 +144,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     tar -xzf juicefs.tar.gz --directory=/usr/bin juicefs && \
     rm -rf juicefs.tar.gz
 
-# Install Terraform
+# Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     TERRAFORM_VERSION=1.8.5; \
@@ -160,7 +161,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     rm -rf ${TERRAFORM_LS_DIST} && \
     rm /usr/bin/LICENSE.txt 
 
-# Install Docker CLI
+# Docker CLI
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
@@ -180,11 +181,12 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     usermod -a -G docker $USER && \
     cleanup_apt_cache
 
-# Install Syncthing
+# Syncthing
 #
 RUN curl -fsSL https://syncthing.net/release-key.txt | \
     sudo gpg --dearmor -o /etc/apt/keyrings/syncthing-apt-keyring.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/syncthing-apt-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/syncthing-apt-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | \
+    tee /etc/apt/sources.list.d/syncthing.list && \
     apt-get update  && \
     apt-get install syncthing -y --no-install-recommends && \
     sed -i '/default_backend xpra/i \ \ \ \ acl is_syncthing path_beg /syncthing\n \ \ \ \use_backend syncthing if is_syncthing\n' /etc/haproxy/haproxy.cfg && \
@@ -205,7 +207,7 @@ RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
 
-# Install Miniconda
+# Miniconda
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
@@ -218,7 +220,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     su - $USER -c '/opt/conda/bin/conda config --set auto_activate_base false' && \
     rm -rf Miniconda3.sh
 
-# Install Clojure
+# Clojure
 #
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
@@ -230,7 +232,7 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     ln -s /usr/local/bin/clojure /usr/local/bin/clj
 
 
-# Install AWS CLI
+# AWS CLI
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
@@ -243,7 +245,19 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     ./aws/install && \
     rm awscliv2.zip
 
-# Install pgAdmin
+# Google Cloud CLI
+#
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+    sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
+    echo \
+    "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+    tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    apt-get update && \
+    apt-get install google-cloud-cli -y --no-install-recommends && \
+    cleanup_apt_cache
+
+
+# pgAdmin
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     mkdir /var/lib/pgadmin && \
@@ -269,7 +283,7 @@ RUN python3 -m venv /opt/skypilot && \
     /opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod,gcp]==0.6.1" --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
-# Install OpenVSCode Server
+# OpenVSCode Server
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
