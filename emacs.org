@@ -1560,7 +1560,7 @@ node `(org) External links' and Info node `(org) Search options'"
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
 
-(setq tramp-default-method "scp"
+(setq tramp-default-method "ssh"
       tramp-ssh-controlmaster-options ""
       remote-file-name-inhibit-cache nil
       remote-file-name-inhibit-locks t
