@@ -1225,8 +1225,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (require 'org-agenda)
 
-(setq org-agenda-show-all-dates nil)
-
 (setq org-agenda-prefix-format '((agenda  . "  ● %i %?-12t% s")
 				 (timeline  . "  % s")
 				 (todo  . " %i %-12:c")
@@ -1235,7 +1233,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq org-agenda-custom-commands
       '(("h" "Agenda and Todo"
-         ((agenda "" ((org-agenda-span 14)
+         ((agenda "" ((org-agenda-span 7)
                       (org-agenda-start-on-weekday nil)
 		      (org-deadline-warning-days 0)))
 	  (agenda "" ((org-agenda-overriding-header "Deadlines")
@@ -1338,6 +1336,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 			     (jump-to-org-agenda))))))
 
 (global-set-key [f1] #'jump-to-org-agenda)
+
+;; Temporary fix, something is overriding this
+(setq org-agenda-show-all-dates nil)
 #+END_SRC
 
 ** QL
