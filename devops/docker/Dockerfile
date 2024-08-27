@@ -207,6 +207,10 @@ RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
 
+RUN python3 -m venv /opt/aider && \
+    /opt/aider/bin/python -m pip install aider-chat --no-cache-dir && \
+    echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc
+
 # Miniconda
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
