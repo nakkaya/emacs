@@ -55,11 +55,13 @@ RUN apt-get update && \
     # PDF Tools
     libpng-dev zlib1g-dev libpoppler-glib-dev \
     poppler-utils libpoppler-private-dev imagemagick \
+    # Vterm
+    cmake libvterm-dev \
     # for cv2
     libgl1 libglib2.0-0 \
     # Jupyter
     jupyter jupyter-notebook \
-    # emcas-jupyter
+    # emacs-jupyter
     autoconf automake libtool \
     -y --no-install-recommends && \
     cleanup_apt_cache

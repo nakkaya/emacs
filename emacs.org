@@ -605,8 +605,28 @@ SSH at least,
 #+end_src
 
 ** Term
+*** VTerm
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :results silent
+(when (package-installed-p 'vterm)
+  (require 'vterm)
+  (setq vterm-shell "/bin/bash")
+
+  (quelpa '(eshell-vterm
+            :fetcher github
+	    :repo "iostapyshyn/eshell-vterm"
+	    :files ("eshell-vterm.el")))
+
+  (use-package eshell-vterm
+    :demand t
+    :after eshell
+    :config
+    (eshell-vterm-mode)))
+#+end_src
+
+*** Term
+
+#+BEGIN_SRC emacs-lisp :results silent
 (setq term-term-name "eterm-color")
 
 (require 'multi-term)
@@ -620,7 +640,9 @@ SSH at least,
   "Open a new instance of eshell."
   (interactive "P")
   (if term-or-shell
-      (multi-term)
+      (if (package-installed-p 'vterm)
+	  (vterm t)
+	(multi-term))
     (eshell 'N)))
 #+END_SRC
 
@@ -631,6 +653,8 @@ SSH at least,
   (add-to-list 'display-buffer-alist
 	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
+
+*** ChatGPT Shell
 
 #+begin_src emacs-lisp :results silent
 (require 'chatgpt-shell)
@@ -1902,28 +1926,32 @@ node `(org) External links' and Info node `(org) Search options'"
 * Popper
 
 #+begin_src emacs-lisp :results silent
-  (use-package popper
-    :ensure t ; or :straight t
-    :bind (("M-q"   . popper-toggle-latest)
-           ("M-\\"   . popper-cycle)
-           ("C-M-\\" . popper-toggle-type))
-    :init
-    (setq popper-reference-buffers
-          '("^\\*eshell.*\\*$" eshell-mode
-	    "^*cider-repl.*"
-	    "^*MATLAB.*"
-	    "^\\*term.*\\*$"   term-mode
-	    "^*jupyter-.*"
-	    inferior-python-mode
-	    inferior-lisp-mode
-            compilation-mode))
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("M-q"   . popper-toggle-latest)
+         ("M-\\"   . popper-cycle)
+         ("C-M-\\" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("^\\*eshell.*\\*$" eshell-mode
+	  "^*cider-repl.*"
+	  "^*MATLAB.*"
+	  "^\\*term.*\\*$" term-mode
+	  "^*jupyter-.*"
+	  inferior-python-mode
+	  inferior-lisp-mode
+          compilation-mode))
 
-    (setq popper-display-function
-	  (lambda (b a)
-	    (display-buffer-same-window b a)))
+  (when (package-installed-p 'vterm)
+    (push "^\\*vterm\\*.*" popper-reference-buffers)
+    (push 'vterm-mode popper-reference-buffers))
 
-    (popper-mode +1)
-    (popper-echo-mode +1))
+  (setq popper-display-function
+	(lambda (b a)
+	  (display-buffer-same-window b a)))
+
+  (popper-mode +1)
+  (popper-echo-mode +1))
 #+end_src
 
 * elfeed
@@ -2241,6 +2269,13 @@ if artifact_content:
   (define-key term-raw-map (kbd "C-\\")     #'other-window)
   (define-key term-raw-map (kbd "M-\\")     #'popper-cycle)
   (define-key term-raw-map (kbd "M-q")      #'popper-toggle-latest))
+
+(with-eval-after-load 'vterm
+  (define-key vterm-mode-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key vterm-mode-map (kbd "C-y")      #'vterm-yank)
+  (define-key vterm-mode-map (kbd "C-\\")     #'other-window)
+  (define-key vterm-mode-map (kbd "M-\\")     #'popper-cycle)
+  (define-key vterm-mode-map (kbd "M-q")      #'popper-toggle-latest))
 
 (global-set-key "\M-[1;5C" #'forward-word)
 (global-set-key "\M-[1;5D" #'backward-word)

@@ -60,7 +60,8 @@
   (push 'org-pdftools package-list))
 
 (when module-file-suffix
-  (push 'jupyter package-list))
+  (push 'jupyter package-list)
+  (push 'vterm package-list))
 
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
