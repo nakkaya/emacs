@@ -285,8 +285,10 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     printf "\n\nbackend pgadmin\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request set-header X-Script-Name /pgadmin\n    server pgadmin_server 127.0.0.1:49162\n" >> /etc/haproxy/haproxy.cfg
 
 
-RUN python3 -m venv /opt/skypilot && \
-    /opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod,gcp]==0.6.0" --no-cache-dir && \
+RUN mkdir /opt/skypilot && \
+    chown $USER:$USER /opt/skypilot && \
+    su - $USER -c 'python3 -m venv /opt/skypilot' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod,gcp]==0.6.1" --no-cache-dir' && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # OpenVSCode Server
