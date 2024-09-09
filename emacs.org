@@ -610,7 +610,8 @@ SSH at least,
 #+begin_src emacs-lisp :results silent
 (when (package-installed-p 'vterm)
   (require 'vterm)
-  (setq vterm-shell "/bin/bash")
+  (setq vterm-shell "/bin/bash"
+	vterm-timer-delay 0.01)
 
   (quelpa '(eshell-vterm
             :fetcher github
@@ -1818,6 +1819,7 @@ node `(org) External links' and Info node `(org) Search options'"
                ("Terminal" (or (mode . term-mode)
 			       (name . "^*chatgpt.*")
                                (name . "^*eshell.*")
+			       (name . "^*ssh.*")
                                (name . "^\\*offlineimap\\*$")
 			       (name . "^*Async Shell.*")))
                ("Dired" (or (mode . dired-mode)
