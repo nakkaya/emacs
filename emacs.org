@@ -1268,29 +1268,18 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 		      (org-agenda-entry-types '(:deadline))
 		      (org-agenda-show-all-dates nil)
 		      (org-agenda-format-date "")))
-          (tags-todo "personal/TODO")
-          (tags-todo "work/TODO")
-          (tags-todo "personal/WAIT")
-          (tags-todo "work/WAIT")))))
+          (todo "TODO")
+          (todo "WAIT")))))
 
 (setq org-capture-templates
       '(("p" "Personal TODO" entry
          (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
          "* TODO %?\n" :prepend t)
-	("t" "Personal TODO for Tomorrow" entry
-         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
-         "* TODO %?\nSCHEDULED: <%(org-read-date nil nil \"+1d\")>" :prepend t)
-	("h" "Personal TODO for Next Hour" entry
-         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Personal")
-         "* TODO %?\nSCHEDULED: <%(concat (org-read-date nil nil \"\") \" \" (format-time-string \"%H:%M\" (+ (float-time) 3600)))>" :prepend t)
-	("r" "Research TODO" entry
-         (file+headline (lambda () (concat na-agenda-folder "notes.org")) "Research")
-         "* TODO %?\n" :prepend t)
 	("b" "Read Later" entry
          (file+headline (lambda () (concat na-agenda-folder "bookmarks.org")) "Read Later")
          "* %?\n" :prepend t)
-	("d" "Dentmetria TODO" entry
-         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Dentmetria")
+	("w" "Work TODO" entry
+         (file+olp (lambda () (concat na-agenda-folder "notes.org")) "Work")
          "* TODO %?\n" :prepend t)))
 
 (setq org-agenda-window-setup 'current-window
