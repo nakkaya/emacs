@@ -1052,6 +1052,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-superstar-headline-bullets-list '("●" "●" "●" "●" "●")
       org-link-file-path-type 'relative)
 
+(add-to-list 'org-link-frame-setup '(file . find-file))
+
 (add-hook 'org-mode-hook (lambda ()
 			   (org-superstar-mode 1)))
 
