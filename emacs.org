@@ -1372,6 +1372,37 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (define-key org-mode-map (kbd "C-c C-j") 'helm-org-ql)
 #+end_src
 
+** Roam
+
+#+begin_src emacs-lisp :results silent
+(cond ((file-exists-p "~/rosetta/")
+       (setq na-org-roam-directory "~/rosetta/"))
+      ((file-exists-p "/storage/source/rosetta/")
+       (setq na-org-roam-directory "/storage/source/rosetta/"))
+      ((file-exists-p "~/source/rosetta/")
+       (setq na-org-roam-directory "~/source/rosetta/"))
+      (t
+       (setq na-org-roam-directory "~/rosetta/")))
+
+(when (and (file-exists-p na-org-roam-directory)
+	   (or (eq system-type 'gnu/linux)
+	       (eq system-type 'darwin)))
+  (use-package org-roam
+    :ensure t
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory na-org-roam-directory)
+    (org-roam-completion-everywhere t)
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           :map org-mode-map
+           ("C-M-i"    . completion-at-point))
+    :config
+    (org-roam-setup)))
+#+end_src
+
 * Jupyter
 ** emacs-jupyter
 

@@ -59,7 +59,8 @@
   (push 'pdf-tools package-list)
   (push 'saveplace-pdf-view package-list)
   (push 'org-noter package-list)
-  (push 'org-pdftools package-list))
+  (push 'org-pdftools package-list)
+  (push 'org-roam package-list))
 
 (when module-file-suffix
   (push 'jupyter package-list)
