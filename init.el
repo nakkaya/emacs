@@ -32,7 +32,6 @@
          lsp-mode
 	 lsp-ui
 	 org
-         org-superstar
 	 ein
          docker
          dockerfile-mode

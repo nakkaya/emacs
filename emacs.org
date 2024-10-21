@@ -1033,7 +1033,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp :results silent
 (require 'org)
-(require 'org-superstar)
 
 (setq org-startup-folded t
       org-adapt-indentation nil
@@ -1049,13 +1048,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-src-tab-acts-natively t
       org-src-preserve-indentation t
       org-ellipsis " ▶"
-      org-superstar-headline-bullets-list '("●" "●" "●" "●" "●")
       org-link-file-path-type 'relative)
 
 (add-to-list 'org-link-frame-setup '(file . find-file))
-
-(add-hook 'org-mode-hook (lambda ()
-			   (org-superstar-mode 1)))
 
 (define-key org-mode-map (kbd "C-c b") #'org-insert-structure-template)
 
@@ -1095,6 +1090,22 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (add-hook 'org-archive-hook 'kill-org-archive-buffer)
 #+end_src
+
+#+begin_src emacs-lisp :results silent
+(quelpa '(org-margin
+          :fetcher github
+	  :repo "rougier/org-margin"))
+
+(setq org-margin-markers
+      (list (cons "\\(#\\+begin_src\\)"
+		  (propertize "⨀" 'face '(font-lock-comment-face bold)))
+            (cons "\\(#\\+begin_quote\\)"
+		  (propertize "“" 'face '(font-lock-comment-face bold)))))
+
+
+(add-hook 'org-mode-hook 'org-margin-mode)
+#+end_src
+
 
 ** Babel
 
