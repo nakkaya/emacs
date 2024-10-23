@@ -2025,112 +2025,137 @@ node `(org) External links' and Info node `(org) Search options'"
 * mlflow
 
 #+begin_src emacs-lisp
-(defvar mlflow-python "~/.conda/envs/ml-toolbox/bin/python")
+(require 'json)
+(require 'time-date)
+(require 'url)
 
-(defun mlflow-run (py)
-  (shell-command-to-string
-   (format "%s -c \"%s\""
-           mlflow-python
-           (replace-regexp-in-string "\"" "\\\\\"" py))))
-
-(defvar mlflow-list-experiments-command "
-from mlflow.tracking import MlflowClient
-xs = MlflowClient().search_experiments()
-for x in xs: print(x.experiment_id, ',', x.name)")
+(defun mlflow-request (endpoint method data)
+  (let* ((url-request-method method)
+         (url-request-extra-headers
+          '(("Content-Type" . "application/json")))
+         (url-request-data (encode-coding-string data 'utf-8))
+         (auth (concat mlflow-username ":" mlflow-password))
+         (url-http-userid mlflow-username)
+         (url-http-password mlflow-password)
+         (url (concat mlflow-server-url "/api/2.0/mlflow/" endpoint)))
+    (with-current-buffer
+        (url-retrieve-synchronously url)
+      (goto-char (point-min))
+      (re-search-forward "^$")
+      (delete-region (point-min) (point))
+      (buffer-string))))
 
 (defun mlflow-list-experiments ()
-  (mapcar (lambda (line)
-            (let ((fields (split-string line "," t)))
-              `(nil [, (car fields) ,(cadr fields)])))
-          (split-string (mlflow-run mlflow-list-experiments-command) "\n" t)))
-
-(defvar mlflow-list-runs-command "
-import datetime
-from mlflow.tracking import MlflowClient
-
-client = MlflowClient()
-runs = client.search_runs(
-    experiment_ids=[%s],
-    filter_string='',
-    order_by=['start_time desc']
-)
-
-for run in runs:
-    run_name = run.data.tags.get('mlflow.runName', 'No run name')
-    start_time = datetime.datetime.fromtimestamp(run.info.start_time / 1000.0)
-
-    preferred_metrics = ['max_val_dice', 'val_dice', 'max_val_iou', 'val_iou', 'val_accuracy']
-    metric_value = next((run.data.metrics.get(metric) for metric in preferred_metrics if metric in run.data.metrics), None)
-    metric_str = str(round(metric_value, 3)) if metric_value is not None else 'N/A'
-
-    end_time = datetime.datetime.fromtimestamp(run.info.end_time / 1000.0) if run.info.end_time else None
-    duration = round((end_time - start_time).total_seconds() / 60 / 60, 2) if end_time else None
-    print(f\"{run_name},{start_time},{duration},{metric_str},{run.info.run_id}\")
-")
+  (let* ((response (mlflow-request "experiments/search" "POST" 
+                                   "{\"order_by\": [\"last_update_time DESC\"], \"max_results\": 1000}"))
+         (json-object-type 'plist)
+         (json-array-type 'list)
+         (parsed-response (json-read-from-string response))
+         (experiments (plist-get parsed-response :experiments)))
+    (mapcar (lambda (exp)
+              `(nil [,(plist-get exp :experiment_id) ,(plist-get exp :name)]))
+            experiments)))
 
 (defun mlflow-list-runs (experiment-id)
-  (mapcar (lambda (line)
-            (let ((fields (split-string line "," t)))
-              `(nil [, (nth 0 fields)
-                       ,(format-time-string "%Y-%m-%d %H:%M" (date-to-time (nth 1 fields)))
-                       ,(nth 2 fields) ,(nth 3 fields) ,(nth 4 fields)])))
-          (split-string
-           (mlflow-run (format mlflow-list-runs-command experiment-id))
-           "\n" t)))
+  (let* ((data (json-encode `(("experiment_ids" . [,experiment-id])
+                              ("max_results" . 100)
+                              ("order_by" . ["start_time DESC"]))))
+         (response (mlflow-request "runs/search" "POST" data))
+         (json-object-type 'plist)
+         (json-array-type 'list)
+         (parsed-response (json-read-from-string response))
+         (runs (plist-get parsed-response :runs)))
+    (mapcar 'mlflow-process-run runs)))
 
-(defvar mlflow-show-run-command "
-from mlflow.tracking import MlflowClient
-client = MlflowClient()
+(defun mlflow-get-tag-value (m k)
+  (let ((tag (cl-find k m :test #'string= :key (lambda (tag) (plist-get tag :key)))))
+    (when tag
+      (plist-get tag :value))))
 
-run = client.get_run('%s')
+(defun mlflow-process-run (run)
+  (let* ((info (plist-get run :info))
+         (data (plist-get run :data))
+         (tags (plist-get data :tags))
+         (metrics (plist-get data :metrics))
+         (run-name (or (mlflow-get-tag-value tags "mlflow.runName") "No run name"))
+         (start-time (/ (plist-get info :start_time) 1000.0))
+         (end-time (/ (plist-get info :end_time) 1000.0))
+         (duration (if (> end-time 0)
+                       (round (/ (- end-time start-time) 3600.0) 2)
+                     nil))
+         (metric-value (mlflow-get-preferred-metric metrics))
+         (metric-str (if metric-value (format "%.3f" metric-value) "N/A")))
+    `(nil [,run-name
+           ,(format-time-string "%Y-%m-%d %H:%M" (seconds-to-time start-time))
+           ,(if duration (number-to-string duration) "N/A")
+           ,metric-str
+           ,(plist-get info :run_id)])))
 
-print(f\"Run ID: {run.info.run_id}\")
-print(f\"Run Name: {run.data.tags.get('mlflow.runName', 'No run name')}\")
-print(f\"Status: {run.info.status}\")
-print(f\"Epoch: {len(client.get_metric_history('%s', 'accuracy'))}\")
-print(\"Metrics:\")
+(defun mlflow-get-preferred-metric (metrics)
+  (let ((preferred-metrics '("max_val_dice" "max_val_accuracy" "test_dice" "test_f1")))
+    (catch 'found
+      (dolist (metric preferred-metrics)
+        (let ((value (mlflow-get-tag-value metrics metric)))
+          (when value
+            (throw 'found value))))
+      nil)))
 
-for key, value in run.data.metrics.items():
-    print(f\"  {key}: {round(value, 3)}\")
-print(\"Parameters:\")
+(defun mlflow-show-run ()
+  (let* ((entry (tabulated-list-get-entry))
+         (run-id (and entry (> (length entry) 4) (string-trim (aref entry 4)))))
+    (when run-id
+      (let* ((run-data (mlflow-get-run-data run-id))
+             (output-buffer (get-buffer-create (format "*mlflow-run-%s*" run-id))))
+        (with-current-buffer output-buffer
+          (erase-buffer)
+          (insert (mlflow-format-run-data run-data))
+          (goto-char (point-min))
+          (special-mode)
+          (local-set-key (kbd "q") (lambda ()
+                                     (interactive)
+                                     (kill-buffer)))
+          (switch-to-buffer output-buffer))))))
 
-for key, value in run.data.params.items():
-    print(f\"  {key}: {value}\")")
+(defun mlflow-get-run-data (run-id)
+  (let* ((response (mlflow-request (format "runs/get?run_id=%s" run-id) "GET" ""))
+         (json-object-type 'plist)
+         (json-array-type 'list)
+         (parsed-response (json-read-from-string response)))
+    parsed-response))
 
-(defvar mlflow-show-model-artifact-command "
-from mlflow.tracking import MlflowClient
-from mlflow.artifacts import download_artifacts
-import json
-import ml_toolbox.dataset
+(defun mlflow-format-run-data (run-data)
+  (let* ((run (plist-get run-data :run))
+         (info (plist-get run :info))
+         (data (plist-get run :data))
+         (tags (plist-get data :tags))
+         (metrics (plist-get data :metrics))
+         (params (plist-get data :params)))
+    (concat
+     (format "Run ID: %s\n" (plist-get info :run_id))
+     (format "Run Name: %s\n" (or (mlflow-get-tag-value tags "mlflow.runName") "No run name"))
+     (format "Status: %s\n" (plist-get info :status))
+     (format "Epoch: %s\n" (mlflow-get-metric-history-length run-id "accuracy"))
+     "Metrics:\n"
+     (mapconcat (lambda (metric)
+                  (format "  %s: %.3f" (plist-get metric :key) (plist-get metric :value)))
+                metrics "\n")
+     "\nParameters:\n"
+     (mapconcat (lambda (param)
+                  (format "  %s: %s" (plist-get param :key) (plist-get param :value)))
+                params "\n"))))
 
-client = MlflowClient()
+(defun mlflow-get-metric-history-length (run-id metric-key)
+  (let* ((response (mlflow-request (format "metrics/get-history?run_id=%s&metric_key=%s" run-id metric-key) "GET" ""))
+         (json-object-type 'plist)
+         (json-array-type 'list)
+         (parsed-response (json-read-from-string response))
+         (metrics (plist-get parsed-response :metrics)))
+    (number-to-string (length metrics))))
 
-def get_model_json_artifact(run_id):
-    run_info = client.get_run(run_id)
-    artifacts_root_uri = run_info.info.artifact_uri
-    artifacts = client.list_artifacts(run_id)
-    model_json_artifact = next((artifact for artifact in artifacts if artifact.path.endswith('model.json')), None)
-
-    if not model_json_artifact:
-        print('Error: model.json artifact not found.')
-        return None
-
-    model_json_uri = artifacts_root_uri + '/' + model_json_artifact.path if not artifacts_root_uri.endswith('/') else artifacts_root_uri + model_json_artifact.path
-    local_path = download_artifacts(model_json_uri)
-
-    return local_path
-
-run_id = '%s'
-artifact_content = get_model_json_artifact(run_id)
-if artifact_content:
-    with open(artifact_content) as json_file:
-        data = json.load(json_file)
-        print(json.dumps(data, indent=4))
-" "")
-
-(defun mlflow-show-model-json (run-id)
-  (let ((command (format mlflow-show-model-artifact-command run-id)))
-    (mlflow-run command)))
+(defun mlflow-get-tag-value (tags key)
+  (let ((tag (cl-find key tags :test #'string= :key (lambda (tag) (plist-get tag :key)))))
+    (when tag
+      (plist-get tag :value))))
 
 (define-derived-mode mlflow-experiments-mode tabulated-list-mode "mlflow-experiments"
   :interactive nil
@@ -2221,30 +2246,14 @@ if artifact_content:
                                      (kill-buffer)))
 	  (switch-to-buffer output-buffer))))))
 
-(defun mlflow-experiments-show-model-json ()
-  (let* ((entry (tabulated-list-get-entry))
-         (run-id (and entry (> (length entry) 0) (string-trim (aref entry 4)))))
-    (when run-id
-      (let* ((model-json-content (mlflow-show-model-json run-id))
-             (output-buffer (get-buffer-create (format "*mlflow-model-json-%s*" run-id))))
-        (with-current-buffer output-buffer
-	  (erase-buffer)
-	  (insert model-json-content)
-	  (goto-char (point-min))
-	  (special-mode)
-	  (local-set-key (kbd "q") (lambda ()
-                                     (interactive)
-                                     (kill-buffer)))
-	  (switch-to-buffer output-buffer))))))
-
 (define-key mlflow-experiment-runs-mode-map (kbd "RET")
 	    (lambda () (interactive) (mlflow-show-run)))
 
-(define-key mlflow-experiment-runs-mode-map (kbd "?")
-	    (lambda () (interactive) (mlflow-experiments-show-model-json)))
-
 (provide 'mlflow)
 #+end_src
+
+#+RESULTS:
+: mlflow
 
 * Copilot
 
