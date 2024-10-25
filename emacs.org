@@ -697,6 +697,37 @@ outputting only code for answers where code is appropriate."))
 (setq chatgpt-shell-system-prompt 0)
 #+end_src
 
+** Popper
+
+#+begin_src emacs-lisp :results silent
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("M-q"   . popper-toggle-latest)
+         ("M-\\"   . popper-cycle)
+         ("C-M-\\" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("^\\*eshell.*\\*$" eshell-mode
+	  "^*cider-repl.*"
+	  "^*MATLAB.*"
+	  "^\\*term.*\\*$" term-mode
+	  "^*jupyter-.*"
+	  inferior-python-mode
+	  inferior-lisp-mode
+          compilation-mode))
+
+  (when (package-installed-p 'vterm)
+    (push "^\\*vterm\\*.*" popper-reference-buffers)
+    (push 'vterm-mode popper-reference-buffers))
+
+  (setq popper-display-function
+	(lambda (b a)
+	  (display-buffer-same-window b a)))
+
+  (popper-mode +1)
+  (popper-echo-mode +1))
+#+end_src
+
 * Languages
 
 Will bounce between matching parens just like % in vi
@@ -1029,6 +1060,22 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (projectile-mode +1)
 #+END_SRC
   
+** Copilot
+
+#+begin_src emacs-lisp :results silent
+(use-package copilot
+  :quelpa (copilot :fetcher github :repo "copilot-emacs/copilot.el"
+		   :files ("*.el")))
+
+(when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
+  (setq copilot-indent-offset-warning-disable t)
+  (add-hook 'prog-mode-hook 'copilot-mode)
+  (add-hook 'yaml-mode-hook 'copilot-mode)
+
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+#+end_src
+
 * Org-Mode
 
 #+begin_src emacs-lisp :results silent
@@ -1957,53 +2004,6 @@ node `(org) External links' and Info node `(org) Search options'"
                               (name 16 -1)
                               " " filename)))
 #+END_SRC
-
-* Popper
-
-#+begin_src emacs-lisp :results silent
-(use-package popper
-  :ensure t ; or :straight t
-  :bind (("M-q"   . popper-toggle-latest)
-         ("M-\\"   . popper-cycle)
-         ("C-M-\\" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("^\\*eshell.*\\*$" eshell-mode
-	  "^*cider-repl.*"
-	  "^*MATLAB.*"
-	  "^\\*term.*\\*$" term-mode
-	  "^*jupyter-.*"
-	  inferior-python-mode
-	  inferior-lisp-mode
-          compilation-mode))
-
-  (when (package-installed-p 'vterm)
-    (push "^\\*vterm\\*.*" popper-reference-buffers)
-    (push 'vterm-mode popper-reference-buffers))
-
-  (setq popper-display-function
-	(lambda (b a)
-	  (display-buffer-same-window b a)))
-
-  (popper-mode +1)
-  (popper-echo-mode +1))
-#+end_src
-
-* Copilot
-
-#+begin_src emacs-lisp :results silent
-(use-package copilot
-  :quelpa (copilot :fetcher github :repo "copilot-emacs/copilot.el"
-		   :files ("*.el")))
-
-(when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
-  (setq copilot-indent-offset-warning-disable t)
-  (add-hook 'prog-mode-hook 'copilot-mode)
-  (add-hook 'yaml-mode-hook 'copilot-mode)
-
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-#+end_src
 
 * Key Bindings
 
