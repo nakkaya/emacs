@@ -2,8 +2,6 @@
  '(warning-suppress-log-types '((comp)))
  '(warning-suppress-types '((comp))))
 
-(setenv "LSP_USE_PLISTS" "true")
-
 (setq dotfiles-dir
       (file-name-directory
        (or load-file-name (buffer-file-name))))
