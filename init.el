@@ -44,8 +44,6 @@
          projectile
          helm
 	 helm-org-rifle
-	 elfeed
-	 elfeed-protocol
 	 chatgpt-shell
 	 transmission))
 

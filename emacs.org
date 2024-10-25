@@ -1989,39 +1989,6 @@ node `(org) External links' and Info node `(org) Search options'"
   (popper-echo-mode +1))
 #+end_src
 
-* elfeed
-
-#+begin_src emacs-lisp
-(require 'elfeed)
-(require 'elfeed-protocol)
-
-(setq elfeed-use-curl t
-      elfeed-sort-order 'ascending
-      elfeed-protocol-fever-maxsize 50
-      elfeed-feeds '(("fever+https://nakkaya@rss.nakkaya.com/fever/"
-		      :api-url "https://rss.nakkaya.com/fever/"
-                      :use-authinfo t)))
-
-(elfeed-protocol-enable)
-
-(advice-add 'elfeed-show-visit :around #'suppress-messages)
-
-(defun na-elfeed ()
-  "Miniflux is the master storage for articles.
-   Do not use elfeed database. Allows syncing
-   from multiple instances."
-  (interactive)
-  (when (file-directory-p elfeed-db-directory)
-    (elfeed-db-unload)
-    (delete-directory elfeed-db-directory 'recursive))
-  (elfeed-db-load)
-  (elfeed)
-  (elfeed-search-fetch nil))
-
-(define-key elfeed-show-mode-map (kbd "j") 'elfeed-show-next)
-(define-key elfeed-show-mode-map (kbd "k") 'elfeed-show-prev)
-#+end_src
-
 * Copilot
 
 #+begin_src emacs-lisp :results silent
