@@ -1095,7 +1095,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-src-tab-acts-natively t
       org-src-preserve-indentation t
       org-ellipsis " ▶"
-      org-link-file-path-type 'relative)
+      org-link-file-path-type 'relative
+      org-capture-bookmark nil
+      org-bookmark-names-plist '())
 
 (add-to-list 'org-link-frame-setup '(file . find-file))
 
@@ -1149,6 +1151,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
             (cons "\\(#\\+begin_quote\\)"
 		  (propertize "“" 'face '(font-lock-comment-face bold)))))
 
+(setq org-margin-bookmark (propertize "🔖" 'face '(error bold)))
 
 (add-hook 'org-mode-hook 'org-margin-mode)
 #+end_src
