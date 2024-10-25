@@ -655,7 +655,7 @@ SSH at least,
 	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
-*** ChatGPT Shell
+** ChatGPT Shell
 
 #+begin_src emacs-lisp :results silent
 (require 'chatgpt-shell)
