@@ -1822,7 +1822,13 @@ node `(org) External links' and Info node `(org) Search options'"
       ls-lisp-dirs-first t
       dired-dwim-target t
       dired-recursive-deletes 'always
-      dired-kill-when-opening-new-dired-buffer t)
+      dired-kill-when-opening-new-dired-buffer t
+      dired-listing-switches "-l -A -h -v")
+
+(defun dired-sort-newest-first ()
+  "Sort dired buffer by modification time, newest first."
+  (interactive)
+  (dired-sort-other (concat dired-listing-switches " -t -r")))
 
 (quelpa '(emacs-async
           :fetcher github :repo "jwiegley/emacs-async"))
