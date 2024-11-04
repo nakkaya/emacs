@@ -44,7 +44,7 @@
          projectile
          helm
 	 helm-org-rifle
-	 chatgpt-shell
+	 gptel
 	 transmission))
 
 (when (or (eq system-type 'gnu/linux)

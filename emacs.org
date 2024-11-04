@@ -827,48 +827,6 @@ SSH at least,
 	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
-** ChatGPT Shell
-
-#+begin_src emacs-lisp :results silent
-(require 'chatgpt-shell)
-
-(setq chatgpt-shell-streaming t)
-(setq shell-maker-prompt-before-killing-buffer nil)
-
-(add-hook 'chatgpt-shell-mode-hook
-          (lambda ()
-	    (define-key chatgpt-shell-mode-map (kbd "M-n") (kbd "C-u 2 C-v"))
-	    (define-key chatgpt-shell-mode-map (kbd "M-p") (kbd "C-u 2 M-v"))))
-
-;;(custom-reevaluate-setting 'chatgpt-shell-system-prompts)
-
-(add-to-list 'chatgpt-shell-system-prompts '("jph00" . "You are an
-autoregressive language model that has been fine-tuned with
-instruction-tuning and RLHF. You carefully provide accurate, factual,
-thoughtful, nuanced answers. You are brilliant at reasoning. If you
-think there might not be a correct answer, you say so.
-
-Your users are experts in AI and ethics, so they already know you're a
-language model and your capabilities and limitations, so don't remind
-them of that. They're familiar with ethical issues in general so you
-don't need to remind them about those either. Don't be verbose in your
-answers, but do provide details and examples where it might help the
-explanation. When showing Python code, minimise vertical space, and do
-not include comments or docstrings; you do not need to follow PEP8,
-since your users' organizations do not do so.
-
-Since you are autoregressive, each token you produce is another
-opportunity to use computation, therefore you always spend a few
-sentences explaining background context assumptions and step-by-step
-thinking BEFORE you try to answer a question. However: if the request
-begins with the string \"vv\" then ignore the previous sentence and
-instead make your response as concise as possible, with no
-introduction or background at the start, no summary at the end, and
-outputting only code for answers where code is appropriate."))
-
-(setq chatgpt-shell-system-prompt 0)
-#+end_src
-
 ** Popper
 
 #+begin_src emacs-lisp :results silent
@@ -1232,22 +1190,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (projectile-mode +1)
 #+END_SRC
   
-** Copilot
-
-#+begin_src emacs-lisp :results silent
-(use-package copilot
-  :quelpa (copilot :fetcher github :repo "copilot-emacs/copilot.el"
-		   :files ("*.el")))
-
-(when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
-  (setq copilot-indent-offset-warning-disable t)
-  (add-hook 'prog-mode-hook 'copilot-mode)
-  (add-hook 'yaml-mode-hook 'copilot-mode)
-
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-#+end_src
-
 * Org-Mode
 
 #+begin_src emacs-lisp :results silent
@@ -1810,6 +1752,68 @@ node `(org) External links' and Info node `(org) Search options'"
 	(inhibit-sentinel-messages #'async-shell-command cmd buffer)
 	(with-current-buffer (get-buffer buffer)
 	  (local-set-key "q" #'bury-buffer))))))
+#+end_src
+
+* LLM
+** gptel
+#+begin_src emacs-lisp :results silent
+(require 'gptel)
+
+(setq litellm-backend
+      (gptel-make-openai "LiteLLM"
+	:protocol "https"
+	:host "llm.computie.net"
+	:key (auth-source-pick-first-password :host "llm.computie.net")
+	:stream t
+	:models '("claude-3-5-sonnet@vertex.ai"
+		  "gpt-4o")))
+
+(setq gptel-backend litellm-backend
+      gptel-model "gpt-4o"
+      gptel-playback t
+      gptel-default-mode 'org-mode)
+
+(add-to-list 'gptel-directives '(jph00 . "You are an
+autoregressive language model that has been fine-tuned with
+instruction-tuning and RLHF. You carefully provide accurate, factual,
+thoughtful, nuanced answers. You are brilliant at reasoning. If you
+think there might not be a correct answer, you say so.
+
+Your users are experts in AI and ethics, so they already know you're a
+language model and your capabilities and limitations, so don't remind
+them of that. They're familiar with ethical issues in general so you
+don't need to remind them about those either. Don't be verbose in your
+answers, but do provide details and examples where it might help the
+explanation. When showing Python code, minimise vertical space, and do
+not include comments or docstrings; you do not need to follow PEP8,
+since your users' organizations do not do so.
+
+Since you are autoregressive, each token you produce is another
+opportunity to use computation, therefore you always spend a few
+sentences explaining background context assumptions and step-by-step
+thinking BEFORE you try to answer a question. However: if the request
+begins with the string \"vv\" then ignore the previous sentence and
+instead make your response as concise as possible, with no
+introduction or background at the start, no summary at the end, and
+outputting only code for answers where code is appropriate."))
+
+;;(setq gptel-log-level 'debug)
+#+end_src
+
+** copilot
+
+#+begin_src emacs-lisp :results silent
+(use-package copilot
+  :quelpa (copilot :fetcher github :repo "copilot-emacs/copilot.el"
+		   :files ("*.el")))
+
+(when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
+  (setq copilot-indent-offset-warning-disable t)
+  (add-hook 'prog-mode-hook 'copilot-mode)
+  (add-hook 'yaml-mode-hook 'copilot-mode)
+
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 #+end_src
 
 * Dired
