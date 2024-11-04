@@ -225,7 +225,6 @@ to ensure it autosaves the latests version back.
        "^\\*Compile-Log\\*$"
        "^\\*quelpa-build-checkout\\*$"
        "^\\*helm.*\\*$"
-       "^\\*transmission\\*$"
        "^\\*projectile-files-errors\\*$"
        "^\\*EGLOT.*"
        "^\\*lsp-.*"
@@ -356,7 +355,6 @@ to ensure it autosaves the latests version back.
                           (mode . makefile-bsdmake-mode)
                           (mode . makefile-mode)
                           (mode . makefile-gmake-mode)
-                          (mode . matlab-mode)
                           (mode . css-mode)
                           (mode . js-mode)
 			  (mode . sql-mode)
@@ -373,7 +371,6 @@ to ensure it autosaves the latests version back.
 			   (name . "^\\*jupyter-.*")
 			   (mode . inferior-lisp-mode)
                            (mode . inferior-python-mode)
-                           (name . "^*MATLAB.*")
                            (name . "^*monroe.*")))
                ("Terminal" (or (mode . term-mode)
 			       (name . "^*chatgpt.*")
@@ -429,7 +426,6 @@ to ensure it autosaves the latests version back.
                          (name . "^\\*quelpa-build-checkout\\*$")
 			 (name . "^\\*quelpa-build-info\\*$")
                          (name . "^\\*helm.*\\*$")
-                         (name . "^\\*transmission\\*$")
 			 (name . "^\\*projectile-files-errors\\*$")
 			 (name . "^\\*EGLOT.*")
                          (name . "^\\*lsp-.*")
@@ -839,7 +835,6 @@ SSH at least,
   (setq popper-reference-buffers
         '("^\\*eshell.*\\*$" eshell-mode
 	  "^*cider-repl.*"
-	  "^*MATLAB.*"
 	  "^\\*term.*\\*$" term-mode
 	  "^*jupyter-.*"
 	  inferior-python-mode
@@ -900,13 +895,6 @@ Will bounce between matching parens just like % in vi
 	  (lambda ()
 	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package html-to-hiccup
-  :ensure t
-  :config
-  (define-key clojure-mode-map (kbd "H-h") #'html-to-hiccup-convert-region))
-#+END_SRC
  
 ** C/C++
 
@@ -915,22 +903,6 @@ Will bounce between matching parens just like % in vi
    (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
    (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
    (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
- #+END_SRC
-
-** Matlab
-
- #+BEGIN_SRC emacs-lisp
-(autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
-
-(add-to-list
- 'auto-mode-alist
- '("\\.m$" . matlab-mode))
-
-(setq matlab-indent-function t)
-(setq matlab-shell-command "matlab")
-
-(eval-after-load 'matlab-mode
-  '(define-key matlab-mode-map (kbd "C-c C-c") 'matlab-shell-run-cell))
  #+END_SRC
 
 ** Python
@@ -1115,11 +1087,6 @@ Will bounce between matching parens just like % in vi
 
 (setq lsp-keymap-prefix "C-c l")
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
-(dolist (dir '(
-               "[/\\\\]matlab_runtime"
-               ))
-  (push dir lsp-file-watch-ignored))
 
 (add-hook 'clojure-mode-hook #'lsp-deferred)
 (add-hook 'python-mode-hook #'lsp-deferred)

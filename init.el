@@ -15,23 +15,19 @@
          hl-todo
          clojure-mode
 	 clojure-mode-extra-font-locking
-	 html-to-hiccup
 	 cider
 	 python-mode
 	 conda
-	 matlab-mode
 	 yaml-mode
 	 markdown-mode
 	 jsonnet-mode
          terraform-mode
-	 kubel
 	 flycheck
 	 yasnippet
          lsp-mode
 	 lsp-ui
 	 org
 	 ein
-         docker
          dockerfile-mode
          docker-compose-mode
 	 multi-term
@@ -44,8 +40,7 @@
          projectile
          helm
 	 helm-org-rifle
-	 gptel
-	 transmission))
+	 gptel))
 
 (when (or (eq system-type 'gnu/linux)
 	  (eq system-type 'darwin))
