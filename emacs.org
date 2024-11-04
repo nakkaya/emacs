@@ -64,6 +64,13 @@
   (y-or-n-p arg))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(require 'undo-tree)
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+(global-undo-tree-mode)
+#+END_SRC
+
+
 #+BEGIN_SRC emacs-lisp :results silent
 (setq mouse-wheel-scroll-amount '(1))
 (setq mouse-wheel-progressive-speed nil)
