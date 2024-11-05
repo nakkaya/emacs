@@ -1739,12 +1739,11 @@ node `(org) External links' and Info node `(org) Search options'"
 	:host "llm.computie.net"
 	:key (auth-source-pick-first-password :host "llm.computie.net")
 	:stream t
-	:models '("gemini-1.5-pro"
-		  "claude-3-5-sonnet@vertex.ai"
-		  "gpt-4o")))
+	:models '("gpt-4o@azure"
+		  "gemini-1.5-pro")))
 
 (setq gptel-backend litellm-backend
-      gptel-model "gemini-1.5-pro"
+      gptel-model "gpt-4o@azure"
       gptel-playback t
       gptel-default-mode 'org-mode)
 
