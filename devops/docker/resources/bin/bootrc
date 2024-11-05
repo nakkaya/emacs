@@ -15,3 +15,10 @@ fi
 if [[ -v VSCODE_ENB ]]; then
     /usr/bin/supervisorctl start vscode
 fi
+
+if [ ! -f "/home/$USER/.emacs" ]; then
+    {
+        echo "(setq package-native-compile t)"
+        echo "(load-file \"/opt/emacsd/conf/init.el\")"
+    } > "/home/$USER/.emacs"
+fi
