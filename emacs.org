@@ -1185,7 +1185,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-ellipsis " ▶"
       org-link-file-path-type 'relative
       org-capture-bookmark nil
-      org-bookmark-names-plist '())
+      org-bookmark-names-plist '()
+      org-export-babel-evaluate nil)
 
 (add-to-list 'org-link-frame-setup '(file . find-file))
 
