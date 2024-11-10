@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 is not running as root. Try using sudo."
+    exit 2
+fi
+
 echo -e "Container Configuration\n"
 
 read -p "Enable host networking (y/n) [n]? " with_host
@@ -101,7 +106,7 @@ cmd="docker run --privileged \
     echo "#!/bin/bash"
     echo ""
     echo "if [ \"$EUID\" -ne 0 ]; then"
-    echo -e "    exec sudo \"\$0\" \"\$@\""
+    echo 'echo "$0 is not running as root. Try using sudo."'
     echo "fi"
     echo ""
     echo "docker pull nakkaya/emacs:latest"
