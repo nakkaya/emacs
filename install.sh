@@ -100,6 +100,10 @@ cmd="docker run --privileged \
 {
     echo "#!/bin/bash"
     echo ""
+    echo "if [ \"$EUID\" -ne 0 ]; then"
+    echo "    exec sudo \"$0\" \"$@\""
+    echo "fi"
+    echo ""
     echo "docker pull nakkaya/emacs:latest"
     echo ""
     echo "if [ \$(docker ps -q -f name=emacsd) ]; then"
