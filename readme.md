@@ -5,7 +5,7 @@
 ### Docker Setup
 
 There is a Docker image built from this repository that contains Emacs
-28 with all packages AOT compiled. Image runs as user `core` replace
+29 with all packages AOT compiled. Image runs as user `core` replace
 your username as required.
 
     docker pull nakkaya/emacs:latest
@@ -19,20 +19,13 @@ You can run it using,
 	  -p 9090:9090/tcp \
 	  nakkaya/emacs
 
-If you have `python` `invoke` installed you can run more complicated
-commands,
+or use the provided install script,
 
-    invoke docker                    # For bares bones version same as above
-	invoke docker --with-gpu         # Run with GPUs attached
-    invoke docker --with-host        # Run with host networking
-    invoke docker --with-passwd 1234 # Set password for Web & SSH login
+    curl https://raw.githubusercontent.com/nakkaya/emacs/master/install.sh -o install.sh
+	# inspect the file
+	sudo bash install.sh
 
-See,
-
-    invoke docker --help
-
-For more options, Either of the following can be used to connect to a
-running image.
+It will guide you through all the options.
 
     # Connect using
     xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
