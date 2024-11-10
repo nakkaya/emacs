@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$EUID" -ne 0 ]; then
+    exec sudo "$0" "$@"
+fi
+
 echo -e "Container Configuration\n"
 
 read -p "Enable host networking (y/n) [n]? " with_host
