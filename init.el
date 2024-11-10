@@ -12,6 +12,7 @@
 	 quelpa-use-package
 	 clipetty
          undo-tree
+	 persp-mode
          hl-todo
          clojure-mode
 	 clojure-mode-extra-font-locking

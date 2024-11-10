@@ -487,6 +487,23 @@ to ensure it autosaves the latests version back.
                               " " filename)))
 #+END_SRC
 
+** persp-mode
+
+#+begin_src emacs-lisp :results silent
+(setq persp-keymap-prefix (kbd "C-c w"))
+
+(require 'persp-mode)
+
+(setq persp-auto-resume-time -1 ;; No autoload buffers
+      persp-set-last-persp-for-new-frames nil
+      persp-reset-windows-on-nil-window-conf t
+      persp-autokill-buffer-on-remove t
+      persp-add-buffer-on-after-change-major-mode t
+      persp-kill-foreign-buffer-behaviour 'kill)
+
+(persp-mode 1)
+#+end_src
+
 * Terminal
 ** Path
 
@@ -1746,7 +1763,8 @@ node `(org) External links' and Info node `(org) Search options'"
 (setq gptel-backend litellm-backend
       gptel-model "gpt-4o@azure"
       gptel-playback t
-      gptel-default-mode 'org-mode)
+      gptel-default-mode 'org-mode
+      gptel-display-buffer-action '(pop-to-buffer-same-window))
 
 (add-to-list 'gptel-directives '(jph00 . "You are an
 autoregressive language model that has been fine-tuned with
