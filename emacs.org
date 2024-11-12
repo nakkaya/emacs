@@ -1819,8 +1819,7 @@ outputting only code for answers where code is appropriate."))
                     (goto-char beg)
                     (kill-region beg end)
                     (insert response)
-                    (set-marker beg nil)
-                    (set-marker end nil))))))))
+		    (deactivate-mark))))))))
     (message "No region selected.")))
 #+end_src
 
