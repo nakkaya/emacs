@@ -1793,6 +1793,37 @@ outputting only code for answers where code is appropriate."))
 ;;(setq gptel-log-level 'debug)
 #+end_src
 
+#+begin_src emacs-lisp
+(defun gptel-fix-grammar ()
+  "Send selected region to ChatGPT to fix grammar and replace it with the response."
+  (interactive)
+  (if (use-region-p)
+      (let ((region-start (region-beginning))
+            (region-end (region-end)))
+        (gptel-request
+            (buffer-substring-no-properties region-start region-end)
+          :system "Correct all grammar and punctuation. Do not change or remove words."
+          :buffer (current-buffer)
+          :context (cons (set-marker (make-marker) region-start)
+                         (set-marker (make-marker) region-end))
+          :callback
+          (lambda (response info)
+            (if (not response)
+		(message "gptel-request failed with message: %s" (plist-get info :status))
+              (let* ((bounds (plist-get info :context))
+                     (beg (car bounds))
+                     (end (cdr bounds))
+                     (buf (plist-get info :buffer)))
+		(with-current-buffer buf
+                  (save-excursion
+                    (goto-char beg)
+                    (kill-region beg end)
+                    (insert response)
+                    (set-marker beg nil)
+                    (set-marker end nil))))))))
+    (message "No region selected.")))
+#+end_src
+
 ** copilot
 
 #+begin_src emacs-lisp :results silent
