@@ -262,6 +262,12 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
     apt-get install google-cloud-cli -y --no-install-recommends && \
     cleanup_apt_cache
 
+# Azure CLI
+#
+
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
+    cleanup_apt_cache
+
 
 # pgAdmin
 #

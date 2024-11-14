@@ -461,6 +461,7 @@ to ensure it autosaves the latests version back.
 			 (name . "^\\*Bookmark List\\*$")
 			 (name . "^\\*Buffer List\\*$")
 			 (name . "^\\*Disabled Command\\*$")
+			 (name . "^\\*copilot events\\*$")
 			 (name . "^\\*kernel-notebook-*")))))))
 
 (setq ibuffer-show-empty-filter-groups nil
