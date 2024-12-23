@@ -38,6 +38,9 @@ with_pgadmin=${with_pgadmin:-n}
 read -p "Enable VSCode (y/n) [n]? " with_vscode
 with_vscode=${with_vscode:-n}
 
+read -p "Mount Host Disk Under /hdd (y/n) [n]? " with_host_disk
+with_host_disk=${with_host_disk:-n}
+
 if [ "$with_host" == "y" ]; then
     host="--network host"
 else
@@ -85,6 +88,12 @@ fi
 
 volume_mounts="-v emacsd-sshd:/etc/ssh -v emacsd-home:/home/core -v emacsd-storage:/storage"
 
+if [ "$with_host_disk" == "y" ]; then
+    host_disk="-v /:/hdd"
+else
+    host_disk=""
+fi
+
 cmd="docker run --privileged \
     --security-opt=\"seccomp=unconfined\" \
     --restart=always \
@@ -98,6 +107,7 @@ cmd="docker run --privileged \
     $pgadmin \
     $vscode \
     $volume_mounts \
+    $host_disk \
     $docker_sock \
     $gpu \
     nakkaya/emacs:latest"
