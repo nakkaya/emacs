@@ -573,6 +573,16 @@ to ensure it autosaves the latests version back.
 	    (company-mode -1)
             (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
             (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+
+(defun eshell-rename-buffer ()
+  "Rename eshell buffer based on current directory, preserving buffer index."
+  (when (eq major-mode 'eshell-mode)
+    (let* ((current-dir (abbreviate-file-name (eshell/pwd)))
+	   (base-name "*eshell*")
+           (new-name (concat base-name " " current-dir)))
+      (rename-buffer new-name t))))
+
+(add-hook 'eshell-after-prompt-hook #'eshell-rename-buffer)
 #+end_src
 
 *** Prompt
