@@ -662,7 +662,7 @@ length of PATH (sans directory slashes) down to MAX-LEN."
 (eshell/alias "ddu" "du -h --max-depth=1 | *sort -hr")
 (eshell/alias "k" "kubectl $*")
 (eshell/alias "sq" "sky queue -s")
-(eshell/alias "aider" "/opt/aider/bin/aider --dark-mode $*")
+(eshell/alias "aider" "/opt/aider/bin/aider --dark-mode --no-auto-commits --no-check-update $*")
 #+END_SRC
 
 *** Commands
