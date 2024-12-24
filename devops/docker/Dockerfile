@@ -210,7 +210,7 @@ RUN python3 -m venv /opt/invoke && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
 
 RUN python3 -m venv /opt/aider && \
-    /opt/aider/bin/python -m pip install aider-chat --no-cache-dir && \
+    /opt/aider/bin/python -m pip install aider-chat[browser] --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc
 
 # Miniconda
