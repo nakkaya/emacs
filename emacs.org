@@ -502,6 +502,22 @@ to ensure it autosaves the latests version back.
       persp-add-buffer-on-after-change-major-mode t
       persp-kill-foreign-buffer-behaviour 'kill)
 
+(defun switch-all-other-frames-to-nil-perspective ()
+  "Switch all other frames to nil perspective, except the current frame."
+  (interactive)
+  (let ((current-frame (selected-frame)))
+    (dolist (frame (frame-list))
+      (unless (eq frame current-frame)
+        (persp-frame-switch persp-nil-name frame)))))
+
+(defun na-persp-frame-switch (name)
+  "Switch all other frames to nil perspective, then switch the current frame perspective to NAME."
+  (interactive (list (persp-read-persp "Switch to perspective")))
+  (switch-all-other-frames-to-nil-perspective)
+  (persp-frame-switch name))
+
+(define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
+
 (persp-mode 1)
 #+end_src
 
