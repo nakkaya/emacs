@@ -14,6 +14,7 @@
          undo-tree
 	 persp-mode
          hl-todo
+	 origami
          clojure-mode
 	 clojure-mode-extra-font-locking
 	 cider

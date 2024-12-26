@@ -55,7 +55,8 @@
 (setq global-auto-revert-non-file-buffers t
       revert-without-query '(".pdf"))
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
+(require 'origami)
+(add-hook 'prog-mode-hook #'origami-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2242,10 +2243,10 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key (kbd "C-S-<down>")  #'shrink-window)
 (global-set-key (kbd "C-S-<up>")    #'enlarge-window)
 
-(global-set-key (kbd "C-c <right>") #'hs-show-block)
-(global-set-key (kbd "C-c <left>")  #'hs-hide-block)
-(global-set-key (kbd "C-c <up>")    #'hs-hide-all)
-(global-set-key (kbd "C-c <down>")  #'hs-show-all)
+(global-set-key (kbd "C-c <right>") #'origami-open-node)
+(global-set-key (kbd "C-c <left>")  #'origami-close-node)
+(global-set-key (kbd "C-c <up>")    #'origami-close-all-nodes)
+(global-set-key (kbd "C-c <down>")  #'origami-open-all-nodes)
 
 (global-set-key (kbd "C-c j") #'helm-org-ql-agenda-files)
 
