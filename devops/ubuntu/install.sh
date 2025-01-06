@@ -3,6 +3,7 @@
 set -e
 
 EMACS_BUILD_TOOLS="wget \
+                   curl \
                    gnupg \
                    software-properties-common \
                    equivs \
@@ -11,26 +12,41 @@ EMACS_BUILD_TOOLS="wget \
                    make \
                    pkg-config \
                    texinfo \
+                   git \
                    gcc-10 \
                    g++-10 \
-                   libgccjit-10-dev \
-                   libsqlite3-dev \
-                   libxpm-dev \
-                   libjpeg-dev \
-                   libgif-dev \
-                   libtiff-dev \
+                   protobuf-compiler \
+                   zlib1g-dev \
+                   libxml2-dev \
+                   libxft-dev \
+                   libfontconfig1-dev \
                    libgnutls28-dev \
-                   libjansson-dev \
-                   libncurses5-dev"
+                   libx11-dev \
+                   xorg-dev \
+                   libcairo2-dev \
+      		   libncurses-dev \
+                   libgtk-3-dev"
 
-EMACS_BUILD_DEPS="libx11-dev \
-                  libgtk-3-dev \
-                  libgccjit0 \
+EMACS_BUILD_DEPS="libgccjit-10-dev \
                   libjansson4 \
                   libm17n-0 \
-                  libgif7 \
-                  libotf1 \
-                  libsqlite3-0"
+                  libgif-dev \
+                  libotf-dev \
+                  libsqlite3-dev \
+                  libtree-sitter-dev \
+                  zlib1g \
+                  libjansson-dev \
+                  libmailutils-dev \
+                  libxml2 \
+                  libxft2 \
+                  libfontconfig1 \
+                  libgnutls30 \
+                  libx11-6 \
+                  libcairo2 \
+                  libgtk-3-0 \
+                  libharfbuzz-dev \
+                  libjpeg-dev \
+                  libpng-dev"
 
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -51,6 +67,7 @@ export CFLAGS="-O3 -mtune=native -march=native -fomit-frame-pointer"
 
 ./autogen.sh
 ./configure \
+    --with-tree-sitter \
     --without-sound \
     --with-zlib \
     --with-native-compilation \
@@ -85,11 +102,3 @@ echo "Exec=$HOME/.emacs.build/src/emacs" >> ~/.local/share/applications/emacs29.
 echo "Type=Application" >> ~/.local/share/applications/emacs29.desktop
 echo "Terminal=false" >> ~/.local/share/applications/emacs29.desktop
 echo "StartupNotify=true" >> ~/.local/share/applications/emacs29.desktop
-
-#sudo pip3 install jupyterlab
-
-sudo adduser $USER dialout
-sudo adduser $USER dialout
-
-# https://askubuntu.com/a/223674
-# gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
