@@ -828,21 +828,22 @@ SSH at least,
 *** VTerm
 
 #+begin_src emacs-lisp :results silent
-(when (package-installed-p 'vterm)
-  (require 'vterm)
-  (setq vterm-shell "/bin/bash"
-	vterm-timer-delay 0.01)
+(unless (eq system-type 'windows-nt)
+  (when (package-installed-p 'vterm)
+    (require 'vterm)
+    (setq vterm-shell "/bin/bash"
+	  vterm-timer-delay 0.01)
 
-  (quelpa '(eshell-vterm
-            :fetcher github
-	    :repo "iostapyshyn/eshell-vterm"
-	    :files ("eshell-vterm.el")))
+    (quelpa '(eshell-vterm
+              :fetcher github
+	      :repo "iostapyshyn/eshell-vterm"
+	      :files ("eshell-vterm.el")))
 
-  (use-package eshell-vterm
-    :demand t
-    :after eshell
-    :config
-    (eshell-vterm-mode)))
+    (use-package eshell-vterm
+      :demand t
+      :after eshell
+      :config
+      (eshell-vterm-mode))))
 #+end_src
 
 *** Term
