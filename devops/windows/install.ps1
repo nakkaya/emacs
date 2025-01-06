@@ -1,10 +1,9 @@
-Invoke-WebRequest -Uri "https://corwin.bru.st/emacs-28/emacs-28.1-NATIVE_FULL_AOT.zip" -OutFile "$env:temp\emacs.zip"
+Invoke-WebRequest -Uri "https://ftpmirror.gnu.org/gnu/emacs/windows/emacs-29/emacs-29.3.zip" -OutFile "$env:temp\emacs.zip"
 
 if (Test-Path -Path "C:\Emacs") {
     Get-ChildItem "C:\Emacs" -Recurse | Remove-Item -Force -Recurse -Confirm:$false -ErrorAction SilentlyContinue
 }
 
-#Remove-Item "C:\Emacs" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
 Expand-Archive "$env:temp\emacs.zip" -DestinationPath "C:\Emacs"
 Remove-Item "$env:temp\emacs.zip"
 
