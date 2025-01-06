@@ -1540,12 +1540,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	(local-set-key [f1] #'kill-org-agenda)
 	(local-set-key "q" #'kill-org-agenda)))))
 
-(when (file-exists-p na-agenda-folder)
-  (run-with-idle-timer (* 120 60) t
-		       (lambda ()
-			 (dolist (f (frame-list))
-			   (with-selected-frame f
-			     (jump-to-org-agenda))))))
+;; (when (file-exists-p na-agenda-folder)
+;;   (run-with-idle-timer (* 120 60) t
+;; 		       (lambda ()
+;; 			 (dolist (f (frame-list))
+;; 			   (with-selected-frame f
+;; 			     (jump-to-org-agenda))))))
 
 (global-set-key [f1] #'jump-to-org-agenda)
 
