@@ -1787,7 +1787,9 @@ node `(org) External links' and Info node `(org) Search options'"
 	:key (auth-source-pick-first-password :host "llm.computie.net")
 	:stream t
 	:models '("gpt-4o@azure"
-		  "gemini-1.5-pro")))
+		  "gpt-4-32k@azure"
+		  "deepseek-r1@azure"
+		  "gemini-1.5-pro@vertex.ai")))
 
 (setq gptel-backend litellm-backend
       gptel-model "gpt-4o@azure"
