@@ -19,6 +19,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@3.3.0
         with:
+          image: tonistiigi/binfmt:qemu-v8.1.5
           platforms: all
 
       - name: Set up Docker Buildx
