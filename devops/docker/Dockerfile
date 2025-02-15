@@ -213,6 +213,9 @@ RUN python3 -m venv /opt/aider && \
     /opt/aider/bin/python -m pip install aider-chat[browser] --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc
 
+# UV
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Miniconda
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
