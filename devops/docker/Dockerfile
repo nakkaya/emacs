@@ -39,7 +39,7 @@ RUN apt-get update && \
     nfs-common jsonnet \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
     meshlab rlwrap netcat less jq dcm2niix \
-    python3-venv python3-wheel \
+    python3-dev python3-venv python3-wheel \
     # Backup & Storage
     rsync rclone git git-lfs git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
