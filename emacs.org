@@ -1783,7 +1783,8 @@ node `(org) External links' and Info node `(org) Search options'"
 	:host "llm.computie.net"
 	:key (auth-source-pick-first-password :host "llm.computie.net")
 	:stream t
-	:models '("gpt-4o@azure"
+	:models '("gpt-o1@azure"
+		  "gpt-4o@azure"
 		  "gpt-4-32k@azure"
 		  "deepseek-r1@azure"
 		  "gemini-1.5-pro@vertex.ai")))
