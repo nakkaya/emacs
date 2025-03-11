@@ -215,7 +215,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
             python3 -m venv /opt/aider && \
             /opt/aider/bin/python -m pip install wheel --no-cache-dir && \
             /opt/aider/bin/python -m pip install aider-chat[browser] --no-cache-dir && \
-            echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/\$USER/.bashrc; \
+            echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc; \
             ;; \
         *) \
             echo "Skipping Aider installation on non-amd64 architecture."; \
