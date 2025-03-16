@@ -44,7 +44,7 @@ RUN apt-get update && \
     rsync rclone git git-lfs git-annex git-annex-remote-rclone \
     apt-transport-https apache2-utils \
     # Slicer3D
-    libpulse-dev
+    libpulse-dev \
     # Java
     openjdk-11-jdk maven visualvm  \
     # C/C++
