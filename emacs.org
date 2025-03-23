@@ -1790,7 +1790,7 @@ node `(org) External links' and Info node `(org) Search options'"
 		  "gemini-1.5-pro@vertex.ai")))
 
 (setq gptel-backend litellm-backend
-      gptel-model "gpt-4o@azure"
+      gptel-model "gpt-o1@azure"
       gptel-playback t
       gptel-default-mode 'org-mode
       gptel-display-buffer-action '(pop-to-buffer-same-window))
@@ -1968,19 +1968,6 @@ Refer to the official JAX documentation for the latest best practices on using J
 
     (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
     (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)))
-#+end_src
-
-** aider
-
-#+begin_src emacs-lisp
-(quelpa '(aider
-          :fetcher github
-	  :repo "tninja/aider.el"
-	  :files ("aider.el")))
-
-(require 'aider)
-(setq aider-program "/opt/aider/bin/aider")
-(setq aider-args '())
 #+end_src
 
 * Dired
