@@ -1777,6 +1777,8 @@ node `(org) External links' and Info node `(org) Search options'"
 #+begin_src emacs-lisp :results silent
 (require 'gptel)
 
+(add-hook 'gptel-mode-hook (lambda () (toggle-truncate-lines 1)))
+
 (setq litellm-backend
       (gptel-make-openai "LiteLLM"
 	:protocol "https"
