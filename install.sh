@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Detect operating system
+OS="$(uname -s)"
+case "${OS}" in
+    Linux*)     OS_TYPE=Linux; BIN_DIR="/usr/bin";;
+    Darwin*)    OS_TYPE=Mac; BIN_DIR="/usr/local/bin";;
+    CYGWIN*)    OS_TYPE=Windows; BIN_DIR="/usr/bin";;
+    MINGW*)     OS_TYPE=Windows; BIN_DIR="/usr/bin";;
+    MSYS*)      OS_TYPE=Windows; BIN_DIR="/usr/bin";;
+    *)          OS_TYPE="UNKNOWN:${OS}"; BIN_DIR="/usr/bin";;
+esac
+
 if [[ $EUID -ne 0 ]]; then
     echo "$0 is not running as root. Try using sudo."
     exit 2
@@ -128,13 +139,13 @@ cmd="docker run --privileged \
     echo "fi"
     echo ""
     echo "$cmd"
-} > /usr/bin/emacsd
+} > "${BIN_DIR}/emacsd"
 
-chmod +x /usr/bin/emacsd
+chmod +x "${BIN_DIR}/emacsd"
 
 echo -e "\nNext steps,"
 echo -e "\nStart the container,"
-echo -e " - /usr/bin/emacsd"
+echo -e " - ${BIN_DIR}/emacsd"
 echo -e "\nAccess via,"
 echo -e " - ssh core@localhost -p 9090"
 echo -e " - http://localhost:9090\n\n"
