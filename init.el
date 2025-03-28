@@ -34,6 +34,7 @@
          docker-compose-mode
 	 multi-term
 	 magit
+	 forge
 	 popper
          doom-themes
          doom-modeline
