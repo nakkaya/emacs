@@ -830,6 +830,8 @@ SSH at least,
 #+begin_src emacs-lisp :results silent
 (unless (eq system-type 'windows-nt)
   (when (package-installed-p 'vterm)
+    (setq vterm-always-compile-module t)
+
     (require 'vterm)
     (setq vterm-shell "/bin/bash"
 	  vterm-timer-delay 0.01)
@@ -1614,6 +1616,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+begin_src emacs-lisp :results silent
 (when module-file-suffix
   ;;(add-to-list 'native-comp-deferred-compilation-deny-list ".*jupyter.*")
+
+  (when (getenv "EMACS_HOME_DIR")
+    (advice-add 'zmq--download-module :around
+		(lambda (orig-fun &rest args)
+		  ;; Return nil to indicate we don't want to download the module
+		  nil)))
 
   (require 'jupyter)
 
