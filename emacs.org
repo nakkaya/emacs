@@ -43,7 +43,8 @@
       indent-tabs-mode nil
       show-paren-delay 0
       mouse-highlight nil
-      show-help-function nil)
+      show-help-function nil
+      truncate-lines t)
 
 (delete-selection-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
