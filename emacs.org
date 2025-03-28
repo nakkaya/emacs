@@ -1614,48 +1614,41 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+end_example
 
 #+begin_src emacs-lisp :results silent
-(when module-file-suffix
-  ;;(add-to-list 'native-comp-deferred-compilation-deny-list ".*jupyter.*")
-
-  (when (getenv "EMACS_HOME_DIR")
-    (advice-add 'zmq--download-module :around
-		(lambda (orig-fun &rest args)
-		  ;; Return nil to indicate we don't want to download the module
-		  nil)))
-
-  (require 'jupyter)
-
+(use-package jupyter
+  :when module-file-suffix
+  :demand t
+  :bind ((:map org-mode-map
+               ("C-c l" . jupyter-org-clear-all-results))
+         (:map jupyter-repl-mode-map
+               ("<up>" . jupyter-repl-history-previous)
+               ("<down>" . jupyter-repl-history-next))
+         (:map jupyter-server-kernel-list-mode-map
+               ("C-c C-d" . jupyter-server-kernel-list-do-shutdown-aux)
+               ("d" . jupyter-server-kernel-list-do-shutdown-aux)))
+  :config
   (setq jupyter-long-timeout 30
-	jupyter-default-timeout 10
-	jupyter-org-auto-connect nil)
-
-  (define-key jupyter-repl-mode-map (kbd "<up>") 'jupyter-repl-history-previous)
-  (define-key jupyter-repl-mode-map (kbd "<down>") 'jupyter-repl-history-next)
+        jupyter-default-timeout 10
+        jupyter-org-auto-connect nil)
 
   (require 'ob-jupyter)
-
+  
   (org-babel-do-load-languages
    'org-babel-load-languages
    (append org-babel-load-languages
-	   '((jupyter . t))))
-
+           '((jupyter . t))))
+  
   (setq org-babel-default-header-args:jupyter-python
-	'((:async . "yes")
-	  (:session . "/ssh:default-gpu:org-session")
-	  (:kernel . "ml")
-	  (:results . "raw drawer"))))
-
-(define-key org-mode-map (kbd "C-c l") 'jupyter-org-clear-all-results)
-
-(defun jupyter-server-kernel-list-do-shutdown-aux ()
-  (interactive)
-  (cl-flet ((always-yes (&rest _) t))
-    (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
-              ((symbol-function 'yes-or-no-p) #'always-yes))
-      (jupyter-server-kernel-list-do-shutdown))))
-
-(define-key jupyter-server-kernel-list-mode-map (kbd "C-c C-d") 'jupyter-server-kernel-list-do-shutdown-aux)
-(define-key jupyter-server-kernel-list-mode-map (kbd "d") 'jupyter-server-kernel-list-do-shutdown-aux)
+        '((:async . "yes")
+          (:session . "/ssh:default-gpu:org-session")
+          (:kernel . "ml")
+          (:results . "raw drawer")))
+  
+  (defun jupyter-server-kernel-list-do-shutdown-aux ()
+    (interactive)
+    (cl-flet ((always-yes (&rest _) t))
+      (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+                ((symbol-function 'yes-or-no-p) #'always-yes))
+        (jupyter-server-kernel-list-do-shutdown)))))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
