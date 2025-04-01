@@ -1764,6 +1764,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 * LLM
 ** gptel
+
 #+begin_src emacs-lisp :results silent
 (require 'gptel)
 
@@ -1963,7 +1964,7 @@ Refer to the official JAX documentation for the latest best practices on using J
     :quelpa (copilot :fetcher github :repo "copilot-emacs/copilot.el"
 		     :files ("*.el")))
 
-  (when (file-exists-p (concat copilot-install-dir "/bin/copilot-node-server"))
+  (when (file-exists-p (concat copilot-install-dir "/bin/copilot-language-server"))
     (setq copilot-indent-offset-warning-disable t)
     (add-hook 'prog-mode-hook 'copilot-mode)
     (add-hook 'yaml-mode-hook 'copilot-mode)
