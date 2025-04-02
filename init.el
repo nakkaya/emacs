@@ -34,6 +34,7 @@
          docker-compose-mode
 	 multi-term
 	 magit
+	 kubernetes
 	 forge
 	 popper
          doom-themes

@@ -879,6 +879,17 @@ SSH at least,
 	       (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 #+END_SRC
 
+** Kubernetes
+
+#+begin_src emacs-lisp
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview)
+  :config
+  (setq kubernetes-poll-frequency 3600
+        kubernetes-redraw-frequency 3600))
+#+end_src
+
 ** Popper
 
 #+begin_src emacs-lisp :results silent
