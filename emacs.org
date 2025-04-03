@@ -47,8 +47,13 @@
       truncate-lines t)
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain
-      ediff-diff-options "-w"
+      ediff-diff-options ""
       ediff-split-window-function 'split-window-horizontally)
+
+(add-hook 'ediff-prepare-buffer-hook
+          (lambda ()
+            (font-lock-mode 1)
+	    (font-lock-ensure)))
 
 (delete-selection-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
@@ -2352,6 +2357,26 @@ Refer to the official JAX documentation for the latest best practices on using J
     (set-face-background 'org-block-end-line bg frame)
     (set-face-background 'show-paren-match bg frame)
     (set-face-background 'ansi-color-yellow bg frame)
+
+    (eval-after-load "diff-mode"
+      '(progn
+	 (set-face-background 'ediff-current-diff-A "#262626" frame)
+	 (set-face-background 'ediff-current-diff-Ancestor "#262626" frame)
+	 (set-face-background 'ediff-current-diff-B "#262626" frame)
+	 (set-face-background 'ediff-current-diff-C "#262626" frame)
+	 (set-face-background 'ediff-even-diff-A "#262626" frame)
+	 (set-face-background 'ediff-even-diff-Ancestor "#262626" frame)
+	 (set-face-background 'ediff-even-diff-B "#262626" frame)
+	 (set-face-background 'ediff-even-diff-C "#262626" frame)
+	 (set-face-background 'ediff-fine-diff-A "#262626" frame)
+	 (set-face-background 'ediff-fine-diff-Ancestor "#262626" frame)
+	 (set-face-background 'ediff-fine-diff-B "#262626" frame)
+	 (set-face-background 'ediff-fine-diff-C "#262626" frame)
+	 (set-face-background 'ediff-odd-diff-A "#262626" frame)
+	 (set-face-background 'ediff-odd-diff-Ancestor "#262626" frame)
+	 (set-face-background 'ediff-odd-diff-B "#262626" frame)
+	 (set-face-background 'ediff-odd-diff-C "#262626" frame)))
+
     (eval-after-load "magit"
       '(progn
 	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
