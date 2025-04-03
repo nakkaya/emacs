@@ -139,6 +139,8 @@ cmd="docker run --privileged \
     echo "fi"
     echo ""
     echo "$cmd"
+    echo ""
+    echo "docker images | grep nakkaya/emacs | grep -v latest | awk '{print \$3}' | xargs -r docker rmi"
 } > "${BIN_DIR}/emacsd"
 
 chmod +x "${BIN_DIR}/emacsd"

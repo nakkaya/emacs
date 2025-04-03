@@ -46,6 +46,10 @@
       show-help-function nil
       truncate-lines t)
 
+(setq ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-diff-options "-w"
+      ediff-split-window-function 'split-window-horizontally)
+
 (delete-selection-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (global-font-lock-mode t)
@@ -376,12 +380,14 @@ to ensure it autosaves the latests version back.
 			  (name . "^\\Jenkinsfile")
 			  (name . "^\\*ein.*")))
 	       ("REPL" (or (name . "^\\*cider-.*")
+			   (name . "^\\*aidermacs:.*")
 			   (name . "^\\*nrepl-.*")
 			   (name . "^\\*jupyter-.*")
 			   (mode . inferior-lisp-mode)
                            (mode . inferior-python-mode)
                            (name . "^*monroe.*")))
                ("Terminal" (or (mode . term-mode)
+			       (mode . vterm-mode)
 			       (name . "^*chatgpt.*")
                                (name . "^*eshell.*")
 			       (name . "^*ssh.*")
@@ -904,6 +910,7 @@ SSH at least,
 	  "^*cider-repl.*"
 	  "^\\*term.*\\*$" term-mode
 	  "^*jupyter-.*"
+	  "^*aidermacs:.*"
 	  inferior-python-mode
 	  inferior-lisp-mode
           compilation-mode))
@@ -1991,7 +1998,9 @@ Refer to the official JAX documentation for the latest best practices on using J
   :bind (("C-c t" . aidermacs-transient-menu))
   :custom
   (setq aidermacs-program "/opt/aider/bin/aider"
+	aidermacs-auto-commits nil
 	aidermacs-use-architect-mode t
+	aidermacs-auto-accept-architect t
 	aidermacs-default-model "claude-3-7-sonnet-latest"
 	aidermacs-weak-model "openai/gpt-4o@azure"
 	aidermacs-architect-model "claude-3-7-sonnet-latest"
