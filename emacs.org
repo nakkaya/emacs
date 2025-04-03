@@ -1987,25 +1987,15 @@ Refer to the official JAX documentation for the latest best practices on using J
 ** Aider
 
 #+begin_src emacs-lisp
-(defun aider ()
-  "Run /opt/aider/bin/aider in a terminal within the Projectile project root.
-The buffer will be named ‘aider’ and killed once the process exits."
-  (interactive)
-  (require 'projectile)
-  (let ((default-directory (projectile-project-root)))
-    (let ((buf (make-term "aider" "/opt/aider/bin/aider" nil
-                          "--dark-mode"
-                          "--no-auto-commits"
-                          "--no-check-update")))
-      (with-current-buffer buf
-        (term-mode)
-        (term-char-mode)
-        (rename-buffer "aider" t)
-        (set-process-sentinel (get-buffer-process buf)
-                              (lambda (proc _event)
-                                (when (memq (process-status proc) '(exit signal))
-                                  (kill-buffer (process-buffer proc)))))))
-    (switch-to-buffer "aider")))
+(use-package aidermacs
+  :bind (("C-c t" . aidermacs-transient-menu))
+  :custom
+  (setq aidermacs-program "/opt/aider/bin/aider"
+	aidermacs-use-architect-mode t
+	aidermacs-default-model "claude-3-7-sonnet-latest"
+	aidermacs-weak-model "openai/gpt-4o@azure"
+	aidermacs-architect-model "claude-3-7-sonnet-latest"
+	aidermacs-editor-model "openai/gpt-4o@azure"))
 #+end_src
 
 * Dired
