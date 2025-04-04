@@ -35,6 +35,7 @@
 	 multi-term
 	 magit
 	 kubernetes
+	 aidermacs
 	 forge
 	 popper
          doom-themes
