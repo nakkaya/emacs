@@ -2002,14 +2002,15 @@ Refer to the official JAX documentation for the latest best practices on using J
 (use-package aidermacs
   :bind (("C-c t" . aidermacs-transient-menu))
   :custom
-  (setq aidermacs-program "/opt/aider/bin/aider"
-	aidermacs-auto-commits nil
-	aidermacs-use-architect-mode t
-	aidermacs-auto-accept-architect t
-	aidermacs-default-model "claude-3-7-sonnet-latest"
-	aidermacs-weak-model "openai/gpt-4o@azure"
-	aidermacs-architect-model "claude-3-7-sonnet-latest"
-	aidermacs-editor-model "openai/gpt-4o@azure"))
+  (aidermacs-program "/opt/aider/bin/aider")
+  (aidermacs-auto-commits nil)
+  (aidermacs-default-model "claude-3-7-sonnet-latest")
+  (aidermacs-weak-model "openai/gpt-4o@azure")
+  ;; (aidermacs-use-architect-mode t)
+  ;; (aidermacs-auto-accept-architect t)
+  ;; (aidermacs-architect-model "claude-3-7-sonnet-latest")
+  ;; (aidermacs-editor-model "openai/gpt-4o@azure")
+  )
 #+end_src
 
 * Dired
