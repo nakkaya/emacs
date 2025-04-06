@@ -1791,8 +1791,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+begin_src emacs-lisp :results silent
 (require 'gptel)
 
-(add-hook 'gptel-mode-hook (lambda () (toggle-truncate-lines 1)))
-
 (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
 (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
 
