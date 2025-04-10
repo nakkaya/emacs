@@ -308,7 +308,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN mkdir /opt/skypilot && \
     chown $USER:$USER /opt/skypilot && \
     su - $USER -c 'python3 -m venv /opt/skypilot' && \
-    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod,gcp]==0.6.1" --no-cache-dir' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[aws,kubernetes,runpod,gcp,azure]==0.6.1" --no-cache-dir' && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # OpenVSCode Server
