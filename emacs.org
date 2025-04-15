@@ -272,6 +272,7 @@ to ensure it autosaves the latests version back.
        "^\\*Disabled Command\\*$"
        "^\\*tfmls\\*$"
        "^\\*tfmls::stderr\\*$"
+       "^\\*Ediff Registry\\*$"
        (rx "*httpd")
        (rx "*ein:log-all")
        (rx "*nrepl-server")
@@ -475,7 +476,8 @@ to ensure it autosaves the latests version back.
 			 (name . "^\\*Buffer List\\*$")
 			 (name . "^\\*Disabled Command\\*$")
 			 (name . "^\\*copilot events\\*$")
-			 (name . "^\\*kernel-notebook-*")))))))
+			 (name . "^\\*kernel-notebook-*")
+			 (name . "^\\*Ediff Registry\\*$"))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t
