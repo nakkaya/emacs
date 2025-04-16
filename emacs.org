@@ -2240,6 +2240,14 @@ Refer to the official JAX documentation for the latest best practices on using J
           '(lambda ()
 	     (define-key aidermacs-comint-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
+(add-hook 'aidermacs-comint-mode-hook
+	  (lambda ()
+	    (define-key aidermacs-comint-mode-map
+			(kbd "C-c C-o")
+			(lambda ()
+			  (interactive)
+			  (kill-region (point-min) (line-beginning-position 0))))))
+
 (add-hook 'c++-mode-hook
           '(lambda ()
 	     (define-key c++-mode-map (kbd "C-d")  #'na-bounce-sexp)))
