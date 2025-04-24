@@ -282,6 +282,28 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     cleanup_apt_cache
 
+# Chrome & Web Driver
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+        amd64) \
+            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chrome-linux64.zip && \
+            mkdir -p /opt/chrome && \
+            unzip chrome-linux64.zip && \
+            mv chrome-linux64/* /opt/chrome/ && \
+            rm -rf chrome-linux64 && \
+            rm chrome-linux64.zip && \
+            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chromedriver-linux64.zip && \
+            unzip chromedriver-linux64.zip  && \
+            sudo mv chromedriver-linux64/* /opt/chrome/  && \
+            rm -rf chromedriver-linux64  && \
+            rm chromedriver-linux64.zip  && \
+            ln -s /opt/chrome/chromedriver /usr/bin/chromedriver; \
+            ;; \
+        *) \
+            echo "Skipping Chrome & Web Driver installation on non-amd64 architecture."; \
+            ;; \
+    esac
 
 # pgAdmin
 #
