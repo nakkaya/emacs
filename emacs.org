@@ -1802,21 +1802,24 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	:host "llm.computie.net"
 	:key (auth-source-pick-first-password :host "llm.computie.net")
 	:stream t
-	:models '("gpt-o1@azure"
-		  "gpt-4o@azure"
-		  "gpt-4-32k@azure"
-		  "deepseek-r1@azure"
-		  "gemini-1.5-pro@vertex.ai")))
+	:models '(gpt-o1@azure
+		  gpt-4o@azure
+		  gpt-4-32k@azure
+		  deepseek-r1@azure
+		  gemini-1.5-pro@vertex.ai)))
 
 (setq anthropic-backend
       (gptel-make-anthropic "Claude"
 	:stream t
 	:host "api.anthropic.com"
 	:key (auth-source-pick-first-password :host "api.anthropic.com")
-	:models '("claude-3-7-sonnet-latest")))
+	:models '(claude-3-7-sonnet-latest)))
+
+Warning (gptel): `gptel-model' expects a symbol, found string "claude-3-7-sonnet-latest"
+   Resetting `gptel-model' to claude-3-7-sonnet-latest
 
 (setq gptel-backend anthropic-backend
-      gptel-model "claude-3-7-sonnet-latest"
+      gptel-model 'claude-3-7-sonnet-latest
       gptel-playback t
       gptel-default-mode 'org-mode
       gptel-display-buffer-action '(pop-to-buffer-same-window))
