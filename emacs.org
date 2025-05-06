@@ -162,6 +162,19 @@ to ensure it autosaves the latests version back.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(defun recreate-scratch-buffer ()
+  "Create a new scratch buffer when the original is killed."
+  (when (not (get-buffer "*scratch*"))
+    (let ((buf (get-buffer-create "*scratch*")))
+      (with-current-buffer buf
+        (lisp-interaction-mode)
+        (insert initial-scratch-message)))))
+
+(add-hook 'kill-buffer-hook #'recreate-scratch-buffer)
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
 (setq password-cache t) ; enable password caching
 (setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
 #+END_SRC
@@ -518,12 +531,14 @@ to ensure it autosaves the latests version back.
       persp-kill-foreign-buffer-behaviour 'kill)
 
 (defun switch-all-other-frames-to-nil-perspective ()
-  "Switch all other frames to nil perspective, except the current frame."
+  "Switch all other frames to nil perspective and activate *scratch* buffer."
   (interactive)
   (let ((current-frame (selected-frame)))
     (dolist (frame (frame-list))
       (unless (eq frame current-frame)
-        (persp-frame-switch persp-nil-name frame)))))
+        (with-selected-frame frame
+          (persp-frame-switch persp-nil-name)
+          (switch-to-buffer "*scratch*"))))))
 
 (defun na-persp-frame-switch (name)
   "Switch all other frames to nil perspective, then switch the current frame perspective to NAME."
@@ -1982,6 +1997,19 @@ Refer to the official JAX documentation for the latest best practices on using J
     (message "No region selected.")))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun gptel-with-persp-name ()
+  "Start gptel with buffer name based on current perspective."
+  (interactive)
+  (let* ((persp-name (if (bound-and-true-p persp-mode)
+                         (or (safe-persp-name (get-current-persp))
+                             "default")
+                       "default"))
+         (buffer-name (format "*LLM-%s*" persp-name)))
+    (gptel buffer-name)
+    (switch-to-buffer buffer-name)))
+#+end_src
+
 ** copilot
 
 #+begin_src emacs-lisp :results silent
@@ -2236,6 +2264,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key (kbd "C-c c") #'org-capture)
 (global-set-key (kbd "C-\\")  #'other-window)
 (global-set-key (kbd "C-d")   #'na-bounce-sexp)
+(global-set-key (kbd "C-c g") 'gptel-with-persp-name)
 
 (global-set-key (kbd "C-M-k")  #'beginning-of-defun)
 (global-set-key (kbd "C-M-j")  #'end-of-defun)
