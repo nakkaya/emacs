@@ -2222,7 +2222,12 @@ Refer to the official JAX documentation for the latest best practices on using J
       mac-command-modifier 'meta)
 
 (global-set-key (kbd "M-x")  #'helm-M-x)
-(global-set-key (kbd "C-]")  #'helm-buffers-list)
+;; (global-set-key (kbd "C-]")  #'helm-buffers-list)
+(global-set-key (kbd "C-]") (lambda ()
+			      (interactive)
+			      (with-persp-buffer-list
+			       ()
+			       (helm-buffers-list))))
 
 (global-set-key (kbd "C-x b") #'ibuffer)
 (global-set-key (kbd "C-c c") #'org-capture)

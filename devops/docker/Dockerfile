@@ -283,6 +283,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     cleanup_apt_cache
 
 # Chrome & Web Driver
+# https://googlechromelabs.github.io/chrome-for-testing/#stable
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
