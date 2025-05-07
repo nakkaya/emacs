@@ -1830,9 +1830,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	:key (auth-source-pick-first-password :host "api.anthropic.com")
 	:models '(claude-3-7-sonnet-latest)))
 
-Warning (gptel): `gptel-model' expects a symbol, found string "claude-3-7-sonnet-latest"
-   Resetting `gptel-model' to claude-3-7-sonnet-latest
-
 (setq gptel-backend anthropic-backend
       gptel-model 'claude-3-7-sonnet-latest
       gptel-playback t
