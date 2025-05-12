@@ -2257,7 +2257,12 @@ Refer to the official JAX documentation for the latest best practices on using J
 			       ()
 			       (helm-buffers-list))))
 
-(global-set-key (kbd "C-x b") #'ibuffer)
+(global-set-key (kbd "C-x b") (lambda ()
+				(interactive)
+				(with-persp-buffer-list
+				 ()
+				 (ibuffer))))
+
 (global-set-key (kbd "C-c c") #'org-capture)
 (global-set-key (kbd "C-\\")  #'other-window)
 (global-set-key (kbd "C-d")   #'na-bounce-sexp)
