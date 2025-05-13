@@ -924,7 +924,7 @@ SSH at least,
 (use-package popper
   :ensure t ; or :straight t
   :bind (("M-q"   . popper-toggle-latest)
-         ("M-\\"   . popper-cycle)
+         ("M-\\"   . popper-cycle-in-perspective)
          ("C-M-\\" . popper-toggle-type))
   :init
   (setq popper-reference-buffers
@@ -944,6 +944,13 @@ SSH at least,
   (setq popper-display-function
 	(lambda (b a)
 	  (display-buffer-same-window b a)))
+
+  (defun popper-cycle-in-perspective (&optional num)
+    (interactive "p")
+    (with-persp-buffer-list
+     ()
+     (popper--find-buried-popups))
+    (popper-cycle num))
 
   (popper-mode +1)
   (popper-echo-mode +1))
