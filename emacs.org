@@ -922,9 +922,9 @@ SSH at least,
 
 #+begin_src emacs-lisp :results silent
 (use-package popper
-  :ensure t ; or :straight t
+  :ensure t
   :bind (("M-q"   . popper-toggle-latest)
-         ("M-\\"   . popper-cycle-in-perspective)
+         ("M-\\"   . popper-cycle)
          ("C-M-\\" . popper-toggle-type))
   :init
   (setq popper-reference-buffers
@@ -935,7 +935,8 @@ SSH at least,
 	  "^*aidermacs:.*"
 	  inferior-python-mode
 	  inferior-lisp-mode
-          compilation-mode))
+          compilation-mode)
+	popper-group-function #'popper-group-by-directory)
 
   (when (package-installed-p 'vterm)
     (push "^\\*vterm\\*.*" popper-reference-buffers)
@@ -944,13 +945,6 @@ SSH at least,
   (setq popper-display-function
 	(lambda (b a)
 	  (display-buffer-same-window b a)))
-
-  (defun popper-cycle-in-perspective (&optional num)
-    (interactive "p")
-    (with-persp-buffer-list
-     ()
-     (popper--find-buried-popups))
-    (popper-cycle num))
 
   (popper-mode +1)
   (popper-echo-mode +1))
@@ -1817,6 +1811,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
 (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+(add-hook 'gptel-mode-hook (lambda () (setq-local truncate-lines nil)))
 
 (setq litellm-backend
       (gptel-make-openai "LiteLLM"
@@ -2264,11 +2259,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 			       ()
 			       (helm-buffers-list))))
 
-(global-set-key (kbd "C-x b") (lambda ()
-				(interactive)
-				(with-persp-buffer-list
-				 ()
-				 (ibuffer))))
+(global-set-key (kbd "C-x b") #'ibuffer)
 
 (global-set-key (kbd "C-c c") #'org-capture)
 (global-set-key (kbd "C-\\")  #'other-window)
