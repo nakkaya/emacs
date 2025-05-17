@@ -97,8 +97,8 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_x86_64.deb' ;; \
-            arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/kubectl-cnpg_1.23.1_linux_arm64.deb' ;; \
+            amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.25.1/kubectl-cnpg_1.25.1_linux_x86_64.deb' ;; \
+            arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.25.1/kubectl-cnpg_1.25.1_linux_arm64.deb' ;; \
     esac; \
     curl -L -s "${URL}" -o "kubectl-cnpg.deb" && \
     dpkg -i kubectl-cnpg.deb && \
