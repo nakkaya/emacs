@@ -225,7 +225,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     esac
 
 # UV
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh && \
+    ln -s /opt/uv/uv /usr/bin/uv
 
 # Miniconda
 #
