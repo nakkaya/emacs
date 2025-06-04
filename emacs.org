@@ -986,7 +986,9 @@ Will bounce between matching parens just like % in vi
 
 (setq nrepl-use-ssh-fallback-for-remote-hosts t
       cider-use-tooltips nil
-      cider-eldoc-display-for-symbol-at-point nil)
+      cider-eldoc-display-for-symbol-at-point nil
+      clojure-indent-style 'align-arguments
+      cider-merge-sessions 'host)
 
 (add-hook 'cider-repl-mode-hook
 	  (lambda ()
