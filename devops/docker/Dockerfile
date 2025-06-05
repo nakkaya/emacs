@@ -245,10 +245,11 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
-    /bin/bash -c "$(curl -fsSL https://download.clojure.org/install/linux-install-1.11.1.1113.sh)" && \
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install)" -- --static --version 2023.10.30-16.25.41 && \
-    /bin/bash -c "$(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)" && \
+    /bin/bash -c "$(curl -fsSL https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh)" && \
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install)" -- --static --version 2025.05.27-13.56.57 && \
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/babashka/babashka/master/install)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clj-kondo/clj-kondo/master/script/install-clj-kondo)" && \
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/borkdude/jet/master/install)" && \
     rm -f /usr/local/bin/clj && \
     ln -s /usr/local/bin/clojure /usr/local/bin/clj
 

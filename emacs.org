@@ -593,6 +593,7 @@ to ensure it autosaves the latests version back.
     (setq exec-path (split-string (getenv "PATH") ";"))
   (setq exec-path (split-string (getenv "PATH") ":")))
 
+(setenv "SHELL" "/bin/bash")
 (setenv "PAGER" "cat")
 ;; (setenv "DISPLAY" ":0")
 #+END_SRC
