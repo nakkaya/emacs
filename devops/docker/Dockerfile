@@ -197,6 +197,12 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
     printf "\n\nbackend syncthing\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /syncthing/ if { path /syncthing }\n    http-request set-path %%[path,regsub(^/syncthing/,/)]\n    http-request set-header Host localhost\n    server syncthing_server 127.0.0.1:8384\n" >> /etc/haproxy/haproxy.cfg && \
     cleanup_apt_cache
 
+# Claude Code
+#
+
+RUN npm install -g @anthropic-ai/claude-code --prefix /opt/claude-code && \
+    echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc
+
 # Configure Python
 #
 RUN python3 -m venv /opt/python-lsp-server && \
