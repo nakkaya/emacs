@@ -2047,6 +2047,22 @@ Refer to the official JAX documentation for the latest best practices on using J
   )
 #+end_src
 
+** Claude
+
+#+begin_src emacs-lisp :results silent
+(quelpa '(claudemacs
+          :fetcher github
+	  :repo "cpoile/claudemacs"))
+
+(require 'claudemacs)
+(setq claudemacs-program "/opt/claude-code/bin/claude")
+(define-key prog-mode-map (kbd "C-c C-e") #'claudemacs-transient-menu)
+
+;; Set a big buffer so we can search our history.
+(with-eval-after-load 'eat
+  (setq eat-term-scrollback-size 400000))
+#+end_src
+
 * Dired
 
 #+BEGIN_SRC emacs-lisp
