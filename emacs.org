@@ -935,6 +935,7 @@ SSH at least,
 	  "^\\*term.*\\*$" term-mode
 	  "^*jupyter-.*"
 	  "^*aidermacs:.*"
+	  "^*claudemacs:.*"
 	  inferior-python-mode
 	  inferior-lisp-mode
           compilation-mode)
@@ -2335,6 +2336,22 @@ Refer to the official JAX documentation for the latest best practices on using J
   (define-key vterm-mode-map (kbd "M-\\")     #'popper-cycle)
   (define-key vterm-mode-map (kbd "M-q")      #'popper-toggle-latest)
   (define-key vterm-mode-map (kbd "M-x")      #'helm-M-x))
+
+(with-eval-after-load 'eat
+  (customize-set-variable ;; has :set code
+   'eat-semi-char-non-bound-keys
+   (append
+    (list (kbd "C-]")
+	  (kbd "C-\\")
+	  [27 92]      ;; M-\ (27 = ESC, 92 = \)
+          [27 113])    ;; M-q (27 = ESC, 113 = q)
+    eat-semi-char-non-bound-keys))
+
+  (define-key eat-mode-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key eat-mode-map (kbd "M-\\")     #'popper-cycle)
+  (define-key eat-mode-map (kbd "M-q")      #'popper-toggle-latest)
+
+  (eat-update-semi-char-mode-map))
 
 (global-set-key "\M-[1;5C" #'forward-word)
 (global-set-key "\M-[1;5D" #'backward-word)
