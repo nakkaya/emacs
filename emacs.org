@@ -996,6 +996,36 @@ Will bounce between matching parens just like % in vi
 (add-hook 'cider-repl-mode-hook
 	  (lambda ()
 	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
+
+(put-clojure-indent 'weave/handler '(1))
+(put-clojure-indent 'testit/fact 1)
+(put-clojure-indent 'testit/facts 1)
+(put-clojure-indent 'facts 1)
+(put-clojure-indent 'fact 1)
+(put-clojure-indent 'testit.core/fact 1)
+(put-clojure-indent 'page/html5 1)
+(put-clojure-indent 'rf/reg-event-fx 1)
+(put-clojure-indent 'chain/reg-chain 1)
+(put-clojure-indent 'rf/reg-sub 1)
+(put-clojure-indent 'rf/reg-event-db 1)
+(put-clojure-indent 'rc/reg-chain 1)
+(put-clojure-indent 'futil/for-all 1)
+(put-clojure-indent 'futil/for-frag 1)
+(put-clojure-indent 'for-frag 1)
+(put-clojure-indent 'for-all 1)
+(put-clojure-indent 'u/for-all 1)
+(put-clojure-indent 'not-join 1)
+(put-clojure-indent 'r/with-let 1)
+(put-clojure-indent 'p/if-all-let 1)
+(put-clojure-indent 'test-seq/seq-tx 1)
+(put-clojure-indent 'or-join 1)
+
+(setq cider-print-fn 'pprint)
+
+(setq clojure-align-binding-forms
+      '("let" "when-let" "when-some" "if-let" "if-some" "binding" "loop"
+        "doseq" "for" "with-open" "with-local-vars" "with-redefs"
+        "r/with-let" "p/if-all-let" "test-seq/seq-tx"))
 #+END_SRC
  
 ** C/C++
