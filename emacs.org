@@ -997,6 +997,7 @@ Will bounce between matching parens just like % in vi
 	  (lambda ()
 	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 
+(put-clojure-indent 'core/handler '(1))
 (put-clojure-indent 'weave/handler '(1))
 (put-clojure-indent 'testit/fact 1)
 (put-clojure-indent 'testit/facts 1)
@@ -1019,6 +1020,9 @@ Will bounce between matching parens just like % in vi
 (put-clojure-indent 'p/if-all-let 1)
 (put-clojure-indent 'test-seq/seq-tx 1)
 (put-clojure-indent 'or-join 1)
+(put 'cc/button 'clojure-indent-function 1)
+(put 'cc/modal-footer 'clojure-indent-function 1)
+(put 'cc/modal-body 'clojure-indent-function 1)
 
 (setq cider-print-fn 'pprint)
 
