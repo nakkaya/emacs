@@ -2067,9 +2067,9 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 ** Aider
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
 (use-package aidermacs
-  :bind (("C-c t" . aidermacs-transient-menu))
+  ;; :bind (("C-c t" . aidermacs-transient-menu))
   :custom
   (aidermacs-program "/opt/aider/bin/aider")
   (aidermacs-auto-commits nil)
@@ -2091,7 +2091,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (require 'claudemacs)
 (setq claudemacs-program "/opt/claude-code/bin/claude")
-(define-key prog-mode-map (kbd "C-c C-e") #'claudemacs-transient-menu)
+(global-set-key (kbd "C-c t") #'claudemacs-transient-menu)
 
 ;; Set a big buffer so we can search our history.
 (with-eval-after-load 'eat
