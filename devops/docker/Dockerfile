@@ -330,21 +330,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
     printf "\n\nbackend jupyter\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
 
-# Install Slicer3D
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-        amd64) \
-            mkdir -p /opt/slicer3d && \
-            curl -L -s "https://slicer-packages.kitware.com/api/v1/item/67c51fc129825655577cfee9/download" | tar --strip-components=1 -xz -C /opt/slicer3d && \
-            ln -s /opt/slicer3d/Slicer /usr/bin/Slicer && \
-            chown -R core:core /opt/slicer3d \
-            ;; \
-        *) \
-            echo "Skipping Slicer3D installation on non-amd64 architecture."; \
-            ;; \
-    esac
-
 # Setup Emacs
 #
 RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
