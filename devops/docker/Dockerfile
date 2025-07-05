@@ -104,17 +104,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     dpkg -i kubectl-cnpg.deb && \
     cleanup_apt_cache
 
-# nats-cli
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.4/nats-0.1.4-amd64.deb' ;; \
-            arm64) URL='https://github.com/nats-io/natscli/releases/download/v0.1.4/nats-0.1.4-arm64.deb' ;; \
-    esac; \
-    curl -L -s "${URL}" -o "nats.deb" && \
-    dpkg -i nats.deb && \
-    rm -rf nats.deb
-
 # temporal-cli
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
