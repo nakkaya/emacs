@@ -104,17 +104,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     dpkg -i kubectl-cnpg.deb && \
     cleanup_apt_cache
 
-# temporal-cli
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) URL='https://temporal.download/cli/archive/latest?platform=linux&arch=amd64' ;; \
-            arm64) URL='https://temporal.download/cli/archive/latest?platform=linux&arch=arm64' ;; \
-    esac; \
-    curl -L -s "${URL}" -o "temporal.tar.gz" && \
-    tar -xzf temporal.tar.gz --directory=/usr/bin temporal && \
-    rm -rf temporal.tar.gz
-
 # JuiceFS
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
