@@ -104,17 +104,6 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     dpkg -i kubectl-cnpg.deb && \
     cleanup_apt_cache
 
-# k9s
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_Linux_amd64.tar.gz' ;; \
-            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_Linux_arm64.tar.gz' ;; \
-    esac; \
-    curl -L -s "${URL}" -o "k9s.tar.gz" && \
-    tar -xzf k9s.tar.gz --directory=/usr/bin k9s && \
-    rm -rf k9s.tar.gz
-
 # nats-cli
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
@@ -255,6 +244,7 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install)" -- --static --version 2025.05.27-13.56.57 && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/babashka/babashka/master/install)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clj-kondo/clj-kondo/master/script/install-clj-kondo)" && \
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/weavejester/cljfmt/HEAD/install.sh)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/borkdude/jet/master/install)" && \
     rm -f /usr/local/bin/clj && \
     ln -s /usr/local/bin/clojure /usr/local/bin/clj
