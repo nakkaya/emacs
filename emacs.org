@@ -2090,12 +2090,21 @@ Refer to the official JAX documentation for the latest best practices on using J
 	  :repo "cpoile/claudemacs"))
 
 (require 'claudemacs)
-(setq claudemacs-program "/opt/claude-code/bin/claude")
+
+(setq claudemacs-program "/opt/claude-code/bin/claude"
+      claudemacs-notify-on-await nil)
+
 (global-set-key (kbd "C-c t") #'claudemacs-transient-menu)
 
 ;; Set a big buffer so we can search our history.
 (with-eval-after-load 'eat
   (setq eat-term-scrollback-size 400000))
+
+(defun claudemacs-disable-setup-bell-handler ()
+  "Disabled version of claudemacs-setup-bell-handler."
+  (interactive))
+
+(advice-add 'claudemacs-setup-bell-handler :override #'claudemacs-disable-setup-bell-handler)
 #+end_src
 
 * Dired
