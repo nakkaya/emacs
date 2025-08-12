@@ -79,6 +79,9 @@
 (require 'undo-tree)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 (global-undo-tree-mode)
+
+(setq undo-limit 16000
+      undo-strong-limit 24000)
 #+END_SRC
 
 
