@@ -184,18 +184,18 @@ RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
     echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
 
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-        amd64) \
-            python3 -m venv /opt/aider && \
-            /opt/aider/bin/python -m pip install wheel --no-cache-dir && \
-            /opt/aider/bin/python -m pip install aider-chat[browser] --no-cache-dir && \
-            echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc; \
-            ;; \
-        *) \
-            echo "Skipping Aider installation on non-amd64 architecture."; \
-            ;; \
-    esac
+# RUN ARCH="$(dpkg --print-architecture)"; \
+#     case "$ARCH" in \
+#         amd64) \
+#             python3 -m venv /opt/aider && \
+#             /opt/aider/bin/python -m pip install wheel --no-cache-dir && \
+#             /opt/aider/bin/python -m pip install aider-chat[browser] --no-cache-dir && \
+#             echo "export PATH=\"\$PATH:/opt/aider/bin\"" >> /home/$USER/.bashrc; \
+#             ;; \
+#         *) \
+#             echo "Skipping Aider installation on non-amd64 architecture."; \
+#             ;; \
+#     esac
 
 # UV
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh && \
@@ -254,9 +254,9 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
 
 # Azure CLI
 #
-
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
-    cleanup_apt_cache
+#
+# RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
+#     cleanup_apt_cache
 
 # Chrome & Web Driver
 # https://googlechromelabs.github.io/chrome-for-testing/#stable
