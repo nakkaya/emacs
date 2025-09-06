@@ -407,7 +407,8 @@ to ensure it autosaves the latests version back.
 			   (name . "^\\*jupyter-.*")
 			   (mode . inferior-lisp-mode)
                            (mode . inferior-python-mode)
-                           (name . "^*monroe.*")))
+                           (name . "^*monroe.*")
+			   (name . "^\\*claudemacs.*")))
                ("Terminal" (or (mode . term-mode)
 			       (mode . vterm-mode)
 			       (name . "^*chatgpt.*")
@@ -936,9 +937,9 @@ SSH at least,
         '("^\\*eshell.*\\*$" eshell-mode
 	  "^*cider-repl.*"
 	  "^\\*term.*\\*$" term-mode
-	  "^*jupyter-.*"
-	  "^*aidermacs:.*"
-	  "^*claudemacs:.*"
+	  ;; "^*jupyter-.*"
+	  ;; "^*aidermacs:.*"
+	  ;; "^*claudemacs:.*"
 	  inferior-python-mode
 	  inferior-lisp-mode
           compilation-mode)
