@@ -5,8 +5,7 @@
 ### Docker Setup
 
 There is a Docker image built from this repository that contains Emacs
-29 with all packages AOT compiled. Image runs as user `core` replace
-your username as required.
+30. Image runs as user `core` replace your username as required.
 
     docker pull nakkaya/emacs:latest
 
