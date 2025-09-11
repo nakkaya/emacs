@@ -36,7 +36,6 @@
          eat
 	 magit
 	 kubernetes
-	 aidermacs
 	 forge
 	 popper
          doom-themes
