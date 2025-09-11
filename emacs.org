@@ -1035,7 +1035,7 @@ Will bounce between matching parens just like % in vi
         "doseq" "for" "with-open" "with-local-vars" "with-redefs"
         "r/with-let" "p/if-all-let" "test-seq/seq-tx"))
 #+END_SRC
- 
+
 ** C/C++
 
  #+BEGIN_SRC emacs-lisp
@@ -1296,7 +1296,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (projectile-mode +1)
 #+END_SRC
-  
+
 * Org-Mode
 
 #+begin_src emacs-lisp :results silent
@@ -1716,18 +1716,18 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
         jupyter-org-auto-connect nil)
 
   (require 'ob-jupyter)
-  
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    (append org-babel-load-languages
            '((jupyter . t))))
-  
+
   (setq org-babel-default-header-args:jupyter-python
         '((:async . "yes")
           (:session . "/ssh:default-gpu:org-session")
           (:kernel . "ml")
           (:results . "raw drawer")))
-  
+
   (defun jupyter-server-kernel-list-do-shutdown-aux ()
     (interactive)
     (cl-flet ((always-yes (&rest _) t))
@@ -1755,7 +1755,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   :config
   (require 'cl)
   (require 'ein-notebook)
-  
+
   (setq ein:url-or-port '("http://lab-desktop:8181"
                            "http://workstation:8181"
                            "http://engine:8181"))
@@ -1783,8 +1783,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (let ((link (read link-path)))
       (cl-destructuring-bind (&key url-or-port name &allow-other-keys)
           link
-        (ein:notebooklist-login 
-         url-or-port 
+        (ein:notebooklist-login
+         url-or-port
          (apply-partially (lambda (url-or-port* path* &rest args)
                             (ein:notebook-open url-or-port* path*))
                           url-or-port name)))))
@@ -2089,26 +2089,27 @@ Refer to the official JAX documentation for the latest best practices on using J
 ** Claude
 
 #+begin_src emacs-lisp :results silent
-(quelpa '(claudemacs
-          :fetcher github
-	  :repo "cpoile/claudemacs"))
+(use-package claudemacs
+  :quelpa (claudemacs
+           :fetcher github
+           :repo "cpoile/claudemacs")
+  :custom
+  (claudemacs-program "/opt/claude-code/bin/claude")
+  (claudemacs-notify-on-await nil)
+  :bind
+  ("C-c t" . claudemacs-transient-menu)
+  :config
+  ;; Set a big buffer so we can search our history
+  (with-eval-after-load 'eat
+    (setq eat-term-scrollback-size 400000))
 
-(require 'claudemacs)
+  ;; Disable the bell handler
+  (defun claudemacs-disable-setup-bell-handler ()
+    "Disabled version of claudemacs-setup-bell-handler."
+    (interactive))
 
-(setq claudemacs-program "/opt/claude-code/bin/claude"
-      claudemacs-notify-on-await nil)
-
-(global-set-key (kbd "C-c t") #'claudemacs-transient-menu)
-
-;; Set a big buffer so we can search our history.
-(with-eval-after-load 'eat
-  (setq eat-term-scrollback-size 400000))
-
-(defun claudemacs-disable-setup-bell-handler ()
-  "Disabled version of claudemacs-setup-bell-handler."
-  (interactive))
-
-(advice-add 'claudemacs-setup-bell-handler :override #'claudemacs-disable-setup-bell-handler)
+  (advice-add 'claudemacs-setup-bell-handler
+	      :override #'claudemacs-disable-setup-bell-handler))
 #+end_src
 
 * Dired

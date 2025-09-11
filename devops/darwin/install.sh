@@ -5,7 +5,7 @@ set -e
 rm -f ~/.emacs
 echo "(load-file \"`pwd`/../../init.el\")" > ~/.emacs
 
-brew install automake poppler libtool aspell libvterm
+brew install cmake automake poppler libtool aspell libvterm gnu-tar
 
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-xwidgets --with-natural-title-bar
