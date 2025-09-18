@@ -2505,6 +2505,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 	 (set-face-background 'magit-diff-removed bg frame)
 	 (set-face-background 'magit-diff-hunk-heading bg frame)
 	 (set-face-foreground 'magit-diff-hunk-heading "#727272" frame)
+	 (set-face-background 'magit-section-highlight bg frame)
 	 (set-face-background 'magit-diff-removed-highlight bg frame)))))
 
 (eval-after-load "helm-buffers"
