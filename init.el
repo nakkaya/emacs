@@ -28,7 +28,6 @@
 	 yasnippet
          lsp-mode
 	 lsp-ui
-	 lsp-treemacs
 	 org
 	 ein
          dockerfile-mode
