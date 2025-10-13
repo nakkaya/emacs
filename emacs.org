@@ -2084,7 +2084,17 @@ Refer to the official JAX documentation for the latest best practices on using J
   :config
   ;; Set a big buffer so we can search our history
   (with-eval-after-load 'eat
-    (setq eat-term-scrollback-size 400000))
+    (setq eat-term-scrollback-size 400000)
+
+    (customize-set-variable
+     'eat-semi-char-non-bound-keys
+     (append
+      (list [29]) ;; C-] as character code 29
+      eat-semi-char-non-bound-keys)))
+
+  (add-to-list 'display-buffer-alist
+               '("^\\*claudemacs"
+                 (display-buffer-same-window)))
 
   ;; Disable the bell handler
   (defun claudemacs-disable-setup-bell-handler ()
