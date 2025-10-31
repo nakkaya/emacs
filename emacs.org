@@ -874,7 +874,8 @@ SSH at least,
 
     (require 'vterm)
     (setq vterm-shell "/bin/bash"
-	  vterm-timer-delay 0.01)
+	  vterm-timer-delay 0.01
+	  vterm-buffer-name-string "vterm %s")
 
     (quelpa '(eshell-vterm
               :fetcher github
