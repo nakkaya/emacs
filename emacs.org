@@ -69,6 +69,7 @@
   :ensure t
   :commands outline-indent-minor-mode
   :custom
+  (outline-blank-line t)
   (outline-indent-ellipsis " ▼"))
 
 (add-hook 'prog-mode-hook #'outline-indent-minor-mode)
