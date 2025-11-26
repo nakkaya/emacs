@@ -310,7 +310,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN mkdir /opt/skypilot && \
     chown $USER:$USER /opt/skypilot && \
     su - $USER -c 'python3 -m venv /opt/skypilot' && \
-    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[kubernetes,runpod]==0.10.5 runpod==1.7.13" --no-cache-dir' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[kubernetes,runpod]==0.10.5" --no-cache-dir' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "runpod==1.7.13" --no-cache-dir' && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
 
 # OpenVSCode Server
