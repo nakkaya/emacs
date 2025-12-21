@@ -46,7 +46,7 @@ RUN apt-get update && \
     # Slicer3D
     libpulse-dev \
     # Java
-    openjdk-17-jdk maven visualvm  \
+    openjdk-21-jdk maven visualvm  \
     # C/C++
     build-essential gcc-10 g++-10 \
     # clang clangd cmake cppcheck valgrind \
