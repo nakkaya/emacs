@@ -184,6 +184,7 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
 #
 
 RUN npm install -g @anthropic-ai/claude-code --prefix /opt/claude-code && \
+    npm install -g @zed-industries/claude-code-acp --prefix /opt/claude-code && \
     echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc
 
 # Configure Python
