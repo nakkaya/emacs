@@ -193,6 +193,7 @@ RUN python3 -m venv /opt/python-lsp-server && \
     /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
 
 RUN python3 -m venv /opt/ansible && \
+    /opt/ansible/bin/python -m pip install --upgrade pip wheel setuptools --no-cache-dir && \
     /opt/ansible/bin/python -m pip install ansible ansible-lint kubernetes --no-cache-dir && \
     /opt/ansible/bin/ansible-galaxy collection install community.kubernetes && \
     echo "export PATH=\"\$PATH:/opt/ansible/bin\"" >> /home/$USER/.bashrc
