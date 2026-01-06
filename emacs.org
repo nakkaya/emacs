@@ -2216,7 +2216,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (setq vc-follow-symlinks t
       magit-hide-diffs t
-      magit-save-repository-buffers 'dontask)
+      magit-save-repository-buffers 'dontask
+      magit-ediff-dwim-show-on-hunks t)
 
 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
