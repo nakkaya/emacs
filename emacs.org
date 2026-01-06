@@ -2217,7 +2217,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 (setq vc-follow-symlinks t
       magit-hide-diffs t
       magit-save-repository-buffers 'dontask
-      magit-ediff-dwim-show-on-hunks t)
+      magit-ediff-dwim-show-on-hunks t
+      magit-diff-visit-prefer-worktree t)
 
 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
@@ -2505,43 +2506,74 @@ Refer to the official JAX documentation for the latest best practices on using J
 
     (eval-after-load "diff-mode"
       '(progn
-	 (set-face-background 'ediff-current-diff-A "#262626" frame)
-	 (set-face-background 'ediff-current-diff-Ancestor "#262626" frame)
-	 (set-face-background 'ediff-current-diff-B "#262626" frame)
-	 (set-face-background 'ediff-current-diff-C "#262626" frame)
-	 (set-face-background 'ediff-even-diff-A "#262626" frame)
-	 (set-face-background 'ediff-even-diff-Ancestor "#262626" frame)
-	 (set-face-background 'ediff-even-diff-B "#262626" frame)
-	 (set-face-background 'ediff-even-diff-C "#262626" frame)
-	 (set-face-background 'ediff-fine-diff-A "#262626" frame)
-	 (set-face-background 'ediff-fine-diff-Ancestor "#262626" frame)
-	 (set-face-background 'ediff-fine-diff-B "#262626" frame)
-	 (set-face-background 'ediff-fine-diff-C "#262626" frame)
-	 (set-face-background 'ediff-odd-diff-A "#262626" frame)
-	 (set-face-background 'ediff-odd-diff-Ancestor "#262626" frame)
-	 (set-face-background 'ediff-odd-diff-B "#262626" frame)
-	 (set-face-background 'ediff-odd-diff-C "#262626" frame)))
+	 ;; Define consistent diff colors (matching magit)
+	 (let ((removed-fg "#ff6c6b")    ;; red for removed/old (A)
+	       (added-fg "#98be65")      ;; green for added/new (B)
+	       (ancestor-fg "#ECBE7B")   ;; yellow for ancestor
+	       (diff-bg "#1f1f1f")
+	       (fine-removed-bg "#251c1c")  ;; very subtle red bg for fine diff
+	       (fine-added-bg "#1c251c"))   ;; very subtle green bg for fine diff
+
+	   ;; Current diff faces (highlighted region being compared)
+	   (set-face-attribute 'ediff-current-diff-A nil :background diff-bg :foreground removed-fg)
+	   (set-face-attribute 'ediff-current-diff-B nil :background diff-bg :foreground added-fg)
+	   (set-face-attribute 'ediff-current-diff-C nil :background diff-bg :foreground ancestor-fg)
+	   (set-face-attribute 'ediff-current-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
+
+	   ;; Even diff faces
+	   (set-face-attribute 'ediff-even-diff-A nil :background diff-bg :foreground removed-fg)
+	   (set-face-attribute 'ediff-even-diff-B nil :background diff-bg :foreground added-fg)
+	   (set-face-attribute 'ediff-even-diff-C nil :background diff-bg :foreground ancestor-fg)
+	   (set-face-attribute 'ediff-even-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
+
+	   ;; Odd diff faces
+	   (set-face-attribute 'ediff-odd-diff-A nil :background diff-bg :foreground removed-fg)
+	   (set-face-attribute 'ediff-odd-diff-B nil :background diff-bg :foreground added-fg)
+	   (set-face-attribute 'ediff-odd-diff-C nil :background diff-bg :foreground ancestor-fg)
+	   (set-face-attribute 'ediff-odd-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
+
+	   ;; Fine diff faces (word-level differences within a region)
+	   (set-face-attribute 'ediff-fine-diff-A nil :background fine-removed-bg :foreground removed-fg :weight 'bold)
+	   (set-face-attribute 'ediff-fine-diff-B nil :background fine-added-bg :foreground added-fg :weight 'bold)
+	   (set-face-attribute 'ediff-fine-diff-C nil :background diff-bg :foreground ancestor-fg :weight 'bold)
+	   (set-face-attribute 'ediff-fine-diff-Ancestor nil :background diff-bg :foreground ancestor-fg :weight 'bold))))
 
     (eval-after-load "magit"
       '(progn
-	 (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
-	 (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-	 (set-face-background 'flycheck-error bg frame)
-	 (set-face-background 'smerge-markers bg frame)
-	 (set-face-background 'smerge-upper bg frame)
-	 (set-face-background 'smerge-lower bg frame)
-	 (set-face-background 'magit-diff-hunk-heading-highlight bg frame)
-	 (set-face-background 'magit-diff-lines-heading bg frame)
-	 (set-face-foreground 'magit-diff-lines-heading "#727272" frame)
-	 (set-face-background 'magit-diff-context bg frame)
-	 (set-face-background 'magit-diff-added-highlight bg frame)
-	 (set-face-background 'magit-diff-context-highlight bg frame)
-	 (set-face-background 'magit-diff-added bg frame)
-	 (set-face-background 'magit-diff-removed bg frame)
-	 (set-face-background 'magit-diff-hunk-heading bg frame)
-	 (set-face-foreground 'magit-diff-hunk-heading "#727272" frame)
-	 (set-face-background 'magit-section-highlight bg frame)
-	 (set-face-background 'magit-diff-removed-highlight bg frame)))))
+	 ;; Use same colors as ediff for consistency
+	 (let ((removed-fg "#ff6c6b")    ;; red for removed
+	       (added-fg "#98be65")      ;; green for added
+	       (heading-fg "#727272"))
+
+	   (remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
+	   (remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
+
+	   (set-face-background 'flycheck-error bg frame)
+	   (set-face-background 'smerge-markers bg frame)
+	   (set-face-background 'smerge-upper bg frame)
+	   (set-face-background 'smerge-lower bg frame)
+	   (set-face-attribute 'smerge-upper nil :foreground removed-fg)
+	   (set-face-attribute 'smerge-lower nil :foreground added-fg)
+
+	   ;; Hunk headings
+	   (set-face-background 'magit-diff-hunk-heading bg frame)
+	   (set-face-foreground 'magit-diff-hunk-heading heading-fg frame)
+	   (set-face-background 'magit-diff-hunk-heading-highlight bg frame)
+	   (set-face-background 'magit-diff-lines-heading bg frame)
+	   (set-face-foreground 'magit-diff-lines-heading heading-fg frame)
+
+	   ;; Context
+	   (set-face-background 'magit-diff-context bg frame)
+	   (set-face-background 'magit-diff-context-highlight bg frame)
+	   (set-face-background 'magit-section-highlight bg frame)
+
+	   ;; Added lines (green)
+	   (set-face-attribute 'magit-diff-added nil :background bg :foreground added-fg)
+	   (set-face-attribute 'magit-diff-added-highlight nil :background bg :foreground added-fg)
+
+	   ;; Removed lines (red)
+	   (set-face-attribute 'magit-diff-removed nil :background bg :foreground removed-fg)
+	   (set-face-attribute 'magit-diff-removed-highlight nil :background bg :foreground removed-fg))))))
 
 (eval-after-load "helm-buffers"
   '(progn
