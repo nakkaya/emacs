@@ -75,8 +75,7 @@
   (when (not (package-installed-p package))
     (package-install package)))
 
-(when (or (eq system-type 'gnu/linux)
-	  (eq system-type 'darwin))
+(when (eq system-type 'darwin)
   (setq-default quelpa-build-tar-executable "/opt/homebrew/opt/gnu-tar/bin/gtar"))
 
 (require 'quelpa-use-package)
