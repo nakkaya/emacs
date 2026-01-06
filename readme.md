@@ -24,9 +24,16 @@ or use the provided install script,
 	# inspect the file
 	sudo bash install.sh
 
-It will guide you through all the options.
+It will guide you through all the options and generate an `emacsd` command.
 
-    # Connect using
+    # Start the container
+    sudo emacsd start
+
+    # Stop/restart the container
+    sudo emacsd stop
+    sudo emacsd restart
+
+    # Connect using GUI
     xpra attach tcp://127.0.0.1:9090 --window-close=disconnect
     # or
     chrome --app=http://127.0.0.1:9090
