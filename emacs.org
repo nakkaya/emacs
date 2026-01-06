@@ -2504,39 +2504,60 @@ Refer to the official JAX documentation for the latest best practices on using J
     (set-face-background 'show-paren-match bg frame)
     (set-face-background 'ansi-color-yellow bg frame)
 
+    ;; diff-mode faces
     (eval-after-load "diff-mode"
-      '(progn
-	 ;; Define consistent diff colors (matching magit)
-	 (let ((removed-fg "#ff6c6b")    ;; red for removed/old (A)
-	       (added-fg "#98be65")      ;; green for added/new (B)
-	       (ancestor-fg "#ECBE7B")   ;; yellow for ancestor
-	       (diff-bg "#1f1f1f")
-	       (fine-removed-bg "#251c1c")  ;; very subtle red bg for fine diff
-	       (fine-added-bg "#1c251c"))   ;; very subtle green bg for fine diff
+      '(let ((removed-fg "#ff6c6b")
+	     (added-fg "#98be65")
+	     (changed-fg "#ECBE7B")
+	     (heading-fg "#727272")
+	     (bg "#1c1c1c")
+	     (removed-bg "#262626")
+	     (added-bg "#262626")
+	     (fine-removed-bg "#262626")
+	     (fine-added-bg "#262626"))
+	 (set-face-attribute 'diff-added nil :background added-bg :foreground added-fg :extend t)
+	 (set-face-attribute 'diff-removed nil :background removed-bg :foreground removed-fg :extend t)
+	 (set-face-attribute 'diff-changed nil :background bg :foreground changed-fg :extend t)
+	 (set-face-attribute 'diff-header nil :background bg :foreground heading-fg :extend t)
+	 (set-face-attribute 'diff-file-header nil :background bg :foreground "#51afef" :weight 'bold :extend t)
+	 (set-face-attribute 'diff-hunk-header nil :background bg :foreground heading-fg :extend t)
+	 (set-face-attribute 'diff-index nil :background bg :foreground heading-fg :extend t)
+	 (set-face-attribute 'diff-indicator-added nil :background added-bg :foreground added-fg)
+	 (set-face-attribute 'diff-indicator-removed nil :background removed-bg :foreground removed-fg)
+	 (set-face-attribute 'diff-indicator-changed nil :background bg :foreground changed-fg)
+	 (set-face-attribute 'diff-refine-added nil :background fine-added-bg :foreground added-fg :weight 'bold)
+	 (set-face-attribute 'diff-refine-removed nil :background fine-removed-bg :foreground removed-fg :weight 'bold)
+	 (set-face-attribute 'diff-refine-changed nil :background bg :foreground changed-fg :weight 'bold)))
 
-	   ;; Current diff faces (highlighted region being compared)
-	   (set-face-attribute 'ediff-current-diff-A nil :background diff-bg :foreground removed-fg)
-	   (set-face-attribute 'ediff-current-diff-B nil :background diff-bg :foreground added-fg)
-	   (set-face-attribute 'ediff-current-diff-C nil :background diff-bg :foreground ancestor-fg)
-	   (set-face-attribute 'ediff-current-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
-
-	   ;; Even diff faces
-	   (set-face-attribute 'ediff-even-diff-A nil :background diff-bg :foreground removed-fg)
-	   (set-face-attribute 'ediff-even-diff-B nil :background diff-bg :foreground added-fg)
-	   (set-face-attribute 'ediff-even-diff-C nil :background diff-bg :foreground ancestor-fg)
-	   (set-face-attribute 'ediff-even-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
-
-	   ;; Odd diff faces
-	   (set-face-attribute 'ediff-odd-diff-A nil :background diff-bg :foreground removed-fg)
-	   (set-face-attribute 'ediff-odd-diff-B nil :background diff-bg :foreground added-fg)
-	   (set-face-attribute 'ediff-odd-diff-C nil :background diff-bg :foreground ancestor-fg)
-	   (set-face-attribute 'ediff-odd-diff-Ancestor nil :background diff-bg :foreground ancestor-fg)
-
-	   ;; Fine diff faces (word-level differences within a region)
-	   (set-face-attribute 'ediff-fine-diff-A nil :background fine-removed-bg :foreground removed-fg :weight 'bold)
-	   (set-face-attribute 'ediff-fine-diff-B nil :background fine-added-bg :foreground added-fg :weight 'bold)
-	   (set-face-attribute 'ediff-fine-diff-C nil :background diff-bg :foreground ancestor-fg :weight 'bold)
-	   (set-face-attribute 'ediff-fine-diff-Ancestor nil :background diff-bg :foreground ancestor-fg :weight 'bold))))
+    ;; ediff faces
+    (eval-after-load "ediff"
+      '(let ((removed-fg "#ff6c6b")
+	     (added-fg "#98be65")
+	     (ancestor-fg "#ECBE7B")
+	     (removed-bg "#262626")
+	     (added-bg "#262626")
+	     (fine-removed-bg "#262626")
+	     (fine-added-bg "#262626"))
+	 ;; Current diff faces (highlighted region being compared)
+	 (set-face-attribute 'ediff-current-diff-A nil :background removed-bg :foreground removed-fg)
+	 (set-face-attribute 'ediff-current-diff-B nil :background added-bg :foreground added-fg)
+	 (set-face-attribute 'ediff-current-diff-C nil :background removed-bg :foreground ancestor-fg)
+	 (set-face-attribute 'ediff-current-diff-Ancestor nil :background removed-bg :foreground ancestor-fg)
+	 ;; Even diff faces
+	 (set-face-attribute 'ediff-even-diff-A nil :background removed-bg :foreground removed-fg)
+	 (set-face-attribute 'ediff-even-diff-B nil :background added-bg :foreground added-fg)
+	 (set-face-attribute 'ediff-even-diff-C nil :background removed-bg :foreground ancestor-fg)
+	 (set-face-attribute 'ediff-even-diff-Ancestor nil :background removed-bg :foreground ancestor-fg)
+	 ;; Odd diff faces
+	 (set-face-attribute 'ediff-odd-diff-A nil :background removed-bg :foreground removed-fg)
+	 (set-face-attribute 'ediff-odd-diff-B nil :background added-bg :foreground added-fg)
+	 (set-face-attribute 'ediff-odd-diff-C nil :background removed-bg :foreground ancestor-fg)
+	 (set-face-attribute 'ediff-odd-diff-Ancestor nil :background removed-bg :foreground ancestor-fg)
+	 ;; Fine diff faces (word-level differences within a region)
+	 (set-face-attribute 'ediff-fine-diff-A nil :background fine-removed-bg :foreground removed-fg :weight 'bold)
+	 (set-face-attribute 'ediff-fine-diff-B nil :background fine-added-bg :foreground added-fg :weight 'bold)
+	 (set-face-attribute 'ediff-fine-diff-C nil :background fine-removed-bg :foreground ancestor-fg :weight 'bold)
+	 (set-face-attribute 'ediff-fine-diff-Ancestor nil :background fine-removed-bg :foreground ancestor-fg :weight 'bold)))
 
     (eval-after-load "magit"
       '(progn
