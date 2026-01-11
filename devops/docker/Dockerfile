@@ -183,7 +183,8 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
 # Tailscale
 #
 RUN curl -fsSL https://tailscale.com/install.sh | sh && \
-    mkdir -p /home/$USER/.local/share/tailscale
+    mkdir -p /home/$USER/.local/share/tailscale && \
+    echo 'TS_SOCKET="/home/core/.local/share/tailscale/tailscaled.sock"' >> /etc/environment
 
 # Claude Code
 #
