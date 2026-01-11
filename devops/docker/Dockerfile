@@ -180,6 +180,11 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
     printf "\n\nbackend syncthing\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /syncthing/ if { path /syncthing }\n    http-request set-path %%[path,regsub(^/syncthing/,/)]\n    http-request set-header Host localhost\n    server syncthing_server 127.0.0.1:8384\n" >> /etc/haproxy/haproxy.cfg && \
     cleanup_apt_cache
 
+# Tailscale
+#
+RUN curl -fsSL https://tailscale.com/install.sh | sh && \
+    mkdir -p /home/$USER/.local/share/tailscale
+
 # Claude Code
 #
 
@@ -353,6 +358,7 @@ COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/vscode.conf /etc/supervisor/conf.d/
+COPY resources/conf/supervisord/tailscale.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
     chown -R $USER:$USER /opt/emacsd && \

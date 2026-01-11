@@ -16,6 +16,10 @@ if [[ -v VSCODE_ENB ]]; then
     /usr/bin/supervisorctl start vscode
 fi
 
+if [[ -v TAILSCALE_ENB ]]; then
+    /usr/bin/supervisorctl start tailscale
+fi
+
 if [ ! -f "/home/$USER/.emacs" ]; then
     {
         echo "(setq package-native-compile t)"

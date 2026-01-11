@@ -49,6 +49,9 @@ with_pgadmin=${with_pgadmin:-n}
 read -p "Enable VSCode (y/n) [n]? " with_vscode
 with_vscode=${with_vscode:-n}
 
+read -p "Enable Tailscale (y/n) [n]? " with_tailscale
+with_tailscale=${with_tailscale:-n}
+
 read -p "Mount Host Disk Under /hdd (y/n) [n]? " with_host_disk
 with_host_disk=${with_host_disk:-n}
 
@@ -97,6 +100,12 @@ else
     vscode=""
 fi
 
+if [ "$with_tailscale" == "y" ]; then
+    tailscale="--env TAILSCALE_ENB=1"
+else
+    tailscale=""
+fi
+
 volume_mounts="-v emacsd-sshd:/etc/ssh -v emacsd-home:/home/core -v emacsd-storage:/storage"
 
 if [ "$with_host_disk" == "y" ]; then
@@ -117,6 +126,7 @@ cmd="docker run --privileged \
     $jupyter \
     $pgadmin \
     $vscode \
+    $tailscale \
     $volume_mounts \
     $host_disk \
     $docker_sock \
