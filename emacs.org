@@ -2121,7 +2121,9 @@ Refer to the official JAX documentation for the latest best practices on using J
   :ensure t
   :config
   (setq agent-shell-anthropic-authentication
-	(agent-shell-anthropic-make-authentication :login t))
+	(agent-shell-anthropic-make-authentication :login t)
+	agent-shell-preferred-agent-config
+	(agent-shell-anthropic-make-claude-code-config))
   (setq agent-shell-mcp-servers
 	'(((name . "clojure-mcp")
 	   (type . "stdio")
