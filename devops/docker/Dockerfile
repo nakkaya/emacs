@@ -72,6 +72,17 @@ RUN apt-get update && \
     apt-get install ispell -y && \
     cleanup_apt_cache
 
+# difft
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/Wilfred/difftastic/releases/download/0.68.0/difft-x86_64-unknown-linux-gnu.tar.gz' ;; \
+            arm64) URL='https://github.com/Wilfred/difftastic/releases/download/0.68.0/difft-aarch64-unknown-linux-gnu.tar.gz' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "difft.tar.gz" && \
+    tar -xzf difft.tar.gz --directory=/usr/bin difft && \
+    rm -rf difft.tar.gz
+
 # Node
 #
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
