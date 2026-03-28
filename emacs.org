@@ -144,7 +144,6 @@
 
 (delete-selection-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
-(global-font-lock-mode t)
 (electric-pair-mode 1)
 (show-paren-mode 1)
 
@@ -163,9 +162,7 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(defun yes-or-no-p (arg)
-  "An alias for y-or-n-p, because I hate having to type 'yes' or 'no'."
-  (y-or-n-p arg))
+(setq use-short-answers t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -295,17 +292,7 @@ to ensure it autosaves the latests version back.
   (add-hook 'text-mode-hook    #'turn-on-flyspell)
   (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
 
-  (defun turn-on-flyspell ()
-    "Force flyspell-mode on.  For use in hooks."
-    (interactive)
-    (flyspell-mode 1))
-
-  (defun turn-off-flyspell ()
-    "Force flyspell-mode off.  For use in hooks."
-    (interactive)
-    (flyspell-mode 0))
-
-  (add-hook 'yaml-mode-hook 'turn-off-flyspell))
+  (add-hook 'yaml-mode-hook (lambda () (flyspell-mode 0))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -2060,7 +2047,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 	   (env . [])))))
 #+end_src
 
-* Dired
+* File Management
+** Dired
 
 #+BEGIN_SRC emacs-lisp
 (require 'dired)
@@ -2091,7 +2079,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 (define-key dired-mode-map (kbd "C-w") 'dired-up-directory)
 #+END_SRC
 
-* Tramp
+** Tramp
 
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
@@ -2389,21 +2377,8 @@ Refer to the official JAX documentation for the latest best practices on using J
           (lambda ()
 	     (define-key clojure-mode-map (kbd "M-q")  #'popper-toggle-latest)))
 
-(add-hook 'c-mode-hook
-          (lambda ()
-	     (define-key c-mode-map (kbd "C-d")  #'na-bounce-sexp)))
-
-(add-hook 'c++-mode-hook
-          (lambda ()
-	     (define-key c++-mode-map (kbd "C-d")  #'na-bounce-sexp)))
-
-(add-hook 'chatgpt-shell-mode-hook
-          (lambda ()
-	     (define-key chatgpt-shell-mode-map (kbd "C-d")  #'na-bounce-sexp)))
-
-(add-hook 'java-mode-hook
-          (lambda ()
-	     (define-key java-mode-map (kbd "C-d")  #'na-bounce-sexp)))
+(dolist (hook '(c-mode-hook c++-mode-hook chatgpt-shell-mode-hook java-mode-hook))
+  (add-hook hook (lambda () (local-set-key (kbd "C-d") #'na-bounce-sexp))))
 
 (global-set-key (kbd "C-x t") #'na-new-term)
 
