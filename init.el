@@ -8,62 +8,63 @@
 
 (setq package-list
       '(use-package
-	 quelpa
-	 quelpa-use-package
-	 clipetty
-         undo-tree
-	 persp-mode
-         hl-todo
-	 outline-indent
-         clojure-mode
-	 clojure-mode-extra-font-locking
-	 cider
-	 python-mode
-	 conda
-	 yaml-mode
-	 markdown-mode
-	 jsonnet-mode
-         terraform-mode
-	 flycheck
-	 yasnippet
-         lsp-mode
-	 lsp-ui
-	 org
-	 ein
-         dockerfile-mode
-         docker-compose-mode
-	 multi-term
-         eat
-	 magit
-	 kubernetes
-	 forge
-	 popper
-         doom-themes
-         doom-modeline
-	 all-the-icons
-	 company
-         projectile
-         helm
-	 helm-org-rifle
-	 gptel))
+        quelpa
+        quelpa-use-package
+        clipetty
+        undo-tree
+        persp-mode
+        hl-todo
+        outline-indent
+        clojure-mode
+        clojure-mode-extra-font-locking
+        cider
+        python-mode
+        conda
+        yaml-mode
+        markdown-mode
+        jsonnet-mode
+        terraform-mode
+        flycheck
+        yasnippet
+        lsp-mode
+        lsp-ui
+        org
+        ein
+        dockerfile-mode
+        docker-compose-mode
+        multi-term
+        eat
+        magit
+        kubernetes
+        forge
+        popper
+        doom-themes
+        doom-modeline
+        all-the-icons
+        company
+        projectile
+        helm
+        helm-org-rifle
+        gptel))
 
 (when (or (eq system-type 'gnu/linux)
-	  (eq system-type 'darwin))
+          (eq system-type 'darwin))
 
-  (push 'magit-todos package-list)
-  (push 'pdf-tools package-list)
-  (push 'saveplace-pdf-view package-list)
-  (push 'org-noter package-list)
-  (push 'org-pdftools package-list)
-  (push 'org-roam package-list))
+  (dolist (pkg '(magit-todos
+		 pdf-tools
+		 saveplace-pdf-view
+                 org-noter
+		 org-pdftools
+		 org-roam))
+    (push pkg package-list)))
 
 (when module-file-suffix
-  (push 'jupyter package-list)
-  (push 'vterm package-list))
+  (dolist (pkg '(jupyter vterm))
+    (push pkg package-list)))
 
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
-	("gnu" . "https://elpa.gnu.org/packages/")
+        ("gnu" . "https://elpa.gnu.org/packages/")
         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
 (package-initialize)
@@ -72,7 +73,7 @@
   (package-refresh-contents))
 
 (dolist (package package-list)
-  (when (not (package-installed-p package))
+  (unless (package-installed-p package)
     (package-install package)))
 
 (when (eq system-type 'darwin)

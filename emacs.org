@@ -19,6 +19,93 @@
 
 (when (getenv "EMACS_HOME_DIR")
   (setenv "EDITOR" "edit"))
+
+(defun na-find-directory (name &optional default)
+  "Find NAME directory across standard locations. Return DEFAULT or ~/NAME/ if not found."
+  (let ((default (or default (concat "~/" name "/"))))
+    (or (cl-find-if #'file-exists-p
+                    (list (concat "~/" name "/")
+                          (concat "/storage/source/" name "/")
+                          (concat "~/source/" name "/")))
+        default)))
+
+(defvar na-boring-buffer-patterns
+  '("^\\*Process List\\*$"
+    "^\\*Dired log\\*$"
+    "^\\*copilot events\\*$"
+    "^\\*info\\*$"
+    "^\\*Man.*\\*$"
+    "^\\*tramp.+\\*$"
+    "^\\*trace.+SMTP.+\\*$"
+    "^\\.todo-do"
+    "^\\*scratch\\*$"
+    "^\\*git-status\\*$"
+    "^\\*git-diff\\*$"
+    "^\\*git-commit\\*$"
+    "^\\*Git Command Output\\*$"
+    "^\\*Org Export/Publishing Help\\*$"
+    "^\\*Org-Babel Error Output\\*$"
+    "^\\*Org PDF LaTeX Output\\*$"
+    "^\\*Org Agenda\\*$"
+    "^\\*Calendar\\*$"
+    "^\\*Messages\\*$"
+    "^\\*Completions\\*$"
+    "^\\*Warnings\\*$"
+    "^\\*Org Agenda.*\\*$"
+    "^\\*Org Help\\*$"
+    "^\\*Backtrace\\*$"
+    "^\\*Colors\\*$"
+    "^TAGS$"
+    "^\\*Help\\*$"
+    "^\\*Shell Command Output\\*$"
+    "^\\*Calculator\\*$"
+    "^\\*Calc Trail\\*$"
+    "^\\*Compile-Log\\*$"
+    "^\\*quelpa-build-checkout\\*$"
+    "^\\*quelpa-build-info\\*$"
+    "^\\*helm.*\\*$"
+    "^\\*projectile-files-errors\\*$"
+    "^\\*EGLOT.*"
+    "^\\*lsp-.*"
+    "^\\*jdtls.*"
+    "^\\*clangd.*"
+    "^\\*Flymake.*"
+    "^\\*Native-.*"
+    "^\\*Async-native-.*"
+    "^\\*Async Shell Command.*"
+    "^\\*emacs\\*$"
+    "^\\*GNU Emacs\\*$"
+    "^\\*compilation\\*$"
+    "^\\*elfeed-.*"
+    "^\\*pylsp.*"
+    "^\\*pyls-remote.*"
+    "^\\*clojure-lsp.*"
+    "^\\*LSP Error List.*"
+    "^\\*lsp session.*"
+    "^\\*Flycheck Errors.*"
+    "^\\*xref\\*$"
+    "^\\*grep\\*$"
+    "^\\*ob-ansible\\*$"
+    "^\\*vc-dir\\*$"
+    "^\\*vc\\*$"
+    "^\\*Diff\\*$"
+    "^\\*httpd\\*$"
+    "^\\*Bookmark List\\*$"
+    "^\\*Buffer List\\*$"
+    "^\\*Disabled Command\\*$"
+    "^\\*tfmls\\*$"
+    "^\\*tfmls::stderr\\*$"
+    "^\\*Ediff Registry\\*$"
+    "^\\*ein:log-all.*"
+    "^\\*nrepl-server.*"
+    "^cider-error"
+    "^cider-macroexpansion"
+    "^\\*magit-.*"
+    "^\\*Ibuffer.*"
+    "^\\*Echo Area.*"
+    "^\\*Minibuf.*"
+    "^\\*kernel-notebook-.*")
+  "Buffer name patterns for boring/internal buffers, shared by helm and ibuffer.")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -92,8 +179,8 @@
 
 
 #+BEGIN_SRC emacs-lisp :results silent
-(setq mouse-wheel-scroll-amount '(1))
-(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-scroll-amount '(1)
+      mouse-wheel-progressive-speed nil)
 
 (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
 (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
@@ -173,7 +260,7 @@ to ensure it autosaves the latests version back.
 #+BEGIN_SRC emacs-lisp
 (defun recreate-scratch-buffer ()
   "Create a new scratch buffer when the original is killed."
-  (when (not (get-buffer "*scratch*"))
+  (unless (get-buffer "*scratch*")
     (let ((buf (get-buffer-create "*scratch*")))
       (with-current-buffer buf
         (lisp-interaction-mode)
@@ -201,7 +288,7 @@ to ensure it autosaves the latests version back.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(when  (not (eq system-type 'windows-nt))
+(unless (eq system-type 'windows-nt)
   (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 
   (add-hook 'message-mode-hook #'turn-on-flyspell)
@@ -230,83 +317,7 @@ to ensure it autosaves the latests version back.
       helm-buffer-max-length nil)
 
 (setq helm-boring-buffer-regexp-list
-      (list
-       "\\` "
-       "^\\*Process List\\*$"
-       "^\\*Dired log\\*$"
-       "^\\*copilot events\\*$"
-       "^\\*info\\*$"
-       "^\\*Man.*\\*$"
-       "^\\*tramp.+\\*$"
-       "^\\*trace.+SMTP.+\\*$"
-       "^\\.todo-do"
-       "^\\*scratch\\*$"
-       "^\\*git-status\\*$"
-       "^\\*git-diff\\*$"
-       "^\\*git-commit\\*$"
-       "^\\*Git Command Output\\*$"
-       "^\\*Org Export/Publishing Help\\*$"
-       "^\\*Org-Babel Error Output\\*$"
-       "^\\*Org PDF LaTeX Output\\*$"
-       "^\\*Org Agenda\\*$"
-       "^\\*Calendar\\*$"
-       "^\\*Messages\\*$"
-       "^\\*Completions\\*$"
-       "^\\*Warnings\\*$"
-       "^\\*Org Agenda.*\\*$"
-       "^\\*Org Help\\*$"
-       "^\\*Backtrace\\*$"
-       "^\\*Colors\\*$"
-       "^TAGS$"
-       "^\\*Help\\*$"
-       "^\\*Shell Command Output\\*$"
-       "^\\*Calculator\\*$"
-       "^\\*Calc Trail\\*$"
-       "^\\*Compile-Log\\*$"
-       "^\\*quelpa-build-checkout\\*$"
-       "^\\*helm.*\\*$"
-       "^\\*projectile-files-errors\\*$"
-       "^\\*EGLOT.*"
-       "^\\*lsp-.*"
-       "^\\*jdtls.*"
-       "^\\*clangd.*"
-       "^\\*Flymake.*"
-       "^\\*Native-.*"
-       "^\\*Async-native-.*"
-       "^\\*Async Shell Command.*"
-       "^\\*emacs\\*$"
-       "^\\*GNU Emacs\\*$"
-       "^\\*compilation\\*$"
-       "^\\*elfeed-.*"
-       "^\\*pylsp.*"
-       "^\\*pyls-remote*"
-       "^\\*clojure-lsp.*"
-       "^\\*LSP Error List*"
-       "^\\*lsp session*"
-       "^\\*Flycheck Errors*"
-       "^\\*xref\\*$"
-       "^\\*grep\\*$"
-       "^\\*ob-ansible\\*$"
-       "^\\*vc-dir\\*$"
-       "^\\*vc\\*$"
-       "^\\*Bookmark List\\*$"
-       "^\\*Buffer List\\*$"
-       "^\\*Disabled Command\\*$"
-       "^\\*tfmls\\*$"
-       "^\\*tfmls::stderr\\*$"
-       "^\\*Ediff Registry\\*$"
-       (rx "*httpd")
-       (rx "*ein:log-all")
-       (rx "*nrepl-server")
-       (rx "cider-error")
-       (rx "cider-macroexpansion")
-       (rx "*magit-")
-       "magit-*"
-       (rx "*Ibuffer")
-       (rx "*Echo Area")
-       (rx "*Minibuf")
-       (rx "*quelpa-build-checkout")
-       (rx "*quelpa-build-info*")))
+      (append '("\\` ") na-boring-buffer-patterns))
 
 ;; Fixes helm messing modeline colors.
 (add-hook 'helm-minibuffer-set-up-hook
@@ -356,7 +367,7 @@ to ensure it autosaves the latests version back.
 
 #+BEGIN_SRC emacs-lisp :results silent
 (setq ibuffer-saved-filter-groups
-      (quote (("default"
+      `(("default"
                ("Notes"
                 (or
                  (name . "^passwd.org$")
@@ -436,71 +447,8 @@ to ensure it autosaves the latests version back.
 			   (name . "^\\*Summary.*\\*$")
 			   (name . "^\\*Article.*\\*$")
 			   (name . "^\\.newsrc-dribble")))
-               ("Emacs" (or
-                         (name . "^\\*Process List\\*$")
-                         (name . "^\\*Dired log\\*$")
-                         (name . "^\\*info\\*$")
-                         (name . "^\\*Man.*\\*$")
-                         (name . "^\\*tramp.+\\*$")
-                         (name . "^\\*trace.+SMTP.+\\*$")
-                         (name . "^\\.todo-do")
-                         (name . "^\\*scratch\\*$")
-                         (name . "^\\*git-status\\*$")
-                         (name . "^\\*git-diff\\*$")
-                         (name . "^\\*git-commit\\*$")
-                         (name . "^\\*Git Command Output\\*$")
-                         (name . "^\\*Org Export/Publishing Help\\*$")
-                         (name . "^\\*Org-Babel Error Output\\*$")
-                         (name . "^\\*Org PDF LaTeX Output\\*$")
-                         (name . "^\\*Org Agenda\\*$")
-                         (name . "^\\*Calendar\\*$")
-                         (name . "^\\*Messages\\*$")
-                         (name . "^\\*Completions\\*$")
-                         (name . "^\\*Warnings\\*$")
-                         (name . "^\\*Org Agenda.*\\*$")
-                         (name . "^\\*Org Help\\*$")
-                         (name . "^\\*Backtrace\\*$")
-			 (name . "^\\*Colors\\*$")
-                         (name . "^TAGS$")
-                         (name . "^\\*Help\\*$")
-                         (name . "^\\*Shell Command Output\\*$")
-                         (name . "^\\*Calculator\\*$")
-                         (name . "^\\*Calc Trail\\*$")
-                         (name . "^\\*Compile-Log\\*$")
-                         (name . "^\\*quelpa-build-checkout\\*$")
-			 (name . "^\\*quelpa-build-info\\*$")
-                         (name . "^\\*helm.*\\*$")
-			 (name . "^\\*projectile-files-errors\\*$")
-			 (name . "^\\*EGLOT.*")
-                         (name . "^\\*lsp-.*")
-                         (name . "^\\*jdtls.*")
-                         (name . "^\\*clangd.*")
-                         (name . "^\\*Flymake.*")
-                         (name . "^\\*Native-.*")
-                         (name . "^\\*Async-native-.*")
-                         (name . "^\\*emacs\\*$")
-                         (name . "^\\*GNU Emacs\\*$")
-                         (name . "^\\*compilation\\*$")
-                         (name . "^\\*elfeed-.*")
-                         (name . "^\\*pylsp.*")
-			 (name . "^\\*pyls-remote*")
-			 (name . "^\\*clojure-lsp.*")
-			 (name . "^\\*LSP Error List*")
-			 (name . "^\\*lsp session*")
-			 (name . "^\\*Flycheck Errors*")
-			 (name . "^\\*xref\\*$")
-			 (name . "^\\*grep\\*$")
-			 (name . "^\\*ob-ansible\\*$")
-			 (name . "^\\*vc-dir\\*$")
-			 (name . "^\\*vc\\*$")
-			 (name . "^\\*Diff\\*$")
-			 (name . "^\\*httpd\\*$")
-			 (name . "^\\*Bookmark List\\*$")
-			 (name . "^\\*Buffer List\\*$")
-			 (name . "^\\*Disabled Command\\*$")
-			 (name . "^\\*copilot events\\*$")
-			 (name . "^\\*kernel-notebook-*")
-			 (name . "^\\*Ediff Registry\\*$")))))))
+               ("Emacs" (or ,@(mapcar (lambda (p) `(name . ,p))
+                                       na-boring-buffer-patterns))))))
 
 (setq ibuffer-show-empty-filter-groups nil
       ibuffer-expert t
@@ -1050,8 +998,6 @@ Will bounce between matching parens just like % in vi
  #+BEGIN_SRC emacs-lisp
    (add-to-list 'auto-mode-alist '("[.]pde$" . c++-mode))
    (add-to-list 'auto-mode-alist '("[.]ino$" . c++-mode))
-   (add-to-list 'auto-mode-alist '("[.]h$" . c++-mode))
-   (add-to-list 'auto-mode-alist '("[.]cpp$" . c++-mode))
  #+END_SRC
 
 ** Python
@@ -1109,8 +1055,6 @@ Will bounce between matching parens just like % in vi
 ** Skeletons
 
  #+BEGIN_SRC emacs-lisp
-(setq abbrev-mode t)
-
 (add-hook 'emacs-lisp-mode-hook #'abbrev-mode)
 (add-hook 'clojure-mode-hook #'abbrev-mode)
 (add-hook 'c++-mode-hook #'abbrev-mode)
@@ -1309,8 +1253,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 * Org-Mode
 
 #+begin_src emacs-lisp :results silent
-(require 'org)
-
 (setq org-startup-folded t
       org-adapt-indentation nil
       org-return-follows-link t
@@ -1529,14 +1471,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 ** Agenda
 
 #+BEGIN_SRC emacs-lisp :results silent
-(cond ((file-exists-p "~/org/")
-       (setq na-agenda-folder "~/org/"))
-      ((file-exists-p "/storage/source/org/")
-       (setq na-agenda-folder "/storage/source/org/"))
-      ((file-exists-p "~/source/org/")
-       (setq na-agenda-folder "~/source/org/"))
-      (t
-       (setq na-agenda-folder "~/org/")))
+(setq na-agenda-folder (na-find-directory "org"))
 
 (when (file-exists-p na-agenda-folder)
   (add-to-list 'org-agenda-files na-agenda-folder)
@@ -1664,14 +1599,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 ** Roam
 
 #+begin_src emacs-lisp :results silent
-(cond ((file-exists-p "~/rosetta/")
-       (setq na-org-roam-directory "~/rosetta/"))
-      ((file-exists-p "/storage/source/rosetta/")
-       (setq na-org-roam-directory "/storage/source/rosetta/"))
-      ((file-exists-p "~/source/rosetta/")
-       (setq na-org-roam-directory "~/source/rosetta/"))
-      (t
-       (setq na-org-roam-directory "~/rosetta/")))
+(setq na-org-roam-directory (na-find-directory "rosetta"))
 
 (when (and (file-exists-p na-org-roam-directory)
 	   (or (eq system-type 'gnu/linux)
@@ -1762,7 +1690,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   :after org
   :commands (ein:notebooklist-login ein:notebook-open)
   :config
-  (require 'cl)
+  (require 'cl-lib)
   (require 'ein-notebook)
 
   (setq ein:url-or-port '("http://lab-desktop:8181"
@@ -2222,9 +2150,6 @@ Refer to the official JAX documentation for the latest best practices on using J
       magit-save-repository-buffers 'dontask
       magit-ediff-dwim-show-on-hunks t
       magit-diff-visit-prefer-worktree t)
-
-(remove-hook 'magit-section-highlight-hook 'magit-section-highlight)
-(remove-hook 'magit-section-highlight-hook 'magit-diff-highlight)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2300,6 +2225,106 @@ Refer to the official JAX documentation for the latest best practices on using J
               (define-key magit-repolist-mode-map (kbd "c") #'na-magit-auto-commit-multi-repo)))
 #+END_SRC
 
+** Difftastic
+
+#+BEGIN_SRC emacs-lisp :results silent
+(defvar-local na-magit--saved-wconf nil)
+
+(defun na-magit--difftastic-quit ()
+  "Kill difftastic buffer and restore window configuration."
+  (interactive)
+  (let ((wconf na-magit--saved-wconf))
+    (kill-buffer)
+    (when wconf
+      (set-window-configuration wconf))))
+
+(defvar na-magit-difftastic-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "q") #'na-magit--difftastic-quit)
+    map))
+
+(define-minor-mode na-magit-difftastic-mode
+  "Minor mode for difftastic buffers to restore window config on quit."
+  :lighter " difft"
+  :keymap na-magit-difftastic-mode-map)
+
+(defun na-magit--with-difftastic (buffer command)
+  "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
+  (let ((process-environment
+         (cons (concat "GIT_EXTERNAL_DIFF=difft --display side-by-side-show-both --width="
+                       (number-to-string (frame-width)))
+               process-environment))
+        (wconf (current-window-configuration)))
+    (with-current-buffer buffer
+      (setq buffer-read-only nil)
+      (setq na-magit--saved-wconf wconf)
+      (erase-buffer))
+    (make-process
+     :name (buffer-name buffer)
+     :buffer buffer
+     :command command
+     :noquery t
+     :sentinel (lambda (proc _event)
+                 (when (eq (process-status proc) 'exit)
+                   (with-current-buffer (process-buffer proc)
+                     (goto-char (point-min))
+                     (ansi-color-apply-on-region (point-min) (point-max))
+                     (setq buffer-read-only t)
+                     (view-mode)
+                     (na-magit-difftastic-mode 1)
+                     (goto-char (point-min))
+                     (pop-to-buffer (current-buffer)
+                                    '((display-buffer-full-frame)))))))))
+
+(defun na-magit-show-with-difftastic (rev)
+  "Show the result of \"git show REV\" with difftastic."
+  (interactive
+   (list (or
+          (when (boundp 'rev) rev)
+          (and (not current-prefix-arg)
+               (or (magit-thing-at-point 'git-revision t)
+                   (magit-branch-or-commit-at-point)))
+          (magit-read-branch-or-commit "Revision"))))
+  (if (not rev)
+      (error "No revision specified")
+    (na-magit--with-difftastic
+     (get-buffer-create (concat "*git show difftastic " rev "*"))
+     (list "git" "--no-pager" "show" "--ext-diff" rev))))
+
+(defun na-magit-diff-with-difftastic (arg)
+  "Show the result of \"git diff ARG\" with difftastic."
+  (interactive
+   (list (or
+          (when (boundp 'range) range)
+          (and current-prefix-arg
+               (magit-diff-read-range-or-commit "Range"))
+          (pcase (magit-diff--dwim)
+            ('unmerged (error "unmerged is not yet implemented"))
+            ('unstaged nil)
+            ('staged "--cached")
+            (`(stash . ,value) (format "%s^..%s" value value))
+            (`(commit . ,value) (format "%s^..%s" value value))
+            ((and range (pred stringp)) range)
+            (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
+  (let ((name (concat "*git diff difftastic"
+                      (if arg (concat " " arg) "")
+                      "*")))
+    (na-magit--with-difftastic
+     (get-buffer-create name)
+     `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
+
+(transient-define-prefix na-magit-aux-commands ()
+  "Auxiliary magit commands."
+  ["Auxiliary commands"
+   ("d" "Difftastic Diff (dwim)" na-magit-diff-with-difftastic)
+   ("s" "Difftastic Show" na-magit-show-with-difftastic)])
+
+(transient-append-suffix 'magit-dispatch "!"
+  '("#" "Difftastic" na-magit-aux-commands))
+
+(define-key magit-status-mode-map (kbd "#") #'na-magit-aux-commands)
+#+END_SRC
+
 * Research
 
 #+begin_src emacs-lisp
@@ -2361,23 +2386,23 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key (kbd "C-M-j")  #'end-of-defun)
 
 (add-hook 'clojure-mode-hook
-          '(lambda ()
+          (lambda ()
 	     (define-key clojure-mode-map (kbd "M-q")  #'popper-toggle-latest)))
 
 (add-hook 'c-mode-hook
-          '(lambda ()
+          (lambda ()
 	     (define-key c-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
 (add-hook 'c++-mode-hook
-          '(lambda ()
+          (lambda ()
 	     (define-key c++-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
 (add-hook 'chatgpt-shell-mode-hook
-          '(lambda ()
+          (lambda ()
 	     (define-key chatgpt-shell-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
 (add-hook 'java-mode-hook
-          '(lambda ()
+          (lambda ()
 	     (define-key java-mode-map (kbd "C-d")  #'na-bounce-sexp)))
 
 (global-set-key (kbd "C-x t") #'na-new-term)
@@ -2448,7 +2473,6 @@ Refer to the official JAX documentation for the latest best practices on using J
 (blink-cursor-mode 1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(toggle-scroll-bar -1)
 (tool-bar-mode -1)
 
 (defun na-reset-window-size ()
