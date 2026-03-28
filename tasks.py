@@ -16,7 +16,7 @@ def tag(n):
 @task
 def build(c, march=False):
     """Build Multi Arch CPU Image."""
-    os.chdir("devops/docker/")
+    os.chdir("docker/")
 
     def cmd(builder):
         return "docker " + builder + " -f Dockerfile " + tag("emacs") + " "
