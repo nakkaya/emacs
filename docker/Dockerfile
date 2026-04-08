@@ -201,7 +201,6 @@ RUN curl -fsSL https://tailscale.com/install.sh | sh && \
 #
 
 RUN npm install -g @anthropic-ai/claude-code --prefix /opt/claude-code && \
-    npm install -g @zed-industries/claude-code-acp --prefix /opt/claude-code && \
     npm install -g @zed-industries/claude-agent-acp --prefix /opt/claude-code && \
     npm install -g agent-browser --prefix /opt/agent-browser && \
     echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc && \
