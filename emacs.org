@@ -151,14 +151,7 @@
 (setq global-auto-revert-non-file-buffers t
       revert-without-query '(".pdf"))
 
-(use-package outline-indent
-  :ensure t
-  :commands outline-indent-minor-mode
-  :custom
-  (outline-blank-line t)
-  (outline-indent-ellipsis " ▼"))
-
-(add-hook 'prog-mode-hook #'outline-indent-minor-mode)
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2425,10 +2418,10 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key (kbd "C-S-<down>")  #'shrink-window)
 (global-set-key (kbd "C-S-<up>")    #'enlarge-window)
 
-(global-set-key (kbd "C-c <right>") #'outline-indent-open-fold-rec)
-(global-set-key (kbd "C-c <left>")  #'outline-indent-close-fold)
-(global-set-key (kbd "C-c <up>")    #'outline-indent-close-folds)
-(global-set-key (kbd "C-c <down>")  #'outline-indent-open-folds)
+(global-set-key (kbd "C-c <right>") #'hs-show-block)
+(global-set-key (kbd "C-c <left>")  #'hs-hide-block)
+(global-set-key (kbd "C-c <up>")    #'hs-hide-all)
+(global-set-key (kbd "C-c <down>")  #'hs-show-all)
 
 (global-set-key (kbd "C-c j") #'helm-org-ql-agenda-files)
 
