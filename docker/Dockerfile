@@ -200,8 +200,10 @@ RUN curl -fsSL https://tailscale.com/install.sh | sh && \
 # Claude Code
 #
 
-RUN npm install -g @anthropic-ai/claude-code --prefix /opt/claude-code && \
-    npm install -g @zed-industries/claude-agent-acp --prefix /opt/claude-code && \
+RUN curl -fsSL https://claude.ai/install.sh | bash && \
+    mv ~/.local/share/claude/versions/* /opt/claude-code/bin/claude && \
+    rm -rf ~/.local/bin/claude ~/.local/share/claude && \
+    npm install -g @agentclientprotocol/claude-agent-acp --prefix /opt/claude-code && \
     npm install -g agent-browser --prefix /opt/agent-browser && \
     echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc && \
     echo "export PATH=\"\$PATH:/opt/agent-browser/bin/\"" >> /home/$USER/.bashrc
