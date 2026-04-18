@@ -1309,6 +1309,52 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (add-hook 'org-mode-hook 'org-margin-mode)
 #+end_src
 
+#+begin_src emacs-lisp :results silent
+(defun na-org-sort-by-todo-local ()
+  (save-excursion
+    (ignore-errors
+      (org-up-heading-safe)
+      (org-sort-entries nil ?o)
+      (outline-hide-subtree)
+      (org-show-children 1))))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAITING(w)" "HOLD(h)" "|" "DONE(d)" "CANCELED(c)")
+        (sequence "WAITING(w)" "DATASET(a)" "TRAINING(r)" "WRITING(i)" "|" "PUBLISHED(p)")
+        (sequence "BACKLOG(b)" "READY(y)" "DOING(o)" "|" "DONE(d)")))
+
+(setq org-tag-alist
+      '((:startgroup)
+        ("work"     . ?w)
+        ("personal" . ?p)
+        ("research" . ?r)
+        (:endgroup)))
+
+(setq org-todo-keyword-faces
+      '(;; sequence 1 — general
+        ("TODO" . (:foreground "#ff9e64" :weight bold))
+        ("WAITING"   . (:foreground "#ffcb6b" :weight bold :slant italic))       ; bright amber
+        ("HOLD"      . (:foreground "#e06c75" :weight bold))                     ; bright red
+        ("DONE"      . (:foreground "#b8e994" :weight bold :strike-through t))   ; bright green
+        ("CANCELED"  . (:foreground "#9e9e9e" :weight bold :strike-through t))   ; light gray
+
+        ;; sequence 2 — DL research pipeline
+        ("DATASET"   . (:foreground "#c792ea" :weight bold))                     ; bright purple
+        ("TRAINING"  . (:foreground "#89ddff" :weight bold))                     ; bright cyan
+        ("WRITING"   . (:foreground "#ffd866" :weight bold))                     ; bright yellow
+        ("PUBLISHED" . (:foreground "#b8e994" :weight bold :strike-through t))   ; bright green
+
+        ;; sequence 3 — kanban
+        ("BACKLOG"   . (:foreground "#ff79c6" :weight bold))                     ; bright pink
+        ("READY"     . (:foreground "#82aaff" :weight bold))                     ; bright blue
+        ("DOING"     . (:foreground "#ff9e64" :weight bold))))                   ; bright orange
+
+
+(setq org-tag-faces
+      '(("work"     . (:foreground "#82aaff" :weight bold))   ; blue
+        ("personal" . (:foreground "#b8e994" :weight bold))   ; green
+        ("research" . (:foreground "#c792ea" :weight bold)))) ; purple
+#+end_src
 
 ** Babel
 

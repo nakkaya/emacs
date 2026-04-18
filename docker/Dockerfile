@@ -206,6 +206,7 @@ RUN curl -fsSL https://claude.ai/install.sh | bash && \
     rm -rf ~/.local/bin/claude ~/.local/share/claude && \
     npm install -g @agentclientprotocol/claude-agent-acp --prefix /opt/claude-code && \
     npm install -g agent-browser --prefix /opt/agent-browser && \
+    /opt/agent-browser/bin/agent-browser install && \
     echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc && \
     echo "export PATH=\"\$PATH:/opt/agent-browser/bin/\"" >> /home/$USER/.bashrc
 
