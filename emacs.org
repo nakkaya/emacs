@@ -1521,8 +1521,14 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 		      (org-agenda-entry-types '(:deadline))
 		      (org-agenda-show-all-dates nil)
 		      (org-agenda-format-date "")))
-          (todo "TODO")
-          (todo "WAIT")))))
+          (tags-todo "work/TODO|WAITING"
+                     ((org-agenda-overriding-header "Work")))
+          (tags-todo "personal/TODO|WAITING"
+                     ((org-agenda-overriding-header "Personal")))
+          (tags-todo "research/TODO|WAITING"
+                     ((org-agenda-overriding-header "Research")))
+          (tags-todo "-work-personal-research/TODO|WAITING"
+                     ((org-agenda-overriding-header "Untagged")))))))
 
 (setq org-capture-templates
       '(("t" "Task TODO" entry
