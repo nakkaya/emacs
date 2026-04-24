@@ -1334,28 +1334,28 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq org-todo-keyword-faces
       '(;; sequence 1 — general
-        ("TODO" . (:foreground "#ff9e64" :weight bold))
-        ("WAITING"   . (:foreground "#ffcb6b" :weight bold :slant italic))       ; bright amber
-        ("HOLD"      . (:foreground "#e06c75" :weight bold))                     ; bright red
-        ("DONE"      . (:foreground "#b8e994" :weight bold :strike-through t))   ; bright green
-        ("CANCELED"  . (:foreground "#9e9e9e" :weight bold :strike-through t))   ; light gray
+        ("TODO"      . (:foreground "#8ec0e8" :weight bold))                     ; steel blue
+        ("WAITING"   . (:foreground "#8ad0c0" :weight bold :slant italic))       ; teal
+        ("HOLD"      . (:foreground "#cc9595" :weight bold))                     ; rose
+        ("DONE"      . (:foreground "#99c899" :weight bold :strike-through t))   ; green
+        ("CANCELED"  . (:foreground "#8a8a8a" :weight bold :strike-through t))   ; gray
 
         ;; sequence 2 — DL research pipeline
-        ("DATASET"   . (:foreground "#c792ea" :weight bold))                     ; bright purple
-        ("TRAINING"  . (:foreground "#89ddff" :weight bold))                     ; bright cyan
-        ("WRITING"   . (:foreground "#ffd866" :weight bold))                     ; bright yellow
-        ("PUBLISHED" . (:foreground "#b8e994" :weight bold :strike-through t))   ; bright green
+        ("DATASET"   . (:foreground "#ababc8" :weight bold))                     ; lavender
+        ("TRAINING"  . (:foreground "#8ad0c0" :weight bold))                     ; teal
+        ("WRITING"   . (:foreground "#c5c595" :weight bold))                     ; olive
+        ("PUBLISHED" . (:foreground "#99c899" :weight bold :strike-through t))   ; green
 
         ;; sequence 3 — kanban
-        ("BACKLOG"   . (:foreground "#ff79c6" :weight bold))                     ; bright pink
-        ("READY"     . (:foreground "#82aaff" :weight bold))                     ; bright blue
-        ("DOING"     . (:foreground "#ff9e64" :weight bold))))                   ; bright orange
+        ("BACKLOG"   . (:foreground "#ababc8" :weight bold))                     ; lavender
+        ("READY"     . (:foreground "#95c5b8" :weight bold))                     ; sage teal
+        ("DOING"     . (:foreground "#8ec0e8" :weight bold))))                   ; steel blue
 
 
 (setq org-tag-faces
-      '(("work"     . (:foreground "#82aaff" :weight bold))   ; blue
-        ("personal" . (:foreground "#b8e994" :weight bold))   ; green
-        ("research" . (:foreground "#c792ea" :weight bold)))) ; purple
+      '(("work"     . (:foreground "#8ec0e8" :weight bold))   ; steel blue
+        ("personal" . (:foreground "#a5cca5" :weight bold))   ; sage green
+        ("research" . (:foreground "#95c5b8" :weight bold)))) ; teal
 #+end_src
 
 ** Babel
@@ -1583,25 +1583,38 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (add-hook 'org-agenda-finalize-hook #'org-agenda-delete-empty-blocks)
 
-(let ((window-configuration (make-hash-table :test 'equal)))
-  (defun kill-org-agenda ()
-    (interactive)
-    (kill-this-buffer)
-    (set-window-configuration
-     (gethash (selected-window) window-configuration nil)))
+(defvar na-agenda-window-configuration (make-hash-table :test 'equal))
 
-  (defun jump-to-org-agenda ()
-    (interactive)
-    (if (string= (buffer-name (current-buffer)) "*Org Agenda(h)*")
-	(org-agenda-redo-all)
-      (progn
-	(puthash (selected-window) (current-window-configuration) window-configuration)
-	(delete-other-windows)
-	(org-agenda nil "h")
-	(org-agenda-redo)
-    	(org-agenda-follow-mode)
-	(local-set-key (kbd "C-c a") #'kill-org-agenda)
-	(local-set-key "q" #'kill-org-agenda)))))
+(defun kill-org-agenda ()
+  (interactive)
+  (kill-this-buffer)
+  (set-window-configuration
+   (gethash (selected-window) na-agenda-window-configuration nil)))
+
+(defun na-shrink-follow-window (&rest _)
+  "Shrink the non-agenda window to 20% after follow-mode displays it."
+  (when (and (eq major-mode 'org-agenda-mode)
+             (> (length (window-list)) 1))
+    (let ((agenda-win (selected-window))
+          (other-win (next-window)))
+      (with-selected-window other-win
+        (let ((target-height (max 3 (floor (* 0.2 (frame-height))))))
+          (enlarge-window (- target-height (window-height))))))))
+
+(advice-add 'org-agenda-show :after #'na-shrink-follow-window)
+
+(defun jump-to-org-agenda ()
+  (interactive)
+  (if (string= (buffer-name (current-buffer)) "*Org Agenda(h)*")
+      (org-agenda-redo-all)
+    (progn
+      (puthash (selected-window) (current-window-configuration) na-agenda-window-configuration)
+      (delete-other-windows)
+      (org-agenda nil "h")
+      (org-agenda-redo)
+      (org-agenda-follow-mode)
+      (local-set-key (kbd "C-c a") #'kill-org-agenda)
+      (local-set-key "q" #'kill-org-agenda))))
 
 ;; (when (file-exists-p na-agenda-folder)
 ;;   (run-with-idle-timer (* 120 60) t
@@ -2537,10 +2550,21 @@ Refer to the official JAX documentation for the latest best practices on using J
 (set-face-attribute 'font-lock-type-face nil :foreground "#d65946")
 (set-face-attribute 'font-lock-constant-face nil :foreground "#ab75c3")
 (set-face-attribute 'font-lock-string-face nil :foreground "#6aaf50")
-(set-face-attribute 'org-level-2 nil :foreground "#7f7dca")
+(set-face-attribute 'org-link nil :foreground "#5f87af" :underline t)
+(set-face-attribute 'org-level-1 nil :foreground "#5f87af" :bold t)
+(set-face-attribute 'org-level-2 nil :foreground "#5f8f9a")
+(set-face-attribute 'org-level-3 nil :foreground "#6a8a8a")
+(set-face-attribute 'org-level-4 nil :foreground "#7a8a7a")
+(set-face-attribute 'org-level-5 nil :foreground "#5f87af")
+(set-face-attribute 'org-level-6 nil :foreground "#5f8f9a")
+(set-face-attribute 'org-level-7 nil :foreground "#6a8a8a")
+(set-face-attribute 'org-level-8 nil :foreground "#7a8a7a")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
 (set-face-attribute 'dired-directory nil :foreground "#7f7dca")
 (set-face-attribute 'markdown-header-face nil :foreground "#51afef")
+(set-face-attribute 'hl-line nil :background "#252535")
+(set-face-attribute 'highlight nil :background "#3a3a3a" :foreground nil)
+(set-face-attribute 'org-agenda-current-time nil :foreground "#5f87af")
 
 
 (defun na-fix-background (&optional frame)
