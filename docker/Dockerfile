@@ -23,8 +23,9 @@ RUN echo '#!/bin/bash' >> /usr/local/bin/cleanup_apt_cache && \
 #
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install curl apt-utils \
+    apt-get install curl apt-utils ca-certificates \
     -y --no-install-recommends && \
+    update-ca-certificates && \
     cleanup_apt_cache
 
 RUN apt-get update && \
