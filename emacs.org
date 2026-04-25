@@ -2513,7 +2513,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key [f2] #'na-elfeed)
 (global-set-key [f12] (lambda ()
 			(interactive)
-			(async-shell-command "QT_XCB_GL_INTEGRATION=none qutebrowser")))
+			(async-shell-command "firefox-esr")))
 #+END_SRC
 
 * Theme
