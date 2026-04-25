@@ -1244,7 +1244,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       org-src-window-setup 'current-window
       org-confirm-babel-evaluate nil
       org-babel-python-command "python3"
-      org-hide-leading-stars t
+      org-hide-leading-stars nil
       org-src-fontify-natively t
       org-src-tab-acts-natively t
       org-src-preserve-indentation t
@@ -1309,6 +1309,24 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (setq org-margin-bookmark (propertize "🔖" 'face '(error bold)))
 
 (add-hook 'org-mode-hook 'org-margin-mode)
+
+(defun na-org-margin-fix-cursor (&rest _)
+  "Ensure cursor lands after the margin display property, not inside it."
+  (when (and (derived-mode-p 'org-mode)
+             (bound-and-true-p org-margin-mode)
+             (get-text-property (point) 'display))
+    (let ((end (next-single-property-change (point) 'display nil (line-end-position))))
+      (when end (goto-char end)))))
+
+(advice-add 'org-beginning-of-line :after #'na-org-margin-fix-cursor)
+(advice-add 'beginning-of-visual-line :after #'na-org-margin-fix-cursor)
+(advice-add 'move-beginning-of-line :after #'na-org-margin-fix-cursor)
+(advice-add 'previous-line :after #'na-org-margin-fix-cursor)
+(advice-add 'next-line :after #'na-org-margin-fix-cursor)
+(advice-add 'org-previous-visible-heading :after #'na-org-margin-fix-cursor)
+(advice-add 'org-next-visible-heading :after #'na-org-margin-fix-cursor)
+(advice-add 'outline-previous-visible-heading :after #'na-org-margin-fix-cursor)
+(advice-add 'outline-next-visible-heading :after #'na-org-margin-fix-cursor)
 #+end_src
 
 #+begin_src emacs-lisp :results silent
