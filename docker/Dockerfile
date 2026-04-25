@@ -21,8 +21,7 @@ RUN echo '#!/bin/bash' >> /usr/local/bin/cleanup_apt_cache && \
 
 # Install Packages
 #
-RUN add-apt-repository ppa:mozillateam/ppa && \
-    apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install \
     curl apt-utils ca-certificates \
@@ -64,10 +63,12 @@ RUN add-apt-repository ppa:mozillateam/ppa && \
     autoconf automake libtool \
     # Spell
     ispell \
-    # Browser
-    firefox-esr libpci-dev \
     -y --no-install-recommends && \
     update-ca-certificates && \
+    # Browser (PPA needs software-properties-common installed above)
+    add-apt-repository ppa:mozillateam/ppa && \
+    apt-get update && \
+    apt-get install firefox-esr libpci-dev -y --no-install-recommends && \
     cleanup_apt_cache
 
 # difft
