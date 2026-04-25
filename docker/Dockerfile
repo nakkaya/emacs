@@ -21,15 +21,11 @@ RUN echo '#!/bin/bash' >> /usr/local/bin/cleanup_apt_cache && \
 
 # Install Packages
 #
-RUN apt-get update && \
+RUN add-apt-repository ppa:mozillateam/ppa && \
+    apt-get update && \
     apt-get upgrade -y && \
-    apt-get install curl apt-utils ca-certificates \
-    -y --no-install-recommends && \
-    update-ca-certificates && \
-    cleanup_apt_cache
-
-RUN apt-get update && \
     apt-get install \
+    curl apt-utils ca-certificates \
     # apt
     gnupg software-properties-common \
     # Misc
@@ -66,16 +62,12 @@ RUN apt-get update && \
     jupyter jupyter-notebook \
     # emacs-jupyter
     autoconf automake libtool \
+    # Spell
+    ispell \
+    # Browser
+    firefox-esr libpci-dev \
     -y --no-install-recommends && \
-    cleanup_apt_cache
-
-RUN add-apt-repository ppa:mozillateam/ppa && \
-    apt-get update && \
-    apt-get install firefox-esr libpci-dev -y --no-install-recommends && \
-    cleanup_apt_cache
-
-RUN apt-get update && \
-    apt-get install ispell -y && \
+    update-ca-certificates && \
     cleanup_apt_cache
 
 # difft
@@ -275,7 +267,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     curl -s "${URL}" -o "awscliv2.zip" && \
     unzip -q awscliv2.zip && \
     ./aws/install && \
-    rm awscliv2.zip
+    rm -rf awscliv2.zip /opt/aws
 
 # Google Cloud CLI
 #
@@ -301,17 +293,14 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
         amd64) \
             wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chrome-linux64.zip && \
+            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chromedriver-linux64.zip && \
             mkdir -p /opt/chrome && \
             unzip chrome-linux64.zip && \
+            unzip chromedriver-linux64.zip && \
             mv chrome-linux64/* /opt/chrome/ && \
-            rm -rf chrome-linux64 && \
-            rm chrome-linux64.zip && \
-            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chromedriver-linux64.zip && \
-            unzip chromedriver-linux64.zip  && \
-            sudo mv chromedriver-linux64/* /opt/chrome/  && \
-            rm -rf chromedriver-linux64  && \
-            rm chromedriver-linux64.zip  && \
-            ln -s /opt/chrome/chromedriver /usr/bin/chromedriver; \
+            mv chromedriver-linux64/* /opt/chrome/ && \
+            ln -s /opt/chrome/chromedriver /usr/bin/chromedriver && \
+            rm -rf chrome-linux64.zip chromedriver-linux64.zip chrome-linux64 chromedriver-linux64; \
             ;; \
         *) \
             echo "Skipping Chrome & Web Driver installation on non-amd64 architecture."; \
@@ -375,10 +364,8 @@ RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
 
 RUN echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/conda/bin:/opt/python-lsp-server/bin:/opt/skypilot/bin:/opt/ansible/bin:/opt/invoke/bin:"' > /etc/environment
 
-COPY resources/bin/ob-tangle.sh /usr/bin/ob-tangle
-RUN sudo chmod +x /usr/bin/ob-tangle
-COPY resources/bin/bootrc /usr/bin/bootrc
-RUN sudo chmod +x /usr/bin/bootrc
+COPY --chmod=755 resources/bin/ob-tangle.sh /usr/bin/ob-tangle
+COPY --chmod=755 resources/bin/bootrc /usr/bin/bootrc
 COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
