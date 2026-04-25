@@ -34,7 +34,7 @@ RUN apt-get update && \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
-    graphviz qutebrowser \
+    graphviz \
     libpq-dev postgresql-client python3-psycopg2 \
     fuse nfs-common jsonnet \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
@@ -66,6 +66,11 @@ RUN apt-get update && \
     # emacs-jupyter
     autoconf automake libtool \
     -y --no-install-recommends && \
+    cleanup_apt_cache
+
+RUN add-apt-repository ppa:mozillateam/ppa && \
+    apt-get update && \
+    apt-get install firefox-esr libpci-dev -y --no-install-recommends && \
     cleanup_apt_cache
 
 RUN apt-get update && \
