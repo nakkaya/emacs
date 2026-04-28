@@ -16,10 +16,6 @@ if [[ -v VSCODE_ENB ]]; then
     /usr/bin/supervisorctl start vscode
 fi
 
-if [[ -v NET_MSS ]]; then
-    iptables -A OUTPUT -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss "$NET_MSS"
-fi
-
 if [[ -v TAILSCALE_ENB ]]; then
     /usr/bin/supervisorctl start tailscale
 fi
