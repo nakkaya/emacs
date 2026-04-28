@@ -234,8 +234,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_24.4.0-0-Linux-x86_64.sh' ;; \
-            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_24.4.0-0-Linux-aarch64.sh' ;; \
+            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.1.1-1-Linux-x86_64.sh' ;; \
+            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.1.1-1-Linux-aarch64.sh' ;; \
     esac; \
     curl -s "${URL}" -o "Miniconda3.sh" && \
     bash Miniconda3.sh -b -u -p /opt/conda && \
