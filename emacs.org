@@ -488,6 +488,14 @@ to ensure it autosaves the latests version back.
 
 (define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
 
+(defun na-delete-frame ()
+  "Switch to nil perspective, then delete the frame."
+  (interactive)
+  (persp-frame-switch persp-nil-name)
+  (delete-frame))
+
+(global-set-key (kbd "C-x 5 0") #'na-delete-frame)
+
 (persp-mode 1)
 #+end_src
 
