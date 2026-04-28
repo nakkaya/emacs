@@ -948,6 +948,11 @@ Will bounce between matching parens just like % in vi
 	  (lambda ()
 	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 
+(defun na-cider-connect ()
+  "Connect to nREPL on localhost:7888."
+  (interactive)
+  (cider-connect '(:host "localhost" :port 7888)))
+
 (put-clojure-indent 'core/handler '(1))
 (put-clojure-indent 'weave/handler '(1))
 (put-clojure-indent 'testit/fact 1)
