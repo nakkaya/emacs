@@ -2447,12 +2447,14 @@ Refer to the official JAX documentation for the latest best practices on using J
       mac-command-modifier 'meta)
 
 (global-set-key (kbd "M-x")  #'helm-M-x)
-;; (global-set-key (kbd "C-]")  #'helm-buffers-list)
-(global-set-key (kbd "C-]") (lambda ()
-			      (interactive)
-			      (with-persp-buffer-list
-			       ()
-			       (helm-buffers-list))))
+(defun na-helm-persp-buffers ()
+  "Show helm buffer list filtered to current perspective."
+  (interactive)
+  (with-persp-buffer-list
+   ()
+   (helm-buffers-list)))
+
+(global-set-key (kbd "C-]") #'na-helm-persp-buffers)
 
 (global-set-key (kbd "C-x b") #'ibuffer)
 
@@ -2475,7 +2477,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (with-eval-after-load 'term
   (define-key term-raw-map (kbd "C-c C-c")  #'term-send-raw)
-  (define-key term-raw-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key term-raw-map (kbd "C-]")      #'na-helm-persp-buffers)
   (define-key term-raw-map (kbd "C-y")      #'term-paste)
   (define-key term-raw-map (kbd "C-\\")     #'other-window)
   (define-key term-raw-map (kbd "M-\\")     #'popper-cycle)
@@ -2483,7 +2485,7 @@ Refer to the official JAX documentation for the latest best practices on using J
   (define-key term-raw-map (kbd "M-x")      #'helm-M-x))
 
 (with-eval-after-load 'vterm
-  (define-key vterm-mode-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key vterm-mode-map (kbd "C-]")      #'na-helm-persp-buffers)
   (define-key vterm-mode-map (kbd "C-y")      #'vterm-yank)
   (define-key vterm-mode-map (kbd "C-\\")     #'other-window)
   (define-key vterm-mode-map (kbd "M-\\")     #'popper-cycle)
@@ -2500,7 +2502,7 @@ Refer to the official JAX documentation for the latest best practices on using J
           [27 113])    ;; M-q (27 = ESC, 113 = q)
     eat-semi-char-non-bound-keys))
 
-  (define-key eat-mode-map (kbd "C-]")      #'helm-buffers-list)
+  (define-key eat-mode-map (kbd "C-]")      #'na-helm-persp-buffers)
   (define-key eat-mode-map (kbd "M-\\")     #'popper-cycle)
   (define-key eat-mode-map (kbd "M-q")      #'popper-toggle-latest)
 
