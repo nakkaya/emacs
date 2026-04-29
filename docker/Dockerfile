@@ -257,6 +257,17 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     ln -s /usr/local/bin/clojure /usr/local/bin/clj
 
 
+# OVH CLI
+#
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "$ARCH" in \
+            amd64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.11.0/ovhcloud-cli_Linux_x86_64.tar.gz' ;; \
+            arm64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.11.0/ovhcloud-cli_Linux_arm64.tar.gz' ;; \
+    esac; \
+    curl -L -s "${URL}" -o "ovhcloud-cli.tar.gz" && \
+    tar -xzf ovhcloud-cli.tar.gz --directory=/usr/bin ovhcloud && \
+    rm -rf ovhcloud-cli.tar.gz
+
 # AWS CLI
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
