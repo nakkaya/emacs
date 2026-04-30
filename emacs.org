@@ -484,11 +484,20 @@ to ensure it autosaves the latests version back.
 
 (defun na-persp-frame-switch (name)
   "Switch all other frames to nil perspective, then switch the current frame perspective to NAME."
-  (interactive (list (persp-read-persp "Switch to perspective")))
+  (interactive
+   (list (let ((helm-display-function
+                (lambda (buffer &optional _resume)
+                  (display-buffer
+                   buffer
+                   '((display-buffer-below-selected)
+                     (window-height . 12))))))
+           (helm-comp-read "Switch to perspective: "
+                           (persp-names)
+                           :must-match t))))
   (switch-all-other-frames-to-nil-perspective)
   (persp-frame-switch name))
 
-(define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
+(global-set-key (kbd "C-;") #'na-persp-frame-switch)
 
 (defun na-delete-frame ()
   "Switch to nil perspective, then delete the frame."
