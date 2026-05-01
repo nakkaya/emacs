@@ -497,6 +497,7 @@ to ensure it autosaves the latests version back.
   (switch-all-other-frames-to-nil-perspective)
   (persp-frame-switch name))
 
+(define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
 (global-set-key (kbd "C-;") #'na-persp-frame-switch)
 
 (defun na-delete-frame ()
