@@ -492,8 +492,7 @@ to ensure it autosaves the latests version back.
                    '((display-buffer-below-selected)
                      (window-height . 12))))))
            (helm-comp-read "Switch to perspective: "
-                           (persp-names)
-                           :must-match t))))
+                           (persp-names)))))
   (switch-all-other-frames-to-nil-perspective)
   (persp-frame-switch name))
 
