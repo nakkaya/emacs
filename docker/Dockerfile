@@ -30,7 +30,7 @@ RUN apt-get update && \
     # Misc
     openssh-server sudo iputils-ping bash-completion \
     zip unzip wget htop xz-utils nq \
-    graphviz \
+    graphviz tmux \
     libpq-dev postgresql-client python3-psycopg2 \
     fuse nfs-common jsonnet \
     offlineimap dovecot-imapd dnsutils nano iproute2 \
