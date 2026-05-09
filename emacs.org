@@ -1901,8 +1901,17 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 	:key (auth-source-pick-first-password :host "api.anthropic.com")
 	:models '(claude-3-7-sonnet-latest)))
 
-(setq gptel-backend anthropic-backend
-      gptel-model 'claude-3-7-sonnet-latest
+(setq openclaw-backend
+      (gptel-make-openai "Jarvis"
+	:protocol "http"
+	:host "openclaw.nakkaya.svc.cluster.local:80"
+	:endpoint "/v1/chat/completions"
+	:key "a8ec003f92be480e59145fef2d447f465895dac6104977dbbc962f6590d04775"
+	:models '("openclaw")
+	:stream t))
+
+(setq gptel-backend openclaw-backend
+      gptel-model 'openclaw
       gptel-playback t
       gptel-default-mode 'org-mode
       gptel-display-buffer-action '(pop-to-buffer-same-window))
