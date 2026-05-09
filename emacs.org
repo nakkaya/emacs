@@ -2087,6 +2087,16 @@ Refer to the official JAX documentation for the latest best practices on using J
     (switch-to-buffer buffer-name)))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun codex-dired ()
+  (interactive)
+  (let* ((pod (string-trim
+               (shell-command-to-string
+                "kubectl get pods -n nakkaya -l app=codex -o jsonpath='{.items[0].metadata.name}'")))
+         (tramp-kubernetes-namespace "nakkaya"))
+    (dired (format "/kubernetes:basic-memory@%s:/app/data/" pod))))
+#+end_src
+
 ** copilot
 
 #+begin_src emacs-lisp :results silent
