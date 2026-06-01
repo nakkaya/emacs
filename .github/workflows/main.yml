@@ -21,7 +21,7 @@ jobs:
       platforms: linux/amd64,linux/arm64
       sign: false
       context: docker
-      file: docker/Dockerfile
+      file: Dockerfile
       meta-images: |
         nakkaya/emacs
         ghcr.io/nakkaya/emacs
