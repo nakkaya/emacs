@@ -1,4 +1,4 @@
-FROM ghcr.io/nakkaya/emacsd:latest AS build
+FROM ghcr.io/nakkaya/emacsd:latest
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
@@ -13,7 +13,7 @@ USER root
 
 RUN echo '#!/bin/bash' >> /usr/local/bin/cleanup_apt_cache && \
     echo 'apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*.deb && \
     apt-get autoremove -y && \
     apt-get autoclean && \
     apt-get clean;' >> /usr/local/bin/cleanup_apt_cache && \
@@ -44,7 +44,7 @@ RUN apt-get update && \
     # Java
     openjdk-21-jdk maven visualvm  \
     # C/C++
-    build-essential gcc-10 g++-10 \
+    build-essential \
     # clang clangd cmake cppcheck valgrind \
     # protobuf-compiler protobuf-compiler-grpc-java-plugin \
     # Latex
@@ -106,7 +106,8 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | \
 
 # helm
 #
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && \
+    cleanup_apt_cache
 
 # k9s
 #
@@ -194,7 +195,8 @@ RUN curl -fsSL https://syncthing.net/release-key.txt | \
 #
 RUN curl -fsSL https://tailscale.com/install.sh | sh && \
     mkdir -p /home/$USER/.local/share/tailscale && \
-    echo 'TS_SOCKET="/home/core/.local/share/tailscale/tailscaled.sock"' >> /etc/environment
+    echo 'TS_SOCKET="/home/core/.local/share/tailscale/tailscaled.sock"' >> /etc/environment && \
+    cleanup_apt_cache
 
 # Claude Code
 #
@@ -209,22 +211,30 @@ RUN curl -fsSL https://claude.ai/install.sh | bash && \
         /opt/agent-browser/bin/agent-browser install; \
     fi && \
     echo "export PATH=\"\$PATH:/opt/claude-code/bin/\"" >> /home/$USER/.bashrc && \
-    echo "export PATH=\"\$PATH:/opt/agent-browser/bin/\"" >> /home/$USER/.bashrc
+    echo "export PATH=\"\$PATH:/opt/agent-browser/bin/\"" >> /home/$USER/.bashrc && \
+    npm cache clean --force && \
+    rm -rf /root/.npm /root/.cache
 
 # Configure Python
 #
 RUN python3 -m venv /opt/python-lsp-server && \
-    /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir
+    /opt/python-lsp-server/bin/python -m pip install python-lsp-server[all] --no-cache-dir && \
+    find /opt/python-lsp-server -type d -name __pycache__ -exec rm -rf {} + && \
+    find /opt/python-lsp-server -type d -name tests -exec rm -rf {} +
 
 RUN python3 -m venv /opt/ansible && \
     /opt/ansible/bin/python -m pip install --upgrade pip wheel setuptools --no-cache-dir && \
     /opt/ansible/bin/python -m pip install ansible ansible-lint kubernetes --no-cache-dir && \
     /opt/ansible/bin/ansible-galaxy collection install community.kubernetes && \
-    echo "export PATH=\"\$PATH:/opt/ansible/bin\"" >> /home/$USER/.bashrc
+    echo "export PATH=\"\$PATH:/opt/ansible/bin\"" >> /home/$USER/.bashrc && \
+    find /opt/ansible -type d -name __pycache__ -exec rm -rf {} + && \
+    find /opt/ansible -type d -name tests -exec rm -rf {} +
 
 RUN python3 -m venv /opt/invoke && \
     /opt/invoke/bin/python -m pip install invoke --no-cache-dir && \
-    echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc
+    echo "export PATH=\"\$PATH:/opt/invoke/bin\"" >> /home/$USER/.bashrc && \
+    find /opt/invoke -type d -name __pycache__ -exec rm -rf {} + && \
+    find /opt/invoke -type d -name tests -exec rm -rf {} +
 
 # UV
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh && \
@@ -241,6 +251,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     bash Miniconda3.sh -b -u -p /opt/conda && \
     su - $USER -c '/opt/conda/bin/conda init bash' && \
     su - $USER -c '/opt/conda/bin/conda config --set auto_activate_base false' && \
+    /opt/conda/bin/conda clean -afy && \
     rm -rf Miniconda3.sh
 
 # Clojure
@@ -329,6 +340,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     python3 -m venv /opt/pgadmin && \
     /opt/pgadmin/bin/python -m pip install wheel --no-cache-dir && \
     /opt/pgadmin/bin/python -m pip install pgadmin4 --no-cache-dir && \
+    find /opt/pgadmin -type d -name __pycache__ -exec rm -rf {} + && \
+    find /opt/pgadmin -type d -name tests -exec rm -rf {} + && \
     sed -i -e "s/^DEFAULT_SERVER =.*/DEFAULT_SERVER=\'0\.0\.0\.0\'/g" /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     sed -i 's/DEFAULT_SERVER_PORT = 5050/DEFAULT_SERVER_PORT = 49162/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
     sed -i 's/SERVER_MODE = True/SERVER_MODE = False/' /opt/pgadmin/lib/python3.10/site-packages/pgadmin4/config.py && \
@@ -346,7 +359,9 @@ RUN mkdir /opt/skypilot && \
     su - $USER -c 'python3 -m venv /opt/skypilot' && \
     su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[kubernetes,runpod]==0.10.5" --no-cache-dir' && \
     su - $USER -c '/opt/skypilot/bin/python -m pip install "runpod==1.7.13" --no-cache-dir' && \
-    echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc
+    echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc && \
+    find /opt/skypilot -type d -name __pycache__ -exec rm -rf {} + && \
+    find /opt/skypilot -type d -name tests -exec rm -rf {} +
 
 # OpenVSCode Server
 #
@@ -370,9 +385,10 @@ RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \
 
 # Setup Emacs
 #
-RUN git clone https://github.com/nakkaya/emacs /opt/emacsd/conf && \
+RUN git clone --depth=1 https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(setq package-native-compile t)" > /home/$USER/.emacs && \
-    echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs
+    echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
+    chown -R $USER:$USER /opt/emacsd
 
 RUN echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/conda/bin:/opt/python-lsp-server/bin:/opt/skypilot/bin:/opt/ansible/bin:/opt/invoke/bin:"' >> /etc/environment
 
@@ -386,7 +402,6 @@ COPY resources/conf/supervisord/vscode.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/tailscale.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
-    chown -R $USER:$USER /opt/emacsd && \
     chown -R $USER:$USER /home/$USER && \
     chown -R $USER:$USER /storage
 
