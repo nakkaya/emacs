@@ -46,9 +46,6 @@ with_jupyter=${with_jupyter:-n}
 read -p "Enable pgAdmin (y/n) [n]? " with_pgadmin
 with_pgadmin=${with_pgadmin:-n}
 
-read -p "Enable VSCode (y/n) [n]? " with_vscode
-with_vscode=${with_vscode:-n}
-
 read -p "Enable Tailscale (y/n) [n]? " with_tailscale
 with_tailscale=${with_tailscale:-n}
 
@@ -94,12 +91,6 @@ else
     pgadmin=""
 fi
 
-if [ "$with_vscode" == "y" ]; then
-    vscode="--env VSCODE_ENB=1"
-else
-    vscode=""
-fi
-
 if [ "$with_tailscale" == "y" ]; then
     tailscale="--env TAILSCALE_ENB=1"
 else
@@ -125,7 +116,6 @@ cmd="docker run --privileged \
     $syncthing \
     $jupyter \
     $pgadmin \
-    $vscode \
     $tailscale \
     $volume_mounts \
     $host_disk \

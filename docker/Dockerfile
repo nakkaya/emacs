@@ -75,8 +75,8 @@ RUN apt-get update && \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/Wilfred/difftastic/releases/download/0.68.0/difft-x86_64-unknown-linux-gnu.tar.gz' ;; \
-            arm64) URL='https://github.com/Wilfred/difftastic/releases/download/0.68.0/difft-aarch64-unknown-linux-gnu.tar.gz' ;; \
+            amd64) URL='https://github.com/Wilfred/difftastic/releases/download/0.69.0/difft-x86_64-unknown-linux-gnu.tar.gz' ;; \
+            arm64) URL='https://github.com/Wilfred/difftastic/releases/download/0.69.0/difft-aarch64-unknown-linux-gnu.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "difft.tar.gz" && \
     tar -xzf difft.tar.gz --directory=/usr/bin difft && \
@@ -86,7 +86,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
     gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" |  \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" |  \
     tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
     apt-get install nodejs -y --no-install-recommends && \
@@ -94,10 +94,10 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
 
 # K8S
 #
-RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | \
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key | \
     sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
     echo \
-    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | \
+    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /" | \
     tee /etc/apt/sources.list.d/kubernetes.list > /dev/null && \
     apt-get update && \
     apt-get install kubectl socat lsof -y --no-install-recommends && \
@@ -113,8 +113,8 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.50.15/k9s_Linux_amd64.tar.gz' ;; \
-            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.50.15/k9s_Linux_arm64.tar.gz' ;; \
+            amd64) URL='https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Linux_amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Linux_arm64.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "k9s.tar.gz" && \
     tar -xzf k9s.tar.gz --directory=/usr/bin k9s && \
@@ -124,8 +124,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.25.1/kubectl-cnpg_1.25.1_linux_x86_64.deb' ;; \
-            arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.25.1/kubectl-cnpg_1.25.1_linux_arm64.deb' ;; \
+            amd64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.29.1/kubectl-cnpg_1.29.1_linux_x86_64.deb' ;; \
+            arm64) URL='https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.29.1/kubectl-cnpg_1.29.1_linux_arm64.deb' ;; \
     esac; \
     curl -L -s "${URL}" -o "kubectl-cnpg.deb" && \
     dpkg -i kubectl-cnpg.deb && \
@@ -135,8 +135,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/juicedata/juicefs/releases/download/v1.2.0/juicefs-1.2.0-linux-amd64.tar.gz' ;; \
-            arm64) URL='https://github.com/juicedata/juicefs/releases/download/v1.2.0/juicefs-1.2.0-linux-arm64.tar.gz' ;; \
+            amd64) URL='https://github.com/juicedata/juicefs/releases/download/v1.3.1/juicefs-1.3.1-linux-amd64.tar.gz' ;; \
+            arm64) URL='https://github.com/juicedata/juicefs/releases/download/v1.3.1/juicefs-1.3.1-linux-arm64.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "juicefs.tar.gz" && \
     tar -xzf juicefs.tar.gz --directory=/usr/bin juicefs && \
@@ -145,8 +145,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 # Terraform
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
-    TERRAFORM_VERSION=1.8.5; \
-    TERRAFORM_LS_VERSION=0.33.2; \
+    TERRAFORM_VERSION=1.15.5; \
+    TERRAFORM_LS_VERSION=0.38.6; \
     TERRAFORM_DIST="terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip"; \
     TERRAFORM_LS_DIST="terraform-ls_${TERRAFORM_LS_VERSION}_linux_${ARCH}.zip"; \
     echo $TERRAFORM_DIST && \
@@ -244,8 +244,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.1.1-1-Linux-x86_64.sh' ;; \
-            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.1.1-1-Linux-aarch64.sh' ;; \
+            amd64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.3.2-2-Linux-x86_64.sh' ;; \
+            arm64) URL='https://repo.anaconda.com/miniconda/Miniconda3-py310_26.3.2-2-Linux-aarch64.sh' ;; \
     esac; \
     curl -s "${URL}" -o "Miniconda3.sh" && \
     bash Miniconda3.sh -b -u -p /opt/conda && \
@@ -259,7 +259,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -P /usr/bin/ && \
     chmod 755 /usr/bin/lein && \
     /bin/bash -c "$(curl -fsSL https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh)" && \
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install)" -- --static --version 2025.05.27-13.56.57 && \
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install)" -- --static --version 2026.05.05-12.58.26 && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/babashka/babashka/master/install)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/clj-kondo/clj-kondo/master/script/install-clj-kondo)" && \
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/weavejester/cljfmt/HEAD/install.sh)" && \
@@ -272,8 +272,8 @@ RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
-            amd64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.11.0/ovhcloud-cli_Linux_x86_64.tar.gz' ;; \
-            arm64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.11.0/ovhcloud-cli_Linux_arm64.tar.gz' ;; \
+            amd64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.12.0/ovhcloud-cli_Linux_x86_64.tar.gz' ;; \
+            arm64) URL='https://github.com/ovh/ovhcloud-cli/releases/download/v0.12.0/ovhcloud-cli_Linux_arm64.tar.gz' ;; \
     esac; \
     curl -L -s "${URL}" -o "ovhcloud-cli.tar.gz" && \
     tar -xzf ovhcloud-cli.tar.gz --directory=/usr/bin ovhcloud && \
@@ -315,8 +315,8 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "$ARCH" in \
         amd64) \
-            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chrome-linux64.zip && \
-            wget https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.114/linux64/chromedriver-linux64.zip && \
+            wget https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.54/linux64/chrome-linux64.zip && \
+            wget https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.54/linux64/chromedriver-linux64.zip && \
             mkdir -p /opt/chrome && \
             unzip chrome-linux64.zip && \
             unzip chromedriver-linux64.zip && \
@@ -357,26 +357,11 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 RUN mkdir /opt/skypilot && \
     chown $USER:$USER /opt/skypilot && \
     su - $USER -c 'python3 -m venv /opt/skypilot' && \
-    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[kubernetes,runpod]==0.10.5" --no-cache-dir' && \
-    su - $USER -c '/opt/skypilot/bin/python -m pip install "runpod==1.7.13" --no-cache-dir' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "skypilot[kubernetes,runpod]==0.12.3.post1" --no-cache-dir' && \
+    su - $USER -c '/opt/skypilot/bin/python -m pip install "runpod==1.9.1" --no-cache-dir' && \
     echo "export PATH=\"\$PATH:/opt/skypilot/bin\"" >> /home/$USER/.bashrc && \
     find /opt/skypilot -type d -name __pycache__ -exec rm -rf {} + && \
     find /opt/skypilot -type d -name tests -exec rm -rf {} +
-
-# OpenVSCode Server
-#
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "$ARCH" in \
-            amd64) URL='https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.90.1/openvscode-server-v1.90.1-linux-x64.tar.gz' ;; \
-            arm64) URL='https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.90.1/openvscode-server-v1.90.1-linux-arm64.tar.gz' ;; \
-    esac; \
-    cd /opt/ && \
-    curl -L -s "${URL}" -o "vscode.tar.gz" && \
-    mkdir openvscode-server && \
-    tar xf vscode.tar.gz -C openvscode-server --strip-components=1 && \
-    rm vscode.tar.gz && \
-    sed -i '/default_backend xpra/i \ \ \ \ acl is_vscode path_beg /vscode\n \ \ \ \use_backend vscode if is_vscode\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend vscode\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server vscode_server 127.0.0.1:49164\n" >> /etc/haproxy/haproxy.cfg
 
 # Setup Jupter Reverse Proxy
 #
@@ -398,7 +383,6 @@ COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
-COPY resources/conf/supervisord/vscode.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/tailscale.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
