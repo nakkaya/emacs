@@ -2150,6 +2150,9 @@ Refer to the official JAX documentation for the latest best practices on using J
 	(agent-shell-anthropic-make-authentication :login t)
 	agent-shell-preferred-agent-config
 	(agent-shell-anthropic-make-claude-code-config))
+  (setq agent-shell-opencode-acp-command
+	'("/opt/opencode/bin/opencode" "acp"))
+  (setq agent-shell-context-sources nil)
   (setq agent-shell-mcp-servers
 	'(((name . "clojure-mcp")
 	   (type . "stdio")

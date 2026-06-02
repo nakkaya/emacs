@@ -45,6 +45,7 @@ Service ports/paths used by the image when enabled,
  - WebDAV: `/disk`
  - Jupyter: `/jupyter` (When enabled.)
  - PGAdmin: `/pgadmin` (When enabled.)
+ - OpenCode: `/code` (When enabled.)
 
 ### Semi Automated Setup
 
