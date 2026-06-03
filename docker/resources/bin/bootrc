@@ -12,10 +12,6 @@ if [[ -v PGADMIN_ENB ]]; then
     /usr/bin/supervisorctl start pgadmin
 fi
 
-if [[ -v OPENCODE_ENB ]]; then
-    /usr/bin/supervisorctl start opencode
-fi
-
 if [[ -v TAILSCALE_ENB ]]; then
     /usr/bin/supervisorctl start tailscale
 fi

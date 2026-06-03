@@ -46,9 +46,6 @@ with_jupyter=${with_jupyter:-n}
 read -p "Enable pgAdmin (y/n) [n]? " with_pgadmin
 with_pgadmin=${with_pgadmin:-n}
 
-read -p "Enable OpenCode (y/n) [n]? " with_opencode
-with_opencode=${with_opencode:-n}
-
 read -p "Enable Tailscale (y/n) [n]? " with_tailscale
 with_tailscale=${with_tailscale:-n}
 
@@ -94,12 +91,6 @@ else
     pgadmin=""
 fi
 
-if [ "$with_opencode" == "y" ]; then
-    opencode="--env OPENCODE_ENB=1"
-else
-    opencode=""
-fi
-
 if [ "$with_tailscale" == "y" ]; then
     tailscale="--env TAILSCALE_ENB=1"
 else
@@ -125,7 +116,6 @@ cmd="docker run --privileged \
     $syncthing \
     $jupyter \
     $pgadmin \
-    $opencode \
     $tailscale \
     $volume_mounts \
     $host_disk \

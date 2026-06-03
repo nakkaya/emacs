@@ -377,11 +377,6 @@ RUN mkdir /opt/skypilot && \
 RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_jupyter path_beg /jupyter\n \ \ \ \use_backend jupyter if is_jupyter\n' /etc/haproxy/haproxy.cfg && \
     printf "\n\nbackend jupyter\n    mode http\n    http-request auth unless { http_auth(logins) }\n    server jupyter_server 127.0.0.1:49166\n" >> /etc/haproxy/haproxy.cfg
 
-# Setup OpenCode Reverse Proxy
-#
-RUN sed -i '/default_backend xpra/i \ \ \ \ acl is_opencode path_beg /code\n \ \ \ \use_backend opencode if is_opencode\n' /etc/haproxy/haproxy.cfg && \
-    printf "\n\nbackend opencode\n    mode http\n    http-request auth unless { http_auth(logins) }\n    http-request redirect location /code/ if { path /code }\n    http-request set-path %%[path,regsub(^/code/,/)]\n    server opencode_server 127.0.0.1:49168\n" >> /etc/haproxy/haproxy.cfg
-
 # Setup Emacs
 #
 RUN git clone --depth=1 https://github.com/nakkaya/emacs /opt/emacsd/conf && \
@@ -397,7 +392,6 @@ COPY resources/conf/supervisord/bootrc.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/syncthing.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/pgadmin.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/jupyter.conf /etc/supervisor/conf.d/
-COPY resources/conf/supervisord/opencode.conf /etc/supervisor/conf.d/
 COPY resources/conf/supervisord/tailscale.conf /etc/supervisor/conf.d/
 
 RUN mkdir -p /home/$USER/.local/share/ && \
