@@ -61,8 +61,6 @@ RUN apt-get update && \
     jupyter jupyter-notebook \
     # emacs-jupyter
     autoconf automake libtool \
-    # Spell
-    ispell \
     -y --no-install-recommends && \
     update-ca-certificates && \
     # Browser (PPA needs software-properties-common installed above)

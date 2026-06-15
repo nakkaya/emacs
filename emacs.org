@@ -1,4 +1,4 @@
-# -*- mode: Org; eval: (flyspell-mode 0) -*- #
+# -*- mode: Org; -*- #
 #+title: Emacs Configuration
 #+STARTUP: hidestars
 
@@ -275,17 +275,6 @@ to ensure it autosaves the latests version back.
   (interactive)
   (set-face-attribute 'default nil :height
                       (- (face-attribute 'default :height) 10)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(unless (eq system-type 'windows-nt)
-  (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
-
-  (add-hook 'message-mode-hook #'turn-on-flyspell)
-  (add-hook 'text-mode-hook    #'turn-on-flyspell)
-  (add-to-list 'ispell-skip-region-alist '("+begin_src" . "+end_src"))
-
-  (add-hook 'yaml-mode-hook (lambda () (flyspell-mode 0))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
