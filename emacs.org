@@ -107,10 +107,7 @@
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
+(set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8-unix)
 
@@ -264,8 +261,8 @@ to ensure it autosaves the latests version back.
 
 
 #+BEGIN_SRC emacs-lisp
-(setq password-cache t) ; enable password caching
-(setq password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
+(setq password-cache t                   ; enable password caching
+      password-cache-expiry (* 12 3600)) ; for twelfe hours (time in secs)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -310,15 +307,6 @@ to ensure it autosaves the latests version back.
 	("\*cider-repl.*" (display-buffer-same-window))
 	("\*ein:.*" (display-buffer-same-window))))
 #+END_SRC
-
-#+begin_src emacs-lisp
-(defun suppress-messages (old-fun &rest args)
-  (cl-flet ((silence (&rest args1) (ignore)))
-    (advice-add 'message :around #'silence)
-    (unwind-protect
-        (apply old-fun args)
-      (advice-remove 'message #'silence))))
-#+end_src
 
 #+begin_src emacs-lisp
 (defun na-recursive-grep (search-term search-path)
@@ -573,9 +561,10 @@ to ensure it autosaves the latests version back.
 
 (add-hook 'eshell-mode-hook
           (lambda ()
-	    (company-mode -1)
-            (define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
-            (define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)))
+            (company-mode -1)))
+
+(define-key eshell-mode-map (kbd "<up>") #'eshell-previous-input)
+(define-key eshell-mode-map (kbd "<down>") #'eshell-next-input)
 
 (defun eshell-rename-buffer ()
   "Rename eshell buffer based on current directory, preserving buffer index."
@@ -991,9 +980,8 @@ Will bounce between matching parens just like % in vi
         cider-merge-sessions 'host
         cider-print-fn 'pprint)
 
-  (add-hook 'cider-repl-mode-hook
-            (lambda ()
-              (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer))))
+  (with-eval-after-load 'cider-repl
+    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 #+END_SRC
 
 ** C/C++
@@ -1024,13 +1012,13 @@ Will bounce between matching parens just like % in vi
  #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 
 (use-package docker-compose-mode
   :ensure t
   :demand t)
-
-(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
  #+END_SRC
 
 ** Languages
@@ -1329,9 +1317,9 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 #+begin_src emacs-lisp
   (setq org-refile-targets '((nil :maxlevel . 9)
-			     (org-agenda-files :maxlevel . 9)))
-  (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-  (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+			     (org-agenda-files :maxlevel . 9))
+        org-outline-path-complete-in-steps nil          ; Refile in a single go
+        org-refile-use-outline-path t)                  ; Show full paths for refiling
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1347,19 +1335,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+end_src
 
 #+begin_src emacs-lisp :results silent
-(use-package org-margin
-  :vc (:url "https://github.com/rougier/org-margin" :rev :newest))
-
-(setq org-margin-markers
-      (list (cons "\\(#\\+begin_src\\)"
-		  (propertize "⨀" 'face '(font-lock-comment-face bold)))
-            (cons "\\(#\\+begin_quote\\)"
-		  (propertize "“" 'face '(font-lock-comment-face bold)))))
-
-(setq org-margin-bookmark (propertize "🔖" 'face '(error bold)))
-
-(add-hook 'org-mode-hook 'org-margin-mode)
-
 (defun na-org-margin-fix-cursor (&rest _)
   "Ensure cursor lands after the margin display property, not inside it."
   (when (and (derived-mode-p 'org-mode)
@@ -1368,15 +1343,28 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (let ((end (next-single-property-change (point) 'display nil (line-end-position))))
       (when end (goto-char end)))))
 
-(advice-add 'org-beginning-of-line :after #'na-org-margin-fix-cursor)
-(advice-add 'beginning-of-visual-line :after #'na-org-margin-fix-cursor)
-(advice-add 'move-beginning-of-line :after #'na-org-margin-fix-cursor)
-(advice-add 'previous-line :after #'na-org-margin-fix-cursor)
-(advice-add 'next-line :after #'na-org-margin-fix-cursor)
-(advice-add 'org-previous-visible-heading :after #'na-org-margin-fix-cursor)
-(advice-add 'org-next-visible-heading :after #'na-org-margin-fix-cursor)
-(advice-add 'outline-previous-visible-heading :after #'na-org-margin-fix-cursor)
-(advice-add 'outline-next-visible-heading :after #'na-org-margin-fix-cursor)
+(use-package org-margin
+  :vc (:url "https://github.com/rougier/org-margin" :rev :newest)
+  :config
+  (setq org-margin-markers
+        (list (cons "\\(#\\+begin_src\\)"
+                    (propertize "⨀" 'face '(font-lock-comment-face bold)))
+              (cons "\\(#\\+begin_quote\\)"
+                    (propertize "“" 'face '(font-lock-comment-face bold)))))
+
+  (setq org-margin-bookmark (propertize "🔖" 'face '(error bold)))
+
+  (add-hook 'org-mode-hook 'org-margin-mode)
+
+  (advice-add 'org-beginning-of-line :after #'na-org-margin-fix-cursor)
+  (advice-add 'beginning-of-visual-line :after #'na-org-margin-fix-cursor)
+  (advice-add 'move-beginning-of-line :after #'na-org-margin-fix-cursor)
+  (advice-add 'previous-line :after #'na-org-margin-fix-cursor)
+  (advice-add 'next-line :after #'na-org-margin-fix-cursor)
+  (advice-add 'org-previous-visible-heading :after #'na-org-margin-fix-cursor)
+  (advice-add 'org-next-visible-heading :after #'na-org-margin-fix-cursor)
+  (advice-add 'outline-previous-visible-heading :after #'na-org-margin-fix-cursor)
+  (advice-add 'outline-next-visible-heading :after #'na-org-margin-fix-cursor))
 #+end_src
 
 #+begin_src emacs-lisp :results silent
@@ -1547,8 +1535,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 ;; \\usepackage[style=authoryear-comp,autocite=footnote]{biblatex}
 ;; \\addbibresource{/Users/chl/org/references.bib}
-(eval-after-load "ox-latex"
-  '(add-to-list 'org-latex-classes
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
                 '("tufte-handout"
                   "\\documentclass[nobib]{tufte-handout}
                    \\usepackage{nicefrac}
@@ -1608,7 +1596,6 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (setq org-agenda-window-setup 'current-window
       org-agenda-restore-windows-after-quit t
-      org-agenda-show-all-dates t
       org-deadline-warning-days 150
       org-archive-subtree-save-file-p t)
 
@@ -1632,7 +1619,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
         (cond
          ((looking-at-p block-re)
           (when (< content-line-count 2)
-            (delete-region start-pos (1+ (point-at-bol))))
+            (delete-region start-pos (1+ (line-beginning-position))))
           (setq start-pos (point))
           (forward-line)
           (setq content-line-count (if (looking-at-p blank-line-re) 0 1)))
@@ -1644,7 +1631,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       ;; The above strategy can leave a separator line at the beginning
       ;; of the buffer.
       (when (looking-at-p block-re)
-        (delete-region (point) (1+ (point-at-eol))))))
+        (delete-region (point) (1+ (line-end-position))))))
   (setq buffer-read-only t))
 
 (add-hook 'org-agenda-finalize-hook #'org-agenda-delete-empty-blocks)
@@ -1653,7 +1640,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (defun kill-org-agenda ()
   (interactive)
-  (kill-this-buffer)
+  (kill-buffer (current-buffer))
   (set-window-configuration
    (gethash (selected-window) na-agenda-window-configuration nil)))
 
@@ -1703,13 +1690,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 
 (use-package helm-org-ql
   :vc (:url "https://github.com/alphapapa/org-ql" :rev :newest)
-  :after (org-ql helm))
+  :after (org-ql helm)
+  :bind (:map org-mode-map
+              ("C-c C-j" . helm-org-ql)))
 
 (use-package helm-org-rifle
   :ensure t
   :defer t)
-
-(define-key org-mode-map (kbd "C-c C-j") 'helm-org-ql)
 #+end_src
 
 ** Roam
@@ -1907,7 +1894,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+begin_src emacs-lisp :results silent
 (use-package gptel
   :ensure t
-  :demand t)
+  :demand t
+  :config
 
 (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
 (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
@@ -1945,164 +1933,7 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
       gptel-model 'openclaw
       gptel-playback t
       gptel-default-mode 'org-mode
-      gptel-display-buffer-action '(pop-to-buffer-same-window))
-
-(add-to-list 'gptel-directives '(jph00 . "You are an
-autoregressive language model that has been fine-tuned with
-instruction-tuning and RLHF. You carefully provide accurate, factual,
-thoughtful, nuanced answers. You are brilliant at reasoning. If you
-think there might not be a correct answer, you say so.
-
-Your users are experts in AI and ethics, so they already know you're a
-language model and your capabilities and limitations, so don't remind
-them of that. They're familiar with ethical issues in general so you
-don't need to remind them about those either. Don't be verbose in your
-answers, but do provide details and examples where it might help the
-explanation. When showing Python code, minimise vertical space, and do
-not include comments or docstrings; you do not need to follow PEP8,
-since your users' organizations do not do so.
-
-Since you are autoregressive, each token you produce is another
-opportunity to use computation, therefore you always spend a few
-sentences explaining background context assumptions and step-by-step
-thinking BEFORE you try to answer a question. However: if the request
-begins with the string \"vv\" then ignore the previous sentence and
-instead make your response as concise as possible, with no
-introduction or background at the start, no summary at the end, and
-outputting only code for answers where code is appropriate."))
-
-(add-to-list 'gptel-directives '(python-jax . "
-You are an expert in JAX, Python, NumPy, and Machine Learning.
-
----
-
-Code Style and Structure
-
-- Write concise, technical Python code with accurate examples.
-- Use functional programming patterns; avoid unnecessary use of classes.
-- Prefer vectorized operations over explicit loops for performance.
-- Use descriptive variable names (e.g., `learning_rate`, `weights`, `gradients`).
-- Organize code into functions and modules for clarity and reusability.
-- Follow PEP 8 style guidelines for Python code.
-
-JAX Best Practices
-
-- Leverage JAX's functional API for numerical computations.
-  - Use `jax.numpy` instead of standard NumPy to ensure compatibility.
-- Utilize automatic differentiation with `jax.grad` and `jax.value_and_grad`.
-  - Write functions suitable for differentiation (i.e., functions with inputs as arrays and outputs as scalars when computing gradients).
-- Apply `jax.jit` for just-in-time compilation to optimize performance.
-  - Ensure functions are compatible with JIT (e.g., avoid Python side-effects and unsupported operations).
-- Use `jax.vmap` for vectorizing functions over batch dimensions.
-  - Replace explicit loops with `vmap` for operations over arrays.
-- Avoid in-place mutations; JAX arrays are immutable.
-  - Refrain from operations that modify arrays in place.
-- Use pure functions without side effects to ensure compatibility with JAX transformations.
-
-Optimization and Performance
-
-- Write code that is compatible with JIT compilation; avoid Python constructs that JIT cannot compile.
-  - Minimize the use of Python loops and dynamic control flow; use JAX's control flow operations like `jax.lax.scan`, `jax.lax.cond`, and `jax.lax.fori_loop`.
-- Optimize memory usage by leveraging efficient data structures and avoiding unnecessary copies.
-- Use appropriate data types (e.g., `float32`) to optimize performance and memory usage.
-- Profile code to identify bottlenecks and optimize accordingly.
-
-Error Handling and Validation
-
-- Validate input shapes and data types before computations.
-  - Use assertions or raise exceptions for invalid inputs.
-- Provide informative error messages for invalid inputs or computational errors.
-- Handle exceptions gracefully to prevent crashes during execution.
-
-Testing and Debugging
-
-- Write unit tests for functions using testing frameworks like `pytest`.
-  - Ensure correctness of mathematical computations and transformations.
-- Use `jax.debug.print` for debugging JIT-compiled functions.
-- Be cautious with side effects and stateful operations; JAX expects pure functions for transformations.
-
-Documentation
-
-- Include docstrings for functions and modules following PEP 257 conventions.
-  - Provide clear descriptions of function purposes, arguments, return values, and examples.
-- Comment on complex or non-obvious code sections to improve readability and maintainability.
-
-Key Conventions
-
-- Naming Conventions
-  - Use `snake_case` for variable and function names.
-  - Use `UPPERCASE` for constants.
-- Function Design
-  - Keep functions small and focused on a single task.
-  - Avoid global variables; pass parameters explicitly.
-- File Structure
-  - Organize code into modules and packages logically.
-  - Separate utility functions, core algorithms, and application code.
-
-JAX Transformations
-
-- Pure Functions
-  - Ensure functions are free of side effects for compatibility with `jit`, `grad`, `vmap`, etc.
-- Control Flow
-  - Use JAX's control flow operations (`jax.lax.cond`, `jax.lax.scan`) instead of Python control flow in JIT-compiled functions.
-- Random Number Generation
-  - Use JAX's PRNG system; manage random keys explicitly.
-- Parallelism
-  - Utilize `jax.pmap` for parallel computations across multiple devices when available.
-
-Performance Tips
-
-- Benchmarking
-  - Use tools like `timeit` and JAX's built-in benchmarking utilities.
-- Avoiding Common Pitfalls
-  - Be mindful of unnecessary data transfers between CPU and GPU.
-  - Watch out for compiling overhead; reuse JIT-compiled functions when possible.
-
-Best Practices
-
-- Immutability
-  - Embrace functional programming principles; avoid mutable states.
-- Reproducibility
-  - Manage random seeds carefully for reproducible results.
-- Version Control
-  - Keep track of library versions (`jax`, `jaxlib`, etc.) to ensure compatibility.
-
----
-
-Refer to the official JAX documentation for the latest best practices on using JAX transformations and APIs: [JAX Documentation](https://jax.readthedocs.io)
-"))
-
-;;(setq gptel-log-level 'debug)
-#+end_src
-
-#+begin_src emacs-lisp
-(defun gptel-fix-grammar ()
-  "Send selected region to ChatGPT to fix grammar and replace it with the response."
-  (interactive)
-  (if (use-region-p)
-      (let ((region-start (region-beginning))
-            (region-end (region-end)))
-        (gptel-request
-            (buffer-substring-no-properties region-start region-end)
-          :system "Correct all grammar and punctuation. Do not change or remove words."
-          :buffer (current-buffer)
-          :context (cons (set-marker (make-marker) region-start)
-                         (set-marker (make-marker) region-end))
-          :callback
-          (lambda (response info)
-            (if (not response)
-		(message "gptel-request failed with message: %s" (plist-get info :status))
-              (let* ((bounds (plist-get info :context))
-                     (beg (car bounds))
-                     (end (cdr bounds))
-                     (buf (plist-get info :buffer)))
-		(with-current-buffer buf
-                  (save-excursion
-                    (goto-char beg)
-                    (kill-region beg end)
-                    (insert response)
-		    (deactivate-mark))))))))
-    (message "No region selected.")))
+      gptel-display-buffer-action '(pop-to-buffer-same-window)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2506,31 +2337,30 @@ Refer to the official JAX documentation for the latest best practices on using J
 (global-set-key (kbd "C-M-k")  #'beginning-of-defun)
 (global-set-key (kbd "C-M-j")  #'end-of-defun)
 
-(add-hook 'clojure-mode-hook
-          (lambda ()
-	     (define-key clojure-mode-map (kbd "M-q")  #'popper-toggle-latest)))
+(with-eval-after-load 'clojure-mode
+  (define-key clojure-mode-map (kbd "M-q") #'popper-toggle-latest))
 
-(dolist (hook '(c-mode-hook c++-mode-hook chatgpt-shell-mode-hook java-mode-hook))
+(dolist (hook '(c-mode-hook c++-mode-hook java-mode-hook))
   (add-hook hook (lambda () (local-set-key (kbd "C-d") #'na-bounce-sexp))))
 
 (global-set-key (kbd "C-x t") #'na-new-term)
 
+(defun na-term-common-keys (map)
+  "Bind the shared terminal navigation keys in MAP."
+  (define-key map (kbd "C-]")  #'na-helm-persp-buffers)
+  (define-key map (kbd "C-\\") #'other-window)
+  (define-key map (kbd "M-\\") #'popper-cycle)
+  (define-key map (kbd "M-q")  #'popper-toggle-latest)
+  (define-key map (kbd "M-x")  #'helm-M-x))
+
 (with-eval-after-load 'term
-  (define-key term-raw-map (kbd "C-c C-c")  #'term-send-raw)
-  (define-key term-raw-map (kbd "C-]")      #'na-helm-persp-buffers)
-  (define-key term-raw-map (kbd "C-y")      #'term-paste)
-  (define-key term-raw-map (kbd "C-\\")     #'other-window)
-  (define-key term-raw-map (kbd "M-\\")     #'popper-cycle)
-  (define-key term-raw-map (kbd "M-q")      #'popper-toggle-latest)
-  (define-key term-raw-map (kbd "M-x")      #'helm-M-x))
+  (na-term-common-keys term-raw-map)
+  (define-key term-raw-map (kbd "C-c C-c") #'term-send-raw)
+  (define-key term-raw-map (kbd "C-y")     #'term-paste))
 
 (with-eval-after-load 'vterm
-  (define-key vterm-mode-map (kbd "C-]")      #'na-helm-persp-buffers)
-  (define-key vterm-mode-map (kbd "C-y")      #'vterm-yank)
-  (define-key vterm-mode-map (kbd "C-\\")     #'other-window)
-  (define-key vterm-mode-map (kbd "M-\\")     #'popper-cycle)
-  (define-key vterm-mode-map (kbd "M-q")      #'popper-toggle-latest)
-  (define-key vterm-mode-map (kbd "M-x")      #'helm-M-x))
+  (na-term-common-keys vterm-mode-map)
+  (define-key vterm-mode-map (kbd "C-y") #'vterm-yank))
 
 (with-eval-after-load 'eat
   (customize-set-variable ;; has :set code
@@ -2610,10 +2440,10 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (use-package all-the-icons
   :ensure t
-  :demand t)
-
-(unless (member "all-the-icons" (font-family-list))
-  (all-the-icons-install-fonts t))
+  :demand t
+  :config
+  (unless (member "all-the-icons" (font-family-list))
+    (all-the-icons-install-fonts t)))
 #+end_src
 
 ** Theme
@@ -2621,31 +2451,31 @@ Refer to the official JAX documentation for the latest best practices on using J
 #+BEGIN_SRC emacs-lisp :results silent
 (use-package doom-themes
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (load-theme 'doom-one t)
 
-(load-theme 'doom-one t)
-
-(set-face-attribute 'show-paren-match nil :foreground "#d65946")
-(set-face-attribute 'font-lock-function-name-face nil :foreground "#1d9a79")
-(set-face-attribute 'font-lock-builtin-face nil :foreground "#7f7dca")
-(set-face-attribute 'font-lock-type-face nil :foreground "#d65946")
-(set-face-attribute 'font-lock-constant-face nil :foreground "#ab75c3")
-(set-face-attribute 'font-lock-string-face nil :foreground "#6aaf50")
-(set-face-attribute 'org-link nil :foreground "#5f87af" :underline t)
-(set-face-attribute 'org-level-1 nil :foreground "#5f87af" :bold t)
-(set-face-attribute 'org-level-2 nil :foreground "#5f8f9a")
-(set-face-attribute 'org-level-3 nil :foreground "#6a8a8a")
-(set-face-attribute 'org-level-4 nil :foreground "#7a8a7a")
-(set-face-attribute 'org-level-5 nil :foreground "#5f87af")
-(set-face-attribute 'org-level-6 nil :foreground "#5f8f9a")
-(set-face-attribute 'org-level-7 nil :foreground "#6a8a8a")
-(set-face-attribute 'org-level-8 nil :foreground "#7a8a7a")
-(set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
-(set-face-attribute 'dired-directory nil :foreground "#7f7dca")
-(set-face-attribute 'markdown-header-face nil :foreground "#51afef")
-(set-face-attribute 'hl-line nil :background "#252535")
-(set-face-attribute 'highlight nil :background "#3a3a3a" :foreground nil)
-(set-face-attribute 'org-agenda-current-time nil :foreground "#5f87af")
+  (set-face-attribute 'show-paren-match nil :foreground "#d65946")
+  (set-face-attribute 'font-lock-function-name-face nil :foreground "#1d9a79")
+  (set-face-attribute 'font-lock-builtin-face nil :foreground "#7f7dca")
+  (set-face-attribute 'font-lock-type-face nil :foreground "#d65946")
+  (set-face-attribute 'font-lock-constant-face nil :foreground "#ab75c3")
+  (set-face-attribute 'font-lock-string-face nil :foreground "#6aaf50")
+  (set-face-attribute 'org-link nil :foreground "#5f87af" :underline t)
+  (set-face-attribute 'org-level-1 nil :foreground "#5f87af" :bold t)
+  (set-face-attribute 'org-level-2 nil :foreground "#5f8f9a")
+  (set-face-attribute 'org-level-3 nil :foreground "#6a8a8a")
+  (set-face-attribute 'org-level-4 nil :foreground "#7a8a7a")
+  (set-face-attribute 'org-level-5 nil :foreground "#5f87af")
+  (set-face-attribute 'org-level-6 nil :foreground "#5f8f9a")
+  (set-face-attribute 'org-level-7 nil :foreground "#6a8a8a")
+  (set-face-attribute 'org-level-8 nil :foreground "#7a8a7a")
+  (set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
+  (set-face-attribute 'dired-directory nil :foreground "#7f7dca")
+  (set-face-attribute 'markdown-header-face nil :foreground "#51afef")
+  (set-face-attribute 'hl-line nil :background "#252535")
+  (set-face-attribute 'highlight nil :background "#3a3a3a" :foreground nil)
+  (set-face-attribute 'org-agenda-current-time nil :foreground "#5f87af"))
 
 
 (defun na-fix-background (&optional frame)
@@ -2659,8 +2489,8 @@ Refer to the official JAX documentation for the latest best practices on using J
     (set-face-background 'ansi-color-yellow bg frame)
 
     ;; diff-mode faces
-    (eval-after-load "diff-mode"
-      '(let ((removed-fg "#ff6c6b")
+    (with-eval-after-load 'diff-mode
+      (let ((removed-fg "#ff6c6b")
 	     (added-fg "#98be65")
 	     (changed-fg "#ECBE7B")
 	     (heading-fg "#727272")
@@ -2684,8 +2514,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 	 (set-face-attribute 'diff-refine-changed nil :background bg :foreground changed-fg :weight 'bold)))
 
     ;; ediff faces
-    (eval-after-load "ediff"
-      '(let ((removed-fg "#ff6c6b")
+    (with-eval-after-load 'ediff
+      (let ((removed-fg "#ff6c6b")
 	     (added-fg "#98be65")
 	     (ancestor-fg "#ECBE7B")
 	     (removed-bg "#262626")
@@ -2713,8 +2543,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 	 (set-face-attribute 'ediff-fine-diff-C nil :background fine-removed-bg :foreground ancestor-fg :weight 'bold)
 	 (set-face-attribute 'ediff-fine-diff-Ancestor nil :background fine-removed-bg :foreground ancestor-fg :weight 'bold)))
 
-    (eval-after-load "magit"
-      '(progn
+    (with-eval-after-load 'magit
+      (progn
 	 ;; Use same colors as ediff for consistency
 	 (let ((removed-fg "#ff6c6b")    ;; red for removed
 	       (added-fg "#98be65")      ;; green for added
@@ -2750,8 +2580,8 @@ Refer to the official JAX documentation for the latest best practices on using J
 	   (set-face-attribute 'magit-diff-removed nil :background bg :foreground removed-fg)
 	   (set-face-attribute 'magit-diff-removed-highlight nil :background bg :foreground removed-fg))))))
 
-(eval-after-load "helm-buffers"
-  '(progn
+(with-eval-after-load 'helm-buffers
+  (progn
      (set-face-attribute 'helm-buffer-file nil
 			 :foreground (face-foreground 'default nil 'default) :background "#1c1c1c")
      (set-face-attribute 'helm-buffer-directory nil
@@ -2762,32 +2592,32 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (use-package doom-modeline
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (require 'doom-modeline-segments)
 
-(require 'doom-modeline-segments)
+  (setq doom-modeline-icon nil
+        doom-modeline-buffer-encoding nil
+        doom-modeline-height 15)
 
-(setq doom-modeline-icon nil
-      doom-modeline-buffer-encoding nil
-      doom-modeline-height 15)
+  (doom-modeline-def-modeline 'main
+    ;; left part
+    '(bar matches buffer-info buffer-position word-count)
+    ;; right part
+    ;; misc-info is what is present in global-mode-string
+    '(misc-info debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs))
 
-(doom-modeline-def-modeline 'main
-  ;; left part
-  '(bar matches buffer-info buffer-position word-count)
-  ;; right part
-  ;; misc-info is what is present in global-mode-string
-  '(misc-info debug repl lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs))
+  (doom-modeline-def-modeline 'dired-line
+    '(buffer-info remote-host)
+    '(major-mode))
 
-(doom-modeline-def-modeline 'dired-line
-  '(buffer-info remote-host)
-  '(major-mode))
+  (add-to-list 'doom-modeline-mode-alist '(dired-mode . dired-line))
 
-(add-to-list 'doom-modeline-mode-alist '(dired-mode . dired-line))
+  (set-face-attribute 'mode-line nil :background "#444444" :foreground "#dadada")
+  (set-face-attribute 'mode-line-inactive nil :background "#262626" :foreground "#767676")
+  (set-face-attribute 'doom-modeline-buffer-modified nil :foreground "#98be65")
 
-(set-face-attribute 'mode-line nil :background "#444444" :foreground "#dadada")
-(set-face-attribute 'mode-line-inactive nil :background "#262626" :foreground "#767676")
-(set-face-attribute 'doom-modeline-buffer-modified nil :foreground "#98be65")
-
-(add-hook 'after-init-hook #'doom-modeline-mode)
+  (add-hook 'after-init-hook #'doom-modeline-mode))
 #+END_SRC
 
 * Server
