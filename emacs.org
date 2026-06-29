@@ -2754,6 +2754,7 @@ Refer to the official JAX documentation for the latest best practices on using J
 
 (set-face-attribute 'mode-line nil :background "#444444" :foreground "#dadada")
 (set-face-attribute 'mode-line-inactive nil :background "#262626" :foreground "#767676")
+(set-face-attribute 'doom-modeline-buffer-modified nil :foreground "#98be65")
 
 (add-hook 'after-init-hook #'doom-modeline-mode)
 #+END_SRC
