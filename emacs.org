@@ -159,12 +159,12 @@
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :ensure t
-  :demand t)
-(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-(global-undo-tree-mode)
-
-(setq undo-limit 16000
-      undo-strong-limit 24000)
+  :demand t
+  :config
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  (global-undo-tree-mode)
+  (setq undo-limit 16000
+        undo-strong-limit 24000))
 #+END_SRC
 
 
@@ -205,8 +205,9 @@ Fix mouse when using emacsclient in tty and daemon launches via gui.
 
 (use-package clipetty
   :ensure t
-  :demand t)
-(global-clipetty-mode)
+  :demand t
+  :config
+  (global-clipetty-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -282,24 +283,24 @@ to ensure it autosaves the latests version back.
 #+BEGIN_SRC emacs-lisp :results silent
 (use-package helm
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (setq helm-M-x-fuzzy-match t
+        helm-split-window-in-side-p t
+        helm-move-to-line-cycle-in-source t
+        helm-buffer-max-length nil)
 
-(setq helm-M-x-fuzzy-match t
-      helm-split-window-in-side-p t
-      helm-move-to-line-cycle-in-source t
-      helm-buffer-max-length nil)
+  (setq helm-boring-buffer-regexp-list
+        (append '("\\` ") na-boring-buffer-patterns))
 
-(setq helm-boring-buffer-regexp-list
-      (append '("\\` ") na-boring-buffer-patterns))
+  ;; Fixes helm messing modeline colors.
+  (add-hook 'helm-minibuffer-set-up-hook
+            (lambda ()
+              (advice-add #'doom-modeline--active :override (lambda () t))))
 
-;; Fixes helm messing modeline colors.
-(add-hook 'helm-minibuffer-set-up-hook
-          (lambda ()
-            (advice-add #'doom-modeline--active :override (lambda () t))))
-
-(add-hook 'helm-cleanup-hook
-          (lambda ()
-            (advice-remove #'doom-modeline--active (lambda () t))))
+  (add-hook 'helm-cleanup-hook
+            (lambda ()
+              (advice-remove #'doom-modeline--active (lambda () t)))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -454,19 +455,6 @@ to ensure it autosaves the latests version back.
 ** persp-mode
 
 #+begin_src emacs-lisp :results silent
-(setq persp-keymap-prefix (kbd "C-c w"))
-
-(use-package persp-mode
-  :ensure t
-  :demand t)
-
-(setq persp-auto-resume-time -1 ;; No autoload buffers
-      persp-set-last-persp-for-new-frames nil
-      persp-reset-windows-on-nil-window-conf t
-      persp-autokill-buffer-on-remove t
-      persp-add-buffer-on-after-change-major-mode t
-      persp-kill-foreign-buffer-behaviour 'kill)
-
 (defun switch-all-other-frames-to-nil-perspective ()
   "Switch all other frames to nil perspective and activate *scratch* buffer."
   (interactive)
@@ -491,18 +479,30 @@ to ensure it autosaves the latests version back.
   (switch-all-other-frames-to-nil-perspective)
   (persp-frame-switch name))
 
-(define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
-(global-set-key (kbd "C-;") #'na-persp-frame-switch)
-
 (defun na-delete-frame ()
   "Switch to nil perspective, then delete the frame."
   (interactive)
   (persp-frame-switch persp-nil-name)
   (delete-frame))
 
-(global-set-key (kbd "C-x 5 0") #'na-delete-frame)
+(use-package persp-mode
+  :ensure t
+  :demand t
+  :init
+  (setq persp-keymap-prefix (kbd "C-c w"))
+  :config
+  (setq persp-auto-resume-time -1 ;; No autoload buffers
+        persp-set-last-persp-for-new-frames nil
+        persp-reset-windows-on-nil-window-conf t
+        persp-autokill-buffer-on-remove t
+        persp-add-buffer-on-after-change-major-mode t
+        persp-kill-foreign-buffer-behaviour 'kill)
 
-(persp-mode 1)
+  (define-key persp-key-map (kbd "s") #'na-persp-frame-switch)
+  (global-set-key (kbd "C-;") #'na-persp-frame-switch)
+  (global-set-key (kbd "C-x 5 0") #'na-delete-frame)
+
+  (persp-mode 1))
 #+end_src
 
 * Terminal
@@ -843,8 +843,9 @@ SSH at least,
 
 (use-package multi-term
   :ensure t
-  :demand t)
-(setq multi-term-program "/bin/bash")
+  :demand t
+  :config
+  (setq multi-term-program "/bin/bash"))
 #+END_SRC
 
 ** Misc
@@ -935,64 +936,64 @@ Will bounce between matching parens just like % in vi
 #+BEGIN_SRC emacs-lisp :results silent
 (use-package clojure-mode
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (setq clojure-indent-style 'align-arguments)
+
+  (put-clojure-indent 'core/handler '(1))
+  (put-clojure-indent 'weave/handler '(1))
+  (put-clojure-indent 'testit/fact 1)
+  (put-clojure-indent 'testit/facts 1)
+  (put-clojure-indent 'facts 1)
+  (put-clojure-indent 'fact 1)
+  (put-clojure-indent 'testit.core/fact 1)
+  (put-clojure-indent 'page/html5 1)
+  (put-clojure-indent 'rf/reg-event-fx 1)
+  (put-clojure-indent 'chain/reg-chain 1)
+  (put-clojure-indent 'rf/reg-sub 1)
+  (put-clojure-indent 'rf/reg-event-db 1)
+  (put-clojure-indent 'rc/reg-chain 1)
+  (put-clojure-indent 'futil/for-all 1)
+  (put-clojure-indent 'futil/for-frag 1)
+  (put-clojure-indent 'for-frag 1)
+  (put-clojure-indent 'for-all 1)
+  (put-clojure-indent 'u/for-all 1)
+  (put-clojure-indent 'not-join 1)
+  (put-clojure-indent 'r/with-let 1)
+  (put-clojure-indent 'p/if-all-let 1)
+  (put-clojure-indent 'test-seq/seq-tx 1)
+  (put-clojure-indent 'or-join 1)
+  (put 'cc/button 'clojure-indent-function 1)
+  (put 'cc/modal-footer 'clojure-indent-function 1)
+  (put 'cc/modal-body 'clojure-indent-function 1)
+
+  (setq clojure-align-binding-forms
+        '("let" "when-let" "when-some" "if-let" "if-some" "binding" "loop"
+          "doseq" "for" "with-open" "with-local-vars" "with-redefs"
+          "r/with-let" "p/if-all-let" "test-seq/seq-tx")))
 
 (use-package clojure-mode-extra-font-locking
   :ensure t
   :demand t)
-
-(use-package cider
-  :ensure t
-  :defer t)
-
-(setq nrepl-use-ssh-fallback-for-remote-hosts t
-      cider-use-tooltips nil
-      cider-eldoc-display-for-symbol-at-point nil
-      clojure-indent-style 'align-arguments
-      cider-merge-sessions 'host)
-
-(add-hook 'cider-repl-mode-hook
-	  (lambda ()
-	    (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer)))
 
 (defun na-cider-connect ()
   "Connect to nREPL on localhost:7888."
   (interactive)
   (cider-connect '(:host "localhost" :port 7888)))
 
-(put-clojure-indent 'core/handler '(1))
-(put-clojure-indent 'weave/handler '(1))
-(put-clojure-indent 'testit/fact 1)
-(put-clojure-indent 'testit/facts 1)
-(put-clojure-indent 'facts 1)
-(put-clojure-indent 'fact 1)
-(put-clojure-indent 'testit.core/fact 1)
-(put-clojure-indent 'page/html5 1)
-(put-clojure-indent 'rf/reg-event-fx 1)
-(put-clojure-indent 'chain/reg-chain 1)
-(put-clojure-indent 'rf/reg-sub 1)
-(put-clojure-indent 'rf/reg-event-db 1)
-(put-clojure-indent 'rc/reg-chain 1)
-(put-clojure-indent 'futil/for-all 1)
-(put-clojure-indent 'futil/for-frag 1)
-(put-clojure-indent 'for-frag 1)
-(put-clojure-indent 'for-all 1)
-(put-clojure-indent 'u/for-all 1)
-(put-clojure-indent 'not-join 1)
-(put-clojure-indent 'r/with-let 1)
-(put-clojure-indent 'p/if-all-let 1)
-(put-clojure-indent 'test-seq/seq-tx 1)
-(put-clojure-indent 'or-join 1)
-(put 'cc/button 'clojure-indent-function 1)
-(put 'cc/modal-footer 'clojure-indent-function 1)
-(put 'cc/modal-body 'clojure-indent-function 1)
+(use-package cider
+  :ensure t
+  :defer t
+  :config
+  (setq nrepl-use-ssh-fallback-for-remote-hosts t
+        cider-use-tooltips nil
+        cider-eldoc-display-for-symbol-at-point nil
+        cider-merge-sessions 'host
+        cider-print-fn 'pprint)
 
-(setq cider-print-fn 'pprint)
-
-(setq clojure-align-binding-forms
-      '("let" "when-let" "when-some" "if-let" "if-some" "binding" "loop"
-        "doseq" "for" "with-open" "with-local-vars" "with-redefs"
-        "r/with-let" "p/if-all-let" "test-seq/seq-tx"))
+  (add-hook 'cider-repl-mode-hook
+            (lambda ()
+              (define-key cider-repl-mode-map (kbd "C-c C-o") 'cider-repl-clear-buffer))))
 #+END_SRC
 
 ** C/C++
@@ -1169,11 +1170,11 @@ Will bounce between matching parens just like % in vi
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :demand t)
-
-   (add-hook 'after-init-hook #'global-company-mode)
-   (setq company-minimum-prefix-length 1)
-   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+  :demand t
+  :hook (after-init . global-company-mode)
+  :bind ("TAB" . company-indent-or-complete-common)
+  :config
+  (setq company-minimum-prefix-length 1))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -1191,61 +1192,61 @@ Will bounce between matching parens just like % in vi
 
 (use-package lsp-ui
   :ensure t
-  :demand t)
+  :demand t
+  :config
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-find-definition)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
 
-(define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-find-definition)
-(define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
+  (setq lsp-log-io nil
+        lsp-idle-delay 0.500
+        lsp-diagnostics-provider :flycheck
+        lsp-headerline-breadcrumb-enable nil
+        lsp-ui-sideline-enable t
+        lsp-ui-sideline-show-code-actions nil
+        lsp-modeline-code-actions-enable nil
+        lsp-ui-doc-enable nil
+        lsp-signature-auto-activate nil
+        lsp-signature-render-documentation nil
+        lsp-ui-sideline-show-diagnostics t
+        lsp-enable-symbol-highlighting nil
+        lsp-eldoc-enable-hover nil)
 
-(setq lsp-log-io nil
-      lsp-idle-delay 0.500
-      lsp-diagnostics-provider :flycheck
-      lsp-headerline-breadcrumb-enable nil
-      lsp-ui-sideline-enable t
-      lsp-ui-sideline-show-code-actions nil
-      lsp-modeline-code-actions-enable nil
-      lsp-ui-doc-enable nil
-      lsp-signature-auto-activate nil
-      lsp-signature-render-documentation nil
-      lsp-ui-sideline-show-diagnostics t
-      lsp-enable-symbol-highlighting nil
-      lsp-eldoc-enable-hover nil)
+  (setq lsp-keymap-prefix "C-c l")
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
-(setq lsp-keymap-prefix "C-c l")
-(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (add-hook 'clojure-mode-hook #'lsp-deferred)
+  (add-hook 'python-mode-hook #'lsp-deferred)
 
-(add-hook 'clojure-mode-hook #'lsp-deferred)
-(add-hook 'python-mode-hook #'lsp-deferred)
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
+                    :major-modes '(terraform-mode)
+                    :server-id 'terraform-ls))
 
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection '("terraform-ls" "serve"))
-                  :major-modes '(terraform-mode)
-                  :server-id 'terraform-ls))
+  (add-hook 'terraform-mode-hook #'lsp-deferred)
 
-(add-hook 'terraform-mode-hook #'lsp-deferred)
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
+                    :major-modes '(python-mode)
+                    :remote? t
+                    :server-id 'pyls-remote))
 
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
-                  :major-modes '(python-mode)
-                  :remote? t
-                  :server-id 'pyls-remote))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                    :major-modes '(clojure-mode)
+                    :remote? t
+                    :server-id 'clojure-lsp-remote))
 
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
-                  :major-modes '(clojure-mode)
-                  :remote? t
-                  :server-id 'clojure-lsp-remote))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                    :major-modes '(clojurescript-mode)
+                    :remote? t
+                    :server-id 'clojurescript-lsp-remote))
 
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
-                  :major-modes '(clojurescript-mode)
-                  :remote? t
-                  :server-id 'clojurescript-lsp-remote))
-
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
-                  :major-modes '(clojurec-mode)
-                  :remote? t
-                  :server-id 'clojurescript-lsp-remote))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "clojure-lsp")
+                    :major-modes '(clojurec-mode)
+                    :remote? t
+                    :server-id 'clojurescript-lsp-remote)))
 #+END_SRC
 
 Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
@@ -1274,14 +1275,12 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :ensure t
-  :demand t)
-
-(setq projectile-completion-system 'helm
-      projectile-switch-project-action #'projectile-dired)
-
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-(projectile-mode +1)
+  :demand t
+  :config
+  (setq projectile-completion-system 'helm
+        projectile-switch-project-action #'projectile-dired)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
 #+END_SRC
 
 * Org-Mode
