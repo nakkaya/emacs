@@ -2036,6 +2036,13 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
 (define-key dired-mode-map (kbd "C-w") 'dired-up-directory)
 #+END_SRC
 
+#+begin_src emacs-lisp
+(use-package dired-sidebar
+  :ensure t
+  ;;:commands (dired-sidebar-toggle-sidebar)
+  )
+#+end_src
+
 ** Tramp
 
 #+BEGIN_SRC emacs-lisp
@@ -2473,6 +2480,10 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (set-face-attribute 'font-lock-variable-name-face nil :foreground "#b6b635")
   (set-face-attribute 'dired-directory nil :foreground "#7f7dca")
   (set-face-attribute 'markdown-header-face nil :foreground "#51afef")
+  (set-face-attribute 'markdown-code-face nil :background 'unspecified)
+  (set-face-attribute 'markdown-table-face nil :background 'unspecified)
+  (set-face-attribute 'markdown-inline-code-face nil :background 'unspecified)
+  (set-face-attribute 'markdown-pre-face nil :background 'unspecified)
   (set-face-attribute 'hl-line nil :background "#252535")
   (set-face-attribute 'highlight nil :background "#3a3a3a" :foreground nil)
   (set-face-attribute 'org-agenda-current-time nil :foreground "#5f87af"))

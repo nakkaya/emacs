@@ -12,6 +12,7 @@
         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
 (package-initialize)
+(package-refresh-contents)
 
 (require 'org)
 (require 'ob-tangle)
