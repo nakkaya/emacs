@@ -2047,6 +2047,18 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(defun my-dired-mark-region-prefix ()
+  "Mark Dired files whose names start with the active region's text."
+  (interactive)
+  (unless (use-region-p)
+    (user-error "No active region"))
+  (let* ((prefix (buffer-substring-no-properties (region-beginning) (region-end)))
+         (regexp (concat "^" (regexp-quote prefix))))
+    (deactivate-mark)
+    (dired-mark-files-regexp regexp)))
+#+end_src
+
 ** Tramp
 
 #+BEGIN_SRC emacs-lisp
