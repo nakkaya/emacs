@@ -393,7 +393,7 @@ to ensure it autosaves the latests version back.
 			   (name . "^Claude Agent.*")
 			   (name . "^acp-client-stderr.*")))
                ("Terminal" (or (mode . term-mode)
-			       (mode . vterm-mode)
+			       (mode . ghostel-mode)
 			       (mode . eat-mode)
 			       (name . "^*chatgpt.*")
                                (name . "^*eshell.*")
@@ -802,24 +802,22 @@ SSH at least,
 #+end_src
 
 ** Term
-*** VTerm
+*** Ghostel
 
 #+begin_src emacs-lisp :results silent
 (unless (eq system-type 'windows-nt)
   (when module-file-suffix
-    (setq vterm-always-compile-module t)
-
-    (use-package vterm :ensure t :demand t)
-    (setq vterm-shell "/bin/bash"
-	  vterm-timer-delay 0.01
-	  vterm-buffer-name-string "vterm %s")
-
-    (use-package eshell-vterm
-      :vc (:url "https://github.com/iostapyshyn/eshell-vterm" :rev :newest)
+    (use-package ghostel
+      :ensure t
       :demand t
-      :after eshell
+      :init
+      (setq ghostel-module-auto-install 'download)
+      :custom
+      (ghostel-shell "/bin/bash")
+      (ghostel-term "xterm-256color")
       :config
-      (eshell-vterm-mode))))
+      (require 'ghostel-eshell)
+      (ghostel-eshell-visual-command-mode))))
 #+end_src
 
 *** Term
@@ -830,24 +828,16 @@ SSH at least,
 (use-package eat
   :ensure t
   :defer t)
-
-(use-package multi-term
-  :ensure t
-  :demand t
-  :config
-  (setq multi-term-program "/bin/bash"))
 #+END_SRC
 
 ** Misc
 
 #+BEGIN_SRC emacs-lisp
-(defun na-new-term(term-or-shell)
-  "Open a new instance of eshell."
+(defun na-new-term (term-or-shell)
+  "Open a new instance of eshell, or ghostel with a prefix arg."
   (interactive "P")
   (if term-or-shell
-      (if (package-installed-p 'vterm)
-	  (vterm t)
-	(multi-term))
+      (ghostel t)
     (eshell 'N)))
 #+END_SRC
 
@@ -881,9 +871,9 @@ SSH at least,
           compilation-mode)
 	popper-group-function #'popper-group-by-directory)
 
-  (when (package-installed-p 'vterm)
-    (push "^\\*vterm\\*.*" popper-reference-buffers)
-    (push 'vterm-mode popper-reference-buffers))
+  (when (package-installed-p 'ghostel)
+    (push "^\\*ghostel.*" popper-reference-buffers)
+    (push 'ghostel-mode popper-reference-buffers))
 
   (setq popper-display-function
 	(lambda (b a)
@@ -2381,9 +2371,8 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (define-key term-raw-map (kbd "C-c C-c") #'term-send-raw)
   (define-key term-raw-map (kbd "C-y")     #'term-paste))
 
-(with-eval-after-load 'vterm
-  (na-term-common-keys vterm-mode-map)
-  (define-key vterm-mode-map (kbd "C-y") #'vterm-yank))
+(with-eval-after-load 'ghostel
+  (na-term-common-keys ghostel-semi-char-mode-map))
 
 (with-eval-after-load 'eat
   (customize-set-variable ;; has :set code
