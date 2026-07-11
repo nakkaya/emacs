@@ -1952,23 +1952,43 @@ then ghostel runs it.
 #+begin_src emacs-lisp :results silent
 (require 'transient)
 
+(defun agent-harness-deepseek-env ()
+  "Environment for running Claude Code against DeepSeek V4.
+Reads the API key from the DEEPSEEK_API_KEY environment variable (set
+it in ~/.netrc.el).  The `[1m]' model suffix unlocks the full 1M-token
+context.  See the `main/projects/cli/claude-code-with-deepseek' note."
+  (list "ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic"
+        (concat "ANTHROPIC_AUTH_TOKEN=" (or (getenv "DEEPSEEK_API_KEY") ""))
+        "ANTHROPIC_MODEL=deepseek-v4-pro[1m]"
+        "ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]"
+        "ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]"
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash"
+        "CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash"
+        "CLAUDE_CODE_EFFORT_LEVEL=max"))
+
 (defvar agent-harnesses
-  '(("claude"   "/opt/claude-code/bin/claude" "--dangerously-skip-permissions")
-    ("codex"    "codex"    "--dangerously-bypass-approvals-and-sandbox")
-    ("opencode" "opencode" nil))
+  '(("claude"          "/opt/claude-code/bin/claude" "--dangerously-skip-permissions" nil)
+    ("claude-deepseek" "/opt/claude-code/bin/claude" "--dangerously-skip-permissions" agent-harness-deepseek-env)
+    ("codex"           "codex"    "--dangerously-bypass-approvals-and-sandbox" nil)
+    ("opencode"        "opencode" nil nil))
   "Agent harnesses launchable in a ghostel terminal.
-Each entry is (LABEL PROGRAM SKIP-SWITCH); SKIP-SWITCH is appended to
-the command line when launched with skip-permissions enabled.")
+Each entry is (LABEL PROGRAM SKIP-SWITCH ENV-FN).  SKIP-SWITCH is
+appended to the command line when skip-permissions is enabled.  ENV-FN
+is nil or a function returning a list of \"KEY=VALUE\" strings prepended
+to the process environment for that launch only.")
 
 (defun agent-harness--start (label)
   "Launch harness LABEL in a new ghostel terminal.
-Appends the harness's skip-permissions switch when the menu's
-\"Skip permissions\" toggle is on."
-  (pcase-let* ((`(,name ,program ,switch) (assoc label agent-harnesses))
+Appends the harness's skip-permissions switch when the menu's \"Skip
+permissions\" toggle is on, and applies its per-harness environment
+\(e.g. DeepSeek) for that launch only via `ghostel-environment'."
+  (pcase-let* ((`(,name ,program ,switch ,env-fn) (assoc label agent-harnesses))
                (skip (and (member "--skip-permissions"
                                   (transient-args 'agent-harness-menu))
                           switch))
                (args (and skip (list switch)))
+               (ghostel-environment (append (and env-fn (funcall env-fn))
+                                            ghostel-environment))
                (buffer (pop-to-buffer (generate-new-buffer (format "*%s*" name)))))
     (ghostel-exec buffer program args)))
 
