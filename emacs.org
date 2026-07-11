@@ -2371,8 +2371,19 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
   (define-key term-raw-map (kbd "C-c C-c") #'term-send-raw)
   (define-key term-raw-map (kbd "C-y")     #'term-paste))
 
+(defun na-ghostel-send-escape ()
+  "Send ESC to the ghostel terminal.
+A lone Escape key is ambiguous with Emacs's Meta prefix (byte 27
+starts every function-key escape sequence), so TUI programs like
+Claude Code never reliably receive it.  Bind a dedicated chord that
+sends a proper, mode-aware escape instead."
+  (interactive)
+  (setq quit-flag nil)
+  (ghostel-send-key "escape"))
+
 (with-eval-after-load 'ghostel
-  (na-term-common-keys ghostel-semi-char-mode-map))
+  (na-term-common-keys ghostel-semi-char-mode-map)
+  (define-key ghostel-semi-char-mode-map (kbd "C-g") #'na-ghostel-send-escape))
 
 (with-eval-after-load 'eat
   (customize-set-variable ;; has :set code
