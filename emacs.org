@@ -1943,38 +1943,57 @@ Fix for - https://github.com/emacs-lsp/lsp-ui/issues/607
     (switch-to-buffer buffer-name)))
 #+end_src
 
-** claudemacs
+** agent-harness
+
+Launch an agent harness in a ghostel terminal.  Modeled after
+claudemacs: pick the harness and whether to skip permission prompts,
+then ghostel runs it.
 
 #+begin_src emacs-lisp :results silent
-(use-package claudemacs
-  :vc (:url "https://github.com/cpoile/claudemacs" :rev :newest)
-  :custom
-  (claudemacs-program "/opt/claude-code/bin/claude")
-  (claudemacs-notify-on-await nil)
-  :bind
-  ("C-c t" . claudemacs-transient-menu)
-  :config
-  ;; Set a big buffer so we can search our history
-  (with-eval-after-load 'eat
-    (setq eat-term-scrollback-size 400000)
+(require 'transient)
 
-    (customize-set-variable
-     'eat-semi-char-non-bound-keys
-     (append
-      (list [29]) ;; C-] as character code 29
-      eat-semi-char-non-bound-keys)))
+(defvar agent-harnesses
+  '(("claude"   "/opt/claude-code/bin/claude" "--dangerously-skip-permissions")
+    ("codex"    "codex"    "--dangerously-bypass-approvals-and-sandbox")
+    ("opencode" "opencode" nil))
+  "Agent harnesses launchable in a ghostel terminal.
+Each entry is (LABEL PROGRAM SKIP-SWITCH); SKIP-SWITCH is appended to
+the command line when launched with skip-permissions enabled.")
 
-  (add-to-list 'display-buffer-alist
-               '("^\\*claudemacs"
-                 (display-buffer-same-window)))
+(defun agent-harness--start (label)
+  "Launch harness LABEL in a new ghostel terminal.
+Appends the harness's skip-permissions switch when the menu's
+\"Skip permissions\" toggle is on."
+  (pcase-let* ((`(,name ,program ,switch) (assoc label agent-harnesses))
+               (skip (and (member "--skip-permissions"
+                                  (transient-args 'agent-harness-menu))
+                          switch))
+               (args (and skip (list switch)))
+               (buffer (pop-to-buffer (generate-new-buffer (format "*%s*" name)))))
+    (ghostel-exec buffer program args)))
 
-  ;; Disable the bell handler
-  (defun claudemacs-disable-setup-bell-handler ()
-    "Disabled version of claudemacs-setup-bell-handler."
-    (interactive))
+(defun agent-harness--suffixes (_)
+  "Build `agent-harness-menu' harness suffixes from `agent-harnesses'."
+  (let ((i 0))
+    (mapcar (lambda (entry)
+              (setq i (1+ i))
+              (let ((label (car entry)))
+                (transient-parse-suffix
+                 'agent-harness-menu
+                 (list (number-to-string i)
+                       label
+                       `(lambda () (interactive) (agent-harness--start ,label))))))
+            agent-harnesses)))
 
-  (advice-add 'claudemacs-setup-bell-handler
-	      :override #'claudemacs-disable-setup-bell-handler))
+(transient-define-prefix agent-harness-menu ()
+  "Launch an agent harness in a ghostel terminal."
+  ["Options"
+   ("-s" "Skip permissions" "--skip-permissions")]
+  ["Harness"
+   :class transient-column
+   :setup-children agent-harness--suffixes])
+
+(global-set-key (kbd "C-c t") #'agent-harness-menu)
 #+end_src
 
 ** agent-shell
