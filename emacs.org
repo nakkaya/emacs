@@ -1024,7 +1024,8 @@ Will bounce between matching parens just like % in vi
   :ensure t
   :defer t
   :custom
-  (markdown-hide-urls t))
+  (markdown-hide-urls t)
+  (markdown-hide-markup t))
 
 (use-package jsonnet-mode
   :ensure t
@@ -1970,7 +1971,7 @@ context.  See the `main/projects/cli/claude-code-with-deepseek' note."
   '(("claude"          "/opt/claude-code/bin/claude" "--dangerously-skip-permissions" nil)
     ("claude-deepseek" "/opt/claude-code/bin/claude" "--dangerously-skip-permissions" agent-harness-deepseek-env)
     ("codex"           "codex"    "--dangerously-bypass-approvals-and-sandbox" nil)
-    ("opencode"        "opencode" nil nil))
+    ("opencode"        "/opt/opencode/bin/opencode" nil nil))
   "Agent harnesses launchable in a ghostel terminal.
 Each entry is (LABEL PROGRAM SKIP-SWITCH ENV-FN).  SKIP-SWITCH is
 appended to the command line when skip-permissions is enabled.  ENV-FN
