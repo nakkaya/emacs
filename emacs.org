@@ -2133,6 +2133,76 @@ permissions\" toggle is on, and applies its per-harness environment
   :ensure t
   :demand t)
 
+(defvar-local my/forge-origin-window nil
+  "Window a Forge topic buffer was opened from.")
+
+(defun my/magit-display-buffer (buffer)
+  "Let `display-buffer-alist' handle Forge topics; Magit does the rest."
+  (if (with-current-buffer buffer (derived-mode-p 'forge-topic-mode))
+      (let ((origin (selected-window)))
+        (with-current-buffer buffer
+          (setq my/forge-origin-window origin))
+        (display-buffer buffer))
+    (magit-display-buffer-traditional buffer)))
+
+(defun my/forge-merge-pullreq ()
+  "Merge the current pull-request through the API, using the merge method.
+Unlike `forge-merge' this asks nothing beyond confirmation, and it
+leaves local branches alone: Forge\'s own callback creates a local
+branch for the pull-request only to check out its upstream, pull and
+then delete it again.  GitHub only."
+  (interactive)
+  (let* ((pullreq (forge-current-pullreq t))
+         (repo (forge-get-repository pullreq))
+         (hash (and-let* ((ref (forge--pullreq-ref pullreq)))
+                 (magit-commit-oid ref t))))
+    (when (y-or-n-p (format "Merge %s using the API? " (oref pullreq slug)))
+      (forge-mutate pullreq mergePullRequest
+        ((pullRequestId (oref pullreq their-id))
+         (mergeMethod "MERGE")
+         (and hash (expectedHeadOid hash)))
+        :callback (lambda (_)
+                    (forge--pull-topic repo pullreq)
+                    (message "Merged %s" (oref pullreq slug)))))))
+
+(defun my/forge-bury-topic (&optional kill-buffer)
+  "Bury the Forge topic buffer, then go back to the window it came from.
+KILL-BUFFER is passed on to `magit-mode-bury-buffer'."
+  (interactive "P")
+  (let ((origin my/forge-origin-window))
+    (magit-mode-bury-buffer kill-buffer)
+    (when (window-live-p origin)
+      (select-window origin))))
+
+(defun my/display-buffer-right-if-wide (buffer alist)
+  "Show BUFFER in a window beside the selected one, only when the frame is wide.
+Reuse the window to the right or left if there is one, otherwise split."
+  (when (>= (frame-width) 200)
+    (if-let* ((win (or (window-in-direction 'right)
+                       (window-in-direction 'left))))
+        (with-selected-window win
+          (display-buffer-same-window buffer alist))
+      (display-buffer-in-direction
+       buffer (append alist '((direction . right)))))))
+
+(use-package forge
+  :after magit
+  :custom (magit-display-buffer-function #'my/magit-display-buffer)
+  :config
+  ;; The `state' filter is ignored while `active' is t, which lets merged
+  ;; pull-requests that are still unread or pending into the list.
+  (oset forge-status-buffer-default-topic-filters active nil)
+  (add-to-list 'display-buffer-alist
+               '((derived-mode . forge-topic-mode)
+                 (my/display-buffer-right-if-wide
+                  display-buffer-same-window)))
+  (keymap-set forge-topic-mode-map "#" #'na-magit-aux-commands)
+  (keymap-set forge-topic-mode-map "C-c C-d" #'na-magit-diff-with-difftastic)
+  (keymap-set forge-topic-mode-map "q" #'my/forge-bury-topic)
+  (transient-append-suffix 'forge-topic-menu "M"
+    '("A" "merge via api" my/forge-merge-pullreq
+      :if forge-current-pullreq :transient nil)))
+
 (use-package magit-todos
   :ensure t
   :after magit
@@ -2249,13 +2319,66 @@ permissions\" toggle is on, and applies its per-harness environment
   :lighter " difft"
   :keymap na-magit-difftastic-mode-map)
 
+(defun na-magit--difftastic-pad-section (beg end target width)
+  "Pad the left column of the difftastic section between BEG and END.
+TARGET is the column the right column should start at, WIDTH the width
+of the window.  Every line is padded by the same amount, so difftastic's
+own alignment is preserved, and the padding is capped so that no line
+grows past WIDTH."
+  (let ((end (copy-marker end))
+        (cols nil)
+        (longest 0))
+    (save-excursion
+      (goto-char beg)
+      (while (< (point) end)
+        (let ((eol (line-end-position)))
+          (setq longest (max longest (- eol (point))))
+          (when (re-search-forward "  +\\([0-9]+\\) " eol t)
+            (push (- (match-beginning 1) (line-beginning-position)) cols)))
+        (forward-line 1)))
+    (when cols
+      ;; Column shared by most lines; a stray match inside content loses.
+      (let* ((split (car (seq-reduce
+                          (lambda (best col)
+                            (let ((n (seq-count (lambda (c) (= c col)) cols)))
+                              (if (> n (cdr best)) (cons col n) best)))
+                          cols (cons (car cols) 0))))
+             (pad (max 0 (min (- target split) (- width longest)))))
+        (when (> pad 0)
+          (save-excursion
+            (goto-char beg)
+            (while (< (point) end)
+              (when (> (- (line-end-position) (point)) split)
+                (forward-char split)
+                ;; The line-number gutter is right-aligned, so SPLIT can land
+                ;; inside a wider number.  Back up into the padding first.
+                (skip-chars-backward "^ " (line-beginning-position))
+                (insert (make-string pad ?\s)))
+              (forward-line 1))))))
+    (set-marker end nil)))
+
+(defun na-magit--difftastic-center (width)
+  "Pad difftastic output in the current buffer to split it near WIDTH/2.
+Difftastic sizes its left column to fit the content, which leaves the
+right half of a wide window unused."
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      (if (looking-at-p "^[ \t]*$")
+          (forward-line 1)
+        (let ((beg (point)))
+          (while (and (not (eobp)) (not (looking-at-p "^[ \t]*$")))
+            (forward-line 1))
+          (na-magit--difftastic-pad-section beg (point) (/ width 2) width))))))
+
 (defun na-magit--with-difftastic (buffer command)
   "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
-  (let ((process-environment
-         (cons (concat "GIT_EXTERNAL_DIFF=difft --display side-by-side-show-both --width="
-                       (number-to-string (frame-width)))
-               process-environment))
-        (wconf (current-window-configuration)))
+  (let* ((width (frame-width))
+         (process-environment
+          (cons (concat "GIT_EXTERNAL_DIFF=difft --display side-by-side-show-both --width="
+                        (number-to-string width))
+                process-environment))
+         (wconf (current-window-configuration)))
     (with-current-buffer buffer
       (setq buffer-read-only nil)
       (setq na-magit--saved-wconf wconf)
@@ -2270,6 +2393,7 @@ permissions\" toggle is on, and applies its per-harness environment
                    (with-current-buffer (process-buffer proc)
                      (goto-char (point-min))
                      (ansi-color-apply-on-region (point-min) (point-max))
+                     (na-magit--difftastic-center width)
                      (setq buffer-read-only t)
                      (view-mode)
                      (na-magit-difftastic-mode 1)
@@ -2292,6 +2416,14 @@ permissions\" toggle is on, and applies its per-harness environment
      (get-buffer-create (concat "*git show difftastic " rev "*"))
      (list "git" "--no-pager" "show" "--ext-diff" rev))))
 
+(defun na-forge--pullreq-range (pullreq)
+  "Return the \"base...head\" range for PULLREQ."
+  (or (forge--pullreq-range pullreq t)
+      (and-let* ((branch (forge--pullreq-branch-active pullreq)))
+        (concat (forge--get-remote) "/" (oref pullreq base-ref) "..." branch))
+      (user-error "No local ref for %s; run `forge-pull' first"
+                  (oref pullreq slug))))
+
 (defun na-magit-diff-with-difftastic (arg)
   "Show the result of \"git diff ARG\" with difftastic."
   (interactive
@@ -2299,6 +2431,8 @@ permissions\" toggle is on, and applies its per-harness environment
           (when (boundp 'range) range)
           (and current-prefix-arg
                (magit-diff-read-range-or-commit "Range"))
+          (and (derived-mode-p 'forge-pullreq-mode)
+               (na-forge--pullreq-range forge-buffer-topic))
           (pcase (magit-diff--dwim)
             ('unmerged (error "unmerged is not yet implemented"))
             ('unstaged nil)
