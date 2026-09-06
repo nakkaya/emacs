@@ -2247,12 +2247,15 @@ then delete it again.  GitHub only."
                     (forge--pull-topic repo pullreq)
                     (message "Merged %s" (oref pullreq slug)))))))
 
-(defun my/forge-bury-topic (&optional kill-buffer)
-  "Bury the Forge topic buffer, then go back to the window it came from.
-KILL-BUFFER is passed on to `magit-mode-bury-buffer'."
+(defun my/forge-bury-topic (&optional arg)
+  "Kill the Forge topic buffer, then go back to the window it came from.
+Topic buffers pile up otherwise.  With a prefix argument ARG bury the
+buffer instead, and with two kill every Magit buffer of the repository,
+as `magit-mode-bury-buffer' does."
   (interactive "P")
   (let ((origin my/forge-origin-window))
-    (magit-mode-bury-buffer kill-buffer)
+    (magit-mode-bury-buffer
+     (if (>= (prefix-numeric-value arg) 16) arg (not arg)))
     (when (window-live-p origin)
       (select-window origin))))
 
