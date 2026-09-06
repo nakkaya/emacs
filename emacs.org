@@ -2145,6 +2145,88 @@ permissions\" toggle is on, and applies its per-harness environment
         (display-buffer buffer))
     (magit-display-buffer-traditional buffer)))
 
+(defvar na-forge--ci-query
+  "query($owner:String!,$name:String!){\
+ repository(owner:$owner,name:$name){\
+ pullRequests(states:OPEN,first:100){\
+ nodes{ number commits(last:1){ nodes{ commit{ statusCheckRollup{ state } } } } } } } }"
+  "Ask for the CI state of the head commit of every open pull-request.")
+
+(defvar na-forge--ci-state (make-hash-table :test 'eql)
+  "Map of pull-request number to CI state, for `na-forge--ci-repo'.")
+
+(defvar na-forge--ci-repo nil
+  "Id of the repository `na-forge--ci-state' describes.")
+
+(defun na-forge-pull-ci-status ()
+  "Fetch the CI state of every open pull-request, then refresh the buffer.
+Forge tracks no CI status of its own, so ask the forge directly.  The
+states are shown in the margin, in front of each topic\'s age."
+  (interactive)
+  (let ((repo (forge-get-repository :tracked))
+        (buffer (current-buffer)))
+    (ghub-request "POST" "/graphql" nil
+      :payload `((query . ,na-forge--ci-query)
+                 (variables . ((owner . ,(oref repo owner))
+                               (name  . ,(oref repo name)))))
+      :auth 'forge :host (oref repo apihost) :forge 'github
+      :callback
+      (lambda (data &rest _)
+        (clrhash na-forge--ci-state)
+        (setq na-forge--ci-repo (oref repo id))
+        (let-alist data
+          (dolist (node .data.repository.pullRequests.nodes)
+            (let-alist node
+              (puthash .number
+                       (alist-get 'state
+                                  (alist-get 'statusCheckRollup
+                                             (alist-get 'commit
+                                                        (car (alist-get 'nodes .commits)))))
+                       na-forge--ci-state))))
+        (message "CI status for %s pull-requests" (hash-table-count na-forge--ci-state))
+        (when (buffer-live-p buffer)
+          (with-current-buffer buffer (magit-refresh)))))))
+
+(defun na-forge--ci-glyph (topic)
+  "Return a margin glyph for TOPIC\'s CI state, or nil when unknown."
+  (and (forge-pullreq-p topic)
+       (equal (oref topic repository) na-forge--ci-repo)
+       (pcase (gethash (oref topic number) na-forge--ci-state)
+         ("SUCCESS"              (magit--propertize-face "\u2713 " 'success))
+         ((or "FAILURE" "ERROR") (magit--propertize-face "\u2717 " 'error))
+         ("PENDING"              (magit--propertize-face "\u00b7 " 'warning))
+         (_ nil))))
+
+(defvar na-forge--ci-topic nil
+  "Topic whose line is currently being inserted.")
+
+(defun na-forge--ci-insert-topic (fn topic &optional width)
+  "Advice for `forge--insert-topic\', recording TOPIC for the margin."
+  (let ((na-forge--ci-topic topic))
+    (funcall fn topic width)))
+
+(defun na-forge--ci-margin (fn &rest args)
+  "Advice for `magit-make-margin-overlay\', prefixing the CI glyph.
+Trim as much from the end as the glyph adds, so that the margin keeps
+its width and the age stays visible."
+  (if-let* ((topic na-forge--ci-topic)
+            (glyph (na-forge--ci-glyph topic))
+            (string (car args)))
+      (apply fn
+             (concat glyph (substring string 0 (max 0 (- (length string)
+                                                         (length glyph)))))
+             (cdr args))
+    (apply fn args)))
+
+(defun na-forge--pull-ci-status (&rest _)
+  "Fetch CI status as part of `forge-pull\', which pulls everything else."
+  (when-let* ((repo (forge-get-repository :tracked?))
+              ((forge--childp repo 'forge-github-repository)))
+    (na-forge-pull-ci-status)))
+
+(advice-add 'forge--insert-topic :around #'na-forge--ci-insert-topic)
+(advice-add 'magit-make-margin-overlay :around #'na-forge--ci-margin)
+
 (defun my/forge-merge-pullreq ()
   "Merge the current pull-request through the API, using the merge method.
 Unlike `forge-merge' this asks nothing beyond confirmation, and it
@@ -2201,7 +2283,8 @@ Reuse the window to the right or left if there is one, otherwise split."
   (keymap-set forge-topic-mode-map "q" #'my/forge-bury-topic)
   (transient-append-suffix 'forge-topic-menu "M"
     '("A" "merge via api" my/forge-merge-pullreq
-      :if forge-current-pullreq :transient nil)))
+      :if forge-current-pullreq :transient nil))
+  (advice-add 'forge-pull :after #'na-forge--pull-ci-status))
 
 (use-package magit-todos
   :ensure t
@@ -2221,6 +2304,10 @@ Reuse the window to the right or left if there is one, otherwise split."
       magit-save-repository-buffers 'dontask
       magit-ediff-dwim-show-on-hunks t
       magit-diff-visit-prefer-worktree t)
+
+;; Show the margin in status buffers; Forge already puts each topic's age
+;; there.  (INIT STYLE WIDTH AUTHOR AUTHOR-WIDTH)
+(setq magit-status-margin '(t age magit-log-margin-width nil 18))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2319,6 +2406,17 @@ Reuse the window to the right or left if there is one, otherwise split."
   :lighter " difft"
   :keymap na-magit-difftastic-mode-map)
 
+(defun na-magit--difftastic-right-column (eol)
+  "Find the right column\'s line-number gutter on the current line.
+Leave the match data of the gutter\'s number, or return nil.  The left
+column has a gutter too, and it is right-aligned, so on a file with
+three-digit line numbers it also starts with two spaces; skip it first
+or it is mistaken for the right column."
+  (goto-char (line-beginning-position))
+  (when (looking-at "[ \t]*\\(?:[0-9]+\\|\\.+\\) ")
+    (goto-char (match-end 0)))
+  (re-search-forward "  +\\([0-9]+\\) " eol t))
+
 (defun na-magit--difftastic-pad-section (beg end target width)
   "Pad the left column of the difftastic section between BEG and END.
 TARGET is the column the right column should start at, WIDTH the width
@@ -2330,10 +2428,11 @@ grows past WIDTH."
         (longest 0))
     (save-excursion
       (goto-char beg)
+      (forward-line 1)                  ; the first line is difftastic's header
       (while (< (point) end)
         (let ((eol (line-end-position)))
           (setq longest (max longest (- eol (point))))
-          (when (re-search-forward "  +\\([0-9]+\\) " eol t)
+          (when (na-magit--difftastic-right-column eol)
             (push (- (match-beginning 1) (line-beginning-position)) cols)))
         (forward-line 1)))
     (when cols
@@ -2347,13 +2446,20 @@ grows past WIDTH."
         (when (> pad 0)
           (save-excursion
             (goto-char beg)
+            (forward-line 1)
             (while (< (point) end)
-              (when (> (- (line-end-position) (point)) split)
-                (forward-char split)
-                ;; The line-number gutter is right-aligned, so SPLIT can land
-                ;; inside a wider number.  Back up into the padding first.
-                (skip-chars-backward "^ " (line-beginning-position))
-                (insert (make-string pad ?\s)))
+              (let ((bol (point))
+                    (eol (line-end-position)))
+                ;; Pad every line that reaches into the right column, which
+                ;; includes added lines, whose left column is blank.  Lines
+                ;; with no right column end within the left one.
+                (when (and (> (- eol bol) split)
+                           (eq (char-after (+ bol split -1)) ?\s))
+                  (goto-char (+ bol split))
+                  ;; The line-number gutter is right-aligned, so SPLIT can
+                  ;; land inside a wider number.  Back into the padding.
+                  (skip-chars-backward "^ " bol)
+                  (insert (make-string pad ?\s))))
               (forward-line 1))))))
     (set-marker end nil)))
 
