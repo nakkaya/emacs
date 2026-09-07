@@ -2259,10 +2259,15 @@ as `magit-mode-bury-buffer' does."
     (when (window-live-p origin)
       (select-window origin))))
 
+(defvar my/forge-min-window-width 75
+  "Narrowest a window may become when splitting to show a Forge topic.
+The vertical divider costs a column, so the frame has to be twice this
+wide plus one for a split to happen.")
+
 (defun my/display-buffer-right-if-wide (buffer alist)
-  "Show BUFFER in a window beside the selected one, only when the frame is wide.
+  "Show BUFFER in a window beside the selected one, when two of them fit.
 Reuse the window to the right or left if there is one, otherwise split."
-  (when (>= (frame-width) 200)
+  (when (>= (frame-width) (1+ (* 2 my/forge-min-window-width)))
     (if-let* ((win (or (window-in-direction 'right)
                        (window-in-direction 'left))))
         (with-selected-window win
@@ -2874,6 +2879,7 @@ sends a proper, mode-aware escape instead."
 	   (set-face-background 'magit-diff-hunk-heading bg frame)
 	   (set-face-foreground 'magit-diff-hunk-heading heading-fg frame)
 	   (set-face-background 'magit-diff-hunk-heading-highlight bg frame)
+	   (set-face-foreground 'magit-diff-hunk-heading-highlight heading-fg frame)
 	   (set-face-background 'magit-diff-lines-heading bg frame)
 	   (set-face-foreground 'magit-diff-lines-heading heading-fg frame)
 
