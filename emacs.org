@@ -2316,6 +2316,17 @@ Reuse the window to the right or left if there is one, otherwise split."
 ;; Show the margin in status buffers; Forge already puts each topic's age
 ;; there.  (INIT STYLE WIDTH AUTHOR AUTHOR-WIDTH)
 (setq magit-status-margin '(t age magit-log-margin-width nil 18))
+
+(defun na-magit--mouse-keep-point (fn &rest args)
+  "Advice for `magit-mouse-set-point': leave point on the line clicked.
+`magit-hunk-set-window-start' scrolls a hunk that is taller than the
+window up to the top, which pushes the clicked line out of view, and
+Emacs then drags point along to keep it visible."
+  (let ((magit-section-movement-hook
+         (remq 'magit-hunk-set-window-start magit-section-movement-hook)))
+    (apply fn args)))
+
+(advice-add 'magit-mouse-set-point :around #'na-magit--mouse-keep-point)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

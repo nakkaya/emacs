@@ -247,6 +247,13 @@ RUN python3 -m venv /opt/invoke && \
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh && \
     ln -s /opt/uv/uv /usr/bin/uv
 
+# claude-swap
+#
+RUN mkdir -p /opt/claude-swap && \
+    chown $USER:$USER /opt/claude-swap && \
+    su - $USER -c 'UV_TOOL_DIR=/opt/claude-swap/tools UV_TOOL_BIN_DIR=/opt/claude-swap/bin uv tool install claude-swap==0.26.0' && \
+    echo "export PATH=\"\$PATH:/opt/claude-swap/bin\"" >> /home/$USER/.bashrc
+
 # Miniconda
 #
 RUN ARCH="$(dpkg --print-architecture)"; \
@@ -394,7 +401,7 @@ RUN git clone --depth=1 https://github.com/nakkaya/emacs /opt/emacsd/conf && \
     echo "(load-file \"/opt/emacsd/conf/init.el\")" >> /home/$USER/.emacs && \
     chown -R $USER:$USER /opt/emacsd
 
-RUN echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/conda/bin:/opt/python-lsp-server/bin:/opt/skypilot/bin:/opt/ansible/bin:/opt/invoke/bin:"' >> /etc/environment
+RUN echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/conda/bin:/opt/python-lsp-server/bin:/opt/skypilot/bin:/opt/ansible/bin:/opt/invoke/bin:/opt/claude-swap/bin:"' >> /etc/environment
 
 COPY --chmod=755 resources/bin/ob-tangle.sh /usr/bin/ob-tangle
 COPY --chmod=755 resources/bin/bootrc /usr/bin/bootrc
