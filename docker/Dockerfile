@@ -249,9 +249,10 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/opt/uv" sh
 
 # claude-swap
 #
-RUN mkdir -p /opt/claude-swap && \
-    chown $USER:$USER /opt/claude-swap && \
-    su - $USER -c 'UV_TOOL_DIR=/opt/claude-swap/tools UV_TOOL_BIN_DIR=/opt/claude-swap/bin uv tool install claude-swap==0.26.0' && \
+RUN UV_PYTHON_INSTALL_DIR=/opt/claude-swap/python \
+    UV_TOOL_DIR=/opt/claude-swap/tools \
+    UV_TOOL_BIN_DIR=/opt/claude-swap/bin \
+    uv tool install claude-swap==0.26.0 --no-cache && \
     echo "export PATH=\"\$PATH:/opt/claude-swap/bin\"" >> /home/$USER/.bashrc
 
 # Miniconda
