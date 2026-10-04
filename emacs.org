@@ -1971,6 +1971,28 @@ permissions\" toggle is on, and applies its per-harness environment
     (openclaw)))
 #+end_src
 
+** Codex
+
+#+begin_src emacs-lisp :results silent
+(defvar codex-directories '("~/codex/" "/storage/codex/" "/source/codex/")
+  "Candidate codex directories; the first existing one is used.")
+
+(defun codex ()
+  "Switch to the codex perspective, creating its layout on first use."
+  (interactive)
+  (if-let* ((dir (seq-find #'file-directory-p codex-directories)))
+      (let ((dir (file-name-as-directory (expand-file-name dir)))
+            (exists (persp-with-name-exists-p "codex")))
+        (na-persp-frame-switch "codex")
+        (unless exists
+          (magit-status-setup-buffer dir)
+          (delete-other-windows)
+          (dired-sidebar-show-sidebar
+           (dired-sidebar-get-or-create-buffer dir))))
+    (message "No codex directory found: %s"
+             (string-join codex-directories ", "))))
+#+end_src
+
 * File Management
 ** Dired
 
