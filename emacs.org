@@ -1964,6 +1964,7 @@ permissions\" toggle is on, and applies its per-harness environment
 
 (use-package openclaw
   :vc (:url "git@github.com:nakkaya/openclaw.el.git" :rev :newest)
+  :hook (openclaw-chat-mode . (lambda () (company-mode -1)))
   :config
   (defun jarvis ()
     (interactive)
