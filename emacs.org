@@ -1023,6 +1023,7 @@ Will bounce between matching parens just like % in vi
 (use-package markdown-mode
   :ensure t
   :defer t
+  :hook (markdown-mode . (lambda () (setq truncate-lines t)))
   :custom
   (markdown-hide-urls t)
   (markdown-hide-markup t))
