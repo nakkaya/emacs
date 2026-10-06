@@ -1970,7 +1970,27 @@ permissions\" toggle is on, and applies its per-harness environment
   (defun jarvis ()
     (interactive)
     (na-persp-frame-switch "jarvis")
-    (openclaw)))
+    (openclaw))
+
+  (defun na-openclaw-magit ()
+    "Open `magit-status' where this chat's remote Claude session works.
+The host is the session's claude-remote model (an ssh alias); the
+directory is the one the claude-remote shim keeps for the session in
+its cwd.json, read with kubectl."
+    (interactive)
+    (let* ((session (openclaw--chat-session))
+           (host (and (equal (plist-get session :modelProvider) "claude-remote")
+                      (plist-get session :model))))
+      (unless host (user-error "Not a remote Claude session"))
+      (let* ((dirs (with-temp-buffer
+                     (call-process "kubectl" nil t nil
+                                   "-n" "nakkaya" "exec" "deploy/openclaw"
+                                   "-c" "claude-remote" "--" "cat"
+                                   "/home/node/.openclaw/claude-remote/cwd.json")
+                     (json-parse-string (buffer-string))))
+             (dir (or (gethash (format "oc:%s|%s" openclaw--session-key host) dirs)
+                      (user-error "No directory recorded for this session"))))
+        (magit-status (format "/ssh:%s:%s" host dir))))))
 #+end_src
 
 ** Codex
