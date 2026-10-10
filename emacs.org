@@ -1961,6 +1961,11 @@ permissions\" toggle is on, and applies its per-harness environment
 ** OpenClaw
 
 #+begin_src emacs-lisp
+;; (dolist (map '(openclaw-sessions-mode-map openclaw-home-mode-map
+;;                openclaw-chat-mode-map openclaw-fold-map
+;;                openclaw--header-permission-map openclaw--header-model-map))
+;;   (makunbound map))
+
 ;; (load-file "../openclaw.el/openclaw.el")
 
 (use-package openclaw
