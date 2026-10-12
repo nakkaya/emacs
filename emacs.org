@@ -2053,6 +2053,14 @@ its cwd.json, read with kubectl."
 #+END_SRC
 
 #+begin_src emacs-lisp
+(defun na-image-dired-newest-first (dir)
+  "Sort DIR's dired buffer newest first; thumbnails follow its order."
+  (dired dir (concat dired-listing-switches " -t")))
+
+(advice-add 'image-dired-show-all-from-dir :before #'na-image-dired-newest-first)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package dired-sidebar
   :ensure t
   ;;:commands (dired-sidebar-toggle-sidebar)
@@ -2479,10 +2487,14 @@ right half of a wide window unused."
           (na-magit--difftastic-pad-section beg (point) (/ width 2) width))))))
 
 (defun na-magit--with-difftastic (buffer command)
-  "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
+  "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER.
+COMMAND runs on the remote host when `default-directory' is remote."
+  (unless (executable-find "difft" t)
+    (user-error "difft not found on %s"
+                (or (file-remote-p default-directory) "this host")))
   (let* ((width (frame-width))
          (process-environment
-          (cons (concat "GIT_EXTERNAL_DIFF=difft --display side-by-side-show-both --width="
+          (cons (concat "GIT_EXTERNAL_DIFF=difft --display side-by-side-show-both --color always --width="
                         (number-to-string width))
                 process-environment))
          (wconf (current-window-configuration)))
@@ -2494,6 +2506,7 @@ right half of a wide window unused."
      :name (buffer-name buffer)
      :buffer buffer
      :command command
+     :file-handler t
      :noquery t
      :sentinel (lambda (proc _event)
                  (when (eq (process-status proc) 'exit)
@@ -2502,7 +2515,6 @@ right half of a wide window unused."
                      (ansi-color-apply-on-region (point-min) (point-max))
                      (na-magit--difftastic-center width)
                      (setq buffer-read-only t)
-                     (view-mode)
                      (na-magit-difftastic-mode 1)
                      (goto-char (point-min))
                      (pop-to-buffer (current-buffer)
