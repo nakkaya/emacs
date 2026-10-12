@@ -1995,7 +1995,7 @@ its cwd.json, read with kubectl."
                      (json-parse-string (buffer-string))))
              (dir (or (gethash (format "oc:%s|%s" openclaw--session-key host) dirs)
                       (user-error "No directory recorded for this session"))))
-        (magit-status (format "/ssh:%s:%s" host dir))))))
+        (magit-status (format "/rpc:%s:%s" host dir))))))
 #+end_src
 
 ** Codex
@@ -2084,12 +2084,10 @@ its cwd.json, read with kubectl."
 #+BEGIN_SRC emacs-lisp
 (require 'tramp)
 
-(setq tramp-default-method "ssh"
+(setq tramp-default-method "rpc"
       tramp-ssh-controlmaster-options ""
-      remote-file-name-inhibit-cache nil
       remote-file-name-inhibit-locks t
-      tramp-verbose 1
-      tramp-completion-reread-directory-timeout nil)
+      tramp-verbose 1)
 
 (when (eq system-type 'windows-nt)
   ;; Add the '-tt' flag to the login arguments for "ssh" ONLY
@@ -2112,6 +2110,83 @@ its cwd.json, read with kubectl."
         (tramp-set-completion-function
          method '((tramp-parse-sconfig "~/.ssh/config"))))
       '("rsync" "scp" "sftp" "ssh"))
+#+END_SRC
+
+*** tramp-rpc
+
+#+BEGIN_SRC emacs-lisp
+(use-package tramp-rpc
+  ;; Pin a release: its server binary is downloaded prebuilt.  Newer
+  ;; commits can need a server only a local Rust toolchain can build.
+  :vc (:url "https://github.com/ArthurHeymans/emacs-tramp-rpc"
+       :rev "v0.15.0"
+       :lisp-dir "lisp")
+  :demand t
+  :config
+  ;; A :vc checkout otherwise refuses to fetch the release server binary.
+  (setq tramp-rpc-deploy-git-build-policy 'release)
+  ;; Like `tramp-ssh-controlmaster-options' above: share the
+  ;; ControlMaster from ~/.ssh/config instead of opening a separate one.
+  (setq tramp-rpc-use-controlmaster nil)
+  (tramp-set-completion-function
+   "rpc" '((tramp-parse-sconfig "~/.ssh/config"))))
+#+END_SRC
+
+tramp-rpc moves a copied file in a single request, which is several
+times slower than scp for large files and fails outright when it takes
+longer than =tramp-rpc-call-timeout= (30s).  Copy large files to or
+from =/rpc:= hosts over the matching =/scp:= name instead.  Copies within
+one host stay server-side.
+
+#+BEGIN_SRC emacs-lisp
+(defvar na-rpc-scp-threshold (* 1024 1024)
+  "Copy files larger than this many bytes to or from /rpc: hosts with scp.")
+
+(defun na-rpc--as-scp (file)
+  "Return FILE with an rpc method replaced by scp."
+  (if (and (tramp-tramp-file-p file) (tramp-rpc-file-name-p file))
+      (let ((v (copy-tramp-file-name (tramp-dissect-file-name file))))
+        (setf (tramp-file-name-method v) "scp")
+        (tramp-make-tramp-file-name v))
+    file))
+
+(defun na-rpc--copy-file (orig filename newname &rest args)
+  "Around `tramp-rpc-handle-copy-file': copy large files with scp."
+  (let ((filename (expand-file-name filename))
+        (newname (expand-file-name newname)))
+    (if (and (not (and (tramp-tramp-file-p filename)
+                       (tramp-tramp-file-p newname)
+                       (tramp-equal-remote filename newname)))
+             (file-regular-p filename)
+             (> (file-attribute-size (file-attributes filename))
+                na-rpc-scp-threshold))
+        (apply #'copy-file (na-rpc--as-scp filename) (na-rpc--as-scp newname) args)
+      (apply orig filename newname args))))
+
+(advice-add 'tramp-rpc-handle-copy-file :around #'na-rpc--copy-file)
+#+END_SRC
+
+=magit-status= runs =magit-toplevel= (two =git rev-parse= calls) about
+17 times before tramp-rpc's prefetch starts, each a round trip
+(tramp-rpc issue #327).  Cache it per remote directory for a minute.
+
+#+BEGIN_SRC emacs-lisp
+(defvar na-magit-toplevel-cache (make-hash-table :test 'equal)
+  "Map a remote directory to (TIME . TOPLEVEL).")
+
+(defun na-magit-toplevel-memo (orig &optional directory)
+  "Around `magit-toplevel': cache non-nil results for remote directories."
+  (let* ((dir (expand-file-name (or directory default-directory)))
+         (hit (gethash dir na-magit-toplevel-cache)))
+    (cond ((not (file-remote-p dir)) (funcall orig directory))
+          ((and hit (< (- (float-time) (car hit)) 60)) (cdr hit))
+          (t (let ((top (funcall orig directory)))
+               (when top
+                 (puthash dir (cons (float-time) top) na-magit-toplevel-cache))
+               top)))))
+
+(with-eval-after-load 'magit
+  (advice-add 'magit-toplevel :around #'na-magit-toplevel-memo))
 #+END_SRC
 
 * Git
