@@ -1975,27 +1975,7 @@ permissions\" toggle is on, and applies its per-harness environment
   (defun jarvis ()
     (interactive)
     (na-persp-frame-switch "jarvis")
-    (openclaw))
-
-  (defun na-openclaw-magit ()
-    "Open `magit-status' where this chat's remote Claude session works.
-The host is the session's claude-remote model (an ssh alias); the
-directory is the one the claude-remote shim keeps for the session in
-its cwd.json, read with kubectl."
-    (interactive)
-    (let* ((session (openclaw--chat-session))
-           (host (and (equal (plist-get session :modelProvider) "claude-remote")
-                      (plist-get session :model))))
-      (unless host (user-error "Not a remote Claude session"))
-      (let* ((dirs (with-temp-buffer
-                     (call-process "kubectl" nil t nil
-                                   "-n" "nakkaya" "exec" "deploy/openclaw"
-                                   "-c" "claude-remote" "--" "cat"
-                                   "/home/node/.openclaw/claude-remote/cwd.json")
-                     (json-parse-string (buffer-string))))
-             (dir (or (gethash (format "oc:%s|%s" openclaw--session-key host) dirs)
-                      (user-error "No directory recorded for this session"))))
-        (magit-status (format "/rpc:%s:%s" host dir))))))
+    (openclaw)))
 #+end_src
 
 ** Codex
@@ -2106,10 +2086,22 @@ its cwd.json, read with kubectl."
       (car (cdr x)))
     (tramp-parse-sconfig "~/.ssh/config"))))
 
+(defun na-jump-to-host (host)
+  "Open HOST's home directory in a perspective named after HOST.
+HOST is completed from ~/.ssh/config, but any host name or IP works.
+If the perspective already exists, just switch to it."
+  (interactive (list (completing-read "Host: " (na-ssh-completions))))
+  (when (string-empty-p host)
+    (user-error "No host given"))
+  (let ((exists (persp-with-name-exists-p host)))
+    (na-persp-frame-switch host)
+    (unless exists
+      (dired (format "/%s:%s:~/" tramp-default-method host)))))
+
 (mapc (lambda (method)
         (tramp-set-completion-function
          method '((tramp-parse-sconfig "~/.ssh/config"))))
-      '("rsync" "scp" "sftp" "ssh"))
+      '("rsync" "scp" "sftp" "ssh" "rpc"))
 #+END_SRC
 
 *** tramp-rpc
