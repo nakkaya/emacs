@@ -816,6 +816,9 @@ SSH at least,
       (ghostel-shell "/bin/bash")
       (ghostel-term "xterm-256color")
       :config
+      ;; Remote shells come from `ghostel-tramp-shells', which only
+      ;; knows ssh and scp; without this, /rpc: dirs fall back to /bin/sh.
+      (add-to-list 'ghostel-tramp-shells '("rpc" login-shell))
       (require 'ghostel-eshell)
       (ghostel-eshell-visual-command-mode))))
 #+end_src
